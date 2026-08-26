@@ -93,6 +93,14 @@ def render_result(result: RunResult, console: Console | None = None) -> None:
             )
 
         if result.error:
+            if result.output:
+                c.print(
+                    Panel(
+                        result.output.strip(),
+                        title=f"[bold cyan]Standard Output: {ex.name}[/bold cyan]",
+                        border_style="cyan",
+                    )
+                )
             c.print(
                 Panel(
                     result.error.strip(),

@@ -55,37 +55,40 @@ class ExerciseRunner:
         env["PYTHONPATH"] = os.pathsep.join(paths)
         return env
 
-    def run_exercise(
+    def _execute_script(
         self,
         exercise: Exercise,
+        path: Path,
         timeout: float = 30.0,
         python_exe: str | None = None,
+        is_solution: bool = False,
     ) -> RunResult:
-        """Execute an exercise file in a subprocess and evaluate its result.
+        """Execute a Python file in a subprocess and construct a RunResult.
 
         Args:
-            exercise: Exercise instance to execute.
-            timeout: Maximum execution timeout in seconds.
-            python_exe: Path to Python executable (defaults to sys.executable).
+            exercise: Exercise model instance.
+            path: Path to the python script (exercise or solution).
+            timeout: Subprocess execution timeout in seconds.
+            python_exe: Optional python interpreter binary path.
+            is_solution: True if running reference solution.
 
         Returns:
-            RunResult containing execution pass/fail status, output, and diagnostics.
+            RunResult with pass/fail evaluation and output diagnostics.
         """
-        exe = python_exe or sys.executable
-        path = exercise.file_path
-
+        label = "Solution" if is_solution else "Exercise"
         if not path.exists():
             return RunResult(
                 exercise=exercise,
                 passed=False,
                 has_not_done_marker=False,
                 output="",
-                error=f"Exercise file not found: {path}",
+                error=f"{label} file not found: {path}",
                 exit_code=1,
             )
 
         has_marker = self.check_marker(path)
         env = self._get_execution_env()
+        exe = python_exe or sys.executable
 
         try:
             proc = subprocess.run(
@@ -113,7 +116,7 @@ class ExerciseRunner:
                 passed=False,
                 has_not_done_marker=has_marker,
                 output=stdout,
-                error=f"Exercise execution timed out after {timeout:.1f}s.\n{stderr}".strip(),
+                error=f"{label} execution timed out after {timeout:.1f}s.\n{stderr}".strip(),
                 exit_code=124,
             )
         except Exception as exc:
@@ -122,9 +125,33 @@ class ExerciseRunner:
                 passed=False,
                 has_not_done_marker=has_marker,
                 output="",
-                error=f"Execution failed with unexpected error: {exc}",
+                error=f"{label} execution failed with unexpected error: {exc}",
                 exit_code=1,
             )
+
+    def run_exercise(
+        self,
+        exercise: Exercise,
+        timeout: float = 30.0,
+        python_exe: str | None = None,
+    ) -> RunResult:
+        """Execute an exercise file in a subprocess and evaluate its result.
+
+        Args:
+            exercise: Exercise instance to execute.
+            timeout: Maximum execution timeout in seconds.
+            python_exe: Path to Python executable (defaults to sys.executable).
+
+        Returns:
+            RunResult containing execution pass/fail status, output, and diagnostics.
+        """
+        return self._execute_script(
+            exercise=exercise,
+            path=exercise.file_path,
+            timeout=timeout,
+            python_exe=python_exe,
+            is_solution=False,
+        )
 
     def run_solution(
         self,
@@ -142,57 +169,10 @@ class ExerciseRunner:
         Returns:
             RunResult containing solution pass/fail status and output.
         """
-        exe = python_exe or sys.executable
-        path = exercise.solution_path
-
-        if not path.exists():
-            return RunResult(
-                exercise=exercise,
-                passed=False,
-                has_not_done_marker=False,
-                output="",
-                error=f"Solution file not found: {path}",
-                exit_code=1,
-            )
-
-        has_marker = self.check_marker(path)
-        env = self._get_execution_env()
-
-        try:
-            proc = subprocess.run(
-                [exe, str(path)],
-                capture_output=True,
-                text=True,
-                timeout=timeout,
-                env=env,
-            )
-            passed = (proc.returncode == 0) and (not has_marker)
-            error = proc.stderr if proc.returncode != 0 else None
-            return RunResult(
-                exercise=exercise,
-                passed=passed,
-                has_not_done_marker=has_marker,
-                output=proc.stdout,
-                error=error,
-                exit_code=proc.returncode,
-            )
-        except subprocess.TimeoutExpired as e:
-            stdout = e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
-            stderr = e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or "")
-            return RunResult(
-                exercise=exercise,
-                passed=False,
-                has_not_done_marker=has_marker,
-                output=stdout,
-                error=f"Solution execution timed out after {timeout:.1f}s.\n{stderr}".strip(),
-                exit_code=124,
-            )
-        except Exception as exc:
-            return RunResult(
-                exercise=exercise,
-                passed=False,
-                has_not_done_marker=has_marker,
-                output="",
-                error=f"Solution execution failed with unexpected error: {exc}",
-                exit_code=1,
-            )
+        return self._execute_script(
+            exercise=exercise,
+            path=exercise.solution_path,
+            timeout=timeout,
+            python_exe=python_exe,
+            is_solution=True,
+        )
