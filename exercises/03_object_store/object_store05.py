@@ -69,9 +69,7 @@ def verify() -> None:
     final_values: list[int] = []
 
     expected = [101, 102, 103, 104, 105]
-    assert (
-        final_values == expected
-    ), f"Expected {expected}, but got {final_values}"
+    assert final_values == expected, f"Expected {expected}, but got {final_values}"
     print(f"✓ object_store05 verified: Nested ObjectRefs resolved successfully ({final_values})!")
 
 

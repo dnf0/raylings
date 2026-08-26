@@ -65,9 +65,9 @@ def verify() -> None:
     assert results == expected, f"Expected {expected}, got {results}"
     assert len(completed) == 4, f"Expected 4 completed tasks, got {len(completed)}"
     print(f"Elapsed time for 4 concurrent blocking tasks: {elapsed:.3f}s")
-    assert (
-        elapsed < 0.22
-    ), f"Threaded actor took too long ({elapsed:.3f}s), thread pool concurrency not active"
+    assert elapsed < 0.22, (
+        f"Threaded actor took too long ({elapsed:.3f}s), thread pool concurrency not active"
+    )
     print("✓ actors05 verified: Threaded Actor multi-thread concurrency confirmed!")
 
 

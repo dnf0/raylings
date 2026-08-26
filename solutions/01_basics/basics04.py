@@ -35,14 +35,16 @@ def verify() -> None:
     ray.init(ignore_reinit_error=True)
 
     final_ref = build_pipeline(2, 4)
-    assert isinstance(
-        final_ref, ObjectRef
-    ), f"build_pipeline must return an ObjectRef, got {type(final_ref)}"
+    assert isinstance(final_ref, ObjectRef), (
+        f"build_pipeline must return an ObjectRef, got {type(final_ref)}"
+    )
 
     result = ray.get(final_ref)
     expected = ((2 * 3) + (4 * 3)) ** 3  # (6 + 12)^3 = 18^3 = 5832
     assert result == expected, f"Expected {expected}, but got {result}"
-    print(f"✓ basics04 verified: Task graph pipeline resolved to {result} without intermediate ray.get()!")
+    print(
+        f"✓ basics04 verified: Task graph pipeline resolved to {result} without intermediate ray.get()!"
+    )
 
 
 if __name__ == "__main__":

@@ -32,7 +32,9 @@ def _version_callback(value: bool) -> None:
     """Callback for --version CLI option."""
     if value:
         render_banner()
-        console.print(f"[bold cyan]raylings[/bold cyan] version [bold green]{__version__}[/bold green]\n")
+        console.print(
+            f"[bold cyan]raylings[/bold cyan] version [bold green]{__version__}[/bold green]\n"
+        )
         raise typer.Exit()
 
 
@@ -54,7 +56,9 @@ def main(
 def version_command() -> None:
     """Display raylings branding banner and current version."""
     render_banner()
-    console.print(f"[bold cyan]raylings[/bold cyan] version [bold green]{__version__}[/bold green]\n")
+    console.print(
+        f"[bold cyan]raylings[/bold cyan] version [bold green]{__version__}[/bold green]\n"
+    )
 
 
 @app.command(name="list")

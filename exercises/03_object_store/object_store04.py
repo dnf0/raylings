@@ -57,7 +57,9 @@ def verify() -> None:
 
     # Demonstrate garbage collection: removing references allows Ray to free Plasma memory
     del chunk_refs
-    print(f"✓ object_store04 verified: Stored {num_chunks} chunks ({num_chunks * chunk_size * 8 / 1024:.1f} KB) and validated retrieval & lifecycle!")
+    print(
+        f"✓ object_store04 verified: Stored {num_chunks} chunks ({num_chunks * chunk_size * 8 / 1024:.1f} KB) and validated retrieval & lifecycle!"
+    )
 
 
 if __name__ == "__main__":

@@ -46,9 +46,9 @@ def verify() -> None:
     assert par_results == expected, f"Expected {expected}, got {par_results}"
 
     print(f"Sequential time: {seq_time:.3f}s | Parallel time: {par_time:.3f}s")
-    assert (
-        par_time < seq_time * 0.75
-    ), f"Parallel execution ({par_time:.3f}s) was not significantly faster than sequential ({seq_time:.3f}s)"
+    assert par_time < seq_time * 0.75, (
+        f"Parallel execution ({par_time:.3f}s) was not significantly faster than sequential ({seq_time:.3f}s)"
+    )
     print("✓ basics03 verified: Parallel task execution pipeline confirmed!")
 
 

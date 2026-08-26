@@ -115,11 +115,21 @@ def test_cli_test_solutions(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     ex1 = Exercise(name="mock01", title="Mock 1", path=str(sol1), chapter_name="01_test")
     ex2 = Exercise(name="mock02", title="Mock 2", path=str(sol2), chapter_name="01_test")
     mock_manifest = Manifest(
-        chapters=[Chapter(number=1, name="01_test", title="Test Chapter", description="Test", exercises=[ex1, ex2])]
+        chapters=[
+            Chapter(
+                number=1,
+                name="01_test",
+                title="Test Chapter",
+                description="Test",
+                exercises=[ex1, ex2],
+            )
+        ]
     )
 
     monkeypatch.setattr(cli_module, "get_manifest", lambda: mock_manifest)
-    monkeypatch.setattr(cli_module, "get_exercise_by_name", lambda name: ex1 if name == "mock01" else None)
+    monkeypatch.setattr(
+        cli_module, "get_exercise_by_name", lambda name: ex1 if name == "mock01" else None
+    )
 
     # Test single exercise solution
     res_single = runner.invoke(app, ["test", "mock01"])
@@ -129,7 +139,11 @@ def test_cli_test_solutions(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     # Test all solutions with summary
     res_all = runner.invoke(app, ["test", "--all"])
     assert res_all.exit_code == 0
-    assert "2 passed" in res_all.stdout.lower() or "All" in res_all.stdout or "passed" in res_all.stdout.lower()
+    assert (
+        "2 passed" in res_all.stdout.lower()
+        or "All" in res_all.stdout
+        or "passed" in res_all.stdout.lower()
+    )
 
     # Test missing solution
     res_missing = runner.invoke(app, ["test", "nonexistent_sol"])
@@ -157,7 +171,15 @@ def test_watcher_find_current_exercise(tmp_path: Path):
     ex3 = Exercise(name="ex03", title="Ex 3", path=str(ex3_file), chapter_name="01_test")
 
     manifest = Manifest(
-        chapters=[Chapter(number=1, name="01_test", title="Test", description="Test", exercises=[ex1, ex2, ex3])]
+        chapters=[
+            Chapter(
+                number=1,
+                name="01_test",
+                title="Test",
+                description="Test",
+                exercises=[ex1, ex2, ex3],
+            )
+        ]
     )
 
     watcher = ExerciseWatcher(manifest=manifest, runner=ExerciseRunner())
@@ -186,7 +208,9 @@ def test_watcher_handle_change(tmp_path: Path):
 
     ex = Exercise(name="ex_change", title="Ex Change", path=str(ex_file), chapter_name="01_test")
     manifest = Manifest(
-        chapters=[Chapter(number=1, name="01_test", title="Test", description="Test", exercises=[ex])]
+        chapters=[
+            Chapter(number=1, name="01_test", title="Test", description="Test", exercises=[ex])
+        ]
     )
 
     watcher = ExerciseWatcher(manifest=manifest, runner=ExerciseRunner())
@@ -214,7 +238,9 @@ def test_watcher_watch_loop_graceful_exit(monkeypatch: pytest.MonkeyPatch, tmp_p
     from raylings.watcher import ExerciseWatcher
 
     mock_daemon = MagicMock()
-    watcher = ExerciseWatcher(manifest=Manifest(chapters=[]), runner=ExerciseRunner(), daemon=mock_daemon)
+    watcher = ExerciseWatcher(
+        manifest=Manifest(chapters=[]), runner=ExerciseRunner(), daemon=mock_daemon
+    )
 
     def mock_watch(*args, **kwargs):
         raise KeyboardInterrupt()

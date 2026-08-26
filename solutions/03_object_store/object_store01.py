@@ -26,9 +26,9 @@ def verify() -> None:
 
     assert data_ref is not None, "data_ref must be created with ray.put()"
     assert isinstance(retrieved_data, np.ndarray), "retrieved_data must be a NumPy array"
-    assert (
-        retrieved_data.flags.writeable is False
-    ), "Plasma shared memory NumPy array should be read-only (flags.writeable == False)"
+    assert retrieved_data.flags.writeable is False, (
+        "Plasma shared memory NumPy array should be read-only (flags.writeable == False)"
+    )
     assert np.isclose(mean_val, 499.5), f"Expected mean 499.5, got {mean_val}"
     assert std_val > 0.0, f"Expected non-zero std, got {std_val}"
     print(

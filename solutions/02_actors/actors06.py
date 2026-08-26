@@ -33,10 +33,10 @@ def verify() -> None:
     discovered_handle = ray.get_actor("app_config_registry")
     retrieved_val = ray.get(discovered_handle.get.remote("cluster_env"))
 
-    assert (
-        retrieved_val == "production"
-    ), f"Expected 'production', but got '{retrieved_val}'"
-    print(f"✓ actors06 verified: Named actor registered and retrieved by name successfully ('{retrieved_val}')!")
+    assert retrieved_val == "production", f"Expected 'production', but got '{retrieved_val}'"
+    print(
+        f"✓ actors06 verified: Named actor registered and retrieved by name successfully ('{retrieved_val}')!"
+    )
 
 
 if __name__ == "__main__":

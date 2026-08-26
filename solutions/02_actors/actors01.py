@@ -32,7 +32,9 @@ def verify() -> None:
     final_count = ray.get(counter.get_count.remote())
 
     assert final_count == 12, f"Expected final count 12, got {final_count}"
-    print(f"✓ actors01 verified: Stateful Actor lifecycle and operations confirmed (count={final_count})!")
+    print(
+        f"✓ actors01 verified: Stateful Actor lifecycle and operations confirmed (count={final_count})!"
+    )
 
 
 if __name__ == "__main__":

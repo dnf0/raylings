@@ -47,7 +47,9 @@ def verify() -> None:
         "deposit: 50.0",
         "withdraw: 30.0",
     ], f"Unexpected history: {history}"
-    print(f"✓ actors02 verified: BankAccount actor state mutations processed sequentially (balance={balance})!")
+    print(
+        f"✓ actors02 verified: BankAccount actor state mutations processed sequentially (balance={balance})!"
+    )
 
 
 if __name__ == "__main__":

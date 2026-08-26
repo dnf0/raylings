@@ -42,6 +42,9 @@ packages = ["src/raylings"]
 line-length = 100
 target-version = "py310"
 
+[tool.ruff.lint.per-file-ignores]
+"exercises/*" = ["F401", "F841"]
+
 [tool.pyright]
 include = ["src", "tests"]
 pythonVersion = "3.10"

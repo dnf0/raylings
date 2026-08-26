@@ -64,7 +64,9 @@ def verify() -> None:
     assert np.array_equal(result, expected), f"Expected {expected}, got {result}"
     # Verify original in Plasma was NOT modified
     assert np.array_equal(ray.get(data_ref), data), "Original array in Plasma must remain immutable"
-    print(f"✓ object_store03 verified: Plasma immutability and safe copy mutation validated ({result})!")
+    print(
+        f"✓ object_store03 verified: Plasma immutability and safe copy mutation validated ({result})!"
+    )
 
 
 if __name__ == "__main__":

@@ -82,7 +82,11 @@ class ExerciseWatcher:
         resolved_target = file_path.resolve() if file_path.exists() else file_path
         for ex in self.manifest.all_exercises:
             resolved_ex = ex.file_path.resolve() if ex.file_path.exists() else ex.file_path
-            if resolved_ex == resolved_target or file_path.name == ex.file_path.name or str(file_path).endswith(ex.path):
+            if (
+                resolved_ex == resolved_target
+                or file_path.name == ex.file_path.name
+                or str(file_path).endswith(ex.path)
+            ):
                 return self.evaluate_exercise(ex)
         return None
 

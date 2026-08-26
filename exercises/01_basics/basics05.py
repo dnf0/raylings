@@ -68,10 +68,12 @@ def verify() -> None:
     completed_order = process_as_completed(tasks_config)
 
     expected_order = [3, 1, 2]
-    assert (
-        completed_order == expected_order
-    ), f"Expected completion order {expected_order}, but got {completed_order}"
-    print(f"✓ basics05 verified: Dynamic ray.wait() streaming completed in order {completed_order}!")
+    assert completed_order == expected_order, (
+        f"Expected completion order {expected_order}, but got {completed_order}"
+    )
+    print(
+        f"✓ basics05 verified: Dynamic ray.wait() streaming completed in order {completed_order}!"
+    )
 
 
 if __name__ == "__main__":

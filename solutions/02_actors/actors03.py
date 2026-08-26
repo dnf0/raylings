@@ -48,7 +48,9 @@ def verify() -> None:
 
     assert batch_sums == [6, 9, 30], f"Expected batch sums [6, 9, 30], got {batch_sums}"
     assert total_items_logged == 9, f"Expected 9 total items logged, got {total_items_logged}"
-    print(f"✓ actors03 verified: Actor handle passed across distributed worker actors (total={total_items_logged})!")
+    print(
+        f"✓ actors03 verified: Actor handle passed across distributed worker actors (total={total_items_logged})!"
+    )
 
 
 if __name__ == "__main__":
