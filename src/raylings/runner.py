@@ -1,0 +1,198 @@
+"""Exercise runner and execution evaluator for Raylings."""
+
+from dataclasses import dataclass
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+from raylings.models import Exercise
+
+NOT_DONE_MARKER = "I AM NOT DONE"
+
+
+@dataclass
+class RunResult:
+    """Encapsulates the execution result and evaluation state of an exercise."""
+
+    exercise: Exercise
+    passed: bool
+    has_not_done_marker: bool
+    output: str
+    error: str | None = None
+    exit_code: int = 0
+
+
+class ExerciseRunner:
+    """Executes exercises and canonical solutions in isolated subprocesses."""
+
+    def check_marker(self, path: Path) -> bool:
+        """Check if the given file contains the 'I AM NOT DONE' marker.
+
+        Args:
+            path: Filesystem path to the exercise file.
+
+        Returns:
+            bool: True if marker exists in the file content, False otherwise.
+        """
+        if not path.exists():
+            return False
+        try:
+            content = path.read_text(encoding="utf-8")
+            return NOT_DONE_MARKER in content
+        except Exception:
+            return False
+
+    def _get_execution_env(self) -> dict[str, str]:
+        """Construct the execution environment with proper PYTHONPATH configured."""
+        env = os.environ.copy()
+        src_path = str(Path(__file__).resolve().parent.parent)
+        root_path = str(Path(__file__).resolve().parent.parent.parent)
+        existing_pythonpath = env.get("PYTHONPATH", "")
+        paths = [root_path, src_path]
+        if existing_pythonpath:
+            paths.append(existing_pythonpath)
+        env["PYTHONPATH"] = os.pathsep.join(paths)
+        return env
+
+    def run_exercise(
+        self,
+        exercise: Exercise,
+        timeout: float = 30.0,
+        python_exe: str | None = None,
+    ) -> RunResult:
+        """Execute an exercise file in a subprocess and evaluate its result.
+
+        Args:
+            exercise: Exercise instance to execute.
+            timeout: Maximum execution timeout in seconds.
+            python_exe: Path to Python executable (defaults to sys.executable).
+
+        Returns:
+            RunResult containing execution pass/fail status, output, and diagnostics.
+        """
+        exe = python_exe or sys.executable
+        path = exercise.file_path
+
+        if not path.exists():
+            return RunResult(
+                exercise=exercise,
+                passed=False,
+                has_not_done_marker=False,
+                output="",
+                error=f"Exercise file not found: {path}",
+                exit_code=1,
+            )
+
+        has_marker = self.check_marker(path)
+        env = self._get_execution_env()
+
+        try:
+            proc = subprocess.run(
+                [exe, str(path)],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                env=env,
+            )
+            passed = (proc.returncode == 0) and (not has_marker)
+            error = proc.stderr if proc.returncode != 0 else None
+            return RunResult(
+                exercise=exercise,
+                passed=passed,
+                has_not_done_marker=has_marker,
+                output=proc.stdout,
+                error=error,
+                exit_code=proc.returncode,
+            )
+        except subprocess.TimeoutExpired as e:
+            stdout = e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
+            stderr = e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or "")
+            return RunResult(
+                exercise=exercise,
+                passed=False,
+                has_not_done_marker=has_marker,
+                output=stdout,
+                error=f"Exercise execution timed out after {timeout:.1f}s.\n{stderr}".strip(),
+                exit_code=124,
+            )
+        except Exception as exc:
+            return RunResult(
+                exercise=exercise,
+                passed=False,
+                has_not_done_marker=has_marker,
+                output="",
+                error=f"Execution failed with unexpected error: {exc}",
+                exit_code=1,
+            )
+
+    def run_solution(
+        self,
+        exercise: Exercise,
+        timeout: float = 30.0,
+        python_exe: str | None = None,
+    ) -> RunResult:
+        """Execute the reference solution for an exercise in a subprocess.
+
+        Args:
+            exercise: Exercise instance whose solution to execute.
+            timeout: Maximum execution timeout in seconds.
+            python_exe: Path to Python executable (defaults to sys.executable).
+
+        Returns:
+            RunResult containing solution pass/fail status and output.
+        """
+        exe = python_exe or sys.executable
+        path = exercise.solution_path
+
+        if not path.exists():
+            return RunResult(
+                exercise=exercise,
+                passed=False,
+                has_not_done_marker=False,
+                output="",
+                error=f"Solution file not found: {path}",
+                exit_code=1,
+            )
+
+        has_marker = self.check_marker(path)
+        env = self._get_execution_env()
+
+        try:
+            proc = subprocess.run(
+                [exe, str(path)],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                env=env,
+            )
+            passed = (proc.returncode == 0) and (not has_marker)
+            error = proc.stderr if proc.returncode != 0 else None
+            return RunResult(
+                exercise=exercise,
+                passed=passed,
+                has_not_done_marker=has_marker,
+                output=proc.stdout,
+                error=error,
+                exit_code=proc.returncode,
+            )
+        except subprocess.TimeoutExpired as e:
+            stdout = e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
+            stderr = e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or "")
+            return RunResult(
+                exercise=exercise,
+                passed=False,
+                has_not_done_marker=has_marker,
+                output=stdout,
+                error=f"Solution execution timed out after {timeout:.1f}s.\n{stderr}".strip(),
+                exit_code=124,
+            )
+        except Exception as exc:
+            return RunResult(
+                exercise=exercise,
+                passed=False,
+                has_not_done_marker=has_marker,
+                output="",
+                error=f"Solution execution failed with unexpected error: {exc}",
+                exit_code=1,
+            )
