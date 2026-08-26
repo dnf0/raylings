@@ -1,5 +1,16 @@
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib  # type: ignore[no-redef]
+
 from pathlib import Path
+
+
+def test_package_import():
+    import raylings
+
+    assert hasattr(raylings, "__version__")
+    assert raylings.__version__ == "0.1.0"
 
 
 def test_pyproject_structure():

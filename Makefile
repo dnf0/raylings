@@ -1,4 +1,4 @@
-.PHONY: help bootstrap lint fmt test watch
+.PHONY: help bootstrap lint fmt test watch clean
 
 help:
 	@echo "Available make targets:"
@@ -7,6 +7,7 @@ help:
 	@echo "  fmt        - Format code with ruff and auto-fix lint errors"
 	@echo "  test       - Run pytest test suite"
 	@echo "  watch      - Start raylings interactive watcher"
+	@echo "  clean      - Remove build artifacts and cache directories"
 
 bootstrap:
 	pip install -e ".[dev]"
@@ -24,3 +25,7 @@ test:
 
 watch:
 	raylings watch
+
+clean:
+	rm -rf build/ dist/ *.egg-info .pytest_cache .ruff_cache .coverage htmlcov
+
