@@ -33,7 +33,7 @@ class RingWorker:
         return self.buffer.tolist()
 
 
-def ring_allreduce(workers: list) -> None:
+def ring_allreduce(workers: list[ray.actor.ActorHandle]) -> None:
     N = len(workers)
     # 1. Scatter-Reduce Phase
     for step in range(N - 1):

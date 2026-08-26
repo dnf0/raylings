@@ -58,7 +58,7 @@ class RingWorker:
 
 
 # TODO: Implement ring_allreduce function
-def ring_allreduce(workers: list) -> None:
+def ring_allreduce(workers: list[ray.actor.ActorHandle]) -> None:
     pass
 
 

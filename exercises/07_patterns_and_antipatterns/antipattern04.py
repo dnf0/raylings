@@ -53,7 +53,7 @@ def produce_leaf(val: int) -> int:
 
 
 # TODO: Implement tree_reduce
-def tree_reduce(refs: list) -> ray.ObjectRef:
+def tree_reduce(refs: list[ray.ObjectRef]) -> ray.ObjectRef:
     # current = list(refs)
     # while len(current) > 1:
     #     next_level = []
