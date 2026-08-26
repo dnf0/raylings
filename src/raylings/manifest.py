@@ -256,22 +256,22 @@ def build_manifest() -> Manifest:
                 ),
                 Exercise(
                     name="scheduling03",
-                    title="Placement Groups: STRICT_SPREAD",
+                    title="Placement Groups: SPREAD Strategy",
                     path="exercises/04_scheduling_resources/scheduling03.py",
                     chapter_name="04_scheduling_resources",
                     hints=[
-                        "Create a placement group with strategy='STRICT_SPREAD' to ensure anti-affinity across nodes.",
-                        "Use ray.util.placement_group.placement_group([{'CPU': 1}] * n, strategy='STRICT_SPREAD').",
+                        "Create a placement group with strategy='SPREAD' to distribute tasks across bundles.",
+                        "Use ray.util.placement_group.placement_group([{'CPU': 0.5}, {'CPU': 0.5}], strategy='SPREAD').",
                     ],
                 ),
                 Exercise(
                     name="scheduling04",
-                    title="Placement Groups: STRICT_PACK",
+                    title="Placement Groups: PACK Strategy",
                     path="exercises/04_scheduling_resources/scheduling04.py",
                     chapter_name="04_scheduling_resources",
                     hints=[
-                        "Create a placement group with strategy='STRICT_PACK' to co-locate tasks on the same node.",
-                        "Pass PlacementGroupSchedulingStrategy(placement_group=pg) to task options.",
+                        "Create a placement group with strategy='PACK' to co-locate tasks/actors on the same node.",
+                        "Pass PlacementGroupSchedulingStrategy(placement_group=pg, placement_group_bundle_index=0) to options.",
                     ],
                 ),
                 Exercise(

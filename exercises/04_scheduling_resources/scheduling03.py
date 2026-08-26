@@ -23,7 +23,7 @@ pg = placement_group([{"CPU": 1}, {"CPU": 1}], strategy="SPREAD")
 ray.get(pg.ready())  # Block until resources are reserved
 
 # Schedule task into bundle 0
-strategy = PlacementGroupSchedulingStrategy(placement_group=pg, bundle_index=0)
+strategy = PlacementGroupSchedulingStrategy(placement_group=pg, placement_group_bundle_index=0)
 ref = my_task.options(scheduling_strategy=strategy).remote()
 ```
 

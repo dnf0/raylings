@@ -22,7 +22,7 @@ CHAPTER_4_6_EXERCISES = _get_chapter_exercises(
 
 
 @pytest.mark.parametrize("exercise", CHAPTER_4_6_EXERCISES, ids=lambda ex: ex.name)
-def test_exercise_skeleton_fails_with_marker(exercise: Exercise):
+def test_exercise_skeleton_fails_with_marker(exercise: Exercise) -> None:
     """Verify that every exercise file exists, has the marker, and fails default run."""
     runner = ExerciseRunner()
     ex_path = exercise.file_path
@@ -38,7 +38,7 @@ def test_exercise_skeleton_fails_with_marker(exercise: Exercise):
 
 
 @pytest.mark.parametrize("exercise", CHAPTER_4_6_EXERCISES, ids=lambda ex: ex.name)
-def test_solution_file_passes_cleanly(exercise: Exercise):
+def test_solution_file_passes_cleanly(exercise: Exercise) -> None:
     """Verify that every reference solution exists, has no marker, and passes cleanly."""
     runner = ExerciseRunner()
     sol_path = exercise.solution_path
