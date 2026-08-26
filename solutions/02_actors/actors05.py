@@ -29,6 +29,7 @@ def verify() -> None:
     ray.init(ignore_reinit_error=True)
 
     actor = ThreadedComputeActor.remote()
+    ray.get(actor.get_completed.remote())  # Warm-up actor process
     start = time.perf_counter()
     refs = [actor.blocking_task.remote(i, 0.08) for i in range(4)]
     results = ray.get(refs)

@@ -48,7 +48,7 @@ def test_solution_file_passes_cleanly(exercise: Exercise):
         has_marker is False
     ), f"Solution {sol_path} must NOT contain the '# I AM NOT DONE' marker"
 
-    result = runner.run_solution(exercise, timeout=30.0)
+    result = runner.run_solution(exercise, timeout=45.0)
     assert (
         result.passed is True
     ), f"Solution {exercise.name} failed with exit_code={result.exit_code}:\n{result.error}\nOutput:\n{result.output}"

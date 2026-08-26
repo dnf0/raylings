@@ -53,6 +53,7 @@ class ExerciseRunner:
         if existing_pythonpath:
             paths.append(existing_pythonpath)
         env["PYTHONPATH"] = os.pathsep.join(paths)
+        env["RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO"] = "0"
         return env
 
     def _execute_script(
