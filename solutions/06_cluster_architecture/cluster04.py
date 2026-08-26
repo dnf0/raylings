@@ -33,6 +33,7 @@ def verify() -> None:
         f"Expected 'RAY_JOB_COMPLETE' in logs, got {logs}"
     )
     print(f"✓ cluster04 verified: Job submitted, completed ({final_status}), and logs verified!")
+    ray.shutdown()
 
 
 if __name__ == "__main__":

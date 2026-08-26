@@ -27,6 +27,7 @@ def verify() -> None:
     assert sum_val == 100, f"Expected sum 100 (0+10+20+30+40), got {sum_val}"
     assert double_val == 100, f"Expected double sum 100, got {double_val}"
     print(f"✓ fault03 verified: Lineage DAG constructed and resolved successfully (sum={sum_val})!")
+    ray.shutdown()
 
 
 if __name__ == "__main__":

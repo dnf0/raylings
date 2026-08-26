@@ -56,6 +56,7 @@ def verify() -> None:
     expected = ["RAY", "ACTORS", "DISTRIBUTED", "PLASMA", "SCALABILITY"]
     assert results == expected, f"Expected {expected}, got {results}"
     print(f"✓ actors07 verified: ActorPool dynamically balanced work across workers ({results})!")
+    ray.shutdown()
 
 
 if __name__ == "__main__":

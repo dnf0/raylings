@@ -23,6 +23,7 @@ def verify() -> None:
     assert min_val == 3, f"Expected min 3, got {min_val}"
     assert max_val == 99, f"Expected max 99, got {max_val}"
     print(f"✓ basics06 verified: Multiple returns unpacked into min={min_val}, max={max_val}!")
+    ray.shutdown()
 
 
 if __name__ == "__main__":

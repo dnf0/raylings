@@ -54,6 +54,7 @@ class ExerciseRunner:
             paths.append(existing_pythonpath)
         env["PYTHONPATH"] = os.pathsep.join(paths)
         env["RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO"] = "0"
+        env["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
         return env
 
     def _execute_script(
@@ -93,7 +94,7 @@ class ExerciseRunner:
 
         try:
             proc = subprocess.run(
-                [exe, str(path)],
+                [exe, str(path.resolve())],
                 capture_output=True,
                 text=True,
                 timeout=timeout,
