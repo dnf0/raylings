@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build `raylings`, a high-performance interactive CLI learning tool and 13-chapter, 50+ exercise hands-on curriculum (with solutions and tests) for mastering Python Ray from scratch.
+**Goal:** Build `raylings`, a high-performance interactive CLI learning tool and 14-chapter, 55+ exercise hands-on curriculum (with solutions and tests) for mastering Python Ray from scratch.
 
 **Architecture:** A lightweight Python CLI engine built on Typer and Rich with a continuous file watcher (`watchfiles`), background Ray session daemon for sub-50ms exercise execution, declarative curriculum manifest, automated solutions validator, and complete repo infrastructure ready for `dnf0/raylings`.
 
@@ -45,7 +45,8 @@ raylings/
 │   ├── 10_ray_train_and_tune/
 │   ├── 11_ray_tune/
 │   ├── 12_ray_serve/
-│   └── 13_observability_and_debugging/
+│   ├── 13_observability_and_debugging/
+│   └── 14_kuberay/
 ├── solutions/
 │   ├── 01_basics/ ... (mirrors exercises/)
 └── tests/
@@ -231,8 +232,8 @@ from raylings.models import ExerciseStatus
 
 def test_manifest_loads_all_chapters():
     manifest = get_manifest()
-    assert len(manifest.chapters) == 13
-    assert len(manifest.all_exercises) >= 50
+    assert len(manifest.chapters) == 14
+    assert len(manifest.all_exercises) >= 55
     first = manifest.all_exercises[0]
     assert first.name == "basics01"
     assert first.chapter_name == "01_basics"
@@ -816,7 +817,30 @@ git commit -m "feat: add curriculum and solutions for chapters 11 to 13"
 
 ---
 
-### Task 10: Full End-to-End Test Suite, Verification, Agent Rules Sync & GitHub Remote Setup
+### Task 10: Chapter 14 Curriculum & Solutions (KubeRay & Cloud-Native Ray)
+
+**Files:**
+- Create: `exercises/14_kuberay/` (kuberay01.py to kuberay05.py)
+- Create: `solutions/14_kuberay/` (kuberay01.py to kuberay05.py)
+- Test: `tests/test_chapter_14.py`
+
+- [ ] **Step 1: Write verification tests for Chapter 14**
+- [ ] **Step 2: Author exercises and solutions for Chapter 14**
+- [ ] **Step 3: Run tests to verify all solutions pass**
+
+Run: `pytest tests/test_chapter_14.py -v`  
+Expected: PASS
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add exercises/14_kuberay solutions/14_kuberay tests/test_chapter_14.py
+git commit -m "feat: add curriculum and solutions for chapter 14 kuberay"
+```
+
+---
+
+### Task 11: Full End-to-End Test Suite, Verification, Agent Rules Sync & GitHub Remote Setup
 
 **Files:**
 - Create: `tests/test_all_solutions.py`

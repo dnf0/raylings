@@ -12,12 +12,27 @@ from raylings.models import Chapter, Exercise, ExerciseStatus, Manifest
 def test_manifest_loads_all_chapters():
     manifest = get_manifest()
     assert isinstance(manifest, Manifest)
-    assert len(manifest.chapters) == 13
+    assert len(manifest.chapters) == 14
     assert all(isinstance(ch, Chapter) for ch in manifest.chapters)
-    assert len(manifest.all_exercises) >= 50
+    assert len(manifest.all_exercises) >= 55
     first = manifest.all_exercises[0]
     assert first.name == "basics01"
     assert first.chapter_name == "01_basics"
+
+
+def test_unique_exercise_names_and_sequential_chapters():
+    manifest = get_manifest()
+    # Ensure sequential chapter numbering 1..14
+    chapter_numbers = [ch.number for ch in manifest.chapters]
+    assert chapter_numbers == list(range(1, 15))
+
+    # Ensure all exercise names are unique
+    exercise_names = [ex.name for ex in manifest.all_exercises]
+    assert len(exercise_names) == len(set(exercise_names))
+
+    # Ensure all exercise paths are unique
+    exercise_paths = [ex.path for ex in manifest.all_exercises]
+    assert len(exercise_paths) == len(set(exercise_paths))
 
 
 def test_get_exercise_by_name():
@@ -27,10 +42,25 @@ def test_get_exercise_by_name():
     assert ex.name == "basics01"
     assert ex.path.endswith("basics01.py")
 
+    # By filename
+    ex_by_filename = get_exercise_by_name("basics01.py")
+    assert ex_by_filename is not None
+    assert ex_by_filename.name == "basics01"
+
     # By relative path
     ex_by_path = get_exercise_by_name("exercises/01_basics/basics01.py")
     assert ex_by_path is not None
     assert ex_by_path.name == "basics01"
+
+    # By path suffix
+    ex_by_suffix = get_exercise_by_name("01_basics/basics01.py")
+    assert ex_by_suffix is not None
+    assert ex_by_suffix.name == "basics01"
+
+    # Chapter 14 exercise lookup
+    kuberay_ex = get_exercise_by_name("kuberay01")
+    assert kuberay_ex is not None
+    assert kuberay_ex.chapter_name == "14_kuberay"
 
     # Non-existent exercise
     assert get_exercise_by_name("non_existent_exercise") is None
@@ -95,7 +125,7 @@ def test_all_exercise_paths_valid_format():
     for ex in manifest.all_exercises:
         assert ex.path.startswith("exercises/")
         assert ex.path.endswith(".py")
-        assert ex.solution_path == Path(ex.path.replace("exercises/", "solutions/"))
+        assert ex.solution_path == Path(ex.path.replace("exercises/", "solutions/", 1))
         assert len(ex.hints) >= 1, f"Exercise {ex.name} should have at least 1 hint"
         assert ex.chapter_name in ex.path
 

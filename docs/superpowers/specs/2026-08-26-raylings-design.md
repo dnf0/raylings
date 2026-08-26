@@ -63,7 +63,7 @@ Learners progress through progressively challenging exercises where they fix bro
    - Gracefully shuts down on watcher exit (`SIGINT` / `Ctrl+C`).
 
 3. **Exercise Manifest & Registry (`raylings/manifest.py`)**:
-   - Declarative catalogue of all 13 chapters and 50+ exercises with titles, paths, prerequisites, and progressive hints.
+   - Declarative catalogue of all 14 chapters and 55+ exercises with titles, paths, prerequisites, and progressive hints.
    - Parses `# I AM NOT DONE` marker at the top of exercise files.
 
 4. **Canonical Solutions & Testing Harness (`solutions/`, `tests/`)**:
@@ -77,7 +77,7 @@ Learners progress through progressively challenging exercises where they fix bro
 
 ## 3. Curriculum & Syllabus Specification
 
-The curriculum is divided into 13 numbered chapters spanning fundamental tasks to advanced production systems:
+The curriculum is divided into 14 numbered chapters spanning fundamental tasks to advanced production systems:
 
 ### Chapter 1: Ray Core Foundations (Tasks & Futures)
 - `exercises/01_basics/basics01.py`: `ray.init()` mechanics, local vs cluster connection, core worker concepts.
@@ -165,6 +165,13 @@ The curriculum is divided into 13 numbered chapters spanning fundamental tasks t
 - `exercises/13_observability_and_debugging/perf01.py`: Generating and analyzing Chrome execution timelines (`ray timeline`).
 - `exercises/13_observability_and_debugging/perf02.py`: Diagnosing memory leaks and plasma usage with `ray memory`.
 - `exercises/13_observability_and_debugging/perf03.py`: Using Ray Metrics, Prometheus exports, and GCS task/actor summary dumps.
+
+### Chapter 14: KubeRay & Cloud-Native Ray on Kubernetes
+- `exercises/14_kuberay/kuberay01.py`: RayCluster Custom Resource (CRD), `headGroupSpec` and `workerGroupSpecs`, resource limits.
+- `exercises/14_kuberay/kuberay02.py`: RayJob CRD & Batch Job Lifecycle, ephemeral execution, log retrieval via Kubernetes API.
+- `exercises/14_kuberay/kuberay03.py`: RayService CRD & Zero-Downtime Serving, multi-app routes, rolling spec upgrades.
+- `exercises/14_kuberay/kuberay04.py`: Autoscaling with KEDA & Ray Autoscaler, queue metrics, dynamic scaling.
+- `exercises/14_kuberay/kuberay05.py`: Kubernetes Fault Tolerance & Pod Evictions, GCS fault tolerance (Redis/etcd), lineage recovery.
 
 ---
 
@@ -269,7 +276,7 @@ if __name__ == "__main__":
    - `raylings test` verifies all reference solutions.
    - `raylings list` outputs the complete curriculum table with statuses.
 2. **Curriculum Completeness**:
-   - 13 chapters, 50+ deep-dive exercises with verified matching solutions.
+   - 14 chapters, 55+ deep-dive exercises with verified matching solutions.
 3. **CI & Code Quality**:
    - 100% passing test suite on Python 3.10+.
    - Clean linting (`ruff`) and static typing (`pyright`).

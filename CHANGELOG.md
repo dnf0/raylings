@@ -12,5 +12,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project scaffolding, packaging configuration (`pyproject.toml`), and CI workflows.
 - Core CLI framework and background Ray lifecycle daemon architecture.
-- Declarative curriculum manifest covering 13 chapters and 50+ hands-on exercises.
+- Declarative curriculum manifest covering 14 chapters and 55+ hands-on exercises including KubeRay & Cloud-Native Ray.
 - Comprehensive testing harness for exercises and canonical solutions.

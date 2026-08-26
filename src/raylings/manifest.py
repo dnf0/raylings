@@ -1,8 +1,12 @@
+"""Curriculum manifest definition and exercise navigation helpers."""
+
+from pathlib import Path
 from typing import Optional
 from raylings.models import Chapter, Exercise, Manifest
 
 
 def build_manifest() -> Manifest:
+    """Build and return the complete Raylings curriculum manifest."""
     chapters = [
         Chapter(
             number=1,
@@ -721,6 +725,69 @@ def build_manifest() -> Manifest:
                 ),
             ],
         ),
+        Chapter(
+            number=14,
+            name="14_kuberay",
+            title="KubeRay & Cloud-Native Ray on Kubernetes",
+            description="Deploying, scaling, and operating Ray workloads on Kubernetes with KubeRay",
+            exercises=[
+                Exercise(
+                    name="kuberay01",
+                    title="RayCluster Custom Resource (CRD)",
+                    path="exercises/14_kuberay/kuberay01.py",
+                    chapter_name="14_kuberay",
+                    hints=[
+                        "Define RayCluster spec with headGroupSpec and workerGroupSpecs.",
+                        "Specify CPU/memory resource requests and limits in pod templates.",
+                        "Validate Ray version and container image compatibility.",
+                    ],
+                ),
+                Exercise(
+                    name="kuberay02",
+                    title="RayJob CRD & Batch Job Lifecycle",
+                    path="exercises/14_kuberay/kuberay02.py",
+                    chapter_name="14_kuberay",
+                    hints=[
+                        "Configure entrypoint command and runtime_env in RayJob spec.",
+                        "Enable shutdownAfterJobFinishes for ephemeral batch clusters.",
+                        "Monitor job status and retrieve task logs via Kubernetes API.",
+                    ],
+                ),
+                Exercise(
+                    name="kuberay03",
+                    title="RayService CRD & Zero-Downtime Serving",
+                    path="exercises/14_kuberay/kuberay03.py",
+                    chapter_name="14_kuberay",
+                    hints=[
+                        "Define RayService spec embedding RayClusterSpec and serveConfigV2.",
+                        "Configure multi-application serving routes and health checks.",
+                        "Perform zero-downtime rolling upgrades using declarative spec updates.",
+                    ],
+                ),
+                Exercise(
+                    name="kuberay04",
+                    title="Autoscaling with KEDA & Ray Autoscaler",
+                    path="exercises/14_kuberay/kuberay04.py",
+                    chapter_name="14_kuberay",
+                    hints=[
+                        "Configure Ray Autoscaler with minReplicas and maxReplicas per worker group.",
+                        "Integrate KEDA ScaledObject for external queue metrics.",
+                        "Test dynamic scale-up under load and graceful scale-down.",
+                    ],
+                ),
+                Exercise(
+                    name="kuberay05",
+                    title="Kubernetes Fault Tolerance & Pod Evictions",
+                    path="exercises/14_kuberay/kuberay05.py",
+                    chapter_name="14_kuberay",
+                    hints=[
+                        "Configure GCS fault tolerance using external storage (Redis/etcd).",
+                        "Simulate worker pod eviction and verify automatic rescheduling.",
+                        "Ensure object lineage reconstruction completes without data loss.",
+                    ],
+                ),
+            ],
+        ),
     ]
     return Manifest(chapters=chapters)
 
@@ -729,6 +796,7 @@ _MANIFEST: Optional[Manifest] = None
 
 
 def get_manifest() -> Manifest:
+    """Retrieve the singleton curriculum manifest instance, building it if needed."""
     global _MANIFEST
     if _MANIFEST is None:
         _MANIFEST = build_manifest()
@@ -736,25 +804,43 @@ def get_manifest() -> Manifest:
 
 
 def get_exercise_by_name(name: str) -> Optional[Exercise]:
+    """Find an exercise by exact name, exact path, filename, or path suffix."""
     for ex in get_manifest().all_exercises:
-        if ex.name == name or ex.path == name or ex.path.endswith(name):
+        if (
+            ex.name == name
+            or ex.path == name
+            or Path(ex.path).name == name
+            or ex.path.endswith(f"/{name}")
+        ):
             return ex
     return None
 
 
 def get_next_exercise(current_name: str) -> Optional[Exercise]:
+    """Return the next exercise in the curriculum after the specified exercise."""
+    current = get_exercise_by_name(current_name)
+    if current is None:
+        return None
     exercises = get_manifest().all_exercises
-    for i, ex in enumerate(exercises):
-        if ex.name == current_name or ex.path == current_name or ex.path.endswith(current_name):
-            if i + 1 < len(exercises):
-                return exercises[i + 1]
+    try:
+        idx = exercises.index(current)
+    except ValueError:
+        return None
+    if idx + 1 < len(exercises):
+        return exercises[idx + 1]
     return None
 
 
 def get_previous_exercise(current_name: str) -> Optional[Exercise]:
+    """Return the previous exercise in the curriculum before the specified exercise."""
+    current = get_exercise_by_name(current_name)
+    if current is None:
+        return None
     exercises = get_manifest().all_exercises
-    for i, ex in enumerate(exercises):
-        if ex.name == current_name or ex.path == current_name or ex.path.endswith(current_name):
-            if i > 0:
-                return exercises[i - 1]
+    try:
+        idx = exercises.index(current)
+    except ValueError:
+        return None
+    if idx > 0:
+        return exercises[idx - 1]
     return None

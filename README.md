@@ -13,7 +13,7 @@ Ray is a unified framework for scaling AI and Python applications from single la
 Raylings provides:
 - **Interactive File Watcher**: Edit exercises in your favorite editor; Raylings automatically re-runs and validates your changes on file save.
 - **Fast Execution**: Background Ray daemon re-uses a warm local cluster session for sub-50ms exercise turnaround.
-- **13 Chapters & 50+ Exercises**: From first remote tasks to distributed parameter servers, PyTorch DDP pipelines, and Ray Serve DAGs.
+- **14 Chapters & 55+ Exercises**: From first remote tasks to distributed parameter servers, PyTorch DDP pipelines, Ray Serve DAGs, and KubeRay on Kubernetes.
 - **Progressive Hints & Solutions**: Stuck on an exercise? Get layered hints without spoiling the answer, or inspect canonical solutions when finished.
 
 ---
@@ -57,7 +57,7 @@ Raylings will open the first exercise in `exercises/01_basics/basics01.py`. When
 
 ## Curriculum Map
 
-Raylings covers 13 comprehensive chapters spanning core foundations to production ML engineering:
+Raylings covers 14 comprehensive chapters spanning core foundations to production ML engineering:
 
 | Chapter | Title | Topics Covered |
 | :--- | :--- | :--- |
@@ -74,6 +74,7 @@ Raylings covers 13 comprehensive chapters spanning core foundations to productio
 | **11** | **Ray Tune (Hyperparameter Optimization)** | Search spaces, distributed trial execution, ASHA / HyperBand early stopping, Population-Based Training (PBT) |
 | **12** | **Ray Serve (Model Deployment)** | `@serve.deployment`, HTTP ingress, dynamic request batching (`@serve.batch`), multi-model DAGs, streaming LLMs, autoscaling |
 | **13** | **Observability & Debugging** | Chrome execution timelines (`ray timeline`), memory profiling (`ray memory`), Prometheus metrics, GCS dumps |
+| **14** | **KubeRay on Kubernetes** | RayCluster CRD, RayJob batch lifecycles, RayService rolling zero-downtime serving, KEDA autoscaling, pod eviction recovery |
 
 ---
 
