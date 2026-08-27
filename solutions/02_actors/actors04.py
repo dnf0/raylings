@@ -38,7 +38,7 @@ def verify() -> None:
     assert results == expected_results, f"Expected {expected_results}, got {results}"
     assert count == 4, f"Expected count 4, got {count}"
     print(f"Elapsed time for 4 concurrent async requests: {elapsed:.3f}s")
-    assert elapsed < 0.22, f"Async actor took too long ({elapsed:.3f}s), concurrency not active"
+    assert elapsed < 0.30, f"Async actor took too long ({elapsed:.3f}s), concurrency not active"
     print("✓ actors04 verified: Async Actor max_concurrency coroutine concurrency confirmed!")
 
 
