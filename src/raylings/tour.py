@@ -34,7 +34,7 @@ class TourEngine:
                 content=(
                     "Ray is an open-source unified framework for scaling AI and Python applications.\n"
                     "Raylings guides you through tasks, actors, objects, placement groups, Ray Train,\n"
-                    "Ray Data, Ray Serve, and advanced distributed patterns through 66 hands-on exercises."
+                    "Ray Data, Ray Serve, and advanced distributed patterns through 78 hands-on exercises."
                 ),
                 command_hint="raylings list",
                 action_label="View Curriculum",

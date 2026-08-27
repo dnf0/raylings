@@ -62,6 +62,7 @@ nav:
   - CLI Reference: cli-reference.md
   - Troubleshooting: troubleshooting.md
   - Contributing: contributing.md
+  - Roadmap & Backlog: ROADMAP.md
 
 exclude_docs: |
   superpowers/**

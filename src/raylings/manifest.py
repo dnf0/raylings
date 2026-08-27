@@ -792,6 +792,168 @@ def build_manifest() -> Manifest:
                 ),
             ],
         ),
+        Chapter(
+            number=15,
+            name="15_vllm_and_llms",
+            title="Distributed LLM Serving & vLLM",
+            description="Tensor Parallelism, PagedAttention, Multi-LoRA, and Speculative Decoding",
+            exercises=[
+                Exercise(
+                    name="vllm01",
+                    title="Tensor Parallelism & Worker Actor Groups",
+                    path="exercises/15_vllm_and_llms/vllm01.py",
+                    chapter_name="15_vllm_and_llms",
+                    hints=[
+                        "Shard W1 along columns (axis 1) and W2 along rows (axis 0) across world_size workers.",
+                        "In TPWorker.forward(x), compute h_shard = x @ self.w1_shard and z_shard = h_shard @ self.w2_shard.",
+                        "In tensor_parallel_forward, dispatch worker forward passes and sum (all-reduce) results across ranks.",
+                    ],
+                ),
+                Exercise(
+                    name="vllm02",
+                    title="PagedAttention & KV-Cache Block Management",
+                    path="exercises/15_vllm_and_llms/vllm02.py",
+                    chapter_name="15_vllm_and_llms",
+                    hints=[
+                        "Slice prompt tokens into chunks of block_size and check self.prefix_cache for matching prefix blocks.",
+                        "When appending tokens, allocate a new physical block only when crossing a block boundary ((curr_len - 1) % block_size == 0 or len % block_size == 0).",
+                        "Translate logical token index to physical block and offset: logical_token_idx // block_size, logical_token_idx % block_size.",
+                        "In free_sequence, decrement ref counts and return blocks with ref_count == 0 to self.free_blocks.",
+                    ],
+                ),
+                Exercise(
+                    name="vllm03",
+                    title="Dynamic Multi-LoRA Adapter Serving",
+                    path="exercises/15_vllm_and_llms/vllm03.py",
+                    chapter_name="15_vllm_and_llms",
+                    hints=[
+                        "Calculate scaling factor as alpha / float(lora_a.shape[1]).",
+                        "Use self.adapter_cache.popitem(last=False) to evict the oldest adapter when cache is full.",
+                        "In forward(x, adapter_id), compute base_output = x @ self.base_weight and add scaling * ((x @ lora_a) @ lora_b) if adapter_id is given.",
+                        "Call self.adapter_cache.move_to_end(adapter_id) on cache hits to maintain LRU access ordering.",
+                    ],
+                ),
+                Exercise(
+                    name="vllm04",
+                    title="Speculative Decoding with Draft & Target Workers",
+                    path="exercises/15_vllm_and_llms/vllm04.py",
+                    chapter_name="15_vllm_and_llms",
+                    hints=[
+                        "Generate k draft candidate tokens using draft_worker.generate_draft.remote(sequence, k).",
+                        "Evaluate candidate tokens in parallel using target_worker.evaluate_candidates.remote(sequence, draft_tokens).",
+                        "Compare draft tokens against target predictions; on mismatch, append the target correction and break out of the draft loop.",
+                        "If all draft tokens are accepted and the sequence is not full, append the target bonus token.",
+                    ],
+                ),
+            ],
+        ),
+        Chapter(
+            number=16,
+            name="16_fsdp_and_deepspeed",
+            title="DeepSpeed & PyTorch FSDP",
+            description="Fully Sharded Data Parallel, ZeRO Memory Optimization, Mixed Precision, and Fault Recovery",
+            exercises=[
+                Exercise(
+                    name="fsdp01",
+                    title="PyTorch FSDP with Ray Train ScalingConfig",
+                    path="exercises/16_fsdp_and_deepspeed/fsdp01.py",
+                    chapter_name="16_fsdp_and_deepspeed",
+                    hints=[
+                        "Create a size_based_auto_wrap_policy using functools.partial(size_based_auto_wrap_policy, min_num_params=min_num_params).",
+                        "Wrap model with FullyShardedDataParallel(model, auto_wrap_policy=auto_wrap_policy, sharding_strategy=sharding_strategy, device_id=torch.device('cpu')).",
+                        "In train_loop, optimize the FSDP model across epochs, report metrics with ray.train.report(), and return initial and final loss.",
+                    ],
+                ),
+                Exercise(
+                    name="fsdp02",
+                    title="DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 Memory Partitioning",
+                    path="exercises/16_fsdp_and_deepspeed/fsdp02.py",
+                    chapter_name="16_fsdp_and_deepspeed",
+                    hints=[
+                        "Calculate memory: ZeRO-0 (p+g+3p), ZeRO-1 (p+g+3p/N), ZeRO-2 (p+g/N+3p/N), ZeRO-3 (p/N+g/N+3p/N).",
+                        "In ZeROWorker.step(), update m and v moments, apply bias corrections (1 - beta^t), and update param_shard.",
+                        "In reduce_scatter, average gradients across worker lists and split into world_size equal shards.",
+                        "In zero_stage3_distributed_step, dispatch .step.remote to worker actors and all-gather updated shards.",
+                    ],
+                ),
+                Exercise(
+                    name="fsdp03",
+                    title="Mixed Precision & Activation Checkpointing",
+                    path="exercises/16_fsdp_and_deepspeed/fsdp03.py",
+                    chapter_name="16_fsdp_and_deepspeed",
+                    hints=[
+                        "Use torch.utils.checkpoint.checkpoint(block, x, use_reentrant=False) when use_checkpointing and model.training are True.",
+                        "Use torch.autograd.graph.saved_tensors_hooks(pack_hook, unpack_hook) to track saved activation tensor bytes and count.",
+                        "Run forward pass inside torch.autocast(device_type='cpu', dtype=torch.bfloat16, enabled=use_autocast) in train_step.",
+                    ],
+                ),
+                Exercise(
+                    name="fsdp04",
+                    title="Elastic Fault-Tolerant Distributed Checkpoints",
+                    path="exercises/16_fsdp_and_deepspeed/fsdp04.py",
+                    chapter_name="16_fsdp_and_deepspeed",
+                    hints=[
+                        "In save_sharded_checkpoint, save rank_{rank}_model.pt and rank_{rank}_optim.pt, and have rank 0 write metadata.json.",
+                        "In load_sharded_checkpoint, read metadata.json and load the local rank model and optimizer tensors.",
+                        "In ShardedTrainWorker, save and restore local weight_shard and optimizer state dict.",
+                    ],
+                ),
+            ],
+        ),
+        Chapter(
+            number=17,
+            name="17_multimodal_and_vectors",
+            title="Multimodal & Vector Ray Data",
+            description="Streaming Multimodal ETL, ActorPool Batch Embeddings, Length Bucketing, and Vector Stores",
+            exercises=[
+                Exercise(
+                    name="data_genai01",
+                    title="Streaming Multimodal Image & Audio ETL",
+                    path="exercises/17_multimodal_and_vectors/data_genai01.py",
+                    chapter_name="17_multimodal_and_vectors",
+                    hints=[
+                        "Standardize image: (batch['image'].astype(np.float32) / 255.0 - mean) / std where mean/std are shaped (1, 3, 1, 1).",
+                        "Compute log spectrogram using np.log1p(np.maximum(0.0, batch['spectrogram'])).",
+                        "Wrap NumPy arrays in pa.Table using ArrowTensorArray.from_numpy(batch['image']) and ArrowTensorArray.from_numpy(batch['spectrogram']).",
+                        "Stream dataset batches lazily with ds.iter_batches(batch_size=batch_size, batch_format='numpy').",
+                    ],
+                ),
+                Exercise(
+                    name="data_genai02",
+                    title="Accelerated Batch Embeddings with ActorPoolStrategy",
+                    path="exercises/17_multimodal_and_vectors/data_genai02.py",
+                    chapter_name="17_multimodal_and_vectors",
+                    hints=[
+                        "Initialize nn.Linear(in_features, embedding_dim, bias=False), call self.model.eval(), and record os.getpid().",
+                        "Compute embeddings in torch.no_grad() and apply torch.nn.functional.normalize(emb, p=2, dim=-1) if normalize is True.",
+                        "Map BatchEmbeddingExtractor over ds using compute=ray.data.ActorPoolStrategy(min_size=min_workers, max_size=max_workers).",
+                    ],
+                ),
+                Exercise(
+                    name="data_genai03",
+                    title="Dynamic Token Length Bucketing & Padding Optimization",
+                    path="exercises/17_multimodal_and_vectors/data_genai03.py",
+                    chapter_name="17_multimodal_and_vectors",
+                    hints=[
+                        "Find max_len = max(len(toks) for toks in batch['tokens']) for the current micro-batch.",
+                        "Pad sequences with pad_token_id and create binary attention masks (1 for real token, 0 for padding).",
+                        "Compute padding ratio as total_pad / (total_actual + total_pad).",
+                        "Sort dataset using ds.sort('seq_len') to cluster sequences with similar token lengths into adjacent batches.",
+                    ],
+                ),
+                Exercise(
+                    name="data_genai04",
+                    title="Streaming Parallel Ingestion into Vector Databases",
+                    path="exercises/17_multimodal_and_vectors/data_genai04.py",
+                    chapter_name="17_multimodal_and_vectors",
+                    hints=[
+                        "In MockVectorIndexStore.upsert_batch, insert (doc_id, vector) into self.partitions[partition_id] and return record count.",
+                        "In VectorDatabaseDatasink.write, convert blocks via BlockAccessor.for_block(block).to_numpy() and route by doc_id % self.num_partitions.",
+                        "Dispatch batch upserts via self.store_actor.upsert_batch.remote(part_id, buffer) and wait for all tasks with ray.get().",
+                    ],
+                ),
+            ],
+        ),
     ]
     return Manifest(chapters=chapters)
 
