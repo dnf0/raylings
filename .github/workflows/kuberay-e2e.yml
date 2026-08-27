@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "scripts/kuberay/**"
+      - "src/raylings/**"
       - "tests/test_kuberay_e2e.py"
       - ".github/workflows/kuberay-e2e.yml"
   push:
@@ -14,6 +15,7 @@ on:
       - "feat/**"
     paths:
       - "scripts/kuberay/**"
+      - "src/raylings/**"
       - "tests/test_kuberay_e2e.py"
       - ".github/workflows/kuberay-e2e.yml"
   workflow_dispatch:
@@ -60,20 +62,18 @@ jobs:
       - name: Deploy KubeRay Operator & Cluster
         run: bash scripts/kuberay/setup-kuberay.sh up
 
-      - name: Wait for Cluster Readiness
-        run: bash scripts/kuberay/setup-kuberay.sh wait
+      - name: Forward Ray Cluster Ports
+        run: bash scripts/kuberay/setup-kuberay.sh forward
 
       - name: Run KubeRay E2E Integration Tests
         run: |
-          kubectl port-forward svc/raylings-cluster-head-svc 10001:10001 8265:8265 &
-          PF_PID=$!
-          sleep 5
           RAY_ADDRESS=ray://localhost:10001 uv run pytest tests/test_kuberay_e2e.py -v
-          kill $PF_PID 2>/dev/null || true
 
       - name: Cluster Diagnostics on Failure
         if: failure()
         run: |
+          echo "=== Port Forward Logs ==="
+          cat /tmp/kuberay-port-forward.log || true
           echo "=== Pods in all namespaces ==="
           kubectl get pods -A
           echo "=== RayClusters in all namespaces ==="
