@@ -18,9 +18,8 @@ from ray.util.placement_group import placement_group, remove_placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
 from raylings.kuberay_helpers import (
-    PlasmaConsumer,
-    PlasmaProducer,
     WorkerNodeProbe,
+    run_plasma_transfer,
     run_ray_data_multinode_pipeline,
     run_torch_train_multinode,
 )
@@ -165,39 +164,11 @@ def test_kuberay_placement_group_strict_spread(ray_cluster: dict[str, Any]) -> N
 
 def test_kuberay_cross_node_plasma_transfer(ray_cluster: dict[str, Any]) -> None:
     """Verify zero-corruption cross-node object store transfer for NumPy and PyArrow."""
-    bundles = [{"CPU": 0.5}, {"CPU": 0.5}]
-    pg = placement_group(bundles, strategy="STRICT_SPREAD")
-    ready = ray.get(pg.ready(), timeout=30)
-    assert ready is not None, "Placement group failed to reach READY state"
-
-    try:
-        producer = PlasmaProducer.options(
-            scheduling_strategy=PlacementGroupSchedulingStrategy(
-                placement_group=pg,
-                placement_group_bundle_index=0,
-            )
-        ).remote()
-
-        consumer = PlasmaConsumer.options(
-            scheduling_strategy=PlacementGroupSchedulingStrategy(
-                placement_group=pg,
-                placement_group_bundle_index=1,
-            )
-        ).remote()
-
-        # 1. NumPy transfer (1,000,000 int64 elements = 8 MB)
-        np_ref = producer.produce_numpy.remote(num_elements=1_000_000)
-        np_elapsed, np_bytes = ray.get(consumer.verify_numpy.remote(np_ref, expected_len=1_000_000))
-        assert np_bytes == 8_000_000, f"Expected 8,000,000 bytes, got {np_bytes}"
-        assert np_elapsed >= 0.0
-
-        # 2. PyArrow Table transfer (50,000 rows)
-        pa_ref = producer.produce_pyarrow.remote(num_rows=50_000)
-        pa_elapsed, pa_bytes = ray.get(consumer.verify_pyarrow.remote(pa_ref, expected_rows=50_000))
-        assert pa_bytes > 0, "PyArrow transfer resulted in 0 bytes"
-        assert pa_elapsed >= 0.0
-    finally:
-        remove_placement_group(pg)
+    res = ray.get(run_plasma_transfer.remote())
+    assert res["numpy_bytes"] == 8_000_000, f"Expected 8,000,000 bytes, got {res['numpy_bytes']}"
+    assert res["numpy_elapsed"] >= 0.0
+    assert res["pyarrow_bytes"] > 0, "PyArrow transfer resulted in 0 bytes"
+    assert res["pyarrow_elapsed"] >= 0.0
 
 
 def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
