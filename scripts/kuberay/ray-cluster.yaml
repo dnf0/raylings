@@ -6,7 +6,7 @@ metadata:
   labels:
     ray.io/node-type: head
 spec:
-  rayVersion: '2.30.0'
+  rayVersion: '2.58.0'
   headGroupSpec:
     rayStartParams:
       dashboard-host: '0.0.0.0'
@@ -16,7 +16,7 @@ spec:
       spec:
         containers:
           - name: ray-head
-            image: rayproject/ray:2.30.0-py310
+            image: rayproject/ray:latest-py312
             imagePullPolicy: IfNotPresent
             resources:
               limits:
@@ -46,7 +46,7 @@ spec:
         spec:
           containers:
             - name: ray-worker
-              image: rayproject/ray:2.30.0-py310
+              image: rayproject/ray:latest-py312
               imagePullPolicy: IfNotPresent
               resources:
                 limits:

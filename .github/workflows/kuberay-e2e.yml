@@ -63,14 +63,13 @@ jobs:
       - name: Wait for Cluster Readiness
         run: bash scripts/kuberay/setup-kuberay.sh wait
 
-      - name: Port-forward Ray Services
-        run: |
-          kubectl port-forward svc/raylings-cluster-head-svc 10001:10001 8265:8265 &
-          sleep 5
-
       - name: Run KubeRay E2E Integration Tests
         run: |
+          kubectl port-forward svc/raylings-cluster-head-svc 10001:10001 8265:8265 &
+          PF_PID=$!
+          sleep 5
           RAY_ADDRESS=ray://localhost:10001 uv run pytest tests/test_kuberay_e2e.py -v
+          kill $PF_PID 2>/dev/null || true
 
       - name: Cluster Diagnostics on Failure
         if: failure()
