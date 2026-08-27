@@ -59,6 +59,11 @@ nav:
   - Troubleshooting: troubleshooting.md
   - Contributing: contributing.md
 
+exclude_docs: |
+  superpowers/**
+  ONBOARDING.md
+
 not_in_nav: |
   superpowers/**
   ONBOARDING.md
+
