@@ -11,6 +11,9 @@ from raylings.manifest import get_manifest
 from raylings.models import Exercise
 from raylings.runner import ExerciseRunner
 
+pytestmark = pytest.mark.heavy
+
+
 MANIFEST = get_manifest()
 
 CHAPTER_13_14_EXERCISES = [

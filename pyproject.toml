@@ -116,4 +116,9 @@ typeCheckingMode = "basic"
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+markers = [
+    "heavy: marks heavy multi-process distributed tests (skipped in fast CI)",
+    "slow: marks slow tests",
+]
+
 

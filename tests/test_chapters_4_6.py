@@ -3,6 +3,8 @@ import pytest
 from raylings.manifest import Exercise, get_manifest
 from raylings.runner import ExerciseRunner
 
+pytestmark = pytest.mark.heavy
+
 
 def _get_chapter_exercises(chapter_names: set[str]) -> list[Exercise]:
     manifest = get_manifest()

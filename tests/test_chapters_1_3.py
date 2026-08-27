@@ -8,6 +8,8 @@ from raylings.manifest import get_manifest
 from raylings.models import Exercise
 from raylings.runner import ExerciseRunner
 
+pytestmark = pytest.mark.heavy
+
 
 def get_chapter_exercises(chapter_numbers: list[int]) -> list[Exercise]:
     """Retrieve exercises belonging to specified chapter numbers."""

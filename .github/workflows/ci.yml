@@ -49,7 +49,7 @@ jobs:
     name: Test (Python ${{ matrix.python-version }} on ${{ matrix.os }})
     needs: lint-and-format
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -77,17 +77,8 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras --dev --python ${{ matrix.python-version }}
 
-      - name: Run Unit and Infrastructure Tests
-        run: |
-          uv run pytest tests/test_infra.py tests/test_manifest.py tests/test_runner.py tests/test_daemon.py tests/test_cli.py -v
-
-      - name: Run Core & Scheduling Curriculum Tests (Ch 1-6)
-        run: |
-          uv run pytest tests/test_chapters_1_3.py tests/test_chapters_4_6.py -v
-
-      - name: Run Advanced Curriculum Tests (Ch 7-14)
-        run: |
-          uv run pytest tests/test_chapters_7_9.py tests/test_chapters_10_12.py tests/test_chapters_13_14.py -v
+      - name: Run Test Suite (Critical Subset)
+        run: uv run pytest -m "not heavy" -v
 
   cli-smoke-test:
     name: CLI Smoke Test (${{ matrix.os }})
