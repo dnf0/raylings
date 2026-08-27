@@ -843,5 +843,88 @@ def doctor_command(
         raise typer.Exit(1)
 
 
+@app.command(name="new", help="Scaffold a new exercise and solution template.")
+@app.command(name="new-exercise", help="Scaffold a new exercise and solution template (alias).")
+def new_command(
+    chapter: str = typer.Argument(
+        ...,
+        help="Chapter number (e.g. 15 or 01) or chapter directory name (e.g. 15_vllm_and_llms)",
+    ),
+    name: str = typer.Argument(
+        ...,
+        help="Exercise filename/identifier without .py extension (e.g. vllm05)",
+    ),
+    title: str | None = typer.Option(
+        None,
+        "--title",
+        "-t",
+        help="Human-readable exercise title",
+    ),
+    description: str | None = typer.Option(
+        None,
+        "--description",
+        "-d",
+        help="Exercise description summary",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Preview scaffolded files and manifest entry without writing to disk",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output scaffolding result as JSON",
+    ),
+) -> None:
+    """Scaffold a new exercise and reference solution template with boilerplate and manifest entry."""
+    import json
+
+    from rich.panel import Panel
+    from rich.syntax import Syntax
+
+    from raylings.scaffolder import ExerciseScaffolder
+
+    scaffolder = ExerciseScaffolder()
+    try:
+        result = scaffolder.scaffold(
+            chapter=chapter,
+            name=name,
+            title=title,
+            description=description,
+            dry_run=dry_run,
+        )
+    except Exception as e:
+        if as_json:
+            print(json.dumps({"error": str(e), "success": False}, indent=2))
+        else:
+            console.print(f"[bold red]Error:[/bold red] {e}")
+        raise typer.Exit(1)
+
+    if as_json:
+        print(json.dumps(result.to_dict(dry_run=dry_run), indent=2))
+        return
+
+    render_banner()
+    if dry_run:
+        console.print(
+            "[bold yellow]DRY RUN PREVIEW[/bold yellow] (No files were written to disk)\n"
+        )
+    else:
+        console.print(
+            f"[bold green]✓ Successfully scaffolded exercise '{result.exercise_name}'![/bold green]\n"
+        )
+
+    console.print(f"[bold cyan]Chapter:[/bold cyan] {result.chapter_name}")
+    console.print(f"[bold cyan]Exercise File:[/bold cyan] {result.exercise_path}")
+    console.print(f"[bold cyan]Solution File:[/bold cyan] {result.solution_path}\n")
+
+    console.print(
+        f"[bold magenta]Next Step:[/bold magenta] Register this exercise in [bold yellow]src/raylings/manifest.py[/bold yellow] under chapter [bold cyan]{result.chapter_name}[/bold cyan]:\n"
+    )
+    syntax = Syntax(result.manifest_snippet, "python", theme="monokai", line_numbers=False)
+    console.print(Panel(syntax, title="Manifest Registration Snippet", border_style="cyan"))
+
+
 if __name__ == "__main__":
     app()
