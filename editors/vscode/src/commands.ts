@@ -155,7 +155,10 @@ export function registerCommands(
   // 4. Start Watcher in Integrated Terminal
   context.subscriptions.push(
     vscode.commands.registerCommand('raylings.startWatcher', () => {
-      const terminal = vscode.window.createTerminal('Raylings Watcher');
+      let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Watcher');
+      if (!terminal) {
+        terminal = vscode.window.createTerminal('Raylings Watcher');
+      }
       terminal.show();
       terminal.sendText(`${getExecutable()} watch`);
     })

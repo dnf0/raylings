@@ -30,7 +30,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         const config = vscode.workspace.getConfiguration('raylings');
         const autoRun = config.get<boolean>('autoRunOnSave', true);
 
-        if (autoRun && doc.fileName.includes('/exercises/')) {
+        if (autoRun && /[/\\]exercises[/\\]/.test(doc.fileName)) {
           vscode.commands.executeCommand('raylings.runCurrent');
         } else {
           await Promise.all([
