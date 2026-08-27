@@ -221,14 +221,15 @@ def run_ray_data_multinode_pipeline() -> dict[str, Any]:
     import ray.data
 
     ds = ray.data.range(100)
-    transformed_ds = ds.map(
-        lambda row: {
-            "id": row["id"],
-            "square": row["id"] ** 2,
-        }
+    transformed_ds = ds.map_batches(
+        lambda batch: {
+            "id": batch["id"],
+            "square": [int(x) ** 2 for x in batch["id"]],
+        },
+        batch_size=25,
     )
     results = transformed_ds.take_all()
     return {
         "count": len(results),
-        "results": {row["id"]: row["square"] for row in results},
+        "results": {int(row["id"]): int(row["square"]) for row in results},
     }
