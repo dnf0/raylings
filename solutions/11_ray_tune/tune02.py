@@ -7,7 +7,6 @@ import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 import ray
-import ray.train
 from ray import tune
 from ray.tune.schedulers import ASHAScheduler
 

@@ -48,7 +48,7 @@ def verify() -> None:
     assert result is not None, "Trainer result must not be None"
 
     assert result.error is None, f"Training failed: {result.error}"
-    print("✓ train01 verified: 2-worker TorchTrainer trained with successfully!")
+    print("✓ train01 verified: 2-worker TorchTrainer trained successfully!")
     ray.shutdown()
 
 

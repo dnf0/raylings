@@ -41,7 +41,7 @@ class Classifier:
 
 @serve.deployment
 class Pipeline:
-    def __init__(self, tokenizer: DeploymentHandle, classifier: DeploymentHandle):
+    def __init__(self, tokenizer: DeploymentHandle, classifier: DeploymentHandle) -> None:
         self.tokenizer = tokenizer
         self.classifier = classifier
 
