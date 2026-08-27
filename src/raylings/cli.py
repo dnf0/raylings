@@ -139,10 +139,6 @@ def list_command(
     manifest = get_manifest()
     runner = ExerciseRunner()
 
-    if as_json:
-        import json
-
-        chapters_data = []
     tracker = get_state_tracker()
     completed_set = tracker.get_completed_set()
 
@@ -821,6 +817,8 @@ def doctor_command(
     table.add_column("Status", justify="center", width=12)
     table.add_column("Details", style="white")
 
+    from rich.markup import escape
+
     for check in checks:
         st = check["status"]
         status_markup = (
@@ -832,7 +830,7 @@ def doctor_command(
                 else "[bold red]✗ FAIL[/bold red]"
             )
         )
-        table.add_row(check["name"], status_markup, check["details"])
+        table.add_row(check["name"], status_markup, escape(check["details"]))
 
     console.print(table)
     console.print(
