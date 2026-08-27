@@ -15,8 +15,6 @@ from typing import Any, Generator
 
 import pytest
 import ray
-from ray.train import ScalingConfig
-from ray.train.torch import TorchConfig, TorchTrainer
 from ray.util.placement_group import placement_group, remove_placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
@@ -25,8 +23,8 @@ from raylings.kuberay_helpers import (
     PlasmaConsumer,
     PlasmaProducer,
     WorkerNodeProbe,
-    distributed_torch_train_loop,
     run_ray_data_multinode_pipeline,
+    run_torch_train_multinode,
 )
 
 pytestmark = [pytest.mark.kuberay, pytest.mark.heavy]
@@ -49,8 +47,6 @@ def ray_cluster() -> Generator[dict[str, Any], None, None]:
         "env_vars": {
             "PYTHONPATH": python_path,
             "RAY_ENABLE_UV_RUN_RUNTIME_ENV": "0",
-            "GLOO_SOCKET_IFNAME": "eth0",
-            "TP_SOCKET_IFNAME": "eth0",
         },
     }
 
@@ -214,22 +210,11 @@ def test_kuberay_cross_node_plasma_transfer(ray_cluster: dict[str, Any]) -> None
 
 def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
     """Verify distributed multi-worker PyTorch training with gradient synchronization."""
-    scaling_config = ScalingConfig(
-        num_workers=2,
-        use_gpu=False,
-        resources_per_worker={"CPU": 0.5},
-    )
-    torch_config = TorchConfig(backend="gloo", timeout_s=60)
-    trainer = TorchTrainer(
-        train_loop_per_worker=distributed_torch_train_loop,
-        torch_config=torch_config,
-        scaling_config=scaling_config,
-    )
-    result = trainer.fit()
+    res = ray.get(run_torch_train_multinode.remote())
 
-    assert result.error is None, f"TorchTrainer failed with error: {result.error}"
-    if result.metrics:
-        loss = result.metrics.get("loss")
+    assert res["error"] is None, f"TorchTrainer failed with error: {res['error']}"
+    if res["metrics"]:
+        loss = res["metrics"].get("loss")
         assert loss is not None and loss < 1.0, f"Expected loss < 1.0, got {loss}"
 
 

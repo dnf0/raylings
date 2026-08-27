@@ -109,6 +109,30 @@ def distributed_torch_train_loop() -> None:
 
 
 @ray.remote
+def run_torch_train_multinode() -> dict[str, Any]:
+    """Execute PyTorch distributed training inside cluster context."""
+    from ray.train import ScalingConfig
+    from ray.train.torch import TorchConfig, TorchTrainer
+
+    scaling_config = ScalingConfig(
+        num_workers=2,
+        use_gpu=False,
+        resources_per_worker={"CPU": 0.5},
+    )
+    torch_config = TorchConfig(backend="gloo", timeout_s=60)
+    trainer = TorchTrainer(
+        train_loop_per_worker=distributed_torch_train_loop,
+        torch_config=torch_config,
+        scaling_config=scaling_config,
+    )
+    result = trainer.fit()
+    return {
+        "metrics": result.metrics or {},
+        "error": str(result.error) if result.error else None,
+    }
+
+
+@ray.remote
 def run_ray_data_multinode_pipeline() -> dict[str, Any]:
     """Execute streaming Ray Data pipeline within the cluster context."""
     import ray.data
