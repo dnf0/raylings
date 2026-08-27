@@ -28,9 +28,9 @@ mindmap
 
 ---
 
-## Track 1: Next-Gen Distributed AI Curriculum (In Progress 🚀)
+## Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)
 
-Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced distributed AI and Generative AI chapters:
+Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced distributed AI and Generative AI chapters (78 total exercises):
 
 ### Chapter 15: Distributed LLM Serving with vLLM & Ray
 - **`vllm01.py`**: Multi-Worker Tensor Parallelism & Model Partitioning across Ray Actors.
