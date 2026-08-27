@@ -155,7 +155,10 @@ export function registerCommands(
   // 4. Start Watcher in Integrated Terminal
   context.subscriptions.push(
     vscode.commands.registerCommand('raylings.startWatcher', () => {
-      const terminal = vscode.window.createTerminal('Raylings Watcher');
+      let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Watcher');
+      if (!terminal) {
+        terminal = vscode.window.createTerminal('Raylings Watcher');
+      }
       terminal.show();
       terminal.sendText(`${getExecutable()} watch`);
     })
@@ -212,4 +215,74 @@ export function registerCommands(
       vscode.window.showInformationMessage('🔄 Raylings progress synced!');
     })
   );
+
+  // 8. Start Interactive Onboarding Tour in Integrated Terminal
+  context.subscriptions.push(
+    vscode.commands.registerCommand('raylings.startTour', () => {
+      startTourCommand();
+    })
+  );
+
+  // 9. Run Preflight Diagnostics (Doctor) in Integrated Terminal
+  context.subscriptions.push(
+    vscode.commands.registerCommand('raylings.runDoctor', () => {
+      runDoctorCommand();
+    })
+  );
+
+  // 10. Open Specified Exercise File
+  context.subscriptions.push(
+    vscode.commands.registerCommand('raylings.openExercise', async (filePath?: string | vscode.Uri) => {
+      await openExerciseCommand(filePath);
+    })
+  );
+}
+
+/**
+ * Launch the interactive onboarding tour in a dedicated terminal.
+ */
+export function startTourCommand(): void {
+  const config = vscode.workspace.getConfiguration('raylings');
+  const executable = config.get<string>('executablePath', 'raylings');
+  let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Tour');
+  if (!terminal) {
+    terminal = vscode.window.createTerminal('Raylings Tour');
+  }
+  terminal.show();
+  terminal.sendText(`${executable} tour`);
+}
+
+/**
+ * Launch the preflight doctor diagnostics in a dedicated terminal.
+ */
+export function runDoctorCommand(): void {
+  const config = vscode.workspace.getConfiguration('raylings');
+  const executable = config.get<string>('executablePath', 'raylings');
+  let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Doctor');
+  if (!terminal) {
+    terminal = vscode.window.createTerminal('Raylings Doctor');
+  }
+  terminal.show();
+  terminal.sendText(`${executable} doctor`);
+}
+
+/**
+ * Open a specified exercise file or uri in the active text editor.
+ */
+export async function openExerciseCommand(filePath?: string | vscode.Uri): Promise<void> {
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+  if (!filePath) {
+    await vscode.commands.executeCommand('raylings.openNextExercise');
+    return;
+  }
+  try {
+    const targetUri =
+      typeof filePath === 'string'
+        ? vscode.Uri.file(path.isAbsolute(filePath) ? filePath : path.resolve(workspaceRoot, filePath))
+        : filePath;
+    const doc = await vscode.workspace.openTextDocument(targetUri);
+    await vscode.window.showTextDocument(doc);
+  } catch (err: any) {
+    vscode.window.showErrorMessage(`Failed to open exercise file: ${err.message}`);
+  }
 }
