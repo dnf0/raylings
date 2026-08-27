@@ -53,6 +53,30 @@ Raylings takes a **learn-by-fixing** approach:
 
     [:octicons-arrow-right-24: Start Onboarding](onboarding-guide.md)
 
+-   :material-monitor-dashboard:{ .lg .middle } **Interactive Split-Pane TUI**
+
+    ---
+
+    Full-screen terminal interface (`raylings tui`) featuring curriculum tree navigation, syntax-highlighted code preview, hotkey execution (`[r]`), hint revelation (`[h]`), and telemetry overlays (`[t]`).
+
+    [:octicons-arrow-right-24: TUI Reference](cli-reference.md#raylings-tui)
+
+-   :material-chart-timeline-variant-shimmer:{ .lg .middle } **Real-Time Cluster Telemetry**
+
+    ---
+
+    Live cluster inspector (`raylings top` / `raylings metrics`) monitoring Plasma object store memory, spilling rates, node CPU/GPU saturation, and active actor tables with JSON export.
+
+    [:octicons-arrow-right-24: Telemetry Reference](cli-reference.md#raylings-top-raylings-metrics)
+
+-   :material-auto-fix:{ .lg .middle } **Exercise Scaffolding CLI**
+
+    ---
+
+    Standardized generator (`raylings new`) to instantly scaffold exercise skeletons, reference solutions, validation harnesses, and manifest registration snippets.
+
+    [:octicons-arrow-right-24: Scaffolder Reference](cli-reference.md#raylings-new-raylings-new-exercise)
+
 -   :material-microsoft-visual-studio-code:{ .lg .middle } **Native VS Code Extension**
 
     ---
