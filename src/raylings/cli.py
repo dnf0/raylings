@@ -926,5 +926,55 @@ def new_command(
     console.print(Panel(syntax, title="Manifest Registration Snippet", border_style="cyan"))
 
 
+@app.command(name="top", help="Display real-time cluster health and telemetry dashboard.")
+def top_command(
+    interval: float = typer.Option(
+        1.0,
+        "--interval",
+        "-i",
+        help="Refresh interval in seconds for live telemetry monitoring",
+    ),
+    once: bool = typer.Option(
+        False,
+        "--once",
+        help="Capture and render a single cluster telemetry snapshot and exit",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output cluster telemetry snapshot as JSON",
+    ),
+) -> None:
+    """Display real-time cluster health, node resources, Plasma object store metrics, and actor state."""
+    from raylings.metrics import run_top_dashboard
+
+    run_top_dashboard(interval=interval, once=once, as_json=as_json)
+
+
+@app.command(name="metrics", help="Display cluster telemetry and resource metrics (alias for top).")
+def metrics_command(
+    interval: float = typer.Option(
+        1.0,
+        "--interval",
+        "-i",
+        help="Refresh interval in seconds for live telemetry monitoring",
+    ),
+    once: bool = typer.Option(
+        False,
+        "--once",
+        help="Capture and render a single cluster telemetry snapshot and exit",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output cluster telemetry snapshot as JSON",
+    ),
+) -> None:
+    """Display cluster telemetry, node resources, Plasma object store metrics, and actor state."""
+    from raylings.metrics import run_top_dashboard
+
+    run_top_dashboard(interval=interval, once=once, as_json=as_json)
+
+
 if __name__ == "__main__":
     app()
