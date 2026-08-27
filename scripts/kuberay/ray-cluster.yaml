@@ -42,6 +42,7 @@ spec:
       maxReplicas: 2
       rayStartParams:
         block: "true"
+        num-cpus: "1"
       template:
         spec:
           containers:

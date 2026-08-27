@@ -212,7 +212,12 @@ def test_kuberay_cross_node_plasma_transfer(ray_cluster: dict[str, Any]) -> None
 
 def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
     """Verify distributed multi-worker PyTorch training with gradient synchronization."""
-    scaling_config = ScalingConfig(num_workers=2, use_gpu=False)
+    scaling_config = ScalingConfig(
+        num_workers=2,
+        use_gpu=False,
+        trainer_resources={"CPU": 0},
+        resources_per_worker={"CPU": 0.5},
+    )
     trainer = TorchTrainer(
         train_loop_per_worker=distributed_torch_train_loop,
         scaling_config=scaling_config,
