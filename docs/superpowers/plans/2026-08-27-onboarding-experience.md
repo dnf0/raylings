@@ -84,10 +84,10 @@ git commit --no-gpg-sign -m "feat(vscode): add interactive onboarding walkthroug
 - Create: `docs/ONBOARDING.md`
 - Modify: `README.md`
 
-- [ ] **Step 1: Write comprehensive `docs/ONBOARDING.md`**
-- [ ] **Step 2: Update `README.md` with links and quickstart commands (`raylings tour`, `raylings doctor`)**
-- [ ] **Step 3: Run full verification suite (`uv run pytest -m "not heavy" -v`, `uv run ruff check src tests`)**
-- [ ] **Step 4: Commit**
+- [x] **Step 1: Write comprehensive `docs/ONBOARDING.md`**
+- [x] **Step 2: Update `README.md` with links and quickstart commands (`raylings tour`, `raylings doctor`)**
+- [x] **Step 3: Run full verification suite (`uv run pytest -m "not heavy" -v`, `uv run ruff check src tests`)**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/ONBOARDING.md README.md
