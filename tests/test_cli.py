@@ -7,16 +7,15 @@ import pytest
 from typer.testing import CliRunner
 
 from raylings.models import Chapter, Exercise, Manifest
-from raylings.runner import ExerciseRunner, NOT_DONE_MARKER
-
+from raylings.runner import NOT_DONE_MARKER, ExerciseRunner
 
 runner = CliRunner()
 
 
 def test_cli_version():
     """Verify version command and --version flag display version information."""
-    from raylings.cli import app
     from raylings import __version__
+    from raylings.cli import app
 
     res_cmd = runner.invoke(app, ["version"])
     assert res_cmd.exit_code == 0
@@ -103,8 +102,8 @@ def test_cli_daemon_status():
 
 def test_cli_test_solutions(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Verify test command executes solution files and produces summary reports."""
-    from raylings.cli import app
     import raylings.cli as cli_module
+    from raylings.cli import app
 
     # Create mock solution files
     sol1 = tmp_path / "sol1.py"

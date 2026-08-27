@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import Optional
+
 from raylings.models import Chapter, Exercise, Manifest
 
 

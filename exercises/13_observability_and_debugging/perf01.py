@@ -26,8 +26,9 @@ import tempfile
 from typing import Any
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
-import ray
 import os
+
+import ray
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 

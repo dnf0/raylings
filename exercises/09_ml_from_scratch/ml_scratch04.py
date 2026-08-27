@@ -1,5 +1,5 @@
 # I AM NOT DONE
-"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 4: Distributed Data-Parallel Trainer.
+r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 4: Distributed Data-Parallel Trainer.
 
 In Distributed Data-Parallel (DDP) training:
 1. Sharded Data: The dataset is split into N shards across N worker actors.

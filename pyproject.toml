@@ -100,9 +100,13 @@ exclude = [
     "graphify-out",
 ]
 
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501", "E402"]
 
 [tool.ruff.lint.per-file-ignores]
-"exercises/*" = ["F401", "F841"]
+"exercises/**" = ["F841", "F401", "E722", "E402"]
+"solutions/**" = ["F841", "F401", "E402"]
 
 [tool.pyright]
 include = ["src", "tests"]

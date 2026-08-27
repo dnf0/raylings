@@ -1,10 +1,10 @@
 """Exercise runner and execution evaluator for Raylings."""
 
-from dataclasses import dataclass
 import os
-from pathlib import Path
 import subprocess
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 
 from raylings.models import Exercise
 

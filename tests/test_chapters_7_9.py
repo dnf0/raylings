@@ -1,6 +1,7 @@
 """Tests for Chapters 7 to 9 exercises and reference solutions."""
 
 import pytest
+
 from raylings.manifest import Exercise, get_manifest
 from raylings.runner import ExerciseRunner
 

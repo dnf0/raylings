@@ -1,7 +1,9 @@
 """Verification tests for Chapters 1 to 3 curriculum and reference solutions."""
 
 from pathlib import Path
+
 import pytest
+
 from raylings.manifest import get_manifest
 from raylings.models import Exercise
 from raylings.runner import ExerciseRunner

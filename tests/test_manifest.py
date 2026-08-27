@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from raylings.manifest import (
     build_manifest,
     get_exercise_by_name,

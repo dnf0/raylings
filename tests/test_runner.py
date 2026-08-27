@@ -1,9 +1,10 @@
 """Tests for ExerciseRunner and Rich terminal UI diagnostics."""
 
 from pathlib import Path
+
 from rich.console import Console
 
-from raylings.models import Exercise, Chapter, Manifest
+from raylings.models import Chapter, Exercise, Manifest
 from raylings.runner import ExerciseRunner, RunResult
 from raylings.ui import (
     render_banner,

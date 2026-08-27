@@ -1,5 +1,5 @@
 # I AM NOT DONE
-"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 2: Synchronous Gradient Averaging.
+r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 2: Synchronous Gradient Averaging.
 
 In distributed deep learning:
 - Synchronous SGD: The optimizer waits for ALL workers to complete their forward/backward pass,

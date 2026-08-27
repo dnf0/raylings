@@ -1,5 +1,5 @@
 # I AM NOT DONE
-"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 1: Distributed Parameter Server.
+r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 1: Distributed Parameter Server.
 
 The Parameter Server (PS) architecture is a fundamental distributed training pattern.
 It decouples model storage from computation:

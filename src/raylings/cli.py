@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-from rich.table import Table
 import typer
+from rich.table import Table
 
 from raylings import __version__
 from raylings.daemon import RayDaemon
