@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 8: Ray Data for High-Throughput ETL - Exercise 3: Stateful Transforms with ActorPoolStrategy.
 
 When applying heavy ML models (e.g. HuggingFace Transformers, PyTorch ResNets), loading

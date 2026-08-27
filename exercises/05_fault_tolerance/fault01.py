@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 5: Fault Tolerance & Recovery - Exercise 1: Automatic Task Retries.
 
 In distributed computing, transient failures (network blips, memory spikes, spot interruptions)

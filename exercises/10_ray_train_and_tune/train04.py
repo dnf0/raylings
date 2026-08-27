@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 10: Ray Train - Exercise 4: Distributed Checkpointing & Fault Recovery.
 
 Checkpointing allows training jobs to persist model weights periodically and recover

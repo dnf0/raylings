@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 3: Plasma Object Store & Zero-Copy - Exercise 6: Custom Serializers with ray.util.
 
 Ray serializes Python objects into the Plasma store using optimized PyArrow and CloudPickle engines.

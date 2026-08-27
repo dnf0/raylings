@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 12: Ray Serve - Exercise 5: Serve Autoscaling Policies.
 
 Ray Serve features intelligent autoscaling that dynamically provisions actor replicas

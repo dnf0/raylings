@@ -17,10 +17,9 @@ def test_critical_smoke_representative_exercises():
         ex = get_exercise_by_name(name)
         assert ex is not None, f"Exercise {name} not found in manifest"
 
-        # 1. Exercise skeleton should fail initially due to # I AM NOT DONE
+        # 1. Exercise skeleton should fail initially due to incomplete implementation
         skel_result = runner.run_exercise(ex)
         assert skel_result.passed is False, f"Skeleton {name} should have failed initially"
-        assert skel_result.has_not_done_marker is True
 
         # 2. Reference solution should pass cleanly
         sol_result = runner.run_solution(ex)

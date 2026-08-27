@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 4: Scheduling & Resources - Exercise 6: Dynamic Runtime Environments.
 
 In production clusters, different jobs or even different tasks within the same job may require

@@ -116,18 +116,31 @@ def test_cli_run_exercise(tmp_path: Path):
     assert res_missing.exit_code != 0
 
 
-def test_cli_daemon_status():
+def test_cli_daemon_status(monkeypatch: pytest.MonkeyPatch):
     """Verify daemon commands (status, start, stop, restart)."""
+    import raylings.cli as cli_module
     from raylings.cli import app
+
+    mock_daemon = MagicMock()
+    mock_daemon.get_cluster_info.return_value = {
+        "is_running": True,
+        "address": "127.0.0.1:6379",
+        "node_count": 1,
+        "cluster_resources": {"CPU": 2.0},
+        "available_resources": {"CPU": 2.0},
+    }
+    monkeypatch.setattr(cli_module, "RayDaemon", lambda *args, **kwargs: mock_daemon)
 
     res_status = runner.invoke(app, ["daemon", "status"])
     assert res_status.exit_code == 0
 
     res_start = runner.invoke(app, ["daemon", "start"])
     assert res_start.exit_code == 0
+    assert mock_daemon.start.called
 
     res_stop = runner.invoke(app, ["daemon", "stop"])
     assert res_stop.exit_code == 0
+    assert mock_daemon.stop.called
 
     res_restart = runner.invoke(app, ["daemon", "restart"])
     assert res_restart.exit_code == 0
@@ -189,17 +202,17 @@ def test_watcher_find_current_exercise(tmp_path: Path):
     """Verify ExerciseWatcher locates the first pending or incomplete exercise in manifest order."""
     from raylings.watcher import ExerciseWatcher
 
-    # ex1: passed and no marker
+    # ex1: passed cleanly
     ex1_file = tmp_path / "ex01.py"
     ex1_file.write_text("if __name__ == '__main__': pass\n")
 
-    # ex2: contains NOT_DONE_MARKER
+    # ex2: fails validation (assert False)
     ex2_file = tmp_path / "ex02.py"
-    ex2_file.write_text(f"#{NOT_DONE_MARKER}\nif __name__ == '__main__': pass\n")
+    ex2_file.write_text("assert False, 'Not solved yet'\n")
 
-    # ex3: contains NOT_DONE_MARKER
+    # ex3: fails validation
     ex3_file = tmp_path / "ex03.py"
-    ex3_file.write_text(f"#{NOT_DONE_MARKER}\nif __name__ == '__main__': pass\n")
+    ex3_file.write_text("assert False, 'Not solved yet'\n")
 
     ex1 = Exercise(name="ex01", title="Ex 1", path=str(ex1_file), chapter_name="01_test")
     ex2 = Exercise(name="ex02", title="Ex 2", path=str(ex2_file), chapter_name="01_test")
@@ -217,12 +230,18 @@ def test_watcher_find_current_exercise(tmp_path: Path):
         ]
     )
 
-    watcher = ExerciseWatcher(manifest=manifest, runner=ExerciseRunner())
+    from raylings.state import StateTracker
+
+    watcher = ExerciseWatcher(
+        manifest=manifest,
+        runner=ExerciseRunner(),
+        tracker=StateTracker(root_dir=tmp_path),
+    )
     current = watcher.find_current_exercise()
     assert current is not None
     assert current.name == "ex02"
 
-    # Fix ex2 by removing marker
+    # Fix ex2
     ex2_file.write_text("if __name__ == '__main__': pass\n")
     next_current = watcher.find_current_exercise()
     assert next_current is not None
@@ -239,7 +258,7 @@ def test_watcher_handle_change(tmp_path: Path):
     from raylings.watcher import ExerciseWatcher
 
     ex_file = tmp_path / "ex_change.py"
-    ex_file.write_text(f"#{NOT_DONE_MARKER}\nif __name__ == '__main__': pass\n")
+    ex_file.write_text("assert False, 'Initial failing state'\n")
 
     ex = Exercise(name="ex_change", title="Ex Change", path=str(ex_file), chapter_name="01_test")
     manifest = Manifest(
@@ -250,13 +269,12 @@ def test_watcher_handle_change(tmp_path: Path):
 
     watcher = ExerciseWatcher(manifest=manifest, runner=ExerciseRunner())
 
-    # File has NOT_DONE marker
+    # File fails validation
     res = watcher.on_file_changed(ex_file)
     assert res is not None
     assert not res.passed
-    assert res.has_not_done_marker
 
-    # Remove marker and re-trigger
+    # Fix code and re-trigger
     ex_file.write_text("if __name__ == '__main__': pass\n")
     res_passed = watcher.on_file_changed(ex_file)
     assert res_passed is not None

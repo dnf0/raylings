@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 2: Distributed State & Actors - Exercise 1: Stateful Actor Lifecycle.
 
 While Ray tasks are stateless functions, Ray Actors are stateful Python classes.

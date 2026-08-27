@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 3: Plasma Object Store & Zero-Copy - Exercise 3: Object Immutability & Read-Only Semantics.
 
 Objects residing in Ray's Plasma object store are strictly IMMUTABLE.

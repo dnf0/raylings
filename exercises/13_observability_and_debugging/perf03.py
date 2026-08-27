@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 13: Observability - Exercise 3: Ray Metrics & Cluster Introspection.
 
 Ray exposes system metrics (CPU, RAM, GCS state, actor lifecycle) for Prometheus & Grafana.

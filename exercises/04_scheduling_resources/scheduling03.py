@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 4: Scheduling & Resources - Exercise 3: Placement Groups & SPREAD Strategy.
 
 Placement Groups allow you to atomically reserve groups of resource bundles across a cluster.

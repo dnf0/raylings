@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 8: Ray Data for High-Throughput ETL - Exercise 1: Datasets & Block Partitioning.
 
 Ray Data provides distributed data processing for ML pipelines and ETL workloads.

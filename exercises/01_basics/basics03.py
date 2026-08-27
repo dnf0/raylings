@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 1: Ray Core Foundations - Exercise 3: Parallel Pipeline Execution.
 
 A very common mistake when learning Ray is calling `ray.get()` immediately after

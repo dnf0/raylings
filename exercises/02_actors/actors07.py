@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 2: Distributed State & Actors - Exercise 7: ActorPool Dynamic Load Balancing.
 
 When you have a pool of stateful actors (e.g., loaded neural network models, database connections)

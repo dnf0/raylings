@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 1: Ray Core Foundations - Exercise 5: Dynamic Completion with ray.wait().
 
 When running multiple tasks with varying execution times, `ray.get(refs)` blocks until

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 14: KubeRay - Exercise 3: RayService CRD & Zero-Downtime Serving.
 
 The `RayService` CRD manages production Ray Serve deployments on Kubernetes, providing

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 8: Ray Data for High-Throughput ETL - Exercise 4: Filtering, Selection & Aggregation.
 
 Ray Data provides relational operations to filter, select columns, and aggregate distributed datasets

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 8: Ray Data for High-Throughput ETL - Exercise 2: Vectorized Batch Transforms (map_batches).
 
 While `ds.map(fn)` executes a Python function row-by-row, `ds.map_batches(fn, batch_format='numpy')`

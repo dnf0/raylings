@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 4: Scheduling & Resources - Exercise 5: Gang Scheduling & Multi-Bundle Lifecycle.
 
 Gang Scheduling is the practice of scheduling all related distributed processes simultaneously

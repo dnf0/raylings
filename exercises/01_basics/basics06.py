@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 1: Ray Core Foundations - Exercise 6: Multiple Returns in Remote Tasks.
 
 By default, calling a remote function returns a single `ObjectRef`, even if that

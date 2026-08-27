@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 12: Ray Serve - Exercise 1: Ray Serve Deployments & Ingress.
 
 Ray Serve is a scalable model serving framework built on Ray actors.

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 5: Fault Tolerance & Recovery - Exercise 3: Lineage Reconstruction & DAG Replay.
 
 One of Ray's core distributed primitives is Object Lineage Tracking:

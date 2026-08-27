@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 3: Simulating Node Failure.
 
 In production clusters, worker nodes may terminate abruptly due to Spot instance preemption,

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 13: Observability - Exercise 2: Diagnosing Object Store Memory.
 
 Ray's shared-memory object store (Plasma) holds immutable distributed objects.

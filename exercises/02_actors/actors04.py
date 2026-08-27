@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 2: Distributed State & Actors - Exercise 4: Async Actors & Concurrency.
 
 By default, an actor executes one method call at a time. If a method does I/O

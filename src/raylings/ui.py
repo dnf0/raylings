@@ -59,9 +59,7 @@ def render_result(result: RunResult, console: Console | None = None) -> None:
         success_text.append(f"✓ Exercise {ex.name} passed!\n\n", style="bold green")
         if result.output.strip():
             success_text.append(f"Output:\n{result.output.strip()}\n\n", style="dim white")
-        success_text.append(
-            "Great job! Proceeding to next exercise or run `raylings watch`.", style="bold cyan"
-        )
+        success_text.append("Great job! Solution verified and complete.", style="bold cyan")
         c.print(
             Panel(
                 success_text,
@@ -116,6 +114,54 @@ def render_result(result: RunResult, console: Console | None = None) -> None:
                     border_style="yellow",
                 )
             )
+
+
+def render_success_prompt(
+    exercise: Exercise,
+    next_exercise: Exercise | None = None,
+    console: Console | None = None,
+) -> None:
+    """Render interactive success banner with keystroke navigation controls."""
+    c = _get_console(console)
+    next_info = f" ({next_exercise.name})" if next_exercise else " (All Finished!)"
+    nav_text = Text()
+    nav_text.append(f"✓ {exercise.name} passed!\n\n", style="bold green")
+    nav_text.append("Interactive Controls:\n", style="bold white")
+    nav_text.append(f"  [n / Enter]  Advance to next exercise{next_info}\n", style="bold cyan")
+    nav_text.append("  [p]          Go to previous exercise\n", style="bold cyan")
+    nav_text.append("  [r]          Rerun current exercise\n", style="bold cyan")
+    nav_text.append("  [h]          Show progressive hint\n", style="bold cyan")
+    nav_text.append("  [q]          Quit watcher\n", style="bold cyan")
+    c.print(
+        Panel(
+            nav_text,
+            title=f"[bold green]🎉 SUCCESS: {exercise.name} ({exercise.title})[/bold green]",
+            border_style="green",
+        )
+    )
+
+
+def render_failure_prompt(
+    exercise: Exercise,
+    console: Console | None = None,
+) -> None:
+    """Render interactive failure prompt with hint and rerun navigation options."""
+    c = _get_console(console)
+    nav_text = Text()
+    nav_text.append(f"Exercise {exercise.name} is not passing yet.\n\n", style="yellow")
+    nav_text.append("Interactive Controls:\n", style="bold white")
+    nav_text.append("  [h]          Reveal progressive hint\n", style="bold cyan")
+    nav_text.append("  [r]          Rerun exercise after editing\n", style="bold cyan")
+    nav_text.append("  [n]          Skip to next exercise\n", style="bold cyan")
+    nav_text.append("  [p]          Go back to previous exercise\n", style="bold cyan")
+    nav_text.append("  [q]          Quit watcher\n", style="bold cyan")
+    c.print(
+        Panel(
+            nav_text,
+            title=f"[bold yellow]⏳ PENDING: {exercise.name} ({exercise.title})[/bold yellow]",
+            border_style="yellow",
+        )
+    )
 
 
 def render_hint(exercise: Exercise, hint_level: int = 0, console: Console | None = None) -> None:

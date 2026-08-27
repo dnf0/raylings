@@ -49,13 +49,20 @@ class RayDaemon:
 
         if not ray.is_initialized():
             logger.info("Initializing Ray daemon with %d CPUs and %d bytes object store", cpus, mem)
-            ray.init(
-                ignore_reinit_error=True,
-                num_cpus=cpus,
-                object_store_memory=mem,
-                include_dashboard=False,
-                log_to_driver=False,
-            )
+            try:
+                ray.init(
+                    ignore_reinit_error=True,
+                    num_cpus=cpus,
+                    object_store_memory=mem,
+                    include_dashboard=False,
+                    log_to_driver=False,
+                )
+            except ValueError:
+                ray.init(
+                    ignore_reinit_error=True,
+                    include_dashboard=False,
+                    log_to_driver=False,
+                )
         return self.is_running()
 
     def stop(self) -> bool:

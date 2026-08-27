@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 11: Ray Tune - Exercise 1: Search Spaces & Distributed Trials.
 
 Ray Tune is an industry-standard library for distributed hyperparameter optimization.

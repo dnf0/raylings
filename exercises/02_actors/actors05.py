@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 2: Distributed State & Actors - Exercise 5: Threaded Actors for Blocking I/O.
 
 In the previous exercise, we used `async def` for non-blocking coroutines.

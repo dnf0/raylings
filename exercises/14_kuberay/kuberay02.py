@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 14: KubeRay - Exercise 2: RayJob CRD & Batch Job Lifecycle.
 
 The `RayJob` CRD allows submitting non-interactive batch workloads (ETL, distributed training)

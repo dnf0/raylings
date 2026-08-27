@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 3: Plasma Object Store & Zero-Copy - Exercise 4: Object Spilling & Memory Limits.
 
 Ray's in-memory object store (Plasma) has a fixed capacity (by default ~30% of system RAM).

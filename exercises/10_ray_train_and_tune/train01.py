@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 10: Ray Train - Exercise 1: PyTorch TorchTrainer & ScalingConfig.
 
 Ray Train provides distributed deep learning orchestration for PyTorch (DDP).

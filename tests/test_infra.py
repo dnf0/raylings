@@ -43,16 +43,18 @@ def test_all_curriculum_syntax_and_markers():
     assert len(manifest.all_exercises) == 66
 
     for ex in manifest.all_exercises:
-        # Check skeleton
+        # Check skeleton (clean Python without magic markers)
         assert ex.file_path.exists(), f"Missing exercise skeleton: {ex.file_path}"
         code_skel = ex.file_path.read_text(encoding="utf-8")
-        assert NOT_DONE_MARKER in code_skel, f"Exercise {ex.name} missing '# I AM NOT DONE' marker"
+        assert NOT_DONE_MARKER not in code_skel, (
+            f"Exercise {ex.name} unexpectedly contains legacy '{NOT_DONE_MARKER}'"
+        )
         ast.parse(code_skel, filename=str(ex.file_path))
 
-        # Check solution
+        # Check solution (clean Python, valid syntax)
         assert ex.solution_path.exists(), f"Missing solution: {ex.solution_path}"
         code_sol = ex.solution_path.read_text(encoding="utf-8")
         assert NOT_DONE_MARKER not in code_sol, (
-            f"Solution {ex.name} unexpectedly contains '# I AM NOT DONE'"
+            f"Solution {ex.name} unexpectedly contains '{NOT_DONE_MARKER}'"
         )
         ast.parse(code_sol, filename=str(ex.solution_path))

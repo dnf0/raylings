@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 14: KubeRay - Exercise 4: Autoscaling with KEDA & Ray Autoscaler.
 
 KubeRay integrates with the Ray native autoscaler to dynamically provision Kubernetes

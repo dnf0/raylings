@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 2: Distributed State & Actors - Exercise 3: Passing Actor Handles.
 
 In Ray, `ActorHandle`s can be passed as arguments to other `@ray.remote` tasks or actors.

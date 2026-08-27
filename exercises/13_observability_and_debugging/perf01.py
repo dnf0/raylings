@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 13: Observability - Exercise 1: Ray Execution Profiling & Chrome Timelines.
 
 Ray provides built-in execution timeline profiling via `ray.timeline(filename=...)`.

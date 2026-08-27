@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 7: Production Patterns & Anti-Patterns - Exercise 2: Fixing Fine-Grained Task Overhead.
 
 Anti-Pattern: Micro-Tasks.

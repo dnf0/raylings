@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 4: Scheduling & Resources - Exercise 1: Fractional & Custom Resources.
 
 In Ray, tasks and actors are scheduled dynamically based on resource declarations.
