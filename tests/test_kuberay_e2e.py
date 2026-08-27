@@ -10,7 +10,6 @@ import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 
-from pathlib import Path
 from typing import Any, Generator
 
 import pytest
@@ -18,7 +17,6 @@ import ray
 from ray.util.placement_group import placement_group, remove_placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
-import raylings.kuberay_helpers as kh
 from raylings.kuberay_helpers import (
     PlasmaConsumer,
     PlasmaProducer,
@@ -38,14 +36,8 @@ pytestmark = [pytest.mark.kuberay, pytest.mark.heavy]
 @pytest.fixture(scope="module")
 def ray_cluster() -> Generator[dict[str, Any], None, None]:
     """Provide connection to a live multi-node KubeRay cluster or simulated mock."""
-    repo_dir = Path(__file__).parent.parent.resolve()
-    tests_dir = Path(__file__).parent.resolve()
-    python_path = f"{repo_dir}:{tests_dir}:."
-
     runtime_env = {
-        "py_modules": [kh],
         "env_vars": {
-            "PYTHONPATH": python_path,
             "RAY_ENABLE_UV_RUN_RUNTIME_ENV": "0",
         },
     }

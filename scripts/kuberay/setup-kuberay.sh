@@ -127,6 +127,7 @@ cluster_forward() {
     local LOG_FILE="/tmp/kuberay-port-forward.log"
     nohup kubectl port-forward "svc/${RAY_CLUSTER_NAME}-head-svc" 10001:10001 8265:8265 -n "${NAMESPACE}" > "${LOG_FILE}" 2>&1 &
     local PF_PID=$!
+    disown "$PF_PID" 2>/dev/null || true
 
     sleep 2
 
