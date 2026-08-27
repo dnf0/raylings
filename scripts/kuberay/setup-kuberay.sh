@@ -74,7 +74,7 @@ cluster_up() {
     log_info "Installing / upgrading KubeRay operator via Helm..."
     helm repo add kuberay https://ray-project.github.io/kuberay-helm/ --force-update 2>/dev/null || helm repo add kuberay https://ray-project.github.io/kuberay-helm/
     helm repo update
-    helm upgrade --install kuberay-operator kuberay/kuberay-operator --namespace "${NAMESPACE}"
+    helm upgrade --install kuberay-operator kuberay/kuberay-operator --namespace "${NAMESPACE}" --create-namespace
 
     log_info "Waiting for KubeRay operator deployment to be Available..."
     kubectl wait --for=condition=Available deployment/kuberay-operator -n "${NAMESPACE}" --timeout=120s

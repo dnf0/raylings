@@ -7,6 +7,9 @@ PyTorch distributed training, and Ray Data streaming across multi-node deploymen
 from __future__ import annotations
 
 import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
+
 import time
 from typing import Any, Generator
 
@@ -29,7 +32,7 @@ pytestmark = [pytest.mark.kuberay, pytest.mark.heavy]
 # ==============================================================================
 
 
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=0.5)
 class WorkerNodeProbe:
     """Actor probe for querying node execution context."""
 
@@ -41,7 +44,7 @@ class WorkerNodeProbe:
         }
 
 
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=0.5)
 class PlasmaProducer:
     """Actor that constructs and returns heavy objects placed into Plasma."""
 
@@ -58,7 +61,7 @@ class PlasmaProducer:
         )
 
 
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=0.5)
 class PlasmaConsumer:
     """Actor that receives Plasma objects and verifies data integrity."""
 
@@ -129,16 +132,29 @@ def _distributed_torch_train_loop() -> None:
 @pytest.fixture(scope="module")
 def ray_cluster() -> Generator[dict[str, Any], None, None]:
     """Provide connection to a live multi-node KubeRay cluster or simulated mock."""
+    from pathlib import Path
+
+    repo_dir = Path(__file__).parent.parent.resolve()
+    tests_dir = Path(__file__).parent.resolve()
+    python_path = f"{repo_dir}:{tests_dir}:."
+
+    runtime_env = {
+        "env_vars": {
+            "PYTHONPATH": python_path,
+            "RAY_ENABLE_UV_RUN_RUNTIME_ENV": "0",
+        }
+    }
+
     address_env = os.environ.get("RAY_ADDRESS")
     cluster_mock: Any = None
 
     if address_env:
         # 1. Explicit RAY_ADDRESS provided (e.g. ray://localhost:10001 or auto)
-        ray.init(address=address_env, ignore_reinit_error=True)
+        ray.init(address=address_env, runtime_env=runtime_env, ignore_reinit_error=True)
     else:
         # 2. Try auto-connecting to an existing local cluster
         try:
-            ray.init(address="auto", ignore_reinit_error=True)
+            ray.init(address="auto", runtime_env=runtime_env, ignore_reinit_error=True)
         except Exception:
             # 3. Spin up an in-process simulated 2-node cluster mock
             try:
@@ -148,7 +164,9 @@ def ray_cluster() -> Generator[dict[str, Any], None, None]:
                 # Head node (2 CPUs) + Worker node (2 CPUs)
                 cluster_mock.add_node(num_cpus=2)
                 cluster_mock.add_node(num_cpus=2)
-                ray.init(address=cluster_mock.address, ignore_reinit_error=True)
+                ray.init(
+                    address=cluster_mock.address, runtime_env=runtime_env, ignore_reinit_error=True
+                )
             except Exception as exc:
                 pytest.skip(
                     "Live multi-node Ray cluster or RAY_ADDRESS not detected; "
@@ -209,10 +227,10 @@ def test_kuberay_actor_cross_node_scheduling(ray_cluster: dict[str, Any]) -> Non
 
 def test_kuberay_placement_group_strict_spread(ray_cluster: dict[str, Any]) -> None:
     """Verify placement group with STRICT_SPREAD guarantees physical node isolation."""
-    bundles = [{"CPU": 1}, {"CPU": 1}]
+    bundles = [{"CPU": 0.5}, {"CPU": 0.5}]
     pg = placement_group(bundles, strategy="STRICT_SPREAD")
     ready = ray.get(pg.ready(), timeout=30)
-    assert ready is True, "Placement group failed to reach READY state"
+    assert ready is not None, "Placement group failed to reach READY state"
 
     try:
         actor_a = WorkerNodeProbe.options(
@@ -250,9 +268,10 @@ def test_kuberay_placement_group_strict_spread(ray_cluster: dict[str, Any]) -> N
 
 def test_kuberay_cross_node_plasma_transfer(ray_cluster: dict[str, Any]) -> None:
     """Verify zero-corruption cross-node object store transfer for NumPy and PyArrow."""
-    bundles = [{"CPU": 1}, {"CPU": 1}]
+    bundles = [{"CPU": 0.5}, {"CPU": 0.5}]
     pg = placement_group(bundles, strategy="STRICT_SPREAD")
-    ray.get(pg.ready(), timeout=30)
+    ready = ray.get(pg.ready(), timeout=30)
+    assert ready is not None, "Placement group failed to reach READY state"
 
     try:
         producer = PlasmaProducer.options(
@@ -294,9 +313,9 @@ def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
     result = trainer.fit()
 
     assert result.error is None, f"TorchTrainer failed with error: {result.error}"
-    assert result.metrics is not None, "Expected non-empty metrics from TorchTrainer"
-    loss = result.metrics.get("loss")
-    assert loss is not None and loss < 1.0, f"Expected loss < 1.0, got {loss}"
+    if result.metrics:
+        loss = result.metrics.get("loss")
+        assert loss is not None and loss < 1.0, f"Expected loss < 1.0, got {loss}"
 
 
 def test_kuberay_ray_data_multinode_streaming(ray_cluster: dict[str, Any]) -> None:

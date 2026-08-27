@@ -15,6 +15,7 @@ on:
     paths:
       - "scripts/kuberay/**"
       - "tests/test_kuberay_e2e.py"
+      - ".github/workflows/kuberay-e2e.yml"
   workflow_dispatch:
 
 permissions:
