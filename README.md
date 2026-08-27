@@ -1,10 +1,15 @@
 # Raylings ⚡
 
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://dnf0.github.io/raylings/)
+[![CI](https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg)](https://github.com/dnf0/raylings/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 > An interactive, hands-on CLI learning environment for mastering Python Ray from scratch.
 
 Inspired by the pedagogy of [Rustlings](https://github.com/rust-lang/rustlings) and [Ziglings](https://github.com/ziglings/exercises), **Raylings** guides you through progressively challenging distributed computing exercises in Python. You will fix broken code, fill in missing distributed patterns, resolve performance bottlenecks, eliminate memory leaks, and build real-world distributed systems.
 
-👉 **New to Raylings? Read the [Comprehensive Onboarding Guide](docs/ONBOARDING.md)** for a deep dive into setup, preflight diagnostics, the tour engine, keyboard shortcuts, and troubleshooting.
+📚 **Full Documentation Site**: [https://dnf0.github.io/raylings/](https://dnf0.github.io/raylings/)  
+👉 **New to Raylings? Read the [Interactive Onboarding Guide](https://dnf0.github.io/raylings/onboarding-guide/)** for a deep dive into setup, preflight diagnostics, the tour engine, keyboard shortcuts, and troubleshooting.
 
 ---
 
@@ -127,8 +132,14 @@ Raylings covers 14 comprehensive chapters spanning core foundations to productio
 
 ## Documentation
 
-- 📖 [Onboarding & Learner Guide](docs/ONBOARDING.md) — Detailed quickstart, preflight diagnostics, tour engine, watcher shortcuts, and troubleshooting.
-- 🤝 [Contributing Guide](CONTRIBUTING.md) — Local development setup, testing workflows, and PR guidelines.
+The full documentation is available at **[https://dnf0.github.io/raylings/](https://dnf0.github.io/raylings/)**.
+
+- 🚀 [Getting Started](https://dnf0.github.io/raylings/getting-started/) — Prerequisites, installation methods (`uv tool`, `pipx`, editable), and first 5 minutes.
+- 🧭 [Interactive Onboarding Guide](https://dnf0.github.io/raylings/onboarding-guide/) — Guided tour, doctor diagnostics, and VS Code integration.
+- 📚 [Curriculum Syllabus](https://dnf0.github.io/raylings/syllabus/) — Complete 14-chapter map covering all 66 exercises.
+- ⌨️ [CLI Reference Manual](https://dnf0.github.io/raylings/cli-reference/) — Comprehensive reference for all CLI subcommands and JSON outputs.
+- 🛠️ [Troubleshooting Recipes](https://dnf0.github.io/raylings/troubleshooting/) — Diagnostic recipes for port conflicts, memory spilling, and DDP deadlocks.
+- 🤝 [Contributing Guide](https://dnf0.github.io/raylings/contributing/) — Exercise authoring standards, test suites, and contribution workflow.
 
 ---
 

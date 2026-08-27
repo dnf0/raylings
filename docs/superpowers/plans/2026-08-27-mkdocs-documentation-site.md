@@ -141,28 +141,28 @@ git commit -m "feat(docs): add mkdocs configuration and docs dependencies" --no-
 - Create: `docs/troubleshooting.md`
 - Create: `docs/contributing.md`
 
-- [ ] **Step 1: Author `docs/index.md`**
+- [x] **Step 1: Author `docs/index.md`**
 Overview of Raylings, motivation, core features, interactive GIF/demo placeholders, quick architecture diagram.
 
-- [ ] **Step 2: Author `docs/getting-started.md`**
+- [x] **Step 2: Author `docs/getting-started.md`**
 Installation via `uvx`, `pipx`, `pip`, and editable git clone, initializing workspaces with `raylings init`, and running `raylings doctor`.
 
-- [ ] **Step 3: Author `docs/onboarding-guide.md`**
+- [x] **Step 3: Author `docs/onboarding-guide.md`**
 Comprehensive interactive onboarding guide covering the 5-step tour (`raylings tour`), watcher hotkeys, VS Code extension walkthrough, and learning workflows.
 
-- [ ] **Step 4: Author `docs/syllabus.md`**
+- [x] **Step 4: Author `docs/syllabus.md`**
 Complete 14-chapter curriculum map (66 exercises) with topic breakdowns, exercise objectives, prerequisites, and concepts covered.
 
-- [ ] **Step 5: Author `docs/cli-reference.md`**
+- [x] **Step 5: Author `docs/cli-reference.md`**
 Comprehensive CLI reference documenting every subcommand (`init`, `doctor`, `tour`, `watch`, `run`, `test`, `hint`, `list`, `progress`, `daemon`, `version`), flags, and JSON payloads.
 
-- [ ] **Step 6: Author `docs/troubleshooting.md`**
+- [x] **Step 6: Author `docs/troubleshooting.md`**
 Detailed recipes for Ray daemon issues, port conflicts, Plasma OOM, macOS/Linux file descriptor limits, and Python 3.13 compatibility workarounds.
 
-- [ ] **Step 7: Author `docs/contributing.md`**
+- [x] **Step 7: Author `docs/contributing.md`**
 Developer setup, running tests, ruff linting, curriculum authoring guidelines, and PR workflow.
 
-- [ ] **Step 8: Commit Task 2**
+- [x] **Step 8: Commit Task 2**
 
 ```bash
 git add docs/*.md
@@ -176,7 +176,7 @@ git commit -m "docs: author comprehensive documentation site pages" --no-gpg-sig
 **Files:**
 - Create: `.github/workflows/docs.yml`
 
-- [ ] **Step 1: Create `.github/workflows/docs.yml`**
+- [x] **Step 1: Create `.github/workflows/docs.yml`**
 
 ```yaml
 name: Deploy Documentation
@@ -223,16 +223,16 @@ jobs:
           mkdocs gh-deploy --force
 ```
 
-- [ ] **Step 2: Test strict MkDocs build locally**
+- [x] **Step 2: Test strict MkDocs build locally**
 
 Run: `uvx --from mkdocs-material mkdocs build --strict`
 Expected: Documentation builds cleanly into `site/` with zero warnings and exit code 0.
 
-- [ ] **Step 3: Clean up `site/` build artifacts & ensure `.gitignore` ignores `site/`**
+- [x] **Step 3: Clean up `site/` build artifacts & ensure `.gitignore` ignores `site/`**
 
 Verify `.gitignore` contains `site/`.
 
-- [ ] **Step 4: Commit Task 3**
+- [x] **Step 4: Commit Task 3**
 
 ```bash
 git add .github/workflows/docs.yml .gitignore
@@ -246,24 +246,24 @@ git commit -m "ci(docs): add github pages deployment workflow" --no-gpg-sign
 **Files:**
 - Modify: `README.md`
 
-- [ ] **Step 1: Update `README.md` with documentation site badges and links**
+- [x] **Step 1: Update `README.md` with documentation site badges and links**
 Add `[Documentation](https://dnf0.github.io/raylings/)` badge and links to the hosted documentation site.
 
-- [ ] **Step 2: Run full verification suite**
+- [x] **Step 2: Run full verification suite**
 
 Run:
-1. `uvx --from mkdocs-material mkdocs build --strict`
+1. `uvx --with mkdocs-material mkdocs build --strict`
 2. `uv run pytest -m "not heavy" -v`
 3. `uv run ruff check src tests`
 4. `uv run ruff format --check src tests`
 5. `uvx --from graphifyy graphify update .`
 
-- [ ] **Step 3: Commit Task 4**
+- [x] **Step 3: Commit Task 4**
 
 ```bash
 git add README.md
 git commit -m "docs: add documentation site links and badges to README" --no-gpg-sign
 ```
 
-- [ ] **Step 4: Push branch and open Pull Request**
+- [x] **Step 4: Push branch and open Pull Request**
 Push `feat/mkdocs-documentation-site` and create PR via `gh pr create`.
