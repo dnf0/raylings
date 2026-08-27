@@ -28,6 +28,8 @@ def test_cli_version():
 
 def test_cli_list():
     """Verify list command renders chapters and exercises table."""
+    import json
+
     from raylings.cli import app
 
     result = runner.invoke(app, ["list"])
@@ -35,9 +37,36 @@ def test_cli_list():
     assert "01_basics" in result.stdout or "Ray Core Foundations" in result.stdout
     assert "Curriculum Chapters" in result.stdout or "Chapter" in result.stdout
 
+    # Test JSON output
+    res_json = runner.invoke(app, ["list", "--json"])
+    assert res_json.exit_code == 0
+    data = json.loads(res_json.stdout)
+    assert data["total_exercises"] == 66
+    assert len(data["chapters"]) == 14
+    assert data["chapters"][0]["name"] == "01_basics"
+
+
+def test_cli_progress():
+    """Verify progress command renders summary and supports JSON output."""
+    import json
+
+    from raylings.cli import app
+
+    res_cli = runner.invoke(app, ["progress"])
+    assert res_cli.exit_code == 0
+
+    res_json = runner.invoke(app, ["progress", "--json"])
+    assert res_json.exit_code == 0
+    data = json.loads(res_json.stdout)
+    assert data["total"] == 66
+    assert "completed" in data
+    assert "percentage" in data
+
 
 def test_cli_hint():
     """Verify hint command displays progressive hints or errors on invalid names."""
+    import json
+
     from raylings.cli import app
 
     # Valid exercise hint
@@ -49,6 +78,13 @@ def test_cli_hint():
     res_level = runner.invoke(app, ["hint", "basics01", "--level", "1"])
     assert res_level.exit_code == 0
     assert "Hint" in res_level.stdout or "hint" in res_level.stdout.lower()
+
+    # Hint JSON output
+    res_json = runner.invoke(app, ["hint", "basics01", "--json"])
+    assert res_json.exit_code == 0
+    data = json.loads(res_json.stdout)
+    assert data["name"] == "basics01"
+    assert len(data["hints"]) > 0
 
     # Invalid exercise hint
     res_invalid = runner.invoke(app, ["hint", "nonexistent_ex_xyz_999"])
