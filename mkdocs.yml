@@ -1,0 +1,64 @@
+site_name: Raylings
+site_description: An interactive, hands-on CLI learning environment for Python Ray.
+site_url: https://dnf0.github.io/raylings/
+site_author: Raylings Contributors
+repo_name: dnf0/raylings
+repo_url: https://github.com/dnf0/raylings
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: cyan
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - scheme: default
+      primary: cyan
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+
+nav:
+  - Overview: index.md
+  - Getting Started: getting-started.md
+  - Onboarding Guide: onboarding-guide.md
+  - Curriculum Syllabus: syllabus.md
+  - CLI Reference: cli-reference.md
+  - Troubleshooting: troubleshooting.md
+  - Contributing: contributing.md
+
+not_in_nav: |
+  superpowers/**
+  ONBOARDING.md
