@@ -58,7 +58,7 @@ class TourEngine:
                 content=(
                     "Open `exercises/01_basics/basics01.py` in your editor. Transform standard Python\n"
                     "functions into distributed tasks using the `@ray.remote` decorator and invoke them\n"
-                    "with `.remote()`. When ready, remove the `// I AM NOT DONE` marker at the top of the file."
+                    "with `.remote()`. When ready, remove the `# I AM NOT DONE` marker at the top of the file."
                 ),
                 command_hint="raylings run exercises/01_basics/basics01.py",
                 action_label="Run First Exercise",

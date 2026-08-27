@@ -302,20 +302,20 @@ Configure extension preferences in your `settings.json`:
 
 The Raylings curriculum consists of 14 chapters and 66 hands-on exercises spanning basic distributed primitives to production ML systems:
 
-```
-Chapter 01: Ray Core Foundations (basics01 - basics05)
+```text
+Chapter 01: Ray Core Foundations (basics01 - basics06)
  ├── ray.init(), @ray.remote tasks, ObjectRef futures
  └── Parallel pipelines, ray.wait(), dynamic fan-out
 
-Chapter 02: Distributed State & Actors (actors01 - actors05)
+Chapter 02: Distributed State & Actors (actors01 - actors07)
  ├── Stateful Actor classes, method serialization, handles
  └── Async actors, threaded actors, detached actors, actor pools
 
-Chapter 03: Plasma Object Store & Zero-Copy (plasma01 - plasma05)
+Chapter 03: Plasma Object Store & Zero-Copy (object_store01 - object_store06)
  ├── Shared memory architecture, zero-copy NumPy/PyArrow
  └── ray.put(), object pinning, disk spilling, serialization closures
 
-Chapter 04: Scheduling & Placement Groups (sched01 - sched05)
+Chapter 04: Scheduling & Placement Groups (scheduling01 - scheduling06)
  ├── Fractional CPU/GPU resources, node affinity
  └── STRICT_SPREAD, STRICT_PACK, multi-bundle gang scheduling
 
@@ -327,7 +327,7 @@ Chapter 06: Cluster Architecture & Simulation (cluster01 - cluster04)
  ├── Head vs worker nodes, Global Control Store (GCS), Raylets
  └── Multi-node simulation with Cluster API, Job Submission
 
-Chapter 07: Distributed Patterns & Anti-Patterns (patterns01 - patterns05)
+Chapter 07: Distributed Patterns & Anti-Patterns (antipattern01 - antipattern04)
  ├── Eliminating nested ray.get() anti-patterns
  └── Task chunking/batching, actor bottleneck resolution, tree reduction
 
@@ -335,27 +335,27 @@ Chapter 08: Ray Data (data01 - data05)
  ├── Distributed Datasets, block partitioning, map_batches
  └── PyArrow/NumPy streaming, ActorPoolStrategy, backpressure
 
-Chapter 09: Distributed ML Primitives from Scratch (ml01 - ml05)
+Chapter 09: Distributed ML Primitives from Scratch (ml_scratch01 - ml_scratch04)
  ├── Distributed Parameter Servers (Sync & Async SGD)
  └── Ring All-Reduce communication primitives, distributed trainers
 
-Chapter 10: Ray Train (train01 - train05)
+Chapter 10: Ray Train (train01 - train04)
  ├── TorchTrainer, ScalingConfig (multi-worker / multi-GPU)
  └── Distributed dataloaders, gradient sync, distributed checkpointing
 
-Chapter 11: Ray Tune (tune01 - tune05)
+Chapter 11: Ray Tune (tune01 - tune03)
  ├── Hyperparameter search spaces, distributed trial execution
  └── ASHA / HyperBand early stopping, Population-Based Training (PBT)
 
-Chapter 12: Ray Serve (serve01 - serve05)
+Chapter 12: Ray Serve (serve01 - serve06)
  ├── @serve.deployment, HTTP ingress, dynamic batching (@serve.batch)
  └── Multi-model deployment DAGs, streaming LLM responses, autoscaling
 
-Chapter 13: Observability & Distributed Debugging (obs01 - obs04)
+Chapter 13: Observability & Distributed Debugging (perf01 - perf03)
  ├── Chrome execution timelines (ray timeline), ray memory profiling
  └── Prometheus metrics export, GCS state dumps & logging
 
-Chapter 14: KubeRay & Production Kubernetes (kuberay01 - kuberay04)
+Chapter 14: KubeRay & Production Kubernetes (kuberay01 - kuberay05)
  ├── RayCluster Custom Resource Definition (CRD) manifests
  └── RayJob batch lifecycles, RayService zero-downtime upgrades, KEDA
 ```
@@ -442,8 +442,8 @@ Chapter 14: KubeRay & Production Kubernetes (kuberay01 - kuberay04)
 # Re-extract bundled exercises into the current workspace:
 raylings init --force
 
-# Reset curriculum progress:
-raylings verify --reset
+# Reset curriculum progress tracking:
+rm -f .raylings_state.json
 ```
 
 ---

@@ -87,7 +87,7 @@ Raylings starts on the first exercise in `exercises/01_basics/basics01.py`.
 - `raylings test` — Run automated verification across all canonical reference solutions.
 - `raylings hint <exercise_name>` — Show progressive hints for an exercise (`--level`).
 - `raylings list` — View all chapters, exercises, and completion progress.
-- `raylings verify` — Verify full curriculum progress and validate solutions.
+- `raylings progress` — Display progress summary and next recommended exercise.
 - `raylings daemon [status|start|stop|restart]` — Manage the warm background Ray cluster session.
 
 ---
