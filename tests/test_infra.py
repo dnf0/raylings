@@ -30,6 +30,7 @@ def test_gitignore_ignores_agent_state():
     assert ".agents/" in content
     assert ".superpowers/" in content
     assert ".venv/" in content
+    assert ".env" in content
 
 
 def test_all_curriculum_syntax_and_markers():
