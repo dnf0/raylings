@@ -27,7 +27,11 @@
     "onCommand:raylings.startWatcher",
     "onCommand:raylings.initWorkspace",
     "onCommand:raylings.syncProgress",
-    "onCommand:raylings.viewSolution"
+    "onCommand:raylings.viewSolution",
+    "onCommand:raylings.startTour",
+    "onCommand:raylings.runDoctor",
+    "onCommand:raylings.openExercise",
+    "onWalkthrough:raylings.welcome"
   ],
   "contributes": {
     "commands": [
@@ -65,6 +69,87 @@
         "command": "raylings.syncProgress",
         "title": "Sync Progress",
         "category": "Raylings"
+      },
+      {
+        "command": "raylings.startTour",
+        "title": "Start Onboarding Tour",
+        "category": "Raylings",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "raylings.runDoctor",
+        "title": "Run Preflight Diagnostics (Doctor)",
+        "category": "Raylings",
+        "icon": "$(heart)"
+      },
+      {
+        "command": "raylings.openExercise",
+        "title": "Open Exercise File",
+        "category": "Raylings"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "raylings.welcome",
+        "title": "Welcome to Raylings",
+        "description": "Master Distributed Python and AI Systems with Ray from Scratch",
+        "steps": [
+          {
+            "id": "raylings.welcome.intro",
+            "title": "Welcome to Raylings",
+            "description": "Master Distributed Python and AI Systems with Ray from Scratch through 66 hands-on exercises.\n[Start Interactive Tour](command:raylings.startTour)",
+            "media": {
+              "markdown": "walkthroughs/welcome.md"
+            },
+            "completionEvents": [
+              "onCommand:raylings.startTour"
+            ]
+          },
+          {
+            "id": "raylings.welcome.environment",
+            "title": "Environment Diagnostics",
+            "description": "Verify Python 3.10+ requirement, dependencies, and Ray cluster health.\n[Run Doctor Diagnostics](command:raylings.runDoctor)",
+            "media": {
+              "markdown": "walkthroughs/environment.md"
+            },
+            "completionEvents": [
+              "onCommand:raylings.runDoctor"
+            ]
+          },
+          {
+            "id": "raylings.welcome.firstExercise",
+            "title": "Your First Exercise",
+            "description": "Open `exercises/01_basics/basics01.py`, remove the `# I AM NOT DONE` marker, and execute it.\n[Open First Exercise](command:raylings.openExercise?%22exercises/01_basics/basics01.py%22)",
+            "media": {
+              "markdown": "walkthroughs/first-exercise.md"
+            },
+            "completionEvents": [
+              "onCommand:raylings.openExercise"
+            ]
+          },
+          {
+            "id": "raylings.welcome.watcher",
+            "title": "Interactive Watcher Mode",
+            "description": "Continuous auto-compilation, real-time feedback, and instant keyboard navigation.\n[Start Watcher](command:raylings.startWatcher)",
+            "media": {
+              "markdown": "walkthroughs/watcher.md"
+            },
+            "completionEvents": [
+              "onCommand:raylings.startWatcher"
+            ]
+          },
+          {
+            "id": "raylings.welcome.treeView",
+            "title": "Raylings Explorer Tree View",
+            "description": "Explore curriculum chapters, track progress badges, and reveal progressive hints directly from the sidebar.\n[Sync Progress](command:raylings.syncProgress)",
+            "media": {
+              "markdown": "walkthroughs/tree-view.md"
+            },
+            "completionEvents": [
+              "onCommand:raylings.syncProgress"
+            ]
+          }
+        ]
       }
     ],
     "viewsContainers": {

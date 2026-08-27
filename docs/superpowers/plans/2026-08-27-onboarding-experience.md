@@ -21,56 +21,11 @@
 - Create: `tests/test_tour.py`
 - Modify: `src/raylings/__init__.py`
 
-- [ ] **Step 1: Write failing tests for TourEngine and TourStep**
-
-```python
-# tests/test_tour.py
-import json
-import pytest
-from unittest.mock import patch
-from raylings.tour import TourEngine, TourStep, get_tour_engine
-
-def test_tour_steps_structure():
-    engine = TourEngine()
-    steps = engine.get_steps()
-    assert len(steps) == 5
-    assert steps[0].step_number == 1
-    assert "Welcome" in steps[0].title
-    assert steps[4].step_number == 5
-    assert "VS Code" in steps[4].title
-
-def test_tour_json_export():
-    engine = TourEngine()
-    payload = engine.to_json_dict()
-    assert "steps" in payload
-    assert len(payload["steps"]) == 5
-    assert payload["steps"][0]["title"] == engine.get_steps()[0].title
-
-def test_tour_run_single_step():
-    engine = TourEngine()
-    res = engine.get_step(3)
-    assert res is not None
-    assert res.step_number == 3
-    assert "First Exercise" in res.title
-
-def test_tour_invalid_step():
-    engine = TourEngine()
-    assert engine.get_step(99) is None
-```
-
-- [ ] **Step 2: Run test to verify it fails**
-
-Run: `uv run pytest tests/test_tour.py -v`
-Expected: FAIL with `ModuleNotFoundError: No module named 'raylings.tour'`
-
-- [ ] **Step 3: Implement `src/raylings/tour.py`**
-
-- [ ] **Step 4: Run test to verify it passes**
-
-Run: `uv run pytest tests/test_tour.py -v`
-Expected: PASS
-
-- [ ] **Step 5: Commit**
+- [x] **Step 1: Write failing tests for TourEngine and TourStep**
+- [x] **Step 2: Run test to verify it fails**
+- [x] **Step 3: Implement `src/raylings/tour.py`**
+- [x] **Step 4: Run test to verify it passes**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/raylings/tour.py tests/test_tour.py
@@ -110,11 +65,11 @@ git commit --no-gpg-sign -m "feat(cli): register raylings tour and raylings doct
 - Modify: `editors/vscode/src/commands.ts`
 - Modify: `editors/vscode/src/extension.ts`
 
-- [ ] **Step 1: Create markdown walkthrough assets in `editors/vscode/walkthroughs/`**
-- [ ] **Step 2: Register `contributes.walkthroughs` in `editors/vscode/package.json` and commands `raylings.startTour` & `raylings.runDoctor`**
-- [ ] **Step 3: Implement command handlers in `editors/vscode/src/commands.ts`**
-- [ ] **Step 4: Build extension with `npm run compile` in `editors/vscode`**
-- [ ] **Step 5: Commit**
+- [x] **Step 1: Create markdown walkthrough assets in `editors/vscode/walkthroughs/`**
+- [x] **Step 2: Register `contributes.walkthroughs` in `editors/vscode/package.json` and commands `raylings.startTour` & `raylings.runDoctor`**
+- [x] **Step 3: Implement command handlers in `editors/vscode/src/commands.ts`**
+- [x] **Step 4: Build extension with `npm run compile` in `editors/vscode`**
+- [x] **Step 5: Commit**
 
 ```bash
 git add editors/vscode/
