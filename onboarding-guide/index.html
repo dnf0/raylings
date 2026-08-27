@@ -1,0 +1,1263 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An interactive, hands-on CLI learning environment for Python Ray.">
+      
+      
+        <meta name="author" content="Raylings Contributors">
+      
+      
+        <link rel="canonical" href="https://dnf0.github.io/raylings/onboarding-guide/">
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="../syllabus/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Onboarding Guide - Raylings</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#interactive-onboarding-learner-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Raylings
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Onboarding Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dnf0/raylings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dnf0/raylings
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Raylings
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dnf0/raylings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dnf0/raylings
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Onboarding Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Onboarding Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-5-step-guided-tour-raylings-tour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ The 5-Step Guided Tour (raylings tour)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗺️ The 5-Step Guided Tour (raylings tour)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tour-step-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tour Step Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tour Step Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-welcome-distributed-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Welcome &amp; Distributed Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-environment-preflight-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Environment &amp; Preflight Diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-solving-your-first-exercise-basics01py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Solving Your First Exercise (basics01.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-interactive-watcher-keystroke-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Interactive Watcher &amp; Keystroke Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-native-vs-code-ide-experience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Native VS Code &amp; IDE Experience
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preflight-diagnostics-raylings-doctor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Preflight Diagnostics (raylings doctor)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Preflight Diagnostics (raylings doctor)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-5-diagnostic-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 5 Diagnostic Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-diagnostic-payloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Diagnostic Payloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vs-code-native-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💻 VS Code Native Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💻 VS Code Native Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-extension-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Extension Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-palette-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command Palette Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#progress-tracking-state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💾 Progress Tracking &amp; State Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💾 Progress Tracking &amp; State Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-state-is-updated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How State is Updated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspecting-your-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspecting Your Progress
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curriculum Syllabus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-5-step-guided-tour-raylings-tour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ The 5-Step Guided Tour (raylings tour)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗺️ The 5-Step Guided Tour (raylings tour)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tour-step-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tour Step Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tour Step Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-welcome-distributed-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Welcome &amp; Distributed Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-environment-preflight-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Environment &amp; Preflight Diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-solving-your-first-exercise-basics01py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Solving Your First Exercise (basics01.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-interactive-watcher-keystroke-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Interactive Watcher &amp; Keystroke Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-native-vs-code-ide-experience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Native VS Code &amp; IDE Experience
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preflight-diagnostics-raylings-doctor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Preflight Diagnostics (raylings doctor)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Preflight Diagnostics (raylings doctor)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-5-diagnostic-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 5 Diagnostic Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-diagnostic-payloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Diagnostic Payloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vs-code-native-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💻 VS Code Native Extension
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💻 VS Code Native Extension">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-extension-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Extension Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-palette-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command Palette Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#progress-tracking-state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💾 Progress Tracking &amp; State Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💾 Progress Tracking &amp; State Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-state-is-updated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How State is Updated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspecting-your-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspecting Your Progress
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="interactive-onboarding-learner-guide">Interactive Onboarding &amp; Learner Guide 🧭</h1>
+<p>Raylings provides a rich, multi-tiered onboarding workflow designed to ensure your system is properly configured, familiarise you with distributed concepts, and integrate seamlessly into your favorite IDE.</p>
+<hr />
+<h2 id="the-5-step-guided-tour-raylings-tour">🗺️ The 5-Step Guided Tour (<code>raylings tour</code>)</h2>
+<p>Raylings includes an interactive guided tour that introduces you to core distributed computing primitives, exercise mechanics, and CLI productivity workflows.</p>
+<p>To start the tour interactively:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>raylings<span class="w"> </span>tour
+</span></code></pre></div>
+<p>You can also run non-interactively in automated setups or CI:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>raylings<span class="w"> </span>tour<span class="w"> </span>--non-interactive<span class="w">  </span><span class="c1"># or -y</span>
+</span></code></pre></div>
+<p>Or jump directly to a specific step (1–5):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>raylings<span class="w"> </span>tour<span class="w"> </span>--step<span class="w"> </span><span class="m">3</span>
+</span></code></pre></div>
+<p>For programmatic integrations, extract all tour steps as JSON:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>raylings<span class="w"> </span>tour<span class="w"> </span>--json
+</span></code></pre></div>
+<hr />
+<h3 id="tour-step-breakdown">Tour Step Breakdown</h3>
+<pre class="mermaid"><code>flowchart TD
+    S1["Step 1: Core Primitives&lt;br/&gt;&lt;i&gt;Tasks, Actors, Plasma&lt;/i&gt;"] --&gt; S2["Step 2: Preflight Doctor&lt;br/&gt;&lt;i&gt;5-point health check&lt;/i&gt;"]
+    S2 --&gt; S3["Step 3: First Exercise&lt;br/&gt;&lt;i&gt;basics01 &amp; '# I AM NOT DONE'&lt;/i&gt;"]
+    S3 --&gt; S4["Step 4: Live Watcher&lt;br/&gt;&lt;i&gt;Keyboard navigation&lt;/i&gt;"]
+    S4 --&gt; S5["Step 5: VS Code Integration&lt;br/&gt;&lt;i&gt;Sidebar &amp; Status Bar&lt;/i&gt;"]</code></pre>
+<h4 id="step-1-welcome-distributed-primitives">Step 1: Welcome &amp; Distributed Primitives</h4>
+<ul>
+<li><strong>Focus</strong>: What Ray is and how Raylings structures learning.</li>
+<li><strong>Key Concepts</strong>: <a href="../syllabus/#chapter-1-01_basics-ray-core-foundations">Ray Core</a>, tasks, actors, futures (<code>ObjectRef</code>), and the unified AI compute ecosystem.</li>
+<li><strong>Suggested Command</strong>: <code>raylings list</code></li>
+</ul>
+<h4 id="step-2-environment-preflight-diagnostics">Step 2: Environment &amp; Preflight Diagnostics</h4>
+<ul>
+<li><strong>Focus</strong>: Verifying Python 3.10+, Ray runtime, cluster health, and system capacity.</li>
+<li><strong>Key Concepts</strong>: Automated preflight checks, local cluster detection, daemon management.</li>
+<li><strong>Suggested Command</strong>: <code>raylings doctor</code></li>
+</ul>
+<h4 id="step-3-solving-your-first-exercise-basics01py">Step 3: Solving Your First Exercise (<code>basics01.py</code>)</h4>
+<ul>
+<li><strong>Focus</strong>: Understanding the exercise workflow and the <code># I AM NOT DONE</code> marker.</li>
+<li><strong>Key Concepts</strong>: Decorating functions with <code>@ray.remote</code>, asynchronous scheduling with <code>.remote()</code>, blocking retrieval with <code>ray.get()</code>.</li>
+<li><strong>Suggested Command</strong>: <code>raylings run exercises/01_basics/basics01.py</code></li>
+</ul>
+<h4 id="step-4-interactive-watcher-keystroke-controls">Step 4: Interactive Watcher &amp; Keystroke Controls</h4>
+<ul>
+<li><strong>Focus</strong>: Continuous feedback loop and hotkey navigation.</li>
+<li><strong>Key Controls</strong>: <code>[n]</code> Next, <code>[p]</code> Previous, <code>[r]</code> Rerun, <code>[h]</code> Hint, <code>[q]</code> Quit.</li>
+<li><strong>Suggested Command</strong>: <code>raylings watch</code></li>
+</ul>
+<h4 id="step-5-native-vs-code-ide-experience">Step 5: Native VS Code &amp; IDE Experience</h4>
+<ul>
+<li><strong>Focus</strong>: Enhancing productivity with the dedicated VS Code extension.</li>
+<li><strong>Key Features</strong>: Sidebar curriculum tree, real-time status bar cluster health, auto-run on save.</li>
+<li><strong>Suggested Command</strong>: <code>code .</code></li>
+</ul>
+<hr />
+<h2 id="preflight-diagnostics-raylings-doctor">🔍 Preflight Diagnostics (<code>raylings doctor</code>)</h2>
+<p>Before working through advanced chapters like Ray Train DDP or KubeRay, ensure your development workstation satisfies all system requirements using <code>raylings doctor</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>raylings<span class="w"> </span>doctor
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>                     Preflight Diagnostics Summary                     
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>┃ Diagnostic Check          ┃ Status ┃ Details                        ┃
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│ Python Version            │ ✓ PASS │ Python 3.12.3 (&gt;= 3.10)        │
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│ Ray Installation          │ ✓ PASS │ Ray v2.43.0 installed          │
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│ Ray Daemon / Cluster      │ ✓ PASS │ Cluster session active         │
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│ Exercises Manifest        │ ✓ PASS │ Found 66 exercises in 14 chap  │
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│ System Resources          │ ✓ PASS │ 10 logical CPUs, 32.0 GB RAM   │
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>└───────────────────────────┴────────┴────────────────────────────────┘
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>Summary: 5 passed, 0 warnings, 0 failed
+</span></code></pre></div>
+<h3 id="the-5-diagnostic-checks">The 5 Diagnostic Checks</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Check Name</th>
+<th style="text-align: left;">Target Requirement</th>
+<th style="text-align: center;">Status</th>
+<th style="text-align: center;">Critical?</th>
+<th style="text-align: left;">Troubleshooting Recipe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Python Version</strong></td>
+<td style="text-align: left;">Python <code>&gt;= 3.10</code></td>
+<td style="text-align: center;"><code>PASS</code> / <code>FAIL</code></td>
+<td style="text-align: center;"><strong>Yes</strong></td>
+<td style="text-align: left;">Upgrade Python via <code>uv python install 3.12</code> or <code>pyenv</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ray Installation</strong></td>
+<td style="text-align: left;"><code>ray</code> importable and healthy</td>
+<td style="text-align: center;"><code>PASS</code> / <code>FAIL</code></td>
+<td style="text-align: center;"><strong>Yes</strong></td>
+<td style="text-align: left;">Run <code>uv pip install ray[default]</code> or <code>pip install ray</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ray Daemon / Cluster</strong></td>
+<td style="text-align: left;">Background cluster reachable</td>
+<td style="text-align: center;"><code>PASS</code> / <code>WARN</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">Auto-starts during exercises, or run <code>raylings daemon start</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Exercises Manifest</strong></td>
+<td style="text-align: left;"><code>exercises/</code> populated with 66 files</td>
+<td style="text-align: center;"><code>PASS</code> / <code>WARN</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">Run <code>raylings init</code> to extract bundled exercises.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>System Resources</strong></td>
+<td style="text-align: left;">Minimum 2 CPUs and &gt;= 4GB RAM</td>
+<td style="text-align: center;"><code>PASS</code> / <code>WARN</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">Warning shown if running on single-core containers.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="json-diagnostic-payloads">JSON Diagnostic Payloads</h3>
+<p>Integrate health checks into CI pipelines or editor status badges with <code>--json</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>raylings<span class="w"> </span>doctor<span class="w"> </span>--json
+</span></code></pre></div>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"healthy"</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">"passed"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">"summary"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nt">"passed"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="nt">"warnings"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">"failed"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="nt">"checks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Python Version"</span><span class="p">,</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pass"</span><span class="p">,</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">      </span><span class="nt">"critical"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">      </span><span class="nt">"details"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Python 3.12.3 (&gt;= 3.10 supported)"</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ray Installation"</span><span class="p">,</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pass"</span><span class="p">,</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">      </span><span class="nt">"critical"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">      </span><span class="nt">"details"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ray v2.43.0 installed and importable"</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="vs-code-native-extension">💻 VS Code Native Extension</h2>
+<p>Raylings provides a first-class editor extension located in <code>editors/vscode</code> that turns VS Code or Cursor into a dedicated Ray learning IDE.</p>
+<pre class="mermaid"><code>graph LR
+    subgraph VSCode["VS Code / Cursor"]
+        TreeView["Curriculum Tree View (Sidebar)"]
+        StatusBar["Cluster &amp; Progress Status Bar"]
+        Commands["Command Palette (Cmd+Shift+P)"]
+        Walkthrough["Interactive Walkthrough"]
+    end
+
+    subgraph RaylingsCLI["Raylings CLI Driver"]
+        JSONAPI["JSON Engine (--json)"]
+        DaemonCtrl["Daemon Controller"]
+    end
+
+    TreeView --&gt; JSONAPI
+    StatusBar --&gt; JSONAPI
+    Commands --&gt; DaemonCtrl</code></pre>
+<h3 id="key-extension-features">Key Extension Features</h3>
+<ol>
+<li><strong>Curriculum Explorer Tree View</strong>:</li>
+<li>Displays all 14 chapters in an expandable sidebar view.</li>
+<li>Distinct icons for completed (<code>✓</code>), pending (<code>○</code>), and active (<code>►</code>) exercises.</li>
+<li>
+<p>Click any exercise to open it immediately in the editor.</p>
+</li>
+<li>
+<p><strong>Status Bar Cluster &amp; Progress Monitor</strong>:</p>
+</li>
+<li>Shows live cluster status (e.g. <code>$(zap) Ray: 4 Nodes | 12/66 Done</code>).</li>
+<li>
+<p>Click to open the Ray Dashboard or trigger preflight diagnostics.</p>
+</li>
+<li>
+<p><strong>Auto-Run on File Save</strong>:</p>
+</li>
+<li>Automatically invokes <code>raylings run</code> on the active exercise when saved.</li>
+<li>
+<p>In-editor diagnostic output and inline problem highlighting.</p>
+</li>
+<li>
+<p><strong>Progressive Hint Peek</strong>:</p>
+</li>
+<li>Reveal hints directly in the editor using the <code>Raylings: Show Hint</code> command without switching to a terminal window.</li>
+</ol>
+<h3 id="command-palette-integration">Command Palette Integration</h3>
+<p>Open the Command Palette (<code>Ctrl+Shift+P</code> / <code>Cmd+Shift+P</code>) and type <code>Raylings</code>:</p>
+<ul>
+<li><code>Raylings: Open Interactive Tour</code> — Launch the built-in walkthrough (<code>raylings.welcome</code>).</li>
+<li><code>Raylings: Start Watcher</code> — Open an integrated terminal with <code>raylings watch</code>.</li>
+<li><code>Raylings: Run Active Exercise</code> — Execute current file with <code>raylings run</code>.</li>
+<li><code>Raylings: Show Hint for Current Exercise</code> — Display progressive hint level.</li>
+<li><code>Raylings: Run Preflight Diagnostics</code> — Execute <code>raylings doctor</code>.</li>
+<li><code>Raylings: Start / Stop Ray Daemon</code> — Manage background cluster session.</li>
+</ul>
+<hr />
+<h2 id="progress-tracking-state-management">💾 Progress Tracking &amp; State Management</h2>
+<p>Raylings tracks your completion progress using a lightweight JSON state file located at <code>.raylings_state.json</code> in your workspace root.</p>
+<h3 id="how-state-is-updated">How State is Updated</h3>
+<ol>
+<li>When you run an exercise via <code>raylings watch</code> or <code>raylings run</code>:</li>
+<li>Raylings inspects the file for the <code># I AM NOT DONE</code> marker.</li>
+<li>It executes the Python script in an isolated subprocess.</li>
+<li>If the script exits with status code <code>0</code> <strong>AND</strong> no <code># I AM NOT DONE</code> marker is found, the exercise is marked as completed.</li>
+<li>The state tracker writes the result to <code>.raylings_state.json</code>:</li>
+</ol>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">"basics01"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">"basics02"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">"basics03"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="inspecting-your-progress">Inspecting Your Progress</h3>
+<p>View overall completion statistics and your current active exercise:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>raylings<span class="w"> </span>progress
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Progress: [====================&gt;                    ] 33.3% (22/66 completed)
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Current Exercise: exercises/05_fault_tolerance/fault01.py
+</span></code></pre></div>
+<p>Or query in machine-readable JSON:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>raylings<span class="w"> </span>progress<span class="w"> </span>--json
+</span></code></pre></div>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">66</span><span class="p">,</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"completed"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">"percentage"</span><span class="p">:</span><span class="w"> </span><span class="mf">33.3</span><span class="p">,</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">"current_exercise"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fault01"</span><span class="p">,</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nt">"current_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exercises/05_fault_tolerance/fault01.py"</span><span class="p">,</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="nt">"is_finished"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Resetting Progress</p>
+<p>To reset your progress and start over, simply delete <code>.raylings_state.json</code> or re-add the <code># I AM NOT DONE</code> marker to your exercise files.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

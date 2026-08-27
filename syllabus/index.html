@@ -1,0 +1,1625 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An interactive, hands-on CLI learning environment for Python Ray.">
+      
+      
+        <meta name="author" content="Raylings Contributors">
+      
+      
+        <link rel="canonical" href="https://dnf0.github.io/raylings/syllabus/">
+      
+      
+        <link rel="prev" href="../onboarding-guide/">
+      
+      
+        <link rel="next" href="../cli-reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Curriculum Syllabus - Raylings</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#complete-curriculum-syllabus" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Raylings
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Curriculum Syllabus
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dnf0/raylings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dnf0/raylings
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Raylings
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dnf0/raylings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dnf0/raylings
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../onboarding-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Onboarding Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curriculum Syllabus
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curriculum Syllabus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#curriculum-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Curriculum Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-chapter-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 Detailed Chapter Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 Detailed Chapter Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chapter-1-01_basics-ray-core-foundations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 1: 01_basics - Ray Core Foundations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-2-02_actors-distributed-state-actors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 2: 02_actors - Distributed State &amp; Actors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-3-03_object_store-plasma-object-store-zero-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 3: 03_object_store - Plasma Object Store &amp; Zero-Copy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-4-04_scheduling_resources-resource-scheduling-placement-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 4: 04_scheduling_resources - Resource Scheduling &amp; Placement Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-5-05_fault_tolerance-fault-tolerance-lineage-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 5: 05_fault_tolerance - Fault Tolerance &amp; Lineage Recovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-6-06_cluster_architecture-cluster-topology-multi-node-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 6: 06_cluster_architecture - Cluster Topology &amp; Multi-Node Simulation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-7-07_patterns_and_antipatterns-production-patterns-anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 7: 07_patterns_and_antipatterns - Production Patterns &amp; Anti-Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-8-08_ray_data-ray-data-for-high-throughput-etl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 8: 08_ray_data - Ray Data for High-Throughput ETL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-9-09_ml_from_scratch-distributed-ml-primitives-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 9: 09_ml_from_scratch - Distributed ML Primitives from Scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-10-10_ray_train_and_tune-ray-train-distributed-deep-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 10: 10_ray_train_and_tune - Ray Train &amp; Distributed Deep Learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-11-11_ray_tune-scalable-hyperparameter-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 11: 11_ray_tune - Scalable Hyperparameter Tuning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-12-12_ray_serve-ray-serve-production-model-serving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 12: 12_ray_serve - Ray Serve &amp; Production Model Serving
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 13: 13_observability_and_debugging - Observability, Profiling &amp; Memory Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 14: 14_kuberay - KubeRay &amp; Cloud-Native Ray on Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#curriculum-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Curriculum Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-chapter-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 Detailed Chapter Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 Detailed Chapter Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chapter-1-01_basics-ray-core-foundations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 1: 01_basics - Ray Core Foundations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-2-02_actors-distributed-state-actors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 2: 02_actors - Distributed State &amp; Actors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-3-03_object_store-plasma-object-store-zero-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 3: 03_object_store - Plasma Object Store &amp; Zero-Copy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-4-04_scheduling_resources-resource-scheduling-placement-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 4: 04_scheduling_resources - Resource Scheduling &amp; Placement Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-5-05_fault_tolerance-fault-tolerance-lineage-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 5: 05_fault_tolerance - Fault Tolerance &amp; Lineage Recovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-6-06_cluster_architecture-cluster-topology-multi-node-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 6: 06_cluster_architecture - Cluster Topology &amp; Multi-Node Simulation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-7-07_patterns_and_antipatterns-production-patterns-anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 7: 07_patterns_and_antipatterns - Production Patterns &amp; Anti-Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-8-08_ray_data-ray-data-for-high-throughput-etl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 8: 08_ray_data - Ray Data for High-Throughput ETL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-9-09_ml_from_scratch-distributed-ml-primitives-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 9: 09_ml_from_scratch - Distributed ML Primitives from Scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-10-10_ray_train_and_tune-ray-train-distributed-deep-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 10: 10_ray_train_and_tune - Ray Train &amp; Distributed Deep Learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-11-11_ray_tune-scalable-hyperparameter-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 11: 11_ray_tune - Scalable Hyperparameter Tuning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-12-12_ray_serve-ray-serve-production-model-serving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 12: 12_ray_serve - Ray Serve &amp; Production Model Serving
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 13: 13_observability_and_debugging - Observability, Profiling &amp; Memory Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 14: 14_kuberay - KubeRay &amp; Cloud-Native Ray on Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="complete-curriculum-syllabus">Complete Curriculum Syllabus 📚</h1>
+<p>The Raylings curriculum consists of <strong>14 comprehensive chapters</strong> containing <strong>66 hands-on exercises</strong>. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, and cloud-native Kubernetes orchestration.</p>
+<hr />
+<h2 id="curriculum-overview">🗺️ Curriculum Overview</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">Chapter Identifier</th>
+<th style="text-align: left;">Chapter Title</th>
+<th style="text-align: center;">Exercises</th>
+<th style="text-align: left;">Focus Area</th>
+<th style="text-align: left;">Difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>01</strong></td>
+<td style="text-align: left;"><a href="#chapter-1-01_basics-ray-core-foundations"><code>01_basics</code></a></td>
+<td style="text-align: left;"><strong>Ray Core Foundations</strong></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">Tasks, ObjectRefs, Asynchronous Execution</td>
+<td style="text-align: left;">Beginner</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>02</strong></td>
+<td style="text-align: left;"><a href="#chapter-2-02_actors-distributed-state-actors"><code>02_actors</code></a></td>
+<td style="text-align: left;"><strong>Distributed State &amp; Actors</strong></td>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">Stateful Actors, Concurrency, Actor Pools</td>
+<td style="text-align: left;">Beginner</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>03</strong></td>
+<td style="text-align: left;"><a href="#chapter-3-03_object_store-plasma-object-store-zero-copy"><code>03_object_store</code></a></td>
+<td style="text-align: left;"><strong>Plasma Object Store &amp; Zero-Copy</strong></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">Zero-Copy Reads, Memory Limits, Custom Serializers</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>04</strong></td>
+<td style="text-align: left;"><a href="#chapter-4-04_scheduling_resources-resource-scheduling-placement-groups"><code>04_scheduling_resources</code></a></td>
+<td style="text-align: left;"><strong>Resource Scheduling &amp; Placement Groups</strong></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">Fractional CPUs, SPREAD/PACK, Gang Scheduling</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>05</strong></td>
+<td style="text-align: left;"><a href="#chapter-5-05_fault_tolerance-fault-tolerance-lineage-recovery"><code>05_fault_tolerance</code></a></td>
+<td style="text-align: left;"><strong>Fault Tolerance &amp; Lineage Recovery</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">Automatic Retries, Actor Restarts, DAG Recomputation</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>06</strong></td>
+<td style="text-align: left;"><a href="#chapter-6-06_cluster_architecture-cluster-topology-multi-node-simulation"><code>06_cluster_architecture</code></a></td>
+<td style="text-align: left;"><strong>Cluster Topology &amp; Simulation</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">GCS, Multi-Node Simulation, Job Submission API</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>07</strong></td>
+<td style="text-align: left;"><a href="#chapter-7-07_patterns_and_antipatterns-production-patterns-anti-patterns"><code>07_patterns_and_antipatterns</code></a></td>
+<td style="text-align: left;"><strong>Production Patterns &amp; Anti-Patterns</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">Avoiding Stalls, Micro-Task Batching, Tree-Reduce</td>
+<td style="text-align: left;">Advanced</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>08</strong></td>
+<td style="text-align: left;"><a href="#chapter-8-08_ray_data-ray-data-for-high-throughput-etl"><code>08_ray_data</code></a></td>
+<td style="text-align: left;"><strong>Ray Data for High-Throughput ETL</strong></td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">Block Partitioning, PyArrow Vectorization, Streaming</td>
+<td style="text-align: left;">Advanced</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>09</strong></td>
+<td style="text-align: left;"><a href="#chapter-9-09_ml_from_scratch-distributed-ml-primitives-from-scratch"><code>09_ml_from_scratch</code></a></td>
+<td style="text-align: left;"><strong>Distributed ML Primitives from Scratch</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">Parameter Servers, All-Reduce Ring, Data-Parallelism</td>
+<td style="text-align: left;">Advanced</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>10</strong></td>
+<td style="text-align: left;"><a href="#chapter-10-10_ray_train_and_tune-ray-train-distributed-deep-learning"><code>10_ray_train_and_tune</code></a></td>
+<td style="text-align: left;"><strong>Ray Train &amp; Distributed Deep Learning</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">TorchTrainer, ScalingConfig, Distributed Checkpointing</td>
+<td style="text-align: left;">Advanced</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>11</strong></td>
+<td style="text-align: left;"><a href="#chapter-11-11_ray_tune-scalable-hyperparameter-tuning"><code>11_ray_tune</code></a></td>
+<td style="text-align: left;"><strong>Ray Tune: Scalable Hyperparameter Tuning</strong></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">Search Spaces, ASHA Scheduler, Population-Based Training</td>
+<td style="text-align: left;">Advanced</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>12</strong></td>
+<td style="text-align: left;"><a href="#chapter-12-12_ray_serve-ray-serve-production-model-serving"><code>12_ray_serve</code></a></td>
+<td style="text-align: left;"><strong>Ray Serve &amp; Production Model Serving</strong></td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">HTTP Deployments, Request Batching, Pipeline DAGs</td>
+<td style="text-align: left;">Advanced</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>13</strong></td>
+<td style="text-align: left;"><a href="#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging"><code>13_observability_and_debugging</code></a></td>
+<td style="text-align: left;"><strong>Observability &amp; Memory Debugging</strong></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">Chrome Timelines, Plasma Leak Profiling, State APIs</td>
+<td style="text-align: left;">Expert</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>14</strong></td>
+<td style="text-align: left;"><a href="#chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes"><code>14_kuberay</code></a></td>
+<td style="text-align: left;"><strong>KubeRay &amp; Cloud-Native Kubernetes</strong></td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">RayCluster CRD, RayJob, RayService, KEDA Autoscaling</td>
+<td style="text-align: left;">Expert</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="detailed-chapter-breakdown">📖 Detailed Chapter Breakdown</h2>
+<h3 id="chapter-1-01_basics-ray-core-foundations">Chapter 1: <code>01_basics</code> - Ray Core Foundations</h3>
+<p>Covers the core primitives of distributed computing: converting synchronous Python functions into non-blocking asynchronous tasks, capturing futures, and managing data dependencies.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>basics01</code></td>
+<td style="text-align: left;"><code>exercises/01_basics/basics01.py</code></td>
+<td style="text-align: left;"><strong>Ray Init &amp; First Remote Task</strong> — Initializing Ray with <code>ray.init()</code>, applying <code>@ray.remote</code>, and invoking via <code>.remote()</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>basics02</code></td>
+<td style="text-align: left;"><code>exercises/01_basics/basics02.py</code></td>
+<td style="text-align: left;"><strong>ObjectRefs &amp; ray.get()</strong> — Handling return futures (<code>ObjectRef</code>), blocking on results, and fetching batch references.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>basics03</code></td>
+<td style="text-align: left;"><code>exercises/01_basics/basics03.py</code></td>
+<td style="text-align: left;"><strong>Parallel Pipeline Execution</strong> — Eliminating serialization bottlenecks by launching tasks concurrently before blocking.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>basics04</code></td>
+<td style="text-align: left;"><code>exercises/01_basics/basics04.py</code></td>
+<td style="text-align: left;"><strong>Passing ObjectRefs to Tasks</strong> — Passing futures directly into downstream tasks without intermediate driver serialization.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>basics05</code></td>
+<td style="text-align: left;"><code>exercises/01_basics/basics05.py</code></td>
+<td style="text-align: left;"><strong>Dynamic Completion with ray.wait()</strong> — Processing tasks dynamically as they finish using <code>ray.wait()</code> loops.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>basics06</code></td>
+<td style="text-align: left;"><code>exercises/01_basics/basics06.py</code></td>
+<td style="text-align: left;"><strong>Multiple Returns in Remote Tasks</strong> — Returning multiple distinct <code>ObjectRef</code> handles using <code>num_returns=N</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-2-02_actors-distributed-state-actors">Chapter 2: <code>02_actors</code> - Distributed State &amp; Actors</h3>
+<p>Covers stateful distributed objects (Actors), managing mutable internal state across processes, async concurrency, and worker pools.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>actors01</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors01.py</code></td>
+<td style="text-align: left;"><strong>Stateful Actor Lifecycle</strong> — Defining <code>@ray.remote</code> classes, actor instantiation, and method scheduling.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>actors02</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors02.py</code></td>
+<td style="text-align: left;"><strong>Actor Method Calls &amp; Mutation</strong> — Mutating actor internal state across sequential remote method calls.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>actors03</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors03.py</code></td>
+<td style="text-align: left;"><strong>Passing Actor Handles</strong> — Sharing actor handles across multiple worker tasks for centralized state coordination.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>actors04</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors04.py</code></td>
+<td style="text-align: left;"><strong>Async Actors &amp; Coroutine Concurrency</strong> — Using <code>async def</code> methods and <code>max_concurrency</code> for async I/O actors.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>actors05</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors05.py</code></td>
+<td style="text-align: left;"><strong>Threaded Actors for Blocking I/O</strong> — Utilizing threaded actor pools to execute blocking C-extensions or network calls.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>actors06</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors06.py</code></td>
+<td style="text-align: left;"><strong>Detached Named Actors</strong> — Registering persistent actors that survive driver disconnection (<code>lifetime="detached"</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>actors07</code></td>
+<td style="text-align: left;"><code>exercises/02_actors/actors07.py</code></td>
+<td style="text-align: left;"><strong>ActorPool Dynamic Load Balancing</strong> — Managing elastic worker pools with <code>ray.util.ActorPool</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-3-03_object_store-plasma-object-store-zero-copy">Chapter 3: <code>03_object_store</code> - Plasma Object Store &amp; Zero-Copy</h3>
+<p>Covers Ray's shared-memory Plasma object store, zero-copy deserialization semantics, memory bounds, and custom object serializers.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>object_store01</code></td>
+<td style="text-align: left;"><code>exercises/03_object_store/object_store01.py</code></td>
+<td style="text-align: left;"><strong>Zero-Copy Plasma Reads</strong> — Reading shared-memory NumPy and PyArrow buffers without memory duplication.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>object_store02</code></td>
+<td style="text-align: left;"><code>exercises/03_object_store/object_store02.py</code></td>
+<td style="text-align: left;"><strong>ray.put() vs Implicit Serialization</strong> — Pre-allocating shared objects to prevent redundant driver broadcasts.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>object_store03</code></td>
+<td style="text-align: left;"><code>exercises/03_object_store/object_store03.py</code></td>
+<td style="text-align: left;"><strong>Object Immutability Semantics</strong> — Understanding read-only buffer constraints (<code>flags.writeable == False</code>) and safe copies.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>object_store04</code></td>
+<td style="text-align: left;"><code>exercises/03_object_store/object_store04.py</code></td>
+<td style="text-align: left;"><strong>Object Spilling &amp; Memory Limits</strong> — Managing bounded Plasma capacity and automatic NVMe/disk spilling.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>object_store05</code></td>
+<td style="text-align: left;"><code>exercises/03_object_store/object_store05.py</code></td>
+<td style="text-align: left;"><strong>Nested ObjectRefs</strong> — Resolving nested references (<code>ObjectRef[ObjectRef[T]]</code>) in complex pipelines.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>object_store06</code></td>
+<td style="text-align: left;"><code>exercises/03_object_store/object_store06.py</code></td>
+<td style="text-align: left;"><strong>Custom Serializers with ray.util</strong> — Registering optimized serializer/deserializer functions with <code>register_serializer</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-4-04_scheduling_resources-resource-scheduling-placement-groups">Chapter 4: <code>04_scheduling_resources</code> - Resource Scheduling &amp; Placement Groups</h3>
+<p>Covers resource requirements, custom hardware constraints, node affinity, placement groups (PACK/SPREAD), and dynamic runtime environments.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>scheduling01</code></td>
+<td style="text-align: left;"><code>exercises/04_scheduling_resources/scheduling01.py</code></td>
+<td style="text-align: left;"><strong>Fractional &amp; Custom Resources</strong> — Requesting fractional cores (<code>num_cpus=0.5</code>) and custom accelerators.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>scheduling02</code></td>
+<td style="text-align: left;"><code>exercises/04_scheduling_resources/scheduling02.py</code></td>
+<td style="text-align: left;"><strong>Node Affinity Scheduling</strong> — Pinning critical workloads using <code>NodeAffinitySchedulingStrategy</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>scheduling03</code></td>
+<td style="text-align: left;"><code>exercises/04_scheduling_resources/scheduling03.py</code></td>
+<td style="text-align: left;"><strong>Placement Groups: SPREAD</strong> — Distributing worker bundles across distinct nodes for failure isolation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>scheduling04</code></td>
+<td style="text-align: left;"><code>exercises/04_scheduling_resources/scheduling04.py</code></td>
+<td style="text-align: left;"><strong>Placement Groups: PACK</strong> — Co-locating latency-sensitive workers onto the same physical node.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>scheduling05</code></td>
+<td style="text-align: left;"><code>exercises/04_scheduling_resources/scheduling05.py</code></td>
+<td style="text-align: left;"><strong>Gang Scheduling Multi-Bundle</strong> — Atomic resource reservation requiring all bundles ready before job dispatch.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>scheduling06</code></td>
+<td style="text-align: left;"><code>exercises/04_scheduling_resources/scheduling06.py</code></td>
+<td style="text-align: left;"><strong>Dynamic Runtime Environments</strong> — Isolating dependencies with <code>runtime_env={"pip": [...], "env_vars": {...}}</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-5-05_fault_tolerance-fault-tolerance-lineage-recovery">Chapter 5: <code>05_fault_tolerance</code> - Fault Tolerance &amp; Lineage Recovery</h3>
+<p>Covers automatic failure recovery, task retries, actor reconstruction, and lineage recomputation on preemption.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>fault01</code></td>
+<td style="text-align: left;"><code>exercises/05_fault_tolerance/fault01.py</code></td>
+<td style="text-align: left;"><strong>Automatic Task Retries</strong> — Configuring <code>max_retries</code> and <code>retry_exceptions</code> for idempotent task resilience.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>fault02</code></td>
+<td style="text-align: left;"><code>exercises/05_fault_tolerance/fault02.py</code></td>
+<td style="text-align: left;"><strong>Actor Failure &amp; Restart Recovery</strong> — Rebuilding actor state automatically using <code>max_restarts</code> and checkpointing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>fault03</code></td>
+<td style="text-align: left;"><code>exercises/05_fault_tolerance/fault03.py</code></td>
+<td style="text-align: left;"><strong>Lineage Reconstruction</strong> — Recomputing lost object store buffers using the deterministic lineage DAG.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>fault04</code></td>
+<td style="text-align: left;"><code>exercises/05_fault_tolerance/fault04.py</code></td>
+<td style="text-align: left;"><strong>Spot Instance &amp; Preemption Handling</strong> — Graceful failure handling during spot instance termination.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-6-06_cluster_architecture-cluster-topology-multi-node-simulation">Chapter 6: <code>06_cluster_architecture</code> - Cluster Topology &amp; Multi-Node Simulation</h3>
+<p>Covers cluster architecture (Head Node, Raylets, GCS), multi-node simulation in Python, and programmatic job submission.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>cluster01</code></td>
+<td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster01.py</code></td>
+<td style="text-align: left;"><strong>Head Node, Workers &amp; GCS</strong> — Inspecting cluster nodes, heartbeats, and metadata via <code>ray.nodes()</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cluster02</code></td>
+<td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster02.py</code></td>
+<td style="text-align: left;"><strong>Programmatic Cluster Simulation</strong> — Simulating dynamic multi-node topologies using <code>ray.cluster_utils.Cluster</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cluster03</code></td>
+<td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster03.py</code></td>
+<td style="text-align: left;"><strong>Simulating Node Death &amp; Rescheduling</strong> — Testing scheduler behavior when worker nodes disappear dynamically.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cluster04</code></td>
+<td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster04.py</code></td>
+<td style="text-align: left;"><strong>Ray Job Submission API</strong> — Packaging and submitting jobs remotely with <code>ray.job_submission.JobSubmissionClient</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-7-07_patterns_and_antipatterns-production-patterns-anti-patterns">Chapter 7: <code>07_patterns_and_antipatterns</code> - Production Patterns &amp; Anti-Patterns</h3>
+<p>Identifies critical architectural bottlenecks and teaches production-grade distributed patterns.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>antipattern01</code></td>
+<td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern01.py</code></td>
+<td style="text-align: left;"><strong>Fixing ray.get() Inside Tasks</strong> — Eliminating blocking dependency stalls by passing ObjectRefs directly.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>antipattern02</code></td>
+<td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern02.py</code></td>
+<td style="text-align: left;"><strong>Fixing Fine-Grained Overhead</strong> — Amortizing scheduling overhead by batching micro-tasks into coarse chunks.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>antipattern03</code></td>
+<td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern03.py</code></td>
+<td style="text-align: left;"><strong>Fixing Actor Bottlenecks</strong> — Decoupling high-frequency read/write pathways with actor replication pools.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>antipattern04</code></td>
+<td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern04.py</code></td>
+<td style="text-align: left;"><strong>Tree-Reduce Reduction</strong> — Replacing $O(N)$ linear aggregation with $O(\log N)$ logarithmic tree reduction.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-8-08_ray_data-ray-data-for-high-throughput-etl">Chapter 8: <code>08_ray_data</code> - Ray Data for High-Throughput ETL</h3>
+<p>Covers streaming data pipelines, block partitioning, vectorized batch transformations, and PyTorch dataloader integration.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>data01</code></td>
+<td style="text-align: left;"><code>exercises/08_ray_data/data01.py</code></td>
+<td style="text-align: left;"><strong>Datasets &amp; Block Partitioning</strong> — Ingesting data, inspecting block partitions (<code>ds.num_blocks()</code>), and repartitioning.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data02</code></td>
+<td style="text-align: left;"><code>exercises/08_ray_data/data02.py</code></td>
+<td style="text-align: left;"><strong>map vs map_batches</strong> — Accelerating transformations with PyArrow/NumPy vectorized batch processing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data03</code></td>
+<td style="text-align: left;"><code>exercises/08_ray_data/data03.py</code></td>
+<td style="text-align: left;"><strong>Stateful Transforms with ActorPoolStrategy</strong> — Reusing initialized model weights across data blocks.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data04</code></td>
+<td style="text-align: left;"><code>exercises/08_ray_data/data04.py</code></td>
+<td style="text-align: left;"><strong>Streaming Pipelines &amp; Backpressure</strong> — Streaming infinite or multi-gigabyte datasets with bounded RAM usage.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data05</code></td>
+<td style="text-align: left;"><code>exercises/08_ray_data/data05.py</code></td>
+<td style="text-align: left;"><strong>PyTorch DataLoader Interop</strong> — Zero-copy streaming into PyTorch training loops using <code>ds.iter_torch_batches()</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-9-09_ml_from_scratch-distributed-ml-primitives-from-scratch">Chapter 9: <code>09_ml_from_scratch</code> - Distributed ML Primitives from Scratch</h3>
+<p>Builds core distributed machine learning building blocks directly on top of Ray Core actors and tasks.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>ml_scratch01</code></td>
+<td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch01.py</code></td>
+<td style="text-align: left;"><strong>Distributed Parameter Server</strong> — Implementing central parameter storage and worker gradient updates.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ml_scratch02</code></td>
+<td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch02.py</code></td>
+<td style="text-align: left;"><strong>Async vs Sync Gradient Averaging</strong> — Comparing lock-step synchronization vs asynchronous stale gradient updates.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ml_scratch03</code></td>
+<td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch03.py</code></td>
+<td style="text-align: left;"><strong>Ring All-Reduce Implementation</strong> — Building 2-phase Scatter-Reduce and Allgather across a logical actor ring.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ml_scratch04</code></td>
+<td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch04.py</code></td>
+<td style="text-align: left;"><strong>Distributed Data-Parallel Trainer</strong> — Assembling a custom multi-worker DDP training harness.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-10-10_ray_train_and_tune-ray-train-distributed-deep-learning">Chapter 10: <code>10_ray_train_and_tune</code> - Ray Train &amp; Distributed Deep Learning</h3>
+<p>Covers production distributed training using PyTorch and Ray Train (<code>TorchTrainer</code>), data sharding, and checkpointing.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>train01</code></td>
+<td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train01.py</code></td>
+<td style="text-align: left;"><strong>PyTorch TorchTrainer &amp; ScalingConfig</strong> — Setting up multi-worker DDP training loops with <code>TorchTrainer</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>train02</code></td>
+<td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train02.py</code></td>
+<td style="text-align: left;"><strong>Distributed DataLoader via DataConfig</strong> — Auto-sharding datasets across distributed training workers.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>train03</code></td>
+<td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train03.py</code></td>
+<td style="text-align: left;"><strong>Multi-Worker Gradient Sync &amp; Metrics</strong> — Synchronizing models with <code>prepare_model</code> and reporting metrics with <code>ray.train.report</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>train04</code></td>
+<td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train04.py</code></td>
+<td style="text-align: left;"><strong>Distributed Checkpointing &amp; Fault Recovery</strong> — Saving and resuming training states from durable checkpoints.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-11-11_ray_tune-scalable-hyperparameter-tuning">Chapter 11: <code>11_ray_tune</code> - Scalable Hyperparameter Tuning</h3>
+<p>Covers search space exploration, early-stopping schedulers, and Population-Based Training.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>tune01</code></td>
+<td style="text-align: left;"><code>exercises/11_ray_tune/tune01.py</code></td>
+<td style="text-align: left;"><strong>Search Spaces &amp; Distributed Trials</strong> — Defining hyperparameter spaces (<code>tune.uniform</code>, <code>tune.choice</code>) and fitting Tuners.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tune02</code></td>
+<td style="text-align: left;"><code>exercises/11_ray_tune/tune02.py</code></td>
+<td style="text-align: left;"><strong>ASHA / HyperBand Schedulers</strong> — Terminating poorly performing trials early with <code>ASHAScheduler</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tune03</code></td>
+<td style="text-align: left;"><code>exercises/11_ray_tune/tune03.py</code></td>
+<td style="text-align: left;"><strong>Population-Based Training (PBT)</strong> — Dynamic hyperparameter mutation and weight exploitation during training.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-12-12_ray_serve-ray-serve-production-model-serving">Chapter 12: <code>12_ray_serve</code> - Ray Serve &amp; Production Model Serving</h3>
+<p>Covers production-grade HTTP model serving, dynamic request batching, DAG composition, streaming token responses, and autoscaling.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>serve01</code></td>
+<td style="text-align: left;"><code>exercises/12_ray_serve/serve01.py</code></td>
+<td style="text-align: left;"><strong>Ray Serve Deployments &amp; HTTP Ingress</strong> — Defining <code>@serve.deployment</code> classes and binding HTTP entrypoints.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>serve02</code></td>
+<td style="text-align: left;"><code>exercises/12_ray_serve/serve02.py</code></td>
+<td style="text-align: left;"><strong>Dynamic Request Batching (@serve.batch)</strong> — Coalescing concurrent HTTP requests into unified vectorized batches.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>serve03</code></td>
+<td style="text-align: left;"><code>exercises/12_ray_serve/serve03.py</code></td>
+<td style="text-align: left;"><strong>Multi-Model Composable Pipelines (DAGs)</strong> — Chaining preprocessing, inference, and postprocessing deployments.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>serve04</code></td>
+<td style="text-align: left;"><code>exercises/12_ray_serve/serve04.py</code></td>
+<td style="text-align: left;"><strong>Streaming Responses with FastAPI</strong> — Streaming real-time tokens from LLM deployments using Python generators.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>serve05</code></td>
+<td style="text-align: left;"><code>exercises/12_ray_serve/serve05.py</code></td>
+<td style="text-align: left;"><strong>Serve Autoscaling Policies</strong> — Scaling replicas dynamically based on <code>target_ongoing_requests</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging">Chapter 13: <code>13_observability_and_debugging</code> - Observability, Profiling &amp; Memory Debugging</h3>
+<p>Covers distributed profiling, execution timelines, memory debugging, and Prometheus state APIs.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>perf01</code></td>
+<td style="text-align: left;"><code>exercises/13_observability_and_debugging/perf01.py</code></td>
+<td style="text-align: left;"><strong>Execution Profiling &amp; Chrome Timelines</strong> — Exporting execution traces via <code>ray.timeline()</code> for Perfetto / Chrome Tracing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>perf02</code></td>
+<td style="text-align: left;"><code>exercises/13_observability_and_debugging/perf02.py</code></td>
+<td style="text-align: left;"><strong>Diagnosing Memory Leaks with ray memory</strong> — Inspecting active and leaked ObjectRefs across cluster Plasma stores.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>perf03</code></td>
+<td style="text-align: left;"><code>exercises/13_observability_and_debugging/perf03.py</code></td>
+<td style="text-align: left;"><strong>Ray Metrics &amp; Prometheus State APIs</strong> — Querying task queues and worker states using <code>ray.util.state</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes">Chapter 14: <code>14_kuberay</code> - KubeRay &amp; Cloud-Native Ray on Kubernetes</h3>
+<p>Covers deploying, scaling, and managing production Ray clusters on Kubernetes with the KubeRay Operator.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>kuberay01</code></td>
+<td style="text-align: left;"><code>exercises/14_kuberay/kuberay01.py</code></td>
+<td style="text-align: left;"><strong>RayCluster Custom Resource (CRD)</strong> — Authoring declarative head and worker group pod templates in YAML.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kuberay02</code></td>
+<td style="text-align: left;"><code>exercises/14_kuberay/kuberay02.py</code></td>
+<td style="text-align: left;"><strong>RayJob CRD &amp; Batch Lifecycles</strong> — Submitting ephemeral batch jobs with automatic cluster teardown on completion.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kuberay03</code></td>
+<td style="text-align: left;"><code>exercises/14_kuberay/kuberay03.py</code></td>
+<td style="text-align: left;"><strong>RayService CRD &amp; Zero-Downtime Serving</strong> — Operating rolling upgrades and health-checked endpoints on Kubernetes.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kuberay04</code></td>
+<td style="text-align: left;"><code>exercises/14_kuberay/kuberay04.py</code></td>
+<td style="text-align: left;"><strong>Autoscaling with KEDA &amp; Ray Autoscaler</strong> — Scaling Kubernetes worker pods dynamically under queue pressure.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>kuberay05</code></td>
+<td style="text-align: left;"><code>exercises/14_kuberay/kuberay05.py</code></td>
+<td style="text-align: left;"><strong>Kubernetes Fault Tolerance &amp; Pod Evictions</strong> — Preserving cluster state and reconstructing lineage across pod evictions.</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
