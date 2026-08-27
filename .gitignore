@@ -25,6 +25,9 @@ wheels/
 env/
 venv/
 ENV/
+.env
+*.env
+
 
 # Testing & Linters
 .pytest_cache/

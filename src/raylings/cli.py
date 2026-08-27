@@ -61,6 +61,66 @@ def version_command() -> None:
     )
 
 
+@app.command(name="init")
+def init_command(
+    target_dir: Path = typer.Option(
+        Path("."),
+        "--directory",
+        "-d",
+        help="Target directory to initialize raylings exercises in (defaults to current working directory)",
+    ),
+    force: bool = typer.Option(
+        False,
+        "--force",
+        "-f",
+        help="Overwrite existing exercise files if they already exist",
+    ),
+) -> None:
+    """Initialize a fresh Raylings workspace by extracting bundled exercises."""
+    import importlib.resources
+    import shutil
+
+    render_banner()
+    exercises_dest = target_dir / "exercises"
+
+    if exercises_dest.exists() and not force:
+        console.print(
+            f"[bold yellow]Directory '{exercises_dest}' already exists.[/bold yellow]\n"
+            "Use [bold cyan]raylings init --force[/bold cyan] to overwrite, or run [bold green]raylings watch[/bold green] to continue learning."
+        )
+        raise typer.Exit(0)
+
+    try:
+        bundled_pkg = importlib.resources.files("raylings")
+        bundled_exercises = bundled_pkg / "exercises"
+
+        if hasattr(bundled_exercises, "is_dir") and bundled_exercises.is_dir():
+            if exercises_dest.exists() and force:
+                shutil.rmtree(exercises_dest)
+            shutil.copytree(str(bundled_exercises), str(exercises_dest))
+        else:
+            # Fallback to local source tree if running in editable dev mode
+            repo_exercises = Path(__file__).parent.parent.parent / "exercises"
+            if repo_exercises.exists():
+                if exercises_dest.exists() and force:
+                    shutil.rmtree(exercises_dest)
+                shutil.copytree(str(repo_exercises), str(exercises_dest))
+            else:
+                console.print(
+                    "[bold red]Failed to locate bundled exercises in raylings package.[/bold red]"
+                )
+                raise typer.Exit(1)
+
+        console.print(
+            f"[bold green]✨ Raylings workspace initialized successfully in [white]{target_dir.resolve()}[/white]![/bold green]\n\n"
+            "To begin your Ray learning journey, run:\n"
+            "  [bold cyan]raylings watch[/bold cyan]\n"
+        )
+    except Exception as e:
+        console.print(f"[bold red]Error initializing workspace:[/bold red] {e}")
+        raise typer.Exit(1)
+
+
 @app.command(name="list")
 def list_command() -> None:
     """List all 14 curriculum chapters and exercises with status breakdown."""

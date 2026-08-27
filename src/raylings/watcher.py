@@ -102,6 +102,14 @@ class ExerciseWatcher:
 
         render_banner()
 
+        if not exercise_dir.exists():
+            console.print(
+                f"[bold yellow]Directory '{exercise_dir}' not found in current working directory.[/bold yellow]\n\n"
+                "To initialize the interactive Ray exercises in this folder, run:\n"
+                "  [bold cyan]raylings init[/bold cyan]\n"
+            )
+            return
+
         curr = self.find_current_exercise()
         if curr is None:
             console.print(

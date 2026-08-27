@@ -250,3 +250,24 @@ def test_watcher_watch_loop_graceful_exit(monkeypatch: pytest.MonkeyPatch, tmp_p
     # Should not raise exception
     watcher.watch_loop(exercise_dir=tmp_path)
     mock_daemon.stop.assert_called()
+
+
+def test_cli_init(tmp_path: Path):
+    """Verify init command creates an exercises directory with exercise files."""
+    from raylings.cli import app
+
+    target_dir = tmp_path / "my_learning_space"
+    target_dir.mkdir()
+
+    res = runner.invoke(app, ["init", "--directory", str(target_dir)])
+    assert res.exit_code == 0
+    assert "initialized successfully" in res.stdout
+
+    exercises_dir = target_dir / "exercises"
+    assert exercises_dir.exists()
+    assert (exercises_dir / "01_basics" / "basics01.py").exists()
+
+    # Re-running without --force should warn but exit cleanly
+    res_rerun = runner.invoke(app, ["init", "--directory", str(target_dir)])
+    assert res_rerun.exit_code == 0
+    assert "already exists" in res_rerun.stdout

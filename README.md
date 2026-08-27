@@ -22,36 +22,60 @@ Raylings provides:
 
 ### Prerequisites
 - Python 3.10, 3.11, or 3.12
-- [uv](https://github.com/astral-sh/uv) (recommended) or `pip`
+- [uv](https://github.com/astral-sh/uv) (recommended) or `pipx` / `pip`
 
-### Installation
+### 1. Instant Run with `uvx` (No installation needed)
 
-Clone the repository and install dependencies in editable mode:
+Initialize a workspace in any directory and jump right in:
+
+```bash
+uvx raylings init
+uvx raylings watch
+```
+
+Or with `pipx`:
+
+```bash
+pipx run raylings init
+pipx run raylings watch
+```
+
+### 2. Standard Installation
+
+Install globally or in your virtual environment:
+
+```bash
+pip install raylings
+raylings init
+raylings watch
+```
+
+### 3. From Source
+
+Clone the repository and install in editable mode:
 
 ```bash
 git clone https://github.com/dnf0/raylings.git
 cd raylings
 pip install -e ".[dev]"
-```
-
-### Starting the Interactive Watcher
-
-Launch the watcher to start your learning journey:
-
-```bash
 raylings watch
 ```
 
-Raylings will open the first exercise in `exercises/01_basics/basics01.py`. When you remove the `# I AM NOT DONE` marker and fix the code, Raylings automatically tests your solution and advances you to the next challenge.
+### Interactive Learning Workflow
+
+Raylings will start on the first exercise in `exercises/01_basics/basics01.py`. When you remove the `# I AM NOT DONE` marker and implement the solution, Raylings automatically tests your changes on save and advances you to the next challenge.
 
 ### CLI Commands
 
+- `raylings init` — Extract bundled exercises into the current directory.
 - `raylings watch` — Start continuous watching mode (recommended).
 - `raylings run <exercise_name>` — Run and verify a specific exercise.
 - `raylings test` — Run automated verification across all exercises.
 - `raylings hint <exercise_name>` — Show progressive hints for an exercise.
 - `raylings list` — View all chapters, exercises, and completion progress.
 - `raylings verify` — Verify full curriculum progress and validate solutions.
+- `raylings daemon [status|start|stop|restart]` — Manage the warm background Ray session.
+
 
 ---
 

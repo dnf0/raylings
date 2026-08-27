@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   build-release:
@@ -41,10 +42,32 @@ jobs:
           name: raylings-dist
           path: dist/*
 
-  publish-release:
-    name: Create GitHub Release
+  publish-pypi:
+    name: Publish to PyPI
     needs: build-release
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: raylings-dist
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN || secrets.PYPI_TOKEN }}
+          skip-existing: true
+
+  publish-github-release:
+    name: Create GitHub Release
+    needs: [build-release, publish-pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -69,3 +92,4 @@ jobs:
             dist/*
           generate_release_notes: true
           tag_name: ${{ github.ref_name || inputs.tag_name }}
+

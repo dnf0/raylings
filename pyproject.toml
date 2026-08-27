@@ -12,6 +12,32 @@ license = { text = "Apache-2.0" }
 authors = [
     { name = "Daniel Fisher" }
 ]
+keywords = [
+    "ray",
+    "distributed-computing",
+    "machine-learning",
+    "deep-learning",
+    "rustlings",
+    "cli",
+    "education",
+    "interactive-learning",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Build Tools",
+]
 dependencies = [
     "ray[default]>=2.30.0",
     "torch>=2.2.0",
@@ -20,11 +46,16 @@ dependencies = [
     "watchfiles>=0.21.0",
     "numpy>=1.24.0",
     "pyarrow>=14.0.0",
-    "pandas>=2.3.3",
+    "pandas>=2.0.0",
     "fastapi>=0.100.0",
     "uvicorn>=0.20.0",
     "starlette>=0.28.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/dnf0/raylings"
+Repository = "https://github.com/dnf0/raylings"
+Issues = "https://github.com/dnf0/raylings/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -42,6 +73,21 @@ raylings = "raylings.cli:app"
 [tool.hatch.build.targets.wheel]
 packages = ["src/raylings"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"exercises" = "raylings/exercises"
+"solutions" = "raylings/solutions"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/exercises",
+    "/solutions",
+    "/tests",
+    "README.md",
+    "LICENSE",
+    "pyproject.toml",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
@@ -57,3 +103,4 @@ typeCheckingMode = "basic"
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+

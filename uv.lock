@@ -2823,7 +2823,7 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.100.0" },
     { name = "numpy", specifier = ">=1.24.0" },
-    { name = "pandas", specifier = ">=2.3.3" },
+    { name = "pandas", specifier = ">=2.0.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.7.0" },
     { name = "pyarrow", specifier = ">=14.0.0" },
     { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.350" },
