@@ -1,6 +1,6 @@
 # Raylings Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build `raylings`, a high-performance interactive CLI learning tool and 14-chapter, 55+ exercise hands-on curriculum (with solutions and tests) for mastering Python Ray from scratch.
 
@@ -73,7 +73,7 @@ raylings/
 - Create: `.github/workflows/ci.yml`
 - Test: `tests/test_infra.py`
 
-- [ ] **Step 1: Write infrastructure test**
+- [x] **Step 1: Write infrastructure test**
 
 ```python
 # tests/test_infra.py
@@ -89,12 +89,12 @@ def test_pyproject_structure():
     assert "raylings" in data["project"]["scripts"]
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pytest tests/test_infra.py -v`  
 Expected: FAIL (pyproject.toml missing)
 
-- [ ] **Step 3: Create pyproject.toml, .gitignore, Makefile, CI workflow and metadata**
+- [x] **Step 3: Create pyproject.toml, .gitignore, Makefile, CI workflow and metadata**
 
 ```toml
 # pyproject.toml
@@ -200,12 +200,12 @@ graphify-out/
 .smellcheck-cache/
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pytest tests/test_infra.py -v`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add pyproject.toml .gitignore Makefile LICENSE README.md CONTRIBUTING.md CHANGELOG.md .github/ tests/test_infra.py
@@ -222,7 +222,7 @@ git commit -m "chore: setup project infrastructure, packaging and CI"
 - Create: `src/raylings/manifest.py`
 - Test: `tests/test_manifest.py`
 
-- [ ] **Step 1: Write test for models and manifest**
+- [x] **Step 1: Write test for models and manifest**
 
 ```python
 # tests/test_manifest.py
@@ -249,12 +249,12 @@ def test_get_next_exercise():
     assert next_ex.name == "basics02"
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pytest tests/test_manifest.py -v`  
 Expected: FAIL (ModuleNotFoundError: No module named 'raylings')
 
-- [ ] **Step 3: Implement models.py and manifest.py**
+- [x] **Step 3: Implement models.py and manifest.py**
 
 ```python
 # src/raylings/models.py
@@ -354,12 +354,12 @@ def get_next_exercise(current_name: str) -> Optional[Exercise]:
     return None
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pytest tests/test_manifest.py -v`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/raylings/ models.py manifest.py tests/test_manifest.py
@@ -374,7 +374,7 @@ git commit -m "feat: implement curriculum manifest and data models"
 - Create: `src/raylings/daemon.py`
 - Test: `tests/test_daemon.py`
 
-- [ ] **Step 1: Write daemon test**
+- [x] **Step 1: Write daemon test**
 
 ```python
 # tests/test_daemon.py
@@ -391,12 +391,12 @@ def test_daemon_start_and_status():
     assert not ray.is_initialized()
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pytest tests/test_daemon.py -v`  
 Expected: FAIL (ModuleNotFoundError: No module named 'raylings.daemon')
 
-- [ ] **Step 3: Implement daemon.py**
+- [x] **Step 3: Implement daemon.py**
 
 ```python
 # src/raylings/daemon.py
@@ -439,12 +439,12 @@ class RayDaemon:
             self._started_by_us = False
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pytest tests/test_daemon.py -v`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/raylings/daemon.py tests/test_daemon.py
@@ -460,7 +460,7 @@ git commit -m "feat: implement background ray session daemon and cleanup"
 - Create: `src/raylings/ui.py`
 - Test: `tests/test_runner.py`
 
-- [ ] **Step 1: Write runner & evaluation tests**
+- [x] **Step 1: Write runner & evaluation tests**
 
 ```python
 # tests/test_runner.py
@@ -487,12 +487,12 @@ def test_runner_executes_passing_code(tmp_path: Path):
     assert not res.has_not_done_marker
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pytest tests/test_runner.py -v`  
 Expected: FAIL (ModuleNotFoundError: No module named 'raylings.runner')
 
-- [ ] **Step 3: Implement runner.py and ui.py**
+- [x] **Step 3: Implement runner.py and ui.py**
 
 ```python
 # src/raylings/runner.py
@@ -576,12 +576,12 @@ def render_hint(exercise: Exercise, hint_index: int = 0):
     console.print(Panel(exercise.hints[idx], title=f"[bold yellow]💡 Hint for {exercise.name}[/bold yellow]"))
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pytest tests/test_runner.py -v`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/raylings/runner.py src/raylings/ui.py tests/test_runner.py
@@ -597,7 +597,7 @@ git commit -m "feat: implement exercise runner and rich UI diagnostics"
 - Create: `src/raylings/cli.py`
 - Test: `tests/test_cli.py`
 
-- [ ] **Step 1: Write CLI tests**
+- [x] **Step 1: Write CLI tests**
 
 ```python
 # tests/test_cli.py
@@ -617,12 +617,12 @@ def test_cli_hint_command():
     assert "Hint" in result.stdout
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pytest tests/test_cli.py -v`  
 Expected: FAIL (ModuleNotFoundError: No module named 'raylings.cli')
 
-- [ ] **Step 3: Implement watcher.py and cli.py**
+- [x] **Step 3: Implement watcher.py and cli.py**
 
 ```python
 # src/raylings/cli.py
@@ -671,12 +671,12 @@ def watch():
     run_watch_loop()
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pytest tests/test_cli.py -v`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/raylings/watcher.py src/raylings/cli.py tests/test_cli.py
@@ -696,7 +696,7 @@ git commit -m "feat: implement CLI commands and watcher loop"
 - Create: `solutions/03_object_store/` (object_store01.py to object_store06.py)
 - Test: `tests/test_chapters_1_3.py`
 
-- [ ] **Step 1: Write verification tests for Chapters 1-3**
+- [x] **Step 1: Write verification tests for Chapters 1-3**
 
 ```python
 # tests/test_chapters_1_3.py
@@ -714,18 +714,18 @@ def test_solutions_01_basics_pass(sol_path: Path):
     assert proc.returncode == 0, f"Solution {sol_path} failed:\n{proc.stderr}"
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pytest tests/test_chapters_1_3.py -v`  
 Expected: FAIL (missing files)
 
-- [ ] **Step 3: Author exercises and solutions for Chapters 1, 2, and 3**
-- [ ] **Step 4: Run tests to verify all solutions pass and exercises fail**
+- [x] **Step 3: Author exercises and solutions for Chapters 1, 2, and 3**
+- [x] **Step 4: Run tests to verify all solutions pass and exercises fail**
 
 Run: `pytest tests/test_chapters_1_3.py -v`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add exercises/01_basics exercises/02_actors exercises/03_object_store solutions/01_basics solutions/02_actors solutions/03_object_store tests/test_chapters_1_3.py
@@ -747,14 +747,14 @@ git commit -m "feat: add curriculum and solutions for chapters 1 to 3"
 - Create: `solutions/07_patterns_and_antipatterns/` (antipattern01.py to antipattern04.py)
 - Test: `tests/test_chapters_4_7.py`
 
-- [ ] **Step 1: Write verification tests for Chapters 4-7**
-- [ ] **Step 2: Author exercises and solutions for Chapters 4, 5, 6, and 7**
-- [ ] **Step 3: Run tests to verify all solutions pass**
+- [x] **Step 1: Write verification tests for Chapters 4-7**
+- [x] **Step 2: Author exercises and solutions for Chapters 4, 5, 6, and 7**
+- [x] **Step 3: Run tests to verify all solutions pass**
 
 Run: `pytest tests/test_chapters_4_7.py -v`  
 Expected: PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add exercises/04_scheduling_resources exercises/05_fault_tolerance exercises/06_cluster_architecture exercises/07_patterns_and_antipatterns solutions/ tests/test_chapters_4_7.py
@@ -774,14 +774,14 @@ git commit -m "feat: add curriculum and solutions for chapters 4 to 7"
 - Create: `solutions/10_ray_train_and_tune/` (train01.py to train04.py)
 - Test: `tests/test_chapters_8_10.py`
 
-- [ ] **Step 1: Write verification tests for Chapters 8-10**
-- [ ] **Step 2: Author exercises and solutions for Chapters 8, 9, and 10**
-- [ ] **Step 3: Run tests to verify all solutions pass**
+- [x] **Step 1: Write verification tests for Chapters 8-10**
+- [x] **Step 2: Author exercises and solutions for Chapters 8, 9, and 10**
+- [x] **Step 3: Run tests to verify all solutions pass**
 
 Run: `pytest tests/test_chapters_8_10.py -v`  
 Expected: PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add exercises/08_ray_data exercises/09_ml_from_scratch exercises/10_ray_train_and_tune solutions/ tests/test_chapters_8_10.py
@@ -801,14 +801,14 @@ git commit -m "feat: add curriculum and solutions for chapters 8 to 10"
 - Create: `solutions/13_observability_and_debugging/` (perf01.py to perf03.py)
 - Test: `tests/test_chapters_11_13.py`
 
-- [ ] **Step 1: Write verification tests for Chapters 11-13**
-- [ ] **Step 2: Author exercises and solutions for Chapters 11, 12, and 13**
-- [ ] **Step 3: Run tests to verify all solutions pass**
+- [x] **Step 1: Write verification tests for Chapters 11-13**
+- [x] **Step 2: Author exercises and solutions for Chapters 11, 12, and 13**
+- [x] **Step 3: Run tests to verify all solutions pass**
 
 Run: `pytest tests/test_chapters_11_13.py -v`  
 Expected: PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add exercises/11_ray_tune exercises/12_ray_serve exercises/13_observability_and_debugging solutions/ tests/test_chapters_11_13.py
@@ -824,14 +824,14 @@ git commit -m "feat: add curriculum and solutions for chapters 11 to 13"
 - Create: `solutions/14_kuberay/` (kuberay01.py to kuberay05.py)
 - Test: `tests/test_chapter_14.py`
 
-- [ ] **Step 1: Write verification tests for Chapter 14**
-- [ ] **Step 2: Author exercises and solutions for Chapter 14**
-- [ ] **Step 3: Run tests to verify all solutions pass**
+- [x] **Step 1: Write verification tests for Chapter 14**
+- [x] **Step 2: Author exercises and solutions for Chapter 14**
+- [x] **Step 3: Run tests to verify all solutions pass**
 
 Run: `pytest tests/test_chapter_14.py -v`  
 Expected: PASS
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add exercises/14_kuberay solutions/14_kuberay tests/test_chapter_14.py
@@ -847,7 +847,7 @@ git commit -m "feat: add curriculum and solutions for chapter 14 kuberay"
 - Create: `tests/test_all_exercises_fail.py`
 - Modify: `README.md`
 
-- [ ] **Step 1: Write comprehensive test runner**
+- [x] **Step 1: Write comprehensive test runner**
 
 ```python
 # tests/test_all_solutions.py
@@ -867,20 +867,20 @@ def test_every_solution_passes(solution_path: Path):
     assert proc.returncode == 0, f"Solution {solution_path} failed:\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
 ```
 
-- [ ] **Step 2: Run full test suite & linters**
+- [x] **Step 2: Run full test suite & linters**
 
 Run: `pytest -v`  
 Run: `ruff check src tests`  
 Run: `pyright src`  
 Expected: ALL PASS
 
-- [ ] **Step 3: Add git remote for dnf0/raylings**
+- [x] **Step 3: Add git remote for dnf0/raylings**
 
 ```bash
 git remote add origin git@github.com:dnf0/raylings.git
 ```
 
-- [ ] **Step 4: Final commit**
+- [x] **Step 4: Final commit**
 
 ```bash
 git add .
