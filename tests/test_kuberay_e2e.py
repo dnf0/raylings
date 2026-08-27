@@ -215,7 +215,6 @@ def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
     scaling_config = ScalingConfig(
         num_workers=2,
         use_gpu=False,
-        trainer_resources={"CPU": 0},
         resources_per_worker={"CPU": 0.5},
     )
     trainer = TorchTrainer(
