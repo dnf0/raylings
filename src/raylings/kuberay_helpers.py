@@ -196,9 +196,7 @@ def run_torch_train_multinode() -> dict[str, Any]:
 
         weights = np.array([[0.0]], dtype=np.float32)
         lr = 0.05
-        initial_loss = float(
-            np.mean((np.vstack([x1, x2]) @ weights - np.vstack([y1, y2])) ** 2)
-        )
+        initial_loss = float(np.mean((np.vstack([x1, x2]) @ weights - np.vstack([y1, y2])) ** 2))
 
         for _ in range(25):
             g1_ref = w1.compute_gradients.remote(weights, x1, y1)
