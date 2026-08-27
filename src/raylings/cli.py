@@ -843,5 +843,168 @@ def doctor_command(
         raise typer.Exit(1)
 
 
+@app.command(name="new", help="Scaffold a new exercise and solution template.")
+@app.command(name="new-exercise", help="Scaffold a new exercise and solution template (alias).")
+def new_command(
+    chapter: str = typer.Argument(
+        ...,
+        help="Chapter number (e.g. 15 or 01) or chapter directory name (e.g. 15_vllm_and_llms)",
+    ),
+    name: str = typer.Argument(
+        ...,
+        help="Exercise filename/identifier without .py extension (e.g. vllm05)",
+    ),
+    title: str | None = typer.Option(
+        None,
+        "--title",
+        "-t",
+        help="Human-readable exercise title",
+    ),
+    description: str | None = typer.Option(
+        None,
+        "--description",
+        "-d",
+        help="Exercise description summary",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Preview scaffolded files and manifest entry without writing to disk",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output scaffolding result as JSON",
+    ),
+) -> None:
+    """Scaffold a new exercise and reference solution template with boilerplate and manifest entry."""
+    import json
+
+    from rich.panel import Panel
+    from rich.syntax import Syntax
+
+    from raylings.scaffolder import ExerciseScaffolder
+
+    scaffolder = ExerciseScaffolder()
+    try:
+        result = scaffolder.scaffold(
+            chapter=chapter,
+            name=name,
+            title=title,
+            description=description,
+            dry_run=dry_run,
+        )
+    except Exception as e:
+        if as_json:
+            print(json.dumps({"error": str(e), "success": False}, indent=2))
+        else:
+            console.print(f"[bold red]Error:[/bold red] {e}")
+        raise typer.Exit(1)
+
+    if as_json:
+        print(json.dumps(result.to_dict(dry_run=dry_run), indent=2))
+        return
+
+    render_banner()
+    if dry_run:
+        console.print(
+            "[bold yellow]DRY RUN PREVIEW[/bold yellow] (No files were written to disk)\n"
+        )
+    else:
+        console.print(
+            f"[bold green]✓ Successfully scaffolded exercise '{result.exercise_name}'![/bold green]\n"
+        )
+
+    console.print(f"[bold cyan]Chapter:[/bold cyan] {result.chapter_name}")
+    console.print(f"[bold cyan]Exercise File:[/bold cyan] {result.exercise_path}")
+    console.print(f"[bold cyan]Solution File:[/bold cyan] {result.solution_path}\n")
+
+    console.print(
+        f"[bold magenta]Next Step:[/bold magenta] Register this exercise in [bold yellow]src/raylings/manifest.py[/bold yellow] under chapter [bold cyan]{result.chapter_name}[/bold cyan]:\n"
+    )
+    syntax = Syntax(result.manifest_snippet, "python", theme="monokai", line_numbers=False)
+    console.print(Panel(syntax, title="Manifest Registration Snippet", border_style="cyan"))
+
+
+@app.command(name="top", help="Display real-time cluster health and telemetry dashboard.")
+def top_command(
+    interval: float = typer.Option(
+        1.0,
+        "--interval",
+        "-i",
+        help="Refresh interval in seconds for live telemetry monitoring",
+    ),
+    once: bool = typer.Option(
+        False,
+        "--once",
+        help="Capture and render a single cluster telemetry snapshot and exit",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output cluster telemetry snapshot as JSON",
+    ),
+) -> None:
+    """Display real-time cluster health, node resources, Plasma object store metrics, and actor state."""
+    from raylings.metrics import run_top_dashboard
+
+    run_top_dashboard(interval=interval, once=once, as_json=as_json)
+
+
+@app.command(name="metrics", help="Display cluster telemetry and resource metrics (alias for top).")
+def metrics_command(
+    interval: float = typer.Option(
+        1.0,
+        "--interval",
+        "-i",
+        help="Refresh interval in seconds for live telemetry monitoring",
+    ),
+    once: bool = typer.Option(
+        False,
+        "--once",
+        help="Capture and render a single cluster telemetry snapshot and exit",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output cluster telemetry snapshot as JSON",
+    ),
+) -> None:
+    """Display cluster telemetry, node resources, Plasma object store metrics, and actor state."""
+    from raylings.metrics import run_top_dashboard
+
+    run_top_dashboard(interval=interval, once=once, as_json=as_json)
+
+
+@app.command(name="tui", help="Launch interactive full-screen split-pane TUI.")
+def tui_command(
+    exercise: str | None = typer.Option(
+        None,
+        "--exercise",
+        "-e",
+        help="Pre-select an exercise by name identifier (e.g. basics01)",
+    ),
+    non_interactive: bool = typer.Option(
+        False,
+        "--non-interactive",
+        help="Render TUI once and exit (for headless tests / automation)",
+    ),
+) -> None:
+    """Launch full-screen interactive split-pane TUI to browse exercises, inspect telemetry, and execute tasks."""
+    from raylings.tui import run_tui_app
+
+    try:
+        run_tui_app(
+            exercise_name=exercise,
+            non_interactive=non_interactive,
+        )
+    except SystemExit as exc:
+        if exc.code != 0:
+            raise typer.Exit(exc.code)
+    except Exception as e:
+        console.print(f"[bold red]Error running TUI:[/bold red] {e}")
+        raise typer.Exit(1)
+
+
 if __name__ == "__main__":
     app()

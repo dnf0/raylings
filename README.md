@@ -2,6 +2,8 @@
 
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://dnf0.github.io/raylings/)
 [![CI](https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg)](https://github.com/dnf0/raylings/actions/workflows/ci.yml)
+[![TUI](https://img.shields.io/badge/TUI-Split--Pane%20Terminal-green.svg)](#interactive-full-screen-tui-raylings-tui)
+[![Telemetry](https://img.shields.io/badge/Telemetry-Ray%20Cluster%20Top-purple.svg)](#cluster-health--telemetry-inspector-raylings-top)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 > An interactive, hands-on CLI learning environment for mastering Python Ray from scratch.
@@ -18,6 +20,9 @@ Inspired by the pedagogy of [Rustlings](https://github.com/rust-lang/rustlings) 
 Ray is a unified framework for scaling AI and Python applications from single laptops to massive multi-node clusters. While powerful, mastering Ray's mental models—futures, stateful actors, Plasma zero-copy memory, dynamic placement groups, and lineage-based fault tolerance—requires hands-on practice.
 
 Raylings provides:
+- **Interactive Full-Screen TUI (`raylings tui`)**: Rich split-pane terminal UI with a live curriculum tree, syntax-highlighted code preview, hotkey execution (`[r]`), progressive hints (`[h]`), and telemetry overlays (`[t]`).
+- **Cluster Health & Telemetry Inspector (`raylings top` / `raylings metrics`)**: Real-time live dashboard monitoring Plasma object store memory, disk spill rates, node CPU/GPU saturation, and active actor tables.
+- **Exercise Scaffolding CLI (`raylings new` / `raylings new-exercise`)**: One-command generator creating boilerplate exercises, reference solutions, validation harnesses, and manifest registration snippets.
 - **Preflight Diagnostics (`raylings doctor`)**: Built-in environment & hardware diagnostics checking Python 3.10+, Ray installation, CPU/RAM capacity, and cluster health.
 - **Interactive Tour (`raylings tour`)**: 5-step interactive curriculum tour explaining distributed primitives, exercise workflow, and developer shortcuts.
 - **Interactive File Watcher (`raylings watch`)**: Edit exercises in your favorite editor; Raylings automatically re-runs and validates your changes on save.
@@ -42,7 +47,7 @@ Initialize a workspace in any directory, run diagnostics, take the tour, and jum
 uvx raylings init
 uvx raylings doctor
 uvx raylings tour
-uvx raylings watch
+uvx raylings tui       # Or launch watcher: uvx raylings watch
 ```
 
 ### 2. Standard Installation
@@ -54,7 +59,7 @@ pip install raylings
 raylings init
 raylings doctor
 raylings tour
-raylings watch
+raylings tui           # Or launch watcher: raylings watch
 ```
 
 ### 3. From Source
@@ -67,27 +72,71 @@ cd raylings
 pip install -e ".[dev]"
 raylings doctor
 raylings tour
-raylings watch
+raylings tui
 ```
 
 ---
 
 ## Interactive Learning Workflow
 
-Raylings starts on the first exercise in `exercises/01_basics/basics01.py`. 
+Raylings offers two ways to learn: the **Full-Screen Split-Pane TUI** and the **Live Background Watcher**.
+
+### 1. Interactive Full-Screen TUI (`raylings tui`)
+
+Launch the split-pane terminal interface to browse the entire curriculum, preview code with line numbers, run exercises, and reveal progressive hints with single keystrokes:
+
+```bash
+raylings tui
+```
+
+| Key | Action | Description |
+| :---: | :--- | :--- |
+| `[r]` | **Run** | Execute active exercise and view execution diagnostics. |
+| `[h]` | **Hint** | Toggle layered progressive hints. |
+| `[j]` / `[↓]` / `[n]` | **Next** | Navigate to the next exercise. |
+| `[k]` / `[↑]` / `[p]` | **Previous** | Navigate to the previous exercise. |
+| `[t]` | **Telemetry** | Open live Ray cluster resource & memory inspector overlay. |
+| `[d]` | **Doctor** | Open preflight system diagnostics overlay. |
+| `[q]` | **Quit** | Exit the TUI. |
+
+### 2. Live Background Watcher (`raylings watch`)
+
+Prefer using your favorite code editor (VS Code, Cursor, Neovim)? Start the continuous background watcher:
 
 ```
-1. Open exercises/01_basics/basics01.py in your code editor.
-2. Read the instructions, implement the Ray distributed calls, and remove '# I AM NOT DONE'.
-3. Save the file. Raylings immediately tests your changes and advances to the next exercise.
+1. Run 'raylings watch' in a terminal.
+2. Open exercises/01_basics/basics01.py in your code editor.
+3. Read the instructions, implement the Ray distributed calls, and remove '# I AM NOT DONE'.
+4. Save the file. Raylings immediately tests your changes and advances to the next exercise.
+```
+
+### 3. Cluster Health & Telemetry Inspector (`raylings top`)
+
+Inspect your local Ray cluster's live Plasma memory allocations, object spill rates, CPU/GPU core usage, and instantiated actor states:
+
+```bash
+raylings top --interval 0.5
+# Or output a one-shot JSON snapshot:
+raylings top --json
+```
+
+### 4. Authoring New Exercises (`raylings new`)
+
+Contribute new exercises to the Raylings curriculum with the built-in scaffolder:
+
+```bash
+raylings new 15 vllm05 --title "Speculative Decoding" --description "Coordinate draft model worker actors."
 ```
 
 ### Key CLI Commands
 
+- `raylings tui` — Launch interactive full-screen split-pane TUI (`-e`, `--non-interactive`).
+- `raylings top` / `raylings metrics` — Live cluster telemetry, memory inspector, and actor monitor (`-i`, `--once`, `--json`).
+- `raylings new` / `raylings new-exercise` — Scaffold new exercise and solution templates (`-t`, `-d`, `--dry-run`, `--json`).
+- `raylings watch` — Start continuous watching mode with keyboard shortcuts (`n`, `p`, `r`, `h`, `q`).
 - `raylings doctor` — Run preflight system, Python, and Ray environment diagnostics.
 - `raylings tour` — Launch the 5-step interactive onboarding tour (`--step`, `-y`, `--json`).
 - `raylings init` — Extract bundled exercises into the current directory.
-- `raylings watch` — Start continuous watching mode with keyboard shortcuts (`n`, `p`, `r`, `h`, `q`).
 - `raylings run <exercise_name>` — Run and verify a specific exercise.
 - `raylings test` — Run automated verification across all canonical reference solutions.
 - `raylings hint <exercise_name>` — Show progressive hints for an exercise (`--level`).

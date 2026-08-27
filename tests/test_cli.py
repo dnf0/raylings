@@ -463,3 +463,22 @@ def test_cli_doctor_critical_failure(monkeypatch: pytest.MonkeyPatch):
 
     res_json = runner.invoke(app, ["doctor", "--json"])
     assert res_json.exit_code == 1
+
+
+def test_cli_tui_non_interactive():
+    """Verify tui --non-interactive renders snapshot and exits cleanly."""
+    from raylings.cli import app
+
+    res = runner.invoke(app, ["tui", "--non-interactive"])
+    assert res.exit_code == 0
+    assert "basics01" in res.stdout or "Curriculum" in res.stdout
+
+    # With pre-selected exercise
+    res_ex = runner.invoke(app, ["tui", "--non-interactive", "--exercise", "basics02"])
+    assert res_ex.exit_code == 0
+    assert "basics02" in res_ex.stdout
+
+    # With invalid exercise
+    res_invalid = runner.invoke(app, ["tui", "--non-interactive", "--exercise", "invalid_ex_000"])
+    assert res_invalid.exit_code != 0
+    assert "not found" in res_invalid.stdout.lower()

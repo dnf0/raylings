@@ -13,10 +13,10 @@ mindmap
       Chapter 15: vLLM & LLM Serving
       Chapter 16: DeepSpeed & PyTorch FSDP
       Chapter 17: Multimodal & Vector Ray Data
-    Track 2: Developer Tooling
+    Track 2: Developer Tooling [Done]
       Full-screen TUI raylings tui
-      Exercise Scaffolder CLI raylings new-exercise
-      Prometheus / OpenTelemetry Metrics Bridge
+      Exercise Scaffolder CLI raylings new
+      Cluster Telemetry raylings top
     Track 3: Cloud & Infrastructure
       Automated Kind / KubeRay CI Testing
       Remote Head Node Connection Profiling
@@ -51,15 +51,18 @@ Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced di
 
 ---
 
-## Track 2: Developer Tooling & CLI Experience (Backlog 📋)
+## Track 2: Developer Tooling & CLI Experience (Completed ✅)
 
 1. **Interactive Full-Screen TUI (`raylings tui`)**:
-   - Built with `textual` and `rich`.
-   - Split-pane layout: live curriculum outline and code preview on the left; real-time watcher logs, hint drawer, and cluster telemetry on the right.
-2. **Exercise Scaffolding Tool (`raylings new-exercise <chapter> <name>`)**:
-   - Single command to generate skeleton exercise, canonical solution, test fixture, and manifest entry.
-3. **Cluster Health & Telemetry Inspector (`raylings metrics`)**:
+   - Built with Rich `Layout`, `Live`, and interactive non-blocking keystroke listener.
+   - Split-pane layout: live curriculum chapter outline with status badges on the left; syntax-highlighted code preview, real-time evaluation logs, progressive hint drawer, and cluster telemetry overlays on the right.
+   - Full keyboard navigation (`[r]` Run, `[h]` Hint, `[j/↓]` Down, `[k/↑]` Up, `[n]` Next, `[p]` Prev, `[t]` Telemetry, `[d]` Doctor, `[q]` Quit).
+2. **Exercise Scaffolding Tool (`raylings new` / `raylings new-exercise <chapter> <name>`)**:
+   - Single command to generate skeleton exercise, canonical solution, verify harness, and manifest entry snippet.
+   - Options for `--title`, `--description`, `--dry-run`, and `--json`.
+3. **Cluster Health & Telemetry Inspector (`raylings top` / `raylings metrics`)**:
    - Live terminal view of Plasma object store memory utilization, spill rate, worker CPU/GPU saturation, and GCS actor tables.
+   - Options for `--interval`, `--once`, and `--json`.
 
 ---
 
