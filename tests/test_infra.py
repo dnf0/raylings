@@ -41,7 +41,7 @@ def test_all_curriculum_syntax_and_markers():
     from raylings.runner import NOT_DONE_MARKER
 
     manifest = get_manifest()
-    assert len(manifest.all_exercises) == 66
+    assert len(manifest.all_exercises) == 78
 
     for ex in manifest.all_exercises:
         # Check skeleton (clean Python without magic markers)

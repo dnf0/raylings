@@ -13,9 +13,9 @@ from raylings.models import Chapter, Exercise, ExerciseStatus, Manifest
 def test_manifest_loads_all_chapters():
     manifest = get_manifest()
     assert isinstance(manifest, Manifest)
-    assert len(manifest.chapters) == 14
+    assert len(manifest.chapters) == 17
     assert all(isinstance(ch, Chapter) for ch in manifest.chapters)
-    assert len(manifest.all_exercises) >= 55
+    assert len(manifest.all_exercises) == 78
     first = manifest.all_exercises[0]
     assert first.name == "basics01"
     assert first.chapter_name == "01_basics"
@@ -23,9 +23,9 @@ def test_manifest_loads_all_chapters():
 
 def test_unique_exercise_names_and_sequential_chapters():
     manifest = get_manifest()
-    # Ensure sequential chapter numbering 1..14
+    # Ensure sequential chapter numbering 1..17
     chapter_numbers = [ch.number for ch in manifest.chapters]
-    assert chapter_numbers == list(range(1, 15))
+    assert chapter_numbers == list(range(1, 18))
 
     # Ensure all exercise names are unique
     exercise_names = [ex.name for ex in manifest.all_exercises]
@@ -62,6 +62,21 @@ def test_get_exercise_by_name():
     kuberay_ex = get_exercise_by_name("kuberay01")
     assert kuberay_ex is not None
     assert kuberay_ex.chapter_name == "14_kuberay"
+
+    # Chapter 15 exercise lookup
+    vllm_ex = get_exercise_by_name("vllm01")
+    assert vllm_ex is not None
+    assert vllm_ex.chapter_name == "15_vllm_and_llms"
+
+    # Chapter 16 exercise lookup
+    fsdp_ex = get_exercise_by_name("fsdp01")
+    assert fsdp_ex is not None
+    assert fsdp_ex.chapter_name == "16_fsdp_and_deepspeed"
+
+    # Chapter 17 exercise lookup
+    genai_ex = get_exercise_by_name("data_genai01")
+    assert genai_ex is not None
+    assert genai_ex.chapter_name == "17_multimodal_and_vectors"
 
     # Non-existent exercise
     assert get_exercise_by_name("non_existent_exercise") is None

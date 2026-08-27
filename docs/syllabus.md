@@ -1,6 +1,6 @@
 # Complete Curriculum Syllabus 📚
 
-The Raylings curriculum consists of **14 comprehensive chapters** containing **66 hands-on exercises**. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, and cloud-native Kubernetes orchestration.
+The Raylings curriculum consists of **17 comprehensive chapters** containing **78 hands-on exercises**. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, and cloud-native Kubernetes orchestration.
 
 ---
 
@@ -22,6 +22,9 @@ The Raylings curriculum consists of **14 comprehensive chapters** containing **6
 | **12** | [`12_ray_serve`](#chapter-12-12_ray_serve-ray-serve-production-model-serving) | **Ray Serve & Production Model Serving** | 5 | HTTP Deployments, Request Batching, Pipeline DAGs | Advanced |
 | **13** | [`13_observability_and_debugging`](#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging) | **Observability & Memory Debugging** | 3 | Chrome Timelines, Plasma Leak Profiling, State APIs | Expert |
 | **14** | [`14_kuberay`](#chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes) | **KubeRay & Cloud-Native Kubernetes** | 5 | RayCluster CRD, RayJob, RayService, KEDA Autoscaling | Expert |
+| **15** | [`15_vllm_and_llms`](#chapter-15-15_vllm_and_llms-distributed-llm-serving-vllm) | **Distributed LLM Serving & vLLM** | 4 | Tensor Parallelism, PagedAttention, Multi-LoRA, Speculative Decoding | Expert |
+| **16** | [`16_fsdp_and_deepspeed`](#chapter-16-16_fsdp_and_deepspeed-deepspeed-pytorch-fsdp) | **DeepSpeed & PyTorch FSDP** | 4 | Fully Sharded Data Parallel, ZeRO Memory Optimization, Fault Recovery | Expert |
+| **17** | [`17_multimodal_and_vectors`](#chapter-17-17_multimodal_and_vectors-multimodal-vector-ray-data) | **Multimodal & Vector Ray Data** | 4 | Streaming Multimodal ETL, ActorPool Embeddings, Vector Stores | Expert |
 
 ---
 
@@ -216,3 +219,43 @@ Covers deploying, scaling, and managing production Ray clusters on Kubernetes wi
 | `kuberay03` | `exercises/14_kuberay/kuberay03.py` | **RayService CRD & Zero-Downtime Serving** — Operating rolling upgrades and health-checked endpoints on Kubernetes. |
 | `kuberay04` | `exercises/14_kuberay/kuberay04.py` | **Autoscaling with KEDA & Ray Autoscaler** — Scaling Kubernetes worker pods dynamically under queue pressure. |
 | `kuberay05` | `exercises/14_kuberay/kuberay05.py` | **Kubernetes Fault Tolerance & Pod Evictions** — Preserving cluster state and reconstructing lineage across pod evictions. |
+
+---
+
+### Chapter 15: `15_vllm_and_llms` - Distributed LLM Serving & vLLM
+
+Covers high-throughput LLM serving architectures, tensor parallel worker actor groups, PagedAttention KV-cache management, multi-LoRA dynamic adapter loading, and speculative decoding.
+
+| Exercise | File Path | Topic & Learning Objective |
+| :--- | :--- | :--- |
+| `vllm01` | `exercises/15_vllm_and_llms/vllm01.py` | **Tensor Parallelism & Worker Actor Groups** — Sharding linear projection matrices across Ray actors (ColumnParallel and RowParallel) with All-Reduce output aggregation. |
+| `vllm02` | `exercises/15_vllm_and_llms/vllm02.py` | **PagedAttention & KV-Cache Block Management** — Managing non-contiguous physical KV-cache memory blocks, logical-to-physical block tables, dynamic boundary allocation, and prefix sharing. |
+| `vllm03` | `exercises/15_vllm_and_llms/vllm03.py` | **Dynamic Multi-LoRA Adapter Serving** — Serving multi-tenant low-rank adapters over a shared base model with LRU cache eviction and dynamic scaling factors. |
+| `vllm04` | `exercises/15_vllm_and_llms/vllm04.py` | **Speculative Decoding with Draft & Target Workers** — Accelerating autoregressive token generation using lightweight draft workers and parallel batch verification with target model workers. |
+
+---
+
+### Chapter 16: `16_fsdp_and_deepspeed` - DeepSpeed & PyTorch FSDP
+
+Covers large-scale distributed model training with PyTorch Fully Sharded Data Parallel (FSDP), DeepSpeed ZeRO memory partitioning stages (ZeRO-1/2/3), activation checkpointing, mixed precision, and fault-tolerant elastic checkpoints.
+
+| Exercise | File Path | Topic & Learning Objective |
+| :--- | :--- | :--- |
+| `fsdp01` | `exercises/16_fsdp_and_deepspeed/fsdp01.py` | **PyTorch FSDP with Ray Train ScalingConfig** — Wrapping PyTorch models in Fully Sharded Data Parallel (`FULL_SHARD`) with size-based auto-wrap policies across Ray Train workers. |
+| `fsdp02` | `exercises/16_fsdp_and_deepspeed/fsdp02.py` | **DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 Memory Partitioning** — Partitioning optimizer states, gradients, and model parameters with ReduceScatter gradient synchronization and AllGather reconstruction. |
+| `fsdp03` | `exercises/16_fsdp_and_deepspeed/fsdp03.py` | **Mixed Precision & Activation Checkpointing** — Slashing peak activation memory via `torch.utils.checkpoint` and mixed-precision `torch.autocast` forward passes. |
+| `fsdp04` | `exercises/16_fsdp_and_deepspeed/fsdp04.py` | **Elastic Fault-Tolerant Distributed Checkpoints** — Saving per-rank sharded checkpoint slices and atomic metadata with elastic recovery upon worker preemption. |
+
+---
+
+### Chapter 17: `17_multimodal_and_vectors` - Multimodal & Vector Ray Data
+
+Covers streaming multimodal ETL pipelines, high-throughput batch embedding extraction via stateful `ActorPoolStrategy`, dynamic token length bucketing, and parallel streaming ingestion into partitioned vector databases.
+
+| Exercise | File Path | Topic & Learning Objective |
+| :--- | :--- | :--- |
+| `data_genai01` | `exercises/17_multimodal_and_vectors/data_genai01.py` | **Streaming Multimodal Image & Audio ETL** — Processing heterogeneous image and audio data with PyArrow tensor extensions, zero-copy transformations, and bounded memory streaming. |
+| `data_genai02` | `exercises/17_multimodal_and_vectors/data_genai02.py` | **Accelerated Batch Embeddings with ActorPoolStrategy** — Streaming document embeddings through persistent stateful neural worker pools with `ActorPoolStrategy`. |
+| `data_genai03` | `exercises/17_multimodal_and_vectors/data_genai03.py` | **Dynamic Token Length Bucketing & Padding Optimization** — Grouping variable-length sequences into length buckets to minimize wasteful padding tokens and attention mask overhead. |
+| `data_genai04` | `exercises/17_multimodal_and_vectors/data_genai04.py` | **Streaming Parallel Ingestion into Vector Databases** — Authoring custom Ray Data `Datasink` classes for partition-aware, high-throughput parallel upserts into vector indices. |
+
