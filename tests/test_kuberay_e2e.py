@@ -16,7 +16,7 @@ from typing import Any, Generator
 import pytest
 import ray
 from ray.train import ScalingConfig
-from ray.train.torch import TorchTrainer
+from ray.train.torch import TorchConfig, TorchTrainer
 from ray.util.placement_group import placement_group, remove_placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
@@ -49,6 +49,8 @@ def ray_cluster() -> Generator[dict[str, Any], None, None]:
         "env_vars": {
             "PYTHONPATH": python_path,
             "RAY_ENABLE_UV_RUN_RUNTIME_ENV": "0",
+            "GLOO_SOCKET_IFNAME": "eth0",
+            "TP_SOCKET_IFNAME": "eth0",
         },
     }
 
@@ -217,8 +219,10 @@ def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
         use_gpu=False,
         resources_per_worker={"CPU": 0.5},
     )
+    torch_config = TorchConfig(backend="gloo", timeout_s=60)
     trainer = TorchTrainer(
         train_loop_per_worker=distributed_torch_train_loop,
+        torch_config=torch_config,
         scaling_config=scaling_config,
     )
     result = trainer.fit()
