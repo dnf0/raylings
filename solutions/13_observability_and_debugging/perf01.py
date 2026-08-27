@@ -6,9 +6,13 @@ Reference Solution for perf01.
 import json
 import os
 import tempfile
+from typing import Any
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 import ray
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 
 
 @ray.remote
@@ -16,7 +20,7 @@ def compute_work(task_id: int) -> int:
     return task_id**2
 
 
-def dump_execution_timeline(filepath: str) -> list[dict]:
+def dump_execution_timeline(filepath: str) -> list[dict[str, Any]]:
     refs = [compute_work.remote(i) for i in range(3)]
     ray.get(refs)
 

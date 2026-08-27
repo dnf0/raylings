@@ -23,9 +23,13 @@ Your Task:
 import json
 import os
 import tempfile
+from typing import Any
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 import ray
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 
 
 @ray.remote
@@ -34,7 +38,7 @@ def compute_work(task_id: int) -> int:
     pass
 
 
-def dump_execution_timeline(filepath: str) -> list[dict]:
+def dump_execution_timeline(filepath: str) -> list[dict[str, Any]]:
     # TODO: Execute tasks, call ray.timeline, load and return json events
     pass
 
