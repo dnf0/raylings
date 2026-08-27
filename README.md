@@ -2,6 +2,7 @@
 
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://dnf0.github.io/raylings/)
 [![CI](https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg)](https://github.com/dnf0/raylings/actions/workflows/ci.yml)
+[![KubeRay CI](https://github.com/dnf0/raylings/actions/workflows/kuberay-e2e.yml/badge.svg)](https://github.com/dnf0/raylings/actions/workflows/kuberay-e2e.yml)
 [![TUI](https://img.shields.io/badge/TUI-Split--Pane%20Terminal-green.svg)](#interactive-full-screen-tui-raylings-tui)
 [![Telemetry](https://img.shields.io/badge/Telemetry-Ray%20Cluster%20Top-purple.svg)](#cluster-health--telemetry-inspector-raylings-top)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -27,6 +28,7 @@ Raylings provides:
 - **Interactive Tour (`raylings tour`)**: 5-step interactive curriculum tour explaining distributed primitives, exercise workflow, and developer shortcuts.
 - **Interactive File Watcher (`raylings watch`)**: Edit exercises in your favorite editor; Raylings automatically re-runs and validates your changes on save.
 - **Sub-50ms Execution**: Background Ray daemon re-uses a warm local cluster session for rapid turnaround.
+- **Multi-Node Kubernetes & KubeRay (`scripts/kuberay/`)**: Ephemeral 3-node KinD cluster harness and end-to-end integration test suite for testing Ray clusters, remote Ray client execution, and DDP training on real Kubernetes topology.
 - **14 Chapters & 66 Exercises**: From first remote tasks to distributed parameter servers, PyTorch DDP pipelines, Ray Serve DAGs, and KubeRay on Kubernetes.
 - **Progressive Hints & Solutions**: Stuck on an exercise? Get layered hints without spoiling the answer, or inspect canonical solutions when finished.
 - **First-Class VS Code Extension**: Dedicated sidebar tree view, status bar progress, on-save auto-evaluations, and built-in interactive walkthroughs.
@@ -156,6 +158,31 @@ Raylings provides a first-class extension for VS Code and Cursor (`editors/vscod
 
 ---
 
+## Cloud & KubeRay Multi-Node Testing
+
+Raylings provides automated scripts and test harnesses to deploy ephemeral multi-node Ray clusters on Kubernetes using **KinD** and the **KubeRay Operator**:
+
+```bash
+# 1. Provision 3-node KinD cluster & KubeRay operator
+bash scripts/kuberay/setup-kuberay.sh up
+
+# 2. Forward Ray client (10001) and dashboard (8265) ports
+bash scripts/kuberay/setup-kuberay.sh forward
+
+# 3. Run exercises or watch against the remote Kubernetes cluster
+RAY_ADDRESS=ray://localhost:10001 raylings run exercises/14_kuberay/kuberay01.py
+
+# 4. Run the multi-node end-to-end integration test suite
+RAY_ADDRESS=ray://localhost:10001 uv run pytest tests/test_kuberay_e2e.py -v
+
+# 5. Teardown cluster
+bash scripts/kuberay/setup-kuberay.sh down
+```
+
+See the [**Cloud & KubeRay Guide**](https://dnf0.github.io/raylings/cloud-kuberay/) for architecture diagrams, Helm configuration, and CI workflows.
+
+---
+
 ## Curriculum Map
 
 Raylings covers 14 comprehensive chapters spanning core foundations to production ML engineering:
@@ -188,6 +215,7 @@ The full documentation is available at **[https://dnf0.github.io/raylings/](http
 - 📚 [Curriculum Syllabus](https://dnf0.github.io/raylings/syllabus/) — Complete 14-chapter map covering all 66 exercises.
 - ⌨️ [CLI Reference Manual](https://dnf0.github.io/raylings/cli-reference/) — Comprehensive reference for all CLI subcommands and JSON outputs.
 - 🛠️ [Troubleshooting Recipes](https://dnf0.github.io/raylings/troubleshooting/) — Diagnostic recipes for port conflicts, memory spilling, and DDP deadlocks.
+- ☸️ [Cloud & KubeRay Deployment](https://dnf0.github.io/raylings/cloud-kuberay/) — KinD multi-node clusters, KubeRay operator, remote execution, and E2E test suite.
 - 🤝 [Contributing Guide](https://dnf0.github.io/raylings/contributing/) — Exercise authoring standards, test suites, and contribution workflow.
 
 ---
