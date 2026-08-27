@@ -572,10 +572,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-2-developer-tooling-cli-experience-backlog" class="md-nav__link">
+  <a href="#track-2-developer-tooling-cli-experience-completed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 2: Developer Tooling &amp; CLI Experience (Backlog 📋)
+        Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)
       
     </span>
   </a>
@@ -700,10 +700,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-2-developer-tooling-cli-experience-backlog" class="md-nav__link">
+  <a href="#track-2-developer-tooling-cli-experience-completed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 2: Developer Tooling &amp; CLI Experience (Backlog 📋)
+        Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)
       
     </span>
   </a>
@@ -762,10 +762,10 @@
       Chapter 15: vLLM &amp; LLM Serving
       Chapter 16: DeepSpeed &amp; PyTorch FSDP
       Chapter 17: Multimodal &amp; Vector Ray Data
-    Track 2: Developer Tooling
+    Track 2: Developer Tooling [Done]
       Full-screen TUI raylings tui
-      Exercise Scaffolder CLI raylings new-exercise
-      Prometheus / OpenTelemetry Metrics Bridge
+      Exercise Scaffolder CLI raylings new
+      Cluster Telemetry raylings top
     Track 3: Cloud &amp; Infrastructure
       Automated Kind / KubeRay CI Testing
       Remote Head Node Connection Profiling
@@ -797,15 +797,18 @@
 <li><strong><code>data_genai04.py</code></strong>: Parallel streaming dataset ingestion into vector databases (LanceDB / Milvus).</li>
 </ul>
 <hr />
-<h2 id="track-2-developer-tooling-cli-experience-backlog">Track 2: Developer Tooling &amp; CLI Experience (Backlog 📋)</h2>
+<h2 id="track-2-developer-tooling-cli-experience-completed">Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)</h2>
 <ol>
 <li><strong>Interactive Full-Screen TUI (<code>raylings tui</code>)</strong>:</li>
-<li>Built with <code>textual</code> and <code>rich</code>.</li>
-<li>Split-pane layout: live curriculum outline and code preview on the left; real-time watcher logs, hint drawer, and cluster telemetry on the right.</li>
-<li><strong>Exercise Scaffolding Tool (<code>raylings new-exercise &lt;chapter&gt; &lt;name&gt;</code>)</strong>:</li>
-<li>Single command to generate skeleton exercise, canonical solution, test fixture, and manifest entry.</li>
-<li><strong>Cluster Health &amp; Telemetry Inspector (<code>raylings metrics</code>)</strong>:</li>
+<li>Built with Rich <code>Layout</code>, <code>Live</code>, and interactive non-blocking keystroke listener.</li>
+<li>Split-pane layout: live curriculum chapter outline with status badges on the left; syntax-highlighted code preview, real-time evaluation logs, progressive hint drawer, and cluster telemetry overlays on the right.</li>
+<li>Full keyboard navigation (<code>[r]</code> Run, <code>[h]</code> Hint, <code>[j/↓]</code> Down, <code>[k/↑]</code> Up, <code>[n]</code> Next, <code>[p]</code> Prev, <code>[t]</code> Telemetry, <code>[d]</code> Doctor, <code>[q]</code> Quit).</li>
+<li><strong>Exercise Scaffolding Tool (<code>raylings new</code> / <code>raylings new-exercise &lt;chapter&gt; &lt;name&gt;</code>)</strong>:</li>
+<li>Single command to generate skeleton exercise, canonical solution, verify harness, and manifest entry snippet.</li>
+<li>Options for <code>--title</code>, <code>--description</code>, <code>--dry-run</code>, and <code>--json</code>.</li>
+<li><strong>Cluster Health &amp; Telemetry Inspector (<code>raylings top</code> / <code>raylings metrics</code>)</strong>:</li>
 <li>Live terminal view of Plasma object store memory utilization, spill rate, worker CPU/GPU saturation, and GCS actor tables.</li>
+<li>Options for <code>--interval</code>, <code>--once</code>, and <code>--json</code>.</li>
 </ol>
 <hr />
 <h2 id="track-3-cloud-enterprise-infrastructure-testing-backlog">Track 3: Cloud &amp; Enterprise Infrastructure Testing (Backlog 📋)</h2>
