@@ -95,15 +95,15 @@ cluster_up() {
 }
 
 cluster_wait() {
-    log_info "Waiting for Ray head pod to be Ready (timeout 180s)..."
-    if ! kubectl wait --for=condition=Ready pod -l ray.io/node-type=head -n "${NAMESPACE}" --timeout=180s; then
+    log_info "Waiting for Ray head pod to be Ready (timeout 300s)..."
+    if ! kubectl wait --for=condition=Ready pod -l ray.io/node-type=head -n "${NAMESPACE}" --timeout=300s; then
         log_error "Ray head pod failed to reach Ready state."
         kubectl describe pods -l ray.io/node-type=head -n "${NAMESPACE}" || true
         exit 1
     fi
 
-    log_info "Waiting for Ray worker pods to be Ready (timeout 180s)..."
-    if ! kubectl wait --for=condition=Ready pod -l ray.io/node-type=worker -n "${NAMESPACE}" --timeout=180s; then
+    log_info "Waiting for Ray worker pods to be Ready (timeout 300s)..."
+    if ! kubectl wait --for=condition=Ready pod -l ray.io/node-type=worker -n "${NAMESPACE}" --timeout=300s; then
         log_error "Ray worker pods failed to reach Ready state."
         kubectl describe pods -l ray.io/node-type=worker -n "${NAMESPACE}" || true
         exit 1
