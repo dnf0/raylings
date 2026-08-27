@@ -17,9 +17,10 @@ mindmap
       Full-screen TUI raylings tui
       Exercise Scaffolder CLI raylings new
       Cluster Telemetry raylings top
-    Track 3: Cloud & Infrastructure
+    Track 3: Cloud & Infrastructure [Done]
       Automated Kind / KubeRay CI Testing
-      Remote Head Node Connection Profiling
+      Multi-Node E2E Pytest Suite
+      Remote Head Node Client Execution
     Track 4: Distribution & Ecosystem
       PyPI Trusted Publisher Automation
       Interactive Pyodide / WASM Sandbox
@@ -66,12 +67,18 @@ Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced di
 
 ---
 
-## Track 3: Cloud & Enterprise Infrastructure Testing (Backlog 📋)
+## Track 3: Cloud & Enterprise Infrastructure Testing (Completed ✅)
 
-1. **Automated Ephemeral KubeRay CI**:
-   - Test harness using KinD (Kubernetes in Docker) to spin up ephemeral Kubernetes clusters in CI and validate Chapter 14 KubeRay manifests against a real KubeRay operator.
-2. **Multi-Node Cluster Simulation Harness**:
-   - Enhanced mock cluster runners for complex network partitioning and failover scenarios.
+1. **Automated Ephemeral Multi-Node KinD & KubeRay CI**:
+   - Automated cluster lifecycle management script (`scripts/kuberay/setup-kuberay.sh`) supporting `up`, `down`, `wait`, `forward`, and `status`.
+   - 3-node KinD topology (`scripts/kuberay/kind-config.yaml`) with port mappings for Ray client (10001), dashboard (8265), and GCS (6379).
+   - Production-ready `RayCluster` CRD spec (`scripts/kuberay/ray-cluster.yaml`) with 1 head pod and 2 worker pods.
+   - Dedicated GitHub Actions workflow (`.github/workflows/kuberay-e2e.yml`) orchestrating ephemeral KinD clusters with automated diagnostic artifact collection on failure.
+2. **Multi-Node End-to-End Test Suite (`tests/test_kuberay_e2e.py`)**:
+   - Comprehensive multi-node pytest suite testing node discovery, actor spread across distinct node IPs, `STRICT_SPREAD` placement groups, cross-node Plasma zero-copy transfers, and multi-node PyTorch `TorchTrainer` DDP gradient sync.
+   - Built-in graceful fallback to in-process multi-node simulation (`ray.cluster_utils.Cluster`).
+3. **Comprehensive Cloud & KubeRay Deployment Guide (`docs/cloud-kuberay.md`)**:
+   - Complete architecture diagrams, local provisioning instructions, remote Ray client execution commands, and troubleshooting recipes.
 
 ---
 

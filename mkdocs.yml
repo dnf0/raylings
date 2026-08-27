@@ -61,6 +61,7 @@ nav:
   - Curriculum Syllabus: syllabus.md
   - CLI Reference: cli-reference.md
   - Troubleshooting: troubleshooting.md
+  - Cloud & KubeRay: cloud-kuberay.md
   - Contributing: contributing.md
   - Roadmap & Backlog: ROADMAP.md
 
