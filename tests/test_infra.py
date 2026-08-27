@@ -10,7 +10,11 @@ def test_package_import():
     import raylings
 
     assert hasattr(raylings, "__version__")
-    assert raylings.__version__ == "0.3.0"
+    assert isinstance(raylings.__version__, str)
+    pyproject_path = Path("pyproject.toml")
+    if pyproject_path.exists():
+        data = tomllib.loads(pyproject_path.read_text())
+        assert raylings.__version__ == data["project"]["version"]
 
 
 def test_pyproject_structure():
