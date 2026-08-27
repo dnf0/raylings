@@ -123,6 +123,7 @@ testpaths = ["tests"]
 markers = [
     "heavy: marks heavy multi-process distributed tests (skipped in fast CI)",
     "slow: marks slow tests",
+    "kuberay: marks tests that validate multi-node KubeRay / Ray cluster deployment and distributed operations",
 ]
 
 [tool.semantic_release]
