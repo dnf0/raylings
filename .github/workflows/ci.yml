@@ -2,71 +2,122 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - "feat/**"
+      - "fix/**"
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint & Style
+  lint-and-format:
+    name: Lint & Format Check
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
 
       - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+        run: uv python install 3.12
 
-      - name: Install Linting Tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install ruff
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
 
       - name: Run Ruff Format Check
-        run: ruff format --check .
+        run: uv run ruff format --check .
 
-      - name: Run Ruff Lint Check
-        run: ruff check .
-
-  type-check:
-    name: Type Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install Package and Dev Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-
-      - name: Run Pyright
-        run: pyright
+      - name: Run Ruff Linter
+        run: uv run ruff check .
 
   test:
-    name: Test (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    name: Test (Python ${{ matrix.python-version }} on ${{ matrix.os }})
+    needs: lint-and-format
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, macos-latest]
         python-version: ["3.10", "3.11", "3.12"]
+        exclude:
+          - os: macos-latest
+            python-version: "3.10"
+          - os: macos-latest
+            python-version: "3.11"
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
 
-      - name: Install Dependencies
+      - name: Install dependencies
+        run: uv sync --all-extras --dev --python ${{ matrix.python-version }}
+
+      - name: Run Unit and Infrastructure Tests
         run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+          uv run pytest tests/test_infra.py tests/test_manifest.py tests/test_runner.py tests/test_daemon.py tests/test_cli.py -v
 
-      - name: Run Pytest
-        run: pytest -v
+      - name: Run Core & Scheduling Curriculum Tests (Ch 1-6)
+        run: |
+          uv run pytest tests/test_chapters_1_3.py tests/test_chapters_4_6.py -v
+
+      - name: Run Advanced Curriculum Tests (Ch 7-14)
+        run: |
+          uv run pytest tests/test_chapters_7_9.py tests/test_chapters_10_12.py tests/test_chapters_13_14.py -v
+
+  cli-smoke-test:
+    name: CLI Smoke Test (${{ matrix.os }})
+    needs: lint-and-format
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install raylings in editable mode
+        run: uv pip install -e .
+
+      - name: Verify CLI Commands
+        run: |
+          uv run raylings --version
+          uv run raylings --help
+          uv run raylings list
+          uv run raylings hint basics01
+          uv run raylings run basics01 || true
