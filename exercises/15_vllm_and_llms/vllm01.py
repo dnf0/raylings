@@ -25,6 +25,7 @@ Your Task:
   - All-reduce (sum) the outputs across all workers along axis 0.
 """
 
+# I AM NOT DONE
 import os
 from typing import Any
 

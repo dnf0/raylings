@@ -1,3 +1,5 @@
+# I AM NOT DONE
+
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 3: Ring All-Reduce Primitive.
 
 Ring All-Reduce is the algorithm that powers multi-GPU communication libraries like NCCL and Horovod.

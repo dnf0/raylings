@@ -24,6 +24,7 @@ Your Task:
   - Assert that the sum is `2450` (sum of all even numbers from 0 to 98).
 """
 
+# I AM NOT DONE
 import ray
 import ray.data
 
