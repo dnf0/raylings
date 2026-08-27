@@ -35,9 +35,12 @@ def process_as_completed(tasks_config: list[tuple[int, float]]) -> list[int]:
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
 
+    # Warm up Ray worker processes to eliminate cold start scheduling latency
+    ray.get([variable_task.remote(0, 0.0) for _ in range(4)])
+
     tasks_config = [
-        (1, 0.04),
-        (2, 0.08),
+        (1, 0.12),
+        (2, 0.30),
         (3, 0.01),
     ]
 

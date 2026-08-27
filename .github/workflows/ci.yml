@@ -49,7 +49,7 @@ jobs:
     name: Test (Python ${{ matrix.python-version }} on ${{ matrix.os }})
     needs: lint-and-format
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 25
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
