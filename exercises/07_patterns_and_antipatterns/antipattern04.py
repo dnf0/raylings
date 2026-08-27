@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 7: Production Patterns & Anti-Patterns - Exercise 4: Tree-Structured Reduction (Tree-Reduce).
 
 Anti-Pattern: Linear Accumulation on the Driver.

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 4: Scheduling & Resources - Exercise 4: Placement Groups & PACK Strategy.
 
 When building latency-critical distributed systems (such as high-speed actor pipelines or

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 10: Ray Train - Exercise 2: Distributed DataLoader via Data Sharding.
 
 Ray Train automatically partitions datasets across distributed training workers.

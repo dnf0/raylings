@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 12: Ray Serve - Exercise 2: Dynamic Request Batching (@serve.batch).
 
 High-throughput ML serving requires micro-batching concurrent individual HTTP requests

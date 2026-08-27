@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 3: Plasma Object Store & Zero-Copy - Exercise 2: ray.put() vs Implicit Serialization.
 
 When you pass a standard Python object (e.g., large array, dataset, model weights)

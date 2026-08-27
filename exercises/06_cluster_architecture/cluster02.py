@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 2: Programmatic Cluster Simulation.
 
 To test multi-node behaviors (distributed scheduling, cross-node data transfer, scale-up)

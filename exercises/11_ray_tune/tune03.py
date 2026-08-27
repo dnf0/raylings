@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 11: Ray Tune - Exercise 3: Population-Based Training (PBT).
 
 Population-Based Training (PBT) combines parallel search with dynamic evolutionary

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 3: Plasma Object Store & Zero-Copy - Exercise 5: Handling & Resolving Nested ObjectRefs.
 
 A subtle nuance in distributed programming with Ray occurs when tasks return other `ObjectRef`s,

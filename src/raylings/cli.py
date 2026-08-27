@@ -10,6 +10,7 @@ from raylings.daemon import RayDaemon
 from raylings.manifest import get_exercise_by_name, get_manifest
 from raylings.models import Exercise
 from raylings.runner import ExerciseRunner
+from raylings.state import get_state_tracker
 from raylings.ui import (
     console,
     render_banner,
@@ -137,14 +138,18 @@ def list_command(
         import json
 
         chapters_data = []
+    tracker = get_state_tracker()
+    completed_set = tracker.get_completed_set()
+
+    if as_json:
+        import json
+
+        chapters_data = []
         for ch in manifest.chapters:
             ex_data = []
             for ex in ch.exercises:
-                has_marker = runner.check_marker(ex.file_path) if ex.file_path.exists() else True
-                completed = False
-                if ex.file_path.exists() and not has_marker:
-                    res = runner.run_exercise(ex, timeout=5.0)
-                    completed = res.passed
+                has_marker = runner.check_marker(ex.file_path) if ex.file_path.exists() else False
+                completed = ex.name in completed_set
                 ex_data.append(
                     {
                         "name": ex.name,
@@ -181,13 +186,7 @@ def list_command(
         return
 
     render_banner()
-    completed_count = 0
-    for ex in manifest.all_exercises:
-        if ex.file_path.exists() and not runner.check_marker(ex.file_path):
-            res = runner.run_exercise(ex, timeout=10.0)
-            if res.passed:
-                completed_count += 1
-
+    completed_count = len(completed_set.intersection({ex.name for ex in manifest.all_exercises}))
     render_progress(manifest, completed_count=completed_count)
 
 
@@ -203,15 +202,10 @@ def progress_command(
     manifest = get_manifest()
     watcher = ExerciseWatcher()
     current_ex = watcher.find_current_exercise()
-    runner = ExerciseRunner()
+    tracker = get_state_tracker()
+    completed_set = tracker.get_completed_set()
 
-    completed_count = 0
-    for ex in manifest.all_exercises:
-        if ex.file_path.exists() and not runner.check_marker(ex.file_path):
-            res = runner.run_exercise(ex, timeout=5.0)
-            if res.passed:
-                completed_count += 1
-
+    completed_count = len(completed_set.intersection({ex.name for ex in manifest.all_exercises}))
     total = len(manifest.all_exercises)
     percentage = (completed_count / total * 100.0) if total > 0 else 0.0
 
@@ -285,6 +279,7 @@ def run_command(
 
     runner = ExerciseRunner()
     res = runner.run_exercise(ex, timeout=timeout)
+    get_state_tracker().mark_completed(ex.name, res.passed)
 
     if as_json:
         import json

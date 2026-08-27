@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 12: Ray Serve - Exercise 4: Streaming Responses with FastApi & Generators.
 
 Ray Serve natively supports token streaming (e.g. for LLMs) using async generators

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 7: Production Patterns & Anti-Patterns - Exercise 3: Fixing Actor Bottlenecks.
 
 Anti-Pattern: The Single Monolithic Actor Bottleneck.

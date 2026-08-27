@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 5: Fault Tolerance & Recovery - Exercise 4: Actor State Checkpointing.
 
 When running distributed workloads on Spot Instances or preemptible machines, an actor

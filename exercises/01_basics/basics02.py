@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 1: Ray Core Foundations - Exercise 2: ObjectRefs and ray.get().
 
 In Ray, calling a remote function does NOT return the computed value directly.

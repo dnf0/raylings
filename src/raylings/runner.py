@@ -55,6 +55,14 @@ class ExerciseRunner:
         env["PYTHONPATH"] = os.pathsep.join(paths)
         env["RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO"] = "0"
         env["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
+        env["RAY_RUNTIME_ENV_DEFAULT_EXCLUDES"] = ".git,.venv,dist,build,.ruff_cache,.pytest_cache"
+        env["RAY_OVERRIDE_RUNTIME_ENV_DEFAULT_EXCLUDES"] = (
+            ".git,.venv,dist,build,.ruff_cache,.pytest_cache"
+        )
+        env["RAY_DASHBOARD_ENABLE"] = "0"
+        env["RAY_INCLUDE_DASHBOARD"] = "0"
+        env["RAY_LOG_TO_DRIVER"] = "0"
+        env.pop("RAY_ADDRESS", None)
         return env
 
     def _execute_script(

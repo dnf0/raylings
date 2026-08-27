@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 11: Ray Tune - Exercise 2: ASHA / HyperBand Schedulers for Early Stopping.
 
 Asynchronous Successive Halving Algorithm (ASHA) dynamically prunes underperforming

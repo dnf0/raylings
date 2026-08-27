@@ -197,6 +197,25 @@ def test_ui_render_result_failed_error(tmp_path: Path):
     assert "Error" in output or "AssertionError" in output
 
 
+def test_ui_render_prompts(tmp_path: Path):
+    from raylings.ui import render_failure_prompt, render_success_prompt
+
+    ex1 = Exercise("ex01", "Test Exercise 1", str(tmp_path / "ex01.py"), "01_test")
+    ex2 = Exercise("ex02", "Test Exercise 2", str(tmp_path / "ex02.py"), "01_test")
+
+    test_console = Console(record=True)
+    render_success_prompt(ex1, next_exercise=ex2, console=test_console)
+    out_succ = test_console.export_text()
+    assert "ex01 passed" in out_succ
+    assert "Advance to next exercise" in out_succ
+
+    test_console = Console(record=True)
+    render_failure_prompt(ex1, console=test_console)
+    out_fail = test_console.export_text()
+    assert "ex01 is not passing yet" in out_fail
+    assert "Reveal progressive hint" in out_fail
+
+
 def test_ui_render_hint(tmp_path: Path):
     ex = Exercise(
         name="ex01",

@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 1: Head Node, Workers & GCS.
 
 A Ray cluster consists of:

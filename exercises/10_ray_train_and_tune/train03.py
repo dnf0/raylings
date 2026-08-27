@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 10: Ray Train - Exercise 3: Multi-Worker Gradient Sync & Metrics.
 
 In PyTorch DDP, worker processes maintain synchronized parameters via All-Reduce.

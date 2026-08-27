@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 1: Ray Core Foundations - Exercise 4: Passing ObjectRefs to Tasks.
 
 One of Ray's most powerful features is building dynamic task graphs (DAGs).

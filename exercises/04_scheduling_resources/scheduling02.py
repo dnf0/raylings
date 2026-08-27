@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 4: Scheduling & Resources - Exercise 2: Node Affinity Scheduling.
 
 In multi-node clusters, you frequently need fine-grained control over where tasks execute:

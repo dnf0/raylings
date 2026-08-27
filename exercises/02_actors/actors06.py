@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 2: Distributed State & Actors - Exercise 6: Detached Named Actors.
 
 Normally, an actor's lifecycle is bound to the driver job that created it.

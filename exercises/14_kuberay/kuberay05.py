@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 14: KubeRay - Exercise 5: Kubernetes Fault Tolerance & Pod Evictions.
 
 In Kubernetes environments (especially on Spot / Preemptible instances), worker pods

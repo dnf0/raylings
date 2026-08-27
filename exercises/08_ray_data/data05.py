@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 8: Ray Data for High-Throughput ETL - Exercise 5: PyTorch DataLoader Interop (iter_torch_batches).
 
 Feeding data into PyTorch models efficiently is critical for high GPU utilization.

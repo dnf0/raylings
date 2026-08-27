@@ -40,7 +40,11 @@ htmlcov/
 /tmp/ray/
 *.flamegraph.*
 
+# Learner state
+.raylings_state.json
+
 # Agent rules, caches, & AI tooling (DO NOT COMMIT)
+
 .agents/
 .agent-state/
 .superpowers/

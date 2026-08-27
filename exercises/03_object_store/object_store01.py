@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 3: Plasma Object Store & Zero-Copy - Exercise 1: Zero-Copy Plasma Reads.
 
 Ray features an in-memory distributed object store called Plasma (allocated in shared memory,

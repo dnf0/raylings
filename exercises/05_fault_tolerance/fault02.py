@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 5: Fault Tolerance & Recovery - Exercise 2: Actor Failure & Automatic Restarts.
 
 Unlike stateless tasks, actors maintain internal state in their worker process memory.

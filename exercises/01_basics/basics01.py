@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 1: Ray Core Foundations - Exercise 1: Ray Init & First Remote Task.
 
 Welcome to Raylings!

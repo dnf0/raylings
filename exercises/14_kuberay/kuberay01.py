@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 14: KubeRay - Exercise 1: RayCluster Custom Resource (CRD).
 
 KubeRay manages declarative Ray clusters on Kubernetes using the `RayCluster` CRD.

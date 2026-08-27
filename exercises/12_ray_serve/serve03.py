@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 12: Ray Serve - Exercise 3: Composable Multi-Model Pipelines (DAGs).
 
 Ray Serve allows composing deployments into computational graphs (DAGs), where one

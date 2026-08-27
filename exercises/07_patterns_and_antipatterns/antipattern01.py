@@ -1,4 +1,3 @@
-# I AM NOT DONE
 """Chapter 7: Production Patterns & Anti-Patterns - Exercise 1: Fixing ray.get() Inside Tasks.
 
 Anti-Pattern: Calling `ray.get()` inside a task.
