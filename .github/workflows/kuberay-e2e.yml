@@ -62,12 +62,10 @@ jobs:
       - name: Deploy KubeRay Operator & Cluster
         run: bash scripts/kuberay/setup-kuberay.sh up
 
-      - name: Forward Ray Cluster Ports
-        run: bash scripts/kuberay/setup-kuberay.sh forward
-
       - name: Run KubeRay E2E Integration Tests
         run: |
-          RAY_ADDRESS=ray://localhost:10001 uv run pytest tests/test_kuberay_e2e.py -v
+          bash scripts/kuberay/setup-kuberay.sh forward
+          RAY_ADDRESS=ray://localhost:10001 uv run pytest tests/test_kuberay_e2e.py -v --durations=10
 
       - name: Cluster Diagnostics on Failure
         if: failure()
