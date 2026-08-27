@@ -1,0 +1,57 @@
+apiVersion: ray.io/v1
+kind: RayCluster
+metadata:
+  name: raylings-cluster
+  namespace: default
+  labels:
+    ray.io/node-type: head
+spec:
+  rayVersion: '2.30.0'
+  headGroupSpec:
+    rayStartParams:
+      dashboard-host: '0.0.0.0'
+      block: 'true'
+      num-cpus: '1'
+    template:
+      spec:
+        containers:
+          - name: ray-head
+            image: rayproject/ray:2.30.0-py310
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                cpu: "1"
+                memory: "2Gi"
+              requests:
+                cpu: "500m"
+                memory: "1Gi"
+            ports:
+              - containerPort: 6379
+                name: gcs
+                protocol: TCP
+              - containerPort: 8265
+                name: dashboard
+                protocol: TCP
+              - containerPort: 10001
+                name: client
+                protocol: TCP
+  workerGroupSpecs:
+    - groupName: ray-worker-group
+      replicas: 2
+      minReplicas: 2
+      maxReplicas: 2
+      rayStartParams:
+        block: "true"
+      template:
+        spec:
+          containers:
+            - name: ray-worker
+              image: rayproject/ray:2.30.0-py310
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: "2Gi"
+                requests:
+                  cpu: "500m"
+                  memory: "1Gi"
