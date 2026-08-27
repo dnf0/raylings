@@ -424,6 +424,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../cloud-kuberay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud & KubeRay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../contributing/" class="md-nav__link">
         
   
@@ -583,10 +610,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-3-cloud-enterprise-infrastructure-testing-backlog" class="md-nav__link">
+  <a href="#track-3-cloud-enterprise-infrastructure-testing-completed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Backlog 📋)
+        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)
       
     </span>
   </a>
@@ -711,10 +738,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-3-cloud-enterprise-infrastructure-testing-backlog" class="md-nav__link">
+  <a href="#track-3-cloud-enterprise-infrastructure-testing-completed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Backlog 📋)
+        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)
       
     </span>
   </a>
@@ -766,9 +793,10 @@
       Full-screen TUI raylings tui
       Exercise Scaffolder CLI raylings new
       Cluster Telemetry raylings top
-    Track 3: Cloud &amp; Infrastructure
+    Track 3: Cloud &amp; Infrastructure [Done]
       Automated Kind / KubeRay CI Testing
-      Remote Head Node Connection Profiling
+      Multi-Node E2E Pytest Suite
+      Remote Head Node Client Execution
     Track 4: Distribution &amp; Ecosystem
       PyPI Trusted Publisher Automation
       Interactive Pyodide / WASM Sandbox</code></pre>
@@ -811,12 +839,18 @@
 <li>Options for <code>--interval</code>, <code>--once</code>, and <code>--json</code>.</li>
 </ol>
 <hr />
-<h2 id="track-3-cloud-enterprise-infrastructure-testing-backlog">Track 3: Cloud &amp; Enterprise Infrastructure Testing (Backlog 📋)</h2>
+<h2 id="track-3-cloud-enterprise-infrastructure-testing-completed">Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)</h2>
 <ol>
-<li><strong>Automated Ephemeral KubeRay CI</strong>:</li>
-<li>Test harness using KinD (Kubernetes in Docker) to spin up ephemeral Kubernetes clusters in CI and validate Chapter 14 KubeRay manifests against a real KubeRay operator.</li>
-<li><strong>Multi-Node Cluster Simulation Harness</strong>:</li>
-<li>Enhanced mock cluster runners for complex network partitioning and failover scenarios.</li>
+<li><strong>Automated Ephemeral Multi-Node KinD &amp; KubeRay CI</strong>:</li>
+<li>Automated cluster lifecycle management script (<code>scripts/kuberay/setup-kuberay.sh</code>) supporting <code>up</code>, <code>down</code>, <code>wait</code>, <code>forward</code>, and <code>status</code>.</li>
+<li>3-node KinD topology (<code>scripts/kuberay/kind-config.yaml</code>) with port mappings for Ray client (10001), dashboard (8265), and GCS (6379).</li>
+<li>Production-ready <code>RayCluster</code> CRD spec (<code>scripts/kuberay/ray-cluster.yaml</code>) with 1 head pod and 2 worker pods.</li>
+<li>Dedicated GitHub Actions workflow (<code>.github/workflows/kuberay-e2e.yml</code>) orchestrating ephemeral KinD clusters with automated diagnostic artifact collection on failure.</li>
+<li><strong>Multi-Node End-to-End Test Suite (<code>tests/test_kuberay_e2e.py</code>)</strong>:</li>
+<li>Comprehensive multi-node pytest suite testing node discovery, actor spread across distinct node IPs, <code>STRICT_SPREAD</code> placement groups, cross-node Plasma zero-copy transfers, and multi-node PyTorch <code>TorchTrainer</code> DDP gradient sync.</li>
+<li>Built-in graceful fallback to in-process multi-node simulation (<code>ray.cluster_utils.Cluster</code>).</li>
+<li><strong>Comprehensive Cloud &amp; KubeRay Deployment Guide (<code>docs/cloud-kuberay.md</code>)</strong>:</li>
+<li>Complete architecture diagrams, local provisioning instructions, remote Ray client execution commands, and troubleshooting recipes.</li>
 </ol>
 <hr />
 <h2 id="track-4-ecosystem-community-backlog">Track 4: Ecosystem &amp; Community (Backlog 📋)</h2>

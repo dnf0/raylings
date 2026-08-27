@@ -1,0 +1,1734 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An interactive, hands-on CLI learning environment for Python Ray.">
+      
+      
+        <meta name="author" content="Raylings Contributors">
+      
+      
+        <link rel="canonical" href="https://dnf0.github.io/raylings/cloud-kuberay/">
+      
+      
+        <link rel="prev" href="../troubleshooting/">
+      
+      
+        <link rel="next" href="../contributing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cloud & KubeRay - Raylings</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cloud-multi-node-kuberay-deployment" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Raylings
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cloud & KubeRay
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dnf0/raylings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dnf0/raylings
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Raylings
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dnf0/raylings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dnf0/raylings
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../onboarding-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Onboarding Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curriculum Syllabus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud & KubeRay
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud & KubeRay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-cluster-lifecycle-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Local Cluster Lifecycle Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Local Cluster Lifecycle Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-provision-cluster-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Provision Cluster (up)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-port-forwarding-services-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Port-Forwarding Services (forward)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-inspect-cluster-health-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Inspect Cluster Health (status)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-teardown-cluster-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Teardown Cluster (down)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-to-the-remote-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔌 Connecting to the Remote Cluster
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔌 Connecting to the Remote Cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-raylings-exercises-remotely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running Raylings Exercises Remotely
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-connection-in-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programmatic Connection in Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-node-end-to-end-test-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Multi-Node End-to-End Test Suite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Multi-Node End-to-End Test Suite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-the-test-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the Test Suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-scenarios-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Scenarios Covered
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-actions-ci-pipeline-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 GitHub Actions CI Pipeline Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 GitHub Actions CI Pipeline Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-artifact-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Artifact Collection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-common-kuberay-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Troubleshooting Common KubeRay Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Troubleshooting Common KubeRay Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pods-stuck-in-pending-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Pods Stuck in Pending State
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Pods Stuck in Pending State">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symptom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ray-client-port-connection-refused-raylocalhost10001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Ray Client Port Connection Refused (ray://localhost:10001)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Ray Client Port Connection Refused (ray://localhost:10001)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symptom_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cause_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cross-node-plasma-object-store-memory-exhaustion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Cross-Node Plasma Object Store Memory Exhaustion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Cross-Node Plasma Object Store Memory Exhaustion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symptom_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cause_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Related Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap & Backlog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-cluster-lifecycle-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Local Cluster Lifecycle Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Local Cluster Lifecycle Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-provision-cluster-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Provision Cluster (up)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-port-forwarding-services-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Port-Forwarding Services (forward)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-inspect-cluster-health-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Inspect Cluster Health (status)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-teardown-cluster-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Teardown Cluster (down)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-to-the-remote-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔌 Connecting to the Remote Cluster
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔌 Connecting to the Remote Cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-raylings-exercises-remotely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running Raylings Exercises Remotely
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-connection-in-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programmatic Connection in Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-node-end-to-end-test-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Multi-Node End-to-End Test Suite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Multi-Node End-to-End Test Suite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-the-test-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the Test Suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-scenarios-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Scenarios Covered
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-actions-ci-pipeline-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 GitHub Actions CI Pipeline Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 GitHub Actions CI Pipeline Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-artifact-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Artifact Collection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-common-kuberay-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Troubleshooting Common KubeRay Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Troubleshooting Common KubeRay Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pods-stuck-in-pending-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Pods Stuck in Pending State
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Pods Stuck in Pending State">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symptom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ray-client-port-connection-refused-raylocalhost10001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Ray Client Port Connection Refused (ray://localhost:10001)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Ray Client Port Connection Refused (ray://localhost:10001)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symptom_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cause_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cross-node-plasma-object-store-memory-exhaustion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Cross-Node Plasma Object Store Memory Exhaustion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Cross-Node Plasma Object Store Memory Exhaustion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symptom_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cause_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Related Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cloud-multi-node-kuberay-deployment">Cloud &amp; Multi-Node KubeRay Deployment ☸️</h1>
+<p>This guide covers deploying, testing, and managing multi-node Python Ray clusters on Kubernetes using <strong>KinD</strong> (Kubernetes in Docker) and the official <strong>KubeRay Operator</strong>.</p>
+<hr />
+<h2 id="architecture-overview">🏗️ Architecture Overview</h2>
+<p>Raylings provides first-class support for multi-node Kubernetes deployments. While single-node local Ray sessions are ideal for rapid iterative learning, production AI and data engineering workloads run on distributed Kubernetes clusters orchestrated by the KubeRay operator.</p>
+<pre class="mermaid"><code>graph TD
+    subgraph Host["Developer Machine / CI Runner"]
+        CLI["Raylings CLI / Pytest&lt;br/&gt;(RAY_ADDRESS=ray://localhost:10001)"]
+        Browser["Ray Dashboard&lt;br/&gt;(http://localhost:8265)"]
+    end
+
+    subgraph KinD["KinD 3-Node Kubernetes Cluster (raylings-kind)"]
+        subgraph ControlPlane["Control Plane Node (raylings-kind-control-plane)"]
+            KubeRay["KubeRay Operator&lt;br/&gt;(kuberay-operator)"]
+            HeadPod["Ray Head Pod&lt;br/&gt;• GCS (6379)&lt;br/&gt;• Ray Client Server (10001)&lt;br/&gt;• Ray Dashboard (8265)&lt;br/&gt;• Raylet &amp; Plasma Store"]
+            HeadSvc["Service: raylings-cluster-head-svc&lt;br/&gt;Port 10001 &amp; 8265"]
+        end
+
+        subgraph Worker1["Worker Node 1 (raylings-kind-worker)"]
+            WorkerPod1["Ray Worker Pod 1&lt;br/&gt;• Raylet Worker Processes&lt;br/&gt;• Plasma Object Store (1Gi)"]
+        end
+
+        subgraph Worker2["Worker Node 2 (raylings-kind-worker2)"]
+            WorkerPod2["Ray Worker Pod 2&lt;br/&gt;• Raylet Worker Processes&lt;br/&gt;• Plasma Object Store (1Gi)"]
+        end
+    end
+
+    CLI --&gt;|Ray Client Protocol| HeadSvc
+    Browser --&gt;|HTTP| HeadSvc
+    HeadSvc --&gt; HeadPod
+    KubeRay --&gt;|Reconciles CRD| HeadPod
+    KubeRay --&gt;|Reconciles CRD| WorkerPod1
+    KubeRay --&gt;|Reconciles CRD| WorkerPod2
+    HeadPod &lt;--&gt;|GCS &amp; Plasma RPC| WorkerPod1
+    HeadPod &lt;--&gt;|GCS &amp; Plasma RPC| WorkerPod2
+    WorkerPod1 &lt;--&gt;|Peer-to-Peer Object Transfer| WorkerPod2</code></pre>
+<h3 id="core-components">Core Components</h3>
+<ol>
+<li><strong>KinD Multi-Node Cluster (<code>scripts/kuberay/kind-config.yaml</code>)</strong>:</li>
+<li>1 control-plane node with container port mappings (10001 for Ray Client, 8265 for Dashboard, 6379 for GCS).</li>
+<li>2 dedicated worker nodes to simulate a true multi-host physical topology.</li>
+<li><strong>KubeRay Operator</strong>:</li>
+<li>Kubernetes Custom Controller that manages the lifecycle of Ray clusters, jobs, and services.</li>
+<li>Watches <code>RayCluster</code>, <code>RayJob</code>, and <code>RayService</code> Custom Resource Definitions (CRDs).</li>
+<li><strong>RayCluster Custom Resource (<code>scripts/kuberay/ray-cluster.yaml</code>)</strong>:</li>
+<li>Defines 1 Ray Head pod (<code>rayproject/ray:2.30.0-py310</code>) and 2 Ray Worker pods.</li>
+<li>Configures CPU and memory limits, readiness probes, and internal networking services.</li>
+</ol>
+<hr />
+<h2 id="prerequisites">📋 Prerequisites</h2>
+<p>To run multi-node KubeRay clusters locally, ensure the following tools are installed:</p>
+<ul>
+<li><strong>Docker</strong>: Docker Engine 20.10+ or Docker Desktop running.</li>
+<li><strong>KinD</strong>: Kubernetes in Docker (<code>kind</code> v0.20.0+).</li>
+<li><strong>kubectl</strong>: Kubernetes CLI (<code>kubectl</code> v1.28+).</li>
+<li><strong>Helm</strong>: Kubernetes Package Manager (<code>helm</code> v3.12+).</li>
+<li><strong>uv / Python</strong>: Python 3.10+ with <code>raylings</code> installed.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">macOS (Homebrew)</label><label for="__tabbed_1_2">Linux (Debian / Ubuntu)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>brew<span class="w"> </span>install<span class="w"> </span>kind<span class="w"> </span>kubectl<span class="w"> </span>helm
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Install KinD</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="o">[</span><span class="w"> </span><span class="k">$(</span>uname<span class="w"> </span>-m<span class="k">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>x86_64<span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>curl<span class="w"> </span>-Lo<span class="w"> </span>./kind<span class="w"> </span>https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>./kind<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>mv<span class="w"> </span>./kind<span class="w"> </span>/usr/local/bin/kind
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Install kubectl &amp; Helm</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>kubectl<span class="w"> </span>--classic
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>helm<span class="w"> </span>--classic
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="local-cluster-lifecycle-management">🚀 Local Cluster Lifecycle Management</h2>
+<p>Raylings includes an automated cluster lifecycle script located at <code>scripts/kuberay/setup-kuberay.sh</code>.</p>
+<h3 id="1-provision-cluster-up">1. Provision Cluster (<code>up</code>)</h3>
+<p>Bootstraps the 3-node KinD cluster, installs the KubeRay Helm operator, applies the <code>RayCluster</code> specification, and blocks until all pods reach the <code>Ready</code> state:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>bash<span class="w"> </span>scripts/kuberay/setup-kuberay.sh<span class="w"> </span>up
+</span></code></pre></div>
+<p>Expected output:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[INFO] Checking prerequisites...
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>[SUCCESS] All prerequisites are satisfied.
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>[INFO] Creating KinD cluster 'raylings-kind' using scripts/kuberay/kind-config.yaml...
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>[SUCCESS] KinD cluster 'raylings-kind' created.
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>[INFO] Installing / upgrading KubeRay operator via Helm...
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>[INFO] Waiting for KubeRay operator deployment to be Available...
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>deployment.apps/kuberay-operator condition met
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>[SUCCESS] KubeRay operator is running.
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>[INFO] Applying RayCluster manifest scripts/kuberay/ray-cluster.yaml...
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>raycluster.ray.io/raylings-cluster created
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>[INFO] Waiting for Ray head pod to be Ready (timeout 180s)...
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>pod/raylings-cluster-head-xxxxx condition met
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>[INFO] Waiting for Ray worker pods to be Ready (timeout 180s)...
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>pod/raylings-cluster-ray-worker-group-worker-xxxxx condition met
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>pod/raylings-cluster-ray-worker-group-worker-yyyyy condition met
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>[SUCCESS] All Ray cluster pods are Ready.
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>[SUCCESS] KubeRay cluster 'raylings-cluster' is fully up and ready!
+</span></code></pre></div></p>
+<hr />
+<h3 id="2-port-forwarding-services-forward">2. Port-Forwarding Services (<code>forward</code>)</h3>
+<p>Forward the Ray Client port (<code>10001</code>) and the interactive Ray Dashboard (<code>8265</code>) to localhost in the background:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>bash<span class="w"> </span>scripts/kuberay/setup-kuberay.sh<span class="w"> </span>forward
+</span></code></pre></div>
+<p>Output:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>[INFO] Starting background port-forwarding for svc/raylings-cluster-head-svc...
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>[SUCCESS] Port-forwarding established (PID: 12345).
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  - Ray Client:    ray://localhost:10001
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  - Ray Dashboard: http://localhost:8265
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  - Forward Logs:  /tmp/kuberay-port-forward.log
+</span></code></pre></div></p>
+<p>Open <a href="http://localhost:8265">http://localhost:8265</a> in your web browser to view the Ray Dashboard, node resource gauges, and actor placement tables.</p>
+<hr />
+<h3 id="3-inspect-cluster-health-status">3. Inspect Cluster Health (<code>status</code>)</h3>
+<p>Query KinD node statuses, KubeRay CRD state, Ray pods, and head service bindings:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>bash<span class="w"> </span>scripts/kuberay/setup-kuberay.sh<span class="w"> </span>status
+</span></code></pre></div>
+<p>Output:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>=== KinD Nodes ===
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>NAME                          STATUS   ROLES           AGE   VERSION
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>raylings-kind-control-plane   Ready    control-plane   2m    v1.31.0
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>raylings-kind-worker          Ready    &lt;none&gt;          2m    v1.31.0
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>raylings-kind-worker2         Ready    &lt;none&gt;          2m    v1.31.0
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>=== RayCluster CRD Status ===
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>NAME               DESIRED WORKERS   AVAILABLE WORKERS   STATUS   AGE
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>raylings-cluster   2                 2                   ready    2m
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>=== Ray Pods ===
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>NAME                                                 READY   STATUS    NODE
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>raylings-cluster-head-xxxxx                          1/1     Running   raylings-kind-control-plane
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>raylings-cluster-ray-worker-group-worker-xxxxx       1/1     Running   raylings-kind-worker
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>raylings-cluster-ray-worker-group-worker-yyyyy       1/1     Running   raylings-kind-worker2
+</span></code></pre></div></p>
+<hr />
+<h3 id="4-teardown-cluster-down">4. Teardown Cluster (<code>down</code>)</h3>
+<p>Terminates background port forwarding and deletes the KinD cluster:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>bash<span class="w"> </span>scripts/kuberay/setup-kuberay.sh<span class="w"> </span>down
+</span></code></pre></div>
+<hr />
+<h2 id="connecting-to-the-remote-cluster">🔌 Connecting to the Remote Cluster</h2>
+<p>When executing exercises or running the test suite, tell Ray to connect to the remote KubeRay cluster using the <code>RAY_ADDRESS</code> environment variable:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Set environment variable for remote execution</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RAY_ADDRESS</span><span class="o">=</span><span class="s2">"ray://localhost:10001"</span>
+</span></code></pre></div>
+<h3 id="running-raylings-exercises-remotely">Running Raylings Exercises Remotely</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Run a specific exercise on the remote KubeRay cluster</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">RAY_ADDRESS</span><span class="o">=</span>ray://localhost:10001<span class="w"> </span>raylings<span class="w"> </span>run<span class="w"> </span>exercises/14_kuberay/kuberay01.py
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Run continuous watcher against the remote cluster</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nv">RAY_ADDRESS</span><span class="o">=</span>ray://localhost:10001<span class="w"> </span>raylings<span class="w"> </span>watch
+</span></code></pre></div>
+<h3 id="programmatic-connection-in-python">Programmatic Connection in Python</h3>
+<p>In your Python scripts or tests, initialize Ray with the remote address:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># Connect to the remote KubeRay cluster via Ray Client</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s2">"ray://localhost:10001"</span><span class="p">,</span> <span class="n">ignore_reinit_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1"># Query live nodes across the Kubernetes cluster</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">nodes</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Connected to Ray cluster with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span><span class="si">}</span><span class="s2"> nodes:"</span><span class="p">)</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Alive"</span><span class="p">):</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  - Node ID: </span><span class="si">{</span><span class="n">node</span><span class="p">[</span><span class="s1">'NodeID'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (IP: </span><span class="si">{</span><span class="n">node</span><span class="p">[</span><span class="s1">'NodeManagerAddress'</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="multi-node-end-to-end-test-suite">🧪 Multi-Node End-to-End Test Suite</h2>
+<p>Raylings includes a comprehensive end-to-end multi-node integration test suite located in <code>tests/test_kuberay_e2e.py</code>.</p>
+<h3 id="running-the-test-suite">Running the Test Suite</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Run against the active KubeRay cluster</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nv">RAY_ADDRESS</span><span class="o">=</span>ray://localhost:10001<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_kuberay_e2e.py<span class="w"> </span>-v
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Automatic In-Process Fallback</p>
+<p>If no live KubeRay cluster or <code>RAY_ADDRESS</code> is detected, <code>test_kuberay_e2e.py</code> automatically spins up an in-process 2-node simulated cluster using <code>ray.cluster_utils.Cluster</code> to ensure seamless local testing.</p>
+</div>
+<h3 id="test-scenarios-covered">Test Scenarios Covered</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Test Function</th>
+<th style="text-align: left;">Verification Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>test_kuberay_cluster_node_discovery</code></td>
+<td style="text-align: left;">Verifies cluster topology discovery and confirms $\ge 2$ active nodes in GCS.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>test_kuberay_actor_cross_node_scheduling</code></td>
+<td style="text-align: left;">Verifies Raylet actor scheduling distributes workers across distinct node IPs with <code>SPREAD</code> strategy.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>test_kuberay_placement_group_strict_spread</code></td>
+<td style="text-align: left;">Verifies that <code>STRICT_SPREAD</code> placement groups strictly enforce node anti-affinity.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>test_kuberay_cross_node_plasma_transfer</code></td>
+<td style="text-align: left;">Puts heavy NumPy (8MB) and PyArrow (50k rows) datasets into Node A's Plasma store, transfers them to Node B, and asserts bit-for-bit integrity without corruption.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>test_kuberay_ray_train_torch_multinode</code></td>
+<td style="text-align: left;">Launches distributed <code>TorchTrainer</code> across 2 worker nodes, synchronizing PyTorch DDP gradients across pod boundaries.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>test_kuberay_ray_data_multinode_streaming</code></td>
+<td style="text-align: left;">Executes a streaming <code>ray.data.range(100).map(...)</code> ETL pipeline and verifies records are processed across multiple node IPs.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="github-actions-ci-pipeline-architecture">🔄 GitHub Actions CI Pipeline Architecture</h2>
+<p>Every commit affecting KubeRay manifests, test suites, or CI workflows triggers <code>.github/workflows/kuberay-e2e.yml</code>.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant Runner as GitHub Actions Runner
+    participant KinD as KinD Engine
+    participant Helm as Helm / KubeRay Operator
+    participant Cluster as RayCluster CRD
+    participant Pytest as uv run pytest
+
+    Runner-&gt;&gt;KinD: Create 3-node KinD Cluster (kind-config.yaml)
+    Runner-&gt;&gt;Helm: Install KubeRay Operator Chart
+    Helm-&gt;&gt;Cluster: Apply ray-cluster.yaml (1 Head + 2 Workers)
+    Cluster--&gt;&gt;Runner: Pods reach Ready state (kubectl wait)
+    Runner-&gt;&gt;Cluster: Port-forward svc/raylings-cluster-head-svc (10001)
+    Runner-&gt;&gt;Pytest: Execute test_kuberay_e2e.py (RAY_ADDRESS=ray://localhost:10001)
+    Pytest--&gt;&gt;Runner: All multi-node tests pass
+    Runner-&gt;&gt;KinD: Teardown &amp; Clean up cluster</code></pre>
+<h3 id="diagnostic-artifact-collection">Diagnostic Artifact Collection</h3>
+<p>If any step in the CI pipeline fails, the workflow automatically runs diagnostic dumps:
+- <code>kubectl get pods -A</code> (lists all pods across namespaces).
+- <code>kubectl describe rayclusters</code> (inspects operator reconciliation events).
+- <code>kubectl logs -l ray.io/node-type=head</code> (captures Ray head logs).
+- <code>kubectl logs -l app.kubernetes.io/name=kuberay-operator</code> (captures operator logs).</p>
+<hr />
+<h2 id="troubleshooting-common-kuberay-issues">🛠️ Troubleshooting Common KubeRay Issues</h2>
+<h3 id="1-pods-stuck-in-pending-state">1. Pods Stuck in <code>Pending</code> State</h3>
+<h4 id="symptom">Symptom</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>NAME                                            READY   STATUS    RESTARTS   AGE
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>raylings-cluster-ray-worker-group-worker-xxx   0/1     Pending   0          5m
+</span></code></pre></div>
+<h4 id="cause">Cause</h4>
+<p>The Kubernetes node (or Docker engine) has insufficient CPU or memory to satisfy the pod's resource requests.</p>
+<h4 id="solution">Solution</h4>
+<p>Inspect pod scheduling events:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span>raylings-cluster-ray-worker-group-worker-xxx
+</span></code></pre></div>
+Look for <code>0/3 nodes are available: 3 Insufficient cpu</code>.
+- Increase Docker Desktop memory allocation (recommended: $\ge 8\text{ GB}$).
+- Or reduce pod resource requests in <code>scripts/kuberay/ray-cluster.yaml</code>.</p>
+<hr />
+<h3 id="2-ray-client-port-connection-refused-raylocalhost10001">2. Ray Client Port Connection Refused (<code>ray://localhost:10001</code>)</h3>
+<h4 id="symptom_1">Symptom</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>ConnectionError: Failed to connect to Ray client at localhost:10001
+</span></code></pre></div>
+<h4 id="cause_1">Cause</h4>
+<p>The background <code>kubectl port-forward</code> process was terminated, or the Ray head pod is not yet listening on port 10001.</p>
+<h4 id="solution_1">Solution</h4>
+<ol>
+<li>Re-establish port-forwarding:
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>bash<span class="w"> </span>scripts/kuberay/setup-kuberay.sh<span class="w"> </span>forward
+</span></code></pre></div></li>
+<li>Verify head pod logs:
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span>ray.io/node-type<span class="o">=</span>head<span class="w"> </span>-c<span class="w"> </span>ray-head
+</span></code></pre></div></li>
+</ol>
+<hr />
+<h3 id="3-cross-node-plasma-object-store-memory-exhaustion">3. Cross-Node Plasma Object Store Memory Exhaustion</h3>
+<h4 id="symptom_2">Symptom</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ray.exceptions.RaySystemError: Object store full: Failed to put object in Plasma store.
+</span></code></pre></div>
+<h4 id="cause_2">Cause</h4>
+<p>In Kubernetes environments, <code>/dev/shm</code> default size may be limited to 64MB unless an <code>emptyDir</code> with <code>medium: Memory</code> is mounted, or pod memory limits are too low for large dataset shuffling.</p>
+<h4 id="solution_2">Solution</h4>
+<p>In <code>scripts/kuberay/ray-cluster.yaml</code>, ensure worker containers specify sufficient memory limits and volume mounts for shared memory:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ray-worker</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">      </span><span class="nt">resources</span><span class="p">:</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">        </span><span class="nt">limits</span><span class="p">:</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"1"</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"2Gi"</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">        </span><span class="nt">requests</span><span class="p">:</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"500m"</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"1Gi"</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">      </span><span class="nt">volumeMounts</span><span class="p">:</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/shm</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dshm</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dshm</span>
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">      </span><span class="nt">emptyDir</span><span class="p">:</span>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">        </span><span class="nt">medium</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Memory</span>
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">        </span><span class="nt">sizeLimit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
+</span></code></pre></div>
+<hr />
+<h2 id="related-resources">📚 Related Resources</h2>
+<ul>
+<li><a href="https://ray-project.github.io/kuberay/">KubeRay Official Documentation</a></li>
+<li><a href="../syllabus/#chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes">Chapter 14: KubeRay on Kubernetes Curriculum</a></li>
+<li><a href="../troubleshooting/">Troubleshooting Recipes</a></li>
+<li><a href="../cli-reference/">CLI Reference Manual</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
