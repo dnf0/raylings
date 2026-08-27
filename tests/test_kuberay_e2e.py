@@ -10,118 +10,26 @@ import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 
-import time
+from pathlib import Path
 from typing import Any, Generator
 
-import numpy as np
-import pyarrow as pa
 import pytest
 import ray
-import torch
-import torch.nn as nn
 from ray.train import ScalingConfig
 from ray.train.torch import TorchTrainer
 from ray.util.placement_group import placement_group, remove_placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
+import raylings.kuberay_helpers as kh
+from raylings.kuberay_helpers import (
+    PlasmaConsumer,
+    PlasmaProducer,
+    WorkerNodeProbe,
+    distributed_torch_train_loop,
+    run_ray_data_multinode_pipeline,
+)
+
 pytestmark = [pytest.mark.kuberay, pytest.mark.heavy]
-
-
-# ==============================================================================
-# Helper Functions and Actor Definitions (Module-Level for Pickling)
-# ==============================================================================
-
-
-@ray.remote(num_cpus=0.5)
-class WorkerNodeProbe:
-    """Actor probe for querying node execution context."""
-
-    def get_info(self) -> dict[str, str]:
-        return {
-            "node_id": ray.get_runtime_context().get_node_id(),
-            "node_ip": ray.util.get_node_ip_address(),
-            "actor_id": ray.get_runtime_context().get_actor_id() or "",
-        }
-
-
-@ray.remote(num_cpus=0.5)
-class PlasmaProducer:
-    """Actor that constructs and returns heavy objects placed into Plasma."""
-
-    def produce_numpy(self, num_elements: int = 1_000_000) -> np.ndarray:
-        return np.arange(num_elements, dtype=np.int64)
-
-    def produce_pyarrow(self, num_rows: int = 50_000) -> pa.Table:
-        return pa.Table.from_pydict(
-            {
-                "id": pa.array(range(num_rows)),
-                "val": pa.array(np.linspace(0.0, 100.0, num=num_rows)),
-                "tag": pa.array([f"kuberay_row_{i % 10}" for i in range(num_rows)]),
-            }
-        )
-
-
-@ray.remote(num_cpus=0.5)
-class PlasmaConsumer:
-    """Actor that receives Plasma objects and verifies data integrity."""
-
-    def verify_numpy(self, arr: np.ndarray, expected_len: int) -> tuple[float, int]:
-        t0 = time.perf_counter()
-        assert len(arr) == expected_len, f"Expected len {expected_len}, got {len(arr)}"
-        assert arr[0] == 0, f"Expected first element 0, got {arr[0]}"
-        assert arr[-1] == expected_len - 1, (
-            f"Expected last element {expected_len - 1}, got {arr[-1]}"
-        )
-        elapsed = time.perf_counter() - t0
-        return elapsed, arr.nbytes
-
-    def verify_pyarrow(self, table: pa.Table, expected_rows: int) -> tuple[float, int]:
-        t0 = time.perf_counter()
-        assert len(table) == expected_rows, f"Expected {expected_rows} rows, got {len(table)}"
-        assert table.column_names == ["id", "val", "tag"], (
-            f"Unexpected columns: {table.column_names}"
-        )
-        assert table["id"][0].as_py() == 0
-        assert table["id"][-1].as_py() == expected_rows - 1
-        assert table["tag"][-1].as_py() == f"kuberay_row_{(expected_rows - 1) % 10}"
-        elapsed = time.perf_counter() - t0
-        return elapsed, table.nbytes
-
-
-def _distributed_torch_train_loop() -> None:
-    """Module-level distributed PyTorch training loop to ensure clean pickling."""
-    import ray.train
-    import ray.train.torch
-
-    model = nn.Linear(1, 1)
-    model = ray.train.torch.prepare_model(model)
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.05)
-    criterion = nn.MSELoss()
-
-    x = torch.tensor([[1.0], [2.0], [3.0], [4.0]])
-    y = torch.tensor([[2.0], [4.0], [6.0], [8.0]])
-
-    initial_loss = None
-    final_loss = None
-
-    for epoch in range(15):
-        optimizer.zero_grad()
-        pred = model(x)
-        loss = criterion(pred, y)
-        loss.backward()
-        optimizer.step()
-
-        loss_val = float(loss.item())
-        if epoch == 0:
-            initial_loss = loss_val
-        final_loss = loss_val
-
-    assert initial_loss is not None
-    assert final_loss is not None
-    assert final_loss < initial_loss, (
-        f"Model failed to converge: initial={initial_loss}, final={final_loss}"
-    )
-    ray.train.report({"loss": final_loss, "initial_loss": initial_loss})
 
 
 # ==============================================================================
@@ -132,17 +40,16 @@ def _distributed_torch_train_loop() -> None:
 @pytest.fixture(scope="module")
 def ray_cluster() -> Generator[dict[str, Any], None, None]:
     """Provide connection to a live multi-node KubeRay cluster or simulated mock."""
-    from pathlib import Path
-
     repo_dir = Path(__file__).parent.parent.resolve()
     tests_dir = Path(__file__).parent.resolve()
     python_path = f"{repo_dir}:{tests_dir}:."
 
     runtime_env = {
+        "py_modules": [kh],
         "env_vars": {
             "PYTHONPATH": python_path,
             "RAY_ENABLE_UV_RUN_RUNTIME_ENV": "0",
-        }
+        },
     }
 
     address_env = os.environ.get("RAY_ADDRESS")
@@ -307,7 +214,7 @@ def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
     """Verify distributed multi-worker PyTorch training with gradient synchronization."""
     scaling_config = ScalingConfig(num_workers=2, use_gpu=False)
     trainer = TorchTrainer(
-        train_loop_per_worker=_distributed_torch_train_loop,
+        train_loop_per_worker=distributed_torch_train_loop,
         scaling_config=scaling_config,
     )
     result = trainer.fit()
@@ -320,21 +227,11 @@ def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
 
 def test_kuberay_ray_data_multinode_streaming(ray_cluster: dict[str, Any]) -> None:
     """Verify streaming Ray Data map pipeline across cluster nodes."""
-    ds = ray.data.range(100)
-    transformed_ds = ds.map(
-        lambda row: {
-            "id": row["id"],
-            "square": row["id"] ** 2,
-            "node_ip": ray.util.get_node_ip_address(),
-        }
-    )
-    results = transformed_ds.take_all()
+    res = ray.get(run_ray_data_multinode_pipeline.remote())
 
-    assert len(results) == 100, f"Expected 100 results, got {len(results)}"
-    results_dict = {row["id"]: row for row in results}
-    assert len(results_dict) == 100, "Duplicate record IDs detected"
+    assert res["count"] == 100, f"Expected 100 results, got {res['count']}"
+    assert len(res["results"]) == 100, "Duplicate record IDs detected"
 
     for i in range(100):
-        assert i in results_dict, f"Missing index {i} in Ray Data results"
-        assert results_dict[i]["square"] == i**2, f"Invalid computation: {results_dict[i]}"
-        assert "node_ip" in results_dict[i], f"Missing node_ip in result row {i}"
+        assert i in res["results"], f"Missing index {i} in Ray Data results"
+        assert res["results"][i] == i**2, f"Invalid computation: {res['results'][i]}"
