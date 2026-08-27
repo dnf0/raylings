@@ -976,5 +976,35 @@ def metrics_command(
     run_top_dashboard(interval=interval, once=once, as_json=as_json)
 
 
+@app.command(name="tui", help="Launch interactive full-screen split-pane TUI.")
+def tui_command(
+    exercise: str | None = typer.Option(
+        None,
+        "--exercise",
+        "-e",
+        help="Pre-select an exercise by name identifier (e.g. basics01)",
+    ),
+    non_interactive: bool = typer.Option(
+        False,
+        "--non-interactive",
+        help="Render TUI once and exit (for headless tests / automation)",
+    ),
+) -> None:
+    """Launch full-screen interactive split-pane TUI to browse exercises, inspect telemetry, and execute tasks."""
+    from raylings.tui import run_tui_app
+
+    try:
+        run_tui_app(
+            exercise_name=exercise,
+            non_interactive=non_interactive,
+        )
+    except SystemExit as exc:
+        if exc.code != 0:
+            raise typer.Exit(exc.code)
+    except Exception as e:
+        console.print(f"[bold red]Error running TUI:[/bold red] {e}")
+        raise typer.Exit(1)
+
+
 if __name__ == "__main__":
     app()
