@@ -65,7 +65,7 @@ jobs:
       - name: Run KubeRay E2E Integration Tests
         run: |
           bash scripts/kuberay/setup-kuberay.sh forward
-          RAY_ADDRESS=ray://localhost:10001 uv run pytest tests/test_kuberay_e2e.py -v --durations=10
+          RAY_ADDRESS=ray://127.0.0.1:10001 uv run pytest tests/test_kuberay_e2e.py -v --durations=10
 
       - name: Cluster Diagnostics on Failure
         if: failure()
