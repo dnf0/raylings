@@ -124,5 +124,3 @@ markers = [
     "heavy: marks heavy multi-process distributed tests (skipped in fast CI)",
     "slow: marks slow tests",
 ]
-
-
