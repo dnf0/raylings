@@ -22,7 +22,11 @@ def test_tour_steps_structure():
         assert step.content.strip() != ""
 
     assert "Welcome" in steps[0].title
-    assert "Environment" in steps[1].title or "Preflight" in steps[1].title or "doctor" in steps[1].title.lower()
+    assert (
+        "Environment" in steps[1].title
+        or "Preflight" in steps[1].title
+        or "doctor" in steps[1].title.lower()
+    )
     assert "First Exercise" in steps[2].title or "basics01" in steps[2].title
     assert "Watcher" in steps[3].title or "Navigation" in steps[3].title
     assert "VS Code" in steps[4].title or "IDE" in steps[4].title

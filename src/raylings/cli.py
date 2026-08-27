@@ -1,6 +1,10 @@
 """Command-line interface entrypoint for the Raylings learning framework."""
 
+import os
+import platform
+import sys
 from pathlib import Path
+from typing import Any
 
 import typer
 from rich.table import Table
@@ -11,6 +15,7 @@ from raylings.manifest import get_exercise_by_name, get_manifest
 from raylings.models import Exercise
 from raylings.runner import ExerciseRunner
 from raylings.state import get_state_tracker
+from raylings.tour import get_tour_engine
 from raylings.ui import (
     console,
     render_banner,
@@ -513,6 +518,331 @@ def watch_command(
     daemon = RayDaemon() if warm_daemon else None
     watcher = ExerciseWatcher(daemon=daemon)
     watcher.watch_loop(exercise_dir=exercise_dir)
+
+
+@app.command(name="tour")
+def tour_command(
+    step: int | None = typer.Option(
+        None,
+        "--step",
+        "-s",
+        help="Jump directly to a specific 1-indexed tour step (1-5)",
+    ),
+    non_interactive: bool = typer.Option(
+        False,
+        "--non-interactive",
+        "-y",
+        help="Run tour non-interactively without waiting for user input",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output tour content and metadata as JSON",
+    ),
+) -> None:
+    """Interactive onboarding tour introducing Raylings and core concepts."""
+    engine = get_tour_engine()
+    steps = engine.get_steps()
+
+    if as_json:
+        import json
+
+        print(json.dumps(engine.to_json_dict(), indent=2))
+        return
+
+    if step is not None:
+        step_obj = engine.get_step(step)
+        if step_obj is None:
+            console.print(
+                f"[bold red]Invalid step {step}. Please specify a step between 1 and {len(steps)}.[/bold red]"
+            )
+            raise typer.Exit(1)
+        engine.render_step(step_obj)
+        return
+
+    is_interactive = (not non_interactive) and sys.stdin.isatty()
+    render_banner()
+
+    if not is_interactive:
+        for s in steps:
+            engine.render_step(s)
+            console.print()
+        return
+
+    for idx, s in enumerate(steps):
+        engine.render_step(s)
+        if idx < len(steps) - 1:
+            try:
+                choice = console.input(
+                    "\n[bold cyan]Press Enter for next step (or 'q' to quit)... [/bold cyan]"
+                )
+            except (EOFError, KeyboardInterrupt):
+                console.print("\n[yellow]Tour exited.[/yellow]")
+                raise typer.Exit(0)
+            if choice.strip().lower() == "q":
+                console.print("[yellow]Tour exited.[/yellow]")
+                raise typer.Exit(0)
+        else:
+            console.print(
+                "\n[bold green]🎉 Tour complete! Run [cyan]raylings watch[/cyan] to begin your learning journey.[/bold green]\n"
+            )
+
+
+def _get_ram_info() -> str | None:
+    """Attempt to detect system physical RAM capacity."""
+    try:
+        import psutil
+
+        total_gb = psutil.virtual_memory().total / (1024**3)
+        return f"{total_gb:.1f} GB"
+    except (ImportError, Exception):
+        pass
+
+    try:
+        pages = os.sysconf("SC_PHYS_PAGES")
+        page_size = os.sysconf("SC_PAGE_SIZE")
+        total_gb = (pages * page_size) / (1024**3)
+        return f"{total_gb:.1f} GB"
+    except (ValueError, AttributeError, OSError):
+        return None
+
+
+def _run_doctor_diagnostics() -> tuple[list[dict[str, Any]], bool]:
+    """Execute preflight system and environment diagnostics.
+
+    Returns:
+        tuple: (list of diagnostic check dictionaries, has_critical_failure boolean)
+    """
+    checks: list[dict[str, Any]] = []
+    has_critical_failure = False
+
+    # 1. Python version check (>= 3.10 required)
+    py_ver = sys.version_info
+    py_ver_str = f"{py_ver[0]}.{py_ver[1]}.{py_ver[2]}"
+    if py_ver >= (3, 10):
+        checks.append(
+            {
+                "name": "Python Version",
+                "status": "pass",
+                "critical": True,
+                "details": f"Python {py_ver_str} (>= 3.10 supported)",
+            }
+        )
+    else:
+        has_critical_failure = True
+        checks.append(
+            {
+                "name": "Python Version",
+                "status": "fail",
+                "critical": True,
+                "details": f"Python {py_ver_str} is unsupported (>= 3.10 required)",
+            }
+        )
+
+    # 2. Ray installation & version check
+    try:
+        import ray
+
+        checks.append(
+            {
+                "name": "Ray Installation",
+                "status": "pass",
+                "critical": True,
+                "details": f"Ray v{ray.__version__} installed and importable",
+            }
+        )
+    except Exception as e:
+        has_critical_failure = True
+        checks.append(
+            {
+                "name": "Ray Installation",
+                "status": "fail",
+                "critical": True,
+                "details": f"Failed to import Ray: {e}",
+            }
+        )
+
+    # 3. Ray daemon / cluster session status
+    try:
+        daemon = RayDaemon()
+        info = daemon.get_cluster_info()
+        if info.get("is_running"):
+            node_count = info.get("node_count", 1)
+            addr = info.get("address") or "Local"
+            checks.append(
+                {
+                    "name": "Ray Daemon / Cluster",
+                    "status": "pass",
+                    "critical": False,
+                    "details": f"Cluster session active (Nodes: {node_count}, GCS: {addr})",
+                }
+            )
+        else:
+            checks.append(
+                {
+                    "name": "Ray Daemon / Cluster",
+                    "status": "warn",
+                    "critical": False,
+                    "details": "Ray daemon session inactive (auto-starts on exercise run)",
+                }
+            )
+    except Exception as e:
+        checks.append(
+            {
+                "name": "Ray Daemon / Cluster",
+                "status": "warn",
+                "critical": False,
+                "details": f"Could not query daemon: {e}",
+            }
+        )
+
+    # 4. Exercises directory & manifest check
+    exercises_dir = Path("exercises")
+    try:
+        manifest = get_manifest()
+        total_ex = len(manifest.all_exercises)
+        total_ch = len(manifest.chapters)
+        if exercises_dir.exists() and total_ex > 0:
+            checks.append(
+                {
+                    "name": "Exercises Manifest",
+                    "status": "pass",
+                    "critical": False,
+                    "details": f"Found {total_ex} exercises across {total_ch} chapters in exercises/",
+                }
+            )
+        elif total_ex > 0:
+            checks.append(
+                {
+                    "name": "Exercises Manifest",
+                    "status": "warn",
+                    "critical": False,
+                    "details": f"Curriculum manifest loaded ({total_ex} exercises), run 'raylings init' if exercises/ is missing",
+                }
+            )
+        else:
+            checks.append(
+                {
+                    "name": "Exercises Manifest",
+                    "status": "warn",
+                    "critical": False,
+                    "details": "No exercises found. Run 'raylings init' to initialize workspace.",
+                }
+            )
+    except Exception as e:
+        checks.append(
+            {
+                "name": "Exercises Manifest",
+                "status": "warn",
+                "critical": False,
+                "details": f"Could not inspect manifest: {e}",
+            }
+        )
+
+    # 5. System CPU & Platform info
+    cpu_count = os.cpu_count() or 1
+    plat_str = f"{platform.system()} {platform.machine()}"
+    ram_str = _get_ram_info()
+    ram_part = f", {ram_str} RAM" if ram_str else ""
+    sys_details = f"{cpu_count} logical CPUs ({plat_str}{ram_part})"
+    if cpu_count >= 2:
+        checks.append(
+            {
+                "name": "System Resources",
+                "status": "pass",
+                "critical": False,
+                "details": sys_details,
+            }
+        )
+    else:
+        checks.append(
+            {
+                "name": "System Resources",
+                "status": "warn",
+                "critical": False,
+                "details": f"{sys_details} - 2+ CPU cores recommended for Ray parallelism",
+            }
+        )
+
+    return checks, has_critical_failure
+
+
+@app.command(name="doctor")
+def doctor_command(
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output doctor diagnostics as JSON",
+    ),
+) -> None:
+    """Run preflight system and environment diagnostics."""
+    checks, has_critical_failure = _run_doctor_diagnostics()
+
+    passed_count = sum(1 for c in checks if c["status"] == "pass")
+    warn_count = sum(1 for c in checks if c["status"] == "warn")
+    fail_count = sum(1 for c in checks if c["status"] == "fail")
+
+    overall_status = (
+        "healthy"
+        if fail_count == 0 and warn_count == 0
+        else ("degraded" if fail_count == 0 else "error")
+    )
+
+    if as_json:
+        import json
+
+        print(
+            json.dumps(
+                {
+                    "status": overall_status,
+                    "passed": not has_critical_failure,
+                    "summary": {
+                        "total": len(checks),
+                        "passed": passed_count,
+                        "warnings": warn_count,
+                        "failed": fail_count,
+                    },
+                    "checks": checks,
+                },
+                indent=2,
+            )
+        )
+        if has_critical_failure:
+            raise typer.Exit(1)
+        return
+
+    render_banner()
+    table = Table(
+        title="Preflight Diagnostics Summary",
+        border_style="dim",
+        header_style="bold magenta",
+    )
+    table.add_column("Diagnostic Check", style="bold cyan", width=26)
+    table.add_column("Status", justify="center", width=12)
+    table.add_column("Details", style="white")
+
+    for check in checks:
+        st = check["status"]
+        status_markup = (
+            "[bold green]✓ PASS[/bold green]"
+            if st == "pass"
+            else (
+                "[bold yellow]! WARN[/bold yellow]"
+                if st == "warn"
+                else "[bold red]✗ FAIL[/bold red]"
+            )
+        )
+        table.add_row(check["name"], status_markup, check["details"])
+
+    console.print(table)
+    console.print(
+        f"\n[bold]Summary:[/bold] [bold green]{passed_count} passed[/bold green], "
+        f"[bold yellow]{warn_count} warnings[/bold yellow], "
+        f"[bold red]{fail_count} failed[/bold red]\n"
+    )
+
+    if has_critical_failure:
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":
