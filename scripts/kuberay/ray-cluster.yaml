@@ -11,7 +11,7 @@ spec:
     rayStartParams:
       dashboard-host: '0.0.0.0'
       block: 'true'
-      num-cpus: '1'
+      num-cpus: '2'
     template:
       spec:
         containers:
@@ -20,7 +20,7 @@ spec:
             imagePullPolicy: IfNotPresent
             resources:
               limits:
-                cpu: "1"
+                cpu: "2"
                 memory: "2Gi"
               requests:
                 cpu: "500m"
@@ -42,7 +42,7 @@ spec:
       maxReplicas: 2
       rayStartParams:
         block: "true"
-        num-cpus: "1"
+        num-cpus: "2"
       template:
         spec:
           containers:
@@ -51,7 +51,7 @@ spec:
               imagePullPolicy: IfNotPresent
               resources:
                 limits:
-                  cpu: "1"
+                  cpu: "2"
                   memory: "2Gi"
                 requests:
                   cpu: "500m"

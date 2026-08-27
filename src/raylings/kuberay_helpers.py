@@ -108,7 +108,7 @@ def distributed_torch_train_loop() -> None:
     ray.train.report({"loss": final_loss, "initial_loss": initial_loss})
 
 
-@ray.remote
+@ray.remote(num_cpus=0)
 def run_torch_train_multinode() -> dict[str, Any]:
     """Execute PyTorch distributed training inside cluster context."""
     from ray.train import ScalingConfig
@@ -132,7 +132,7 @@ def run_torch_train_multinode() -> dict[str, Any]:
     }
 
 
-@ray.remote
+@ray.remote(num_cpus=0)
 def run_ray_data_multinode_pipeline() -> dict[str, Any]:
     """Execute streaming Ray Data pipeline within the cluster context."""
     import ray.data
