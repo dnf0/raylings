@@ -1,95 +1,85 @@
-name: Raylings Release
+name: Raylings Semantic Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
   workflow_dispatch:
-    inputs:
-      tag_name:
-        description: "Release tag name (e.g. v0.1.0)"
-        required: true
-        default: "v0.1.0"
 
 permissions:
   contents: write
   id-token: write
 
 jobs:
-  build-release:
-    name: Build Package Distribution
+  release:
+    name: Semantic Release & Publish
+    if: ${{ ! endsWith(github.event.head_commit.message, '[release]') }}
     runs-on: ubuntu-latest
+    concurrency: release
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          version: "latest"
           enable-cache: true
 
-      - name: Set up Python
-        run: uv python install 3.12
-
-      - name: Build Wheel and Sdist
+      - name: Run Python Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}
+          GIT_COMMITTER_NAME: "github-actions[bot]"
+          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
         run: |
-          uv build
+          uvx --with "gitpython<3.1.44" python-semantic-release version
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: raylings-dist
-          path: dist/*
+      - name: Build sdist and wheel
+        run: |
+          mkdir -p dist dist-python
+          uv build --out-dir dist-python
+          cp dist-python/* dist/
 
-  publish-pypi:
-    name: Publish to PyPI
-    needs: build-release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
         with:
-          name: raylings-dist
-          path: dist
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "editors/vscode/package-lock.json"
+
+      - name: Build and Package VS Code Extension (.vsix)
+        run: |
+          mkdir -p dist
+          cd editors/vscode && npm ci && npm run build && npx @vscode/vsce package --no-dependencies -o ../../dist/raylings-vscode.vsix
+
+      - name: Upload Artifacts to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
+          if [ -n "$LATEST_TAG" ]; then
+            echo "Attaching build artifacts to release $LATEST_TAG"
+            gh release upload "$LATEST_TAG" dist/* --clobber || true
+          fi
 
       - name: Publish to PyPI
+        if: ${{ env.PYPI_API_TOKEN != '' }}
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.PYPI_API_TOKEN || secrets.PYPI_TOKEN }}
+          packages-dir: dist-python/
+          password: ${{ secrets.PYPI_API_TOKEN }}
           skip-existing: true
-
-  publish-github-release:
-    name: Create GitHub Release
-    needs: [build-release, publish-pypi]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download all build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: raylings-dist
-          path: dist
-
-      - name: Generate Checksums
-        run: |
-          cd dist
-          sha256sum * > SHA256SUMS.txt
-          cat SHA256SUMS.txt
-          cd ..
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/*
-          generate_release_notes: true
-          tag_name: ${{ github.ref_name || inputs.tag_name }}
-
