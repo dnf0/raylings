@@ -122,12 +122,65 @@ def init_command(
 
 
 @app.command(name="list")
-def list_command() -> None:
+def list_command(
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output full curriculum metadata and completion status as JSON",
+    ),
+) -> None:
     """List all 14 curriculum chapters and exercises with status breakdown."""
-    render_banner()
     manifest = get_manifest()
     runner = ExerciseRunner()
 
+    if as_json:
+        import json
+
+        chapters_data = []
+        for ch in manifest.chapters:
+            ex_data = []
+            for ex in ch.exercises:
+                has_marker = runner.check_marker(ex.file_path) if ex.file_path.exists() else True
+                completed = False
+                if ex.file_path.exists() and not has_marker:
+                    res = runner.run_exercise(ex, timeout=5.0)
+                    completed = res.passed
+                ex_data.append(
+                    {
+                        "name": ex.name,
+                        "title": ex.title,
+                        "path": ex.path,
+                        "chapter_name": ex.chapter_name,
+                        "chapter_number": ch.number,
+                        "hints": ex.hints,
+                        "requires_cluster": ex.requires_cluster,
+                        "completed": completed,
+                        "has_marker": has_marker,
+                        "exists": ex.file_path.exists(),
+                    }
+                )
+            chapters_data.append(
+                {
+                    "number": ch.number,
+                    "name": ch.name,
+                    "title": ch.title,
+                    "description": ch.description,
+                    "exercises": ex_data,
+                }
+            )
+        print(
+            json.dumps(
+                {
+                    "version": __version__,
+                    "total_exercises": len(manifest.all_exercises),
+                    "chapters": chapters_data,
+                },
+                indent=2,
+            )
+        )
+        return
+
+    render_banner()
     completed_count = 0
     for ex in manifest.all_exercises:
         if ex.file_path.exists() and not runner.check_marker(ex.file_path):
@@ -135,6 +188,52 @@ def list_command() -> None:
             if res.passed:
                 completed_count += 1
 
+    render_progress(manifest, completed_count=completed_count)
+
+
+@app.command(name="progress")
+def progress_command(
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output overall progress summary as JSON",
+    ),
+) -> None:
+    """Display overall progress summary and current active exercise."""
+    manifest = get_manifest()
+    watcher = ExerciseWatcher()
+    current_ex = watcher.find_current_exercise()
+    runner = ExerciseRunner()
+
+    completed_count = 0
+    for ex in manifest.all_exercises:
+        if ex.file_path.exists() and not runner.check_marker(ex.file_path):
+            res = runner.run_exercise(ex, timeout=5.0)
+            if res.passed:
+                completed_count += 1
+
+    total = len(manifest.all_exercises)
+    percentage = (completed_count / total * 100.0) if total > 0 else 0.0
+
+    if as_json:
+        import json
+
+        print(
+            json.dumps(
+                {
+                    "total": total,
+                    "completed": completed_count,
+                    "percentage": round(percentage, 1),
+                    "current_exercise": current_ex.name if current_ex else None,
+                    "current_path": current_ex.path if current_ex else None,
+                    "is_finished": current_ex is None,
+                },
+                indent=2,
+            )
+        )
+        return
+
+    render_banner()
     render_progress(manifest, completed_count=completed_count)
 
 
@@ -150,6 +249,11 @@ def run_command(
         "-t",
         help="Subprocess timeout in seconds",
     ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output evaluation result as JSON",
+    ),
 ) -> None:
     """Run an exercise or solution once and display evaluation diagnostics."""
     ex = get_exercise_by_name(exercise_name)
@@ -163,11 +267,47 @@ def run_command(
                 chapter_name=target_path.parent.name,
             )
         else:
+            if as_json:
+                import json
+
+                print(
+                    json.dumps(
+                        {
+                            "error": f"Exercise '{exercise_name}' not found.",
+                            "passed": False,
+                        },
+                        indent=2,
+                    )
+                )
+                raise typer.Exit(1)
             console.print(f"[bold red]Exercise '{exercise_name}' not found.[/bold red]")
             raise typer.Exit(1)
 
     runner = ExerciseRunner()
     res = runner.run_exercise(ex, timeout=timeout)
+
+    if as_json:
+        import json
+
+        print(
+            json.dumps(
+                {
+                    "name": ex.name,
+                    "title": ex.title,
+                    "path": ex.path,
+                    "passed": res.passed,
+                    "has_not_done_marker": res.has_not_done_marker,
+                    "exit_code": res.exit_code,
+                    "output": res.output,
+                    "error": res.error,
+                },
+                indent=2,
+            )
+        )
+        if not res.passed:
+            raise typer.Exit(1)
+        return
+
     render_result(res)
     if not res.passed:
         raise typer.Exit(1)
@@ -185,6 +325,11 @@ def hint_command(
         "-l",
         help="Progressive hint level index (0-indexed)",
     ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Output hints as JSON",
+    ),
 ) -> None:
     """Display progressive hints for an exercise."""
     target_ex: Exercise | None = None
@@ -192,14 +337,62 @@ def hint_command(
         watcher = ExerciseWatcher()
         target_ex = watcher.find_current_exercise()
         if target_ex is None:
+            if as_json:
+                import json
+
+                print(
+                    json.dumps(
+                        {
+                            "message": "No incomplete exercises found in curriculum.",
+                            "hints": [],
+                        },
+                        indent=2,
+                    )
+                )
+                raise typer.Exit(0)
             console.print("[yellow]No incomplete exercises found in curriculum.[/yellow]")
             raise typer.Exit(0)
     else:
         target_ex = get_exercise_by_name(exercise_name)
 
     if target_ex is None:
+        if as_json:
+            import json
+
+            print(
+                json.dumps(
+                    {
+                        "error": f"Exercise '{exercise_name}' not found.",
+                        "hints": [],
+                    },
+                    indent=2,
+                )
+            )
+            raise typer.Exit(1)
         console.print(f"[bold red]Exercise '{exercise_name}' not found.[/bold red]")
         raise typer.Exit(1)
+
+    if as_json:
+        import json
+
+        sel_hint = (
+            target_ex.hints[min(level, len(target_ex.hints) - 1)]
+            if target_ex.hints
+            else "No hints available for this exercise."
+        )
+        print(
+            json.dumps(
+                {
+                    "name": target_ex.name,
+                    "title": target_ex.title,
+                    "hints": target_ex.hints,
+                    "selected_level": level,
+                    "selected_hint": sel_hint,
+                },
+                indent=2,
+            )
+        )
+        return
 
     render_hint(target_ex, hint_level=level)
 

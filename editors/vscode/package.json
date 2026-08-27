@@ -1,0 +1,119 @@
+{
+  "name": "raylings-vscode",
+  "displayName": "Raylings: Master Python Ray",
+  "description": "VS Code and Cursor extension for Raylings: learn distributed Python Ray through interactive exercises, progress tracking, and instant execution",
+  "version": "0.1.0",
+  "publisher": "dnf0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dnf0/raylings"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Education",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:exercises",
+    "workspaceContains:solutions",
+    "onCommand:raylings.openNextExercise",
+    "onCommand:raylings.runCurrent",
+    "onCommand:raylings.showHint",
+    "onCommand:raylings.startWatcher",
+    "onCommand:raylings.initWorkspace",
+    "onCommand:raylings.syncProgress",
+    "onCommand:raylings.viewSolution"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "raylings.openNextExercise",
+        "title": "Open Next Exercise",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.runCurrent",
+        "title": "Run Current Exercise",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.showHint",
+        "title": "Show Exercise Hint",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.startWatcher",
+        "title": "Start Watcher in Terminal",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.initWorkspace",
+        "title": "Initialize Exercises Workspace",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.viewSolution",
+        "title": "View Reference Solution",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.syncProgress",
+        "title": "Sync Progress",
+        "category": "Raylings"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "raylings-explorer",
+          "title": "Raylings",
+          "icon": "$(zap)"
+        }
+      ]
+    },
+    "views": {
+      "raylings-explorer": [
+        {
+          "id": "raylings.exerciseTree",
+          "name": "Curriculum Exercises"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Raylings",
+      "properties": {
+        "raylings.executablePath": {
+          "type": "string",
+          "default": "raylings",
+          "description": "Path or command to invoke raylings CLI (e.g. 'raylings', 'uv run raylings', 'uvx raylings')"
+        },
+        "raylings.autoRunOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically evaluate current exercise upon saving"
+        },
+        "raylings.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display progress and current exercise in the status bar"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "node esbuild.config.js --minify",
+    "compile": "node esbuild.config.js",
+    "watch": "node esbuild.config.js --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  }
+}
