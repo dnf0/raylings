@@ -109,35 +109,47 @@ cluster_wait() {
         exit 1
     fi
 
+    log_info "Allowing Ray internal daemons to stabilize..."
+    sleep 5
     log_success "All Ray cluster pods are Ready."
 }
 
 cluster_forward() {
-    log_info "Starting background port-forwarding for svc/${RAY_CLUSTER_NAME}-head-svc..."
-
-    # Check if head service exists
-    if ! kubectl get svc "${RAY_CLUSTER_NAME}-head-svc" -n "${NAMESPACE}" &>/dev/null; then
-        log_error "Service '${RAY_CLUSTER_NAME}-head-svc' not found in namespace '${NAMESPACE}'."
+    log_info "Resolving Ray head pod..."
+    local HEAD_POD
+    HEAD_POD=$(kubectl get pod -l ray.io/node-type=head -n "${NAMESPACE}" -o jsonpath='{.items[0].metadata.name}')
+    if [[ -z "${HEAD_POD}" ]]; then
+        log_error "No Ray head pod found in namespace '${NAMESPACE}'."
         exit 1
     fi
 
+    log_info "Starting background port-forwarding for pod/${HEAD_POD} (10001, 8265)..."
+
     # Kill existing port-forward on port 10001 or 8265 if running
-    pkill -f "kubectl port-forward svc/${RAY_CLUSTER_NAME}-head-svc" 2>/dev/null || true
+    pkill -f "kubectl port-forward.*10001" 2>/dev/null || true
 
     local LOG_FILE="/tmp/kuberay-port-forward.log"
-    nohup kubectl port-forward --address 0.0.0.0 "svc/${RAY_CLUSTER_NAME}-head-svc" 10001:10001 8265:8265 -n "${NAMESPACE}" > "${LOG_FILE}" 2>&1 &
+    nohup kubectl port-forward --address 0.0.0.0 "pod/${HEAD_POD}" 10001:10001 8265:8265 -n "${NAMESPACE}" > "${LOG_FILE}" 2>&1 &
     local PF_PID=$!
     disown "$PF_PID" 2>/dev/null || true
 
-    sleep 2
+    log_info "Verifying Ray Client port 10001 connectivity..."
+    local ready=0
+    for i in {1..30}; do
+        if python3 -c "import socket; s = socket.create_connection(('127.0.0.1', 10001), timeout=1); s.close()" 2>/dev/null; then
+            ready=1
+            break
+        fi
+        sleep 1
+    done
 
-    if kill -0 "$PF_PID" 2>/dev/null; then
-        log_success "Port-forwarding established (PID: ${PF_PID})."
+    if [[ "$ready" -eq 1 ]]; then
+        log_success "Port-forwarding established and verified (PID: ${PF_PID})."
         echo -e "  - Ray Client:    ${BOLD}ray://localhost:10001${NC}"
         echo -e "  - Ray Dashboard: ${BOLD}http://localhost:8265${NC}"
         echo -e "  - Forward Logs:  ${LOG_FILE}"
     else
-        log_error "Port-forwarding failed to start. Logs:"
+        log_error "Port-forwarding failed to connect on port 10001 within 30s. Logs:"
         cat "${LOG_FILE}"
         exit 1
     fi
