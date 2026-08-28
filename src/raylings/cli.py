@@ -1006,5 +1006,133 @@ def tui_command(
         raise typer.Exit(1)
 
 
+plugins_app = typer.Typer(
+    name="plugins",
+    help="Discover, inspect, and validate curriculum extension packs and domain plugins.",
+    no_args_is_help=True,
+)
+app.add_typer(plugins_app, name="plugins")
+
+
+@plugins_app.command(name="list")
+def plugins_list_command() -> None:
+    """List all installed and discovered Raylings curriculum plugins."""
+    from raylings.plugins import get_plugin_registry
+
+    render_banner()
+    registry = get_plugin_registry()
+    plugins = registry.list_plugins()
+
+    table = Table(title="Installed & Discovered Curriculum Plugins", border_style="cyan")
+    table.add_column("Plugin Identifier", style="bold cyan")
+    table.add_column("Title", style="white")
+    table.add_column("Version", style="bold green")
+    table.add_column("Author", style="dim")
+    table.add_column("Chapters", justify="right", style="bold yellow")
+
+    for p in plugins:
+        chapters = p.get_chapters()
+        table.add_row(
+            p.name,
+            p.title,
+            p.version,
+            p.author,
+            str(len(chapters)),
+        )
+
+    console.print(table)
+
+
+@plugins_app.command(name="info")
+def plugins_info_command(
+    name: str = typer.Argument(..., help="Plugin identifier (e.g. finance)"),
+) -> None:
+    """Show detailed metadata, chapters, and exercises provided by a plugin."""
+    from rich.panel import Panel
+
+    from raylings.plugins import get_plugin_registry
+
+    render_banner()
+    registry = get_plugin_registry()
+    plugin = registry.get_plugin(name)
+
+    if not plugin:
+        console.print(f"[bold red]Plugin '{name}' not found.[/bold red]")
+        raise typer.Exit(1)
+
+    chapters = plugin.get_chapters()
+    total_exercises = sum(len(ch.exercises) for ch in chapters)
+
+    info_text = (
+        f"[bold cyan]Plugin:[/bold cyan] {plugin.name} (v{plugin.version})\n"
+        f"[bold cyan]Title:[/bold cyan] {plugin.title}\n"
+        f"[bold cyan]Author:[/bold cyan] {plugin.author}\n"
+        f"[bold cyan]Description:[/bold cyan] {plugin.description}\n"
+        f"[bold cyan]Total Exercises:[/bold cyan] {total_exercises}\n\n"
+        f"[bold green]Chapters ({len(chapters)}):[/bold green]\n"
+    )
+
+    for ch in chapters:
+        info_text += f"  • [bold white]Chapter {ch.number}: {ch.title}[/bold white]\n"
+        for ex in ch.exercises:
+            info_text += f"      - [cyan]{ex.name}[/cyan]: {ex.title}\n"
+
+    console.print(Panel(info_text, title=f"Plugin Info: {plugin.name}", border_style="cyan"))
+
+
+@plugins_app.command(name="validate")
+def plugins_validate_command(
+    target: str = typer.Argument(
+        ..., help="Module path or class string (e.g. raylings.plugins.finance:FinancePlugin)"
+    ),
+) -> None:
+    """Validate that a plugin satisfies the RaylingsPlugin protocol and curriculum contract."""
+    import importlib
+
+    from raylings.plugins.base import RaylingsPlugin
+
+    render_banner()
+    try:
+        if ":" in target:
+            mod_name, cls_name = target.split(":", 1)
+            mod = importlib.import_module(mod_name)
+            plugin_cls = getattr(mod, cls_name)
+            plugin = plugin_cls()
+        else:
+            mod = importlib.import_module(target)
+            # Find subclass of RaylingsPlugin
+            plugin = None
+            for attr in dir(mod):
+                val = getattr(mod, attr)
+                if (
+                    isinstance(val, type)
+                    and issubclass(val, RaylingsPlugin)
+                    and val is not RaylingsPlugin
+                ):
+                    plugin = val()
+                    break
+            if not plugin:
+                console.print(
+                    f"[bold red]No RaylingsPlugin subclass found in module '{target}'.[/bold red]"
+                )
+                raise typer.Exit(1)
+
+        errors = plugin.validate()
+        if errors:
+            console.print(
+                f"[bold red]✗ Plugin validation failed with {len(errors)} error(s):[/bold red]"
+            )
+            for err in errors:
+                console.print(f"  - {err}")
+            raise typer.Exit(1)
+        else:
+            console.print(
+                f"[bold green]✓ Plugin '{plugin.name}' (v{plugin.version}) is VALID and satisfies the RaylingsPlugin protocol![/bold green]"
+            )
+    except Exception as e:
+        console.print(f"[bold red]Error loading/validating plugin '{target}':[/bold red] {e}")
+        raise typer.Exit(1)
+
+
 if __name__ == "__main__":
     app()

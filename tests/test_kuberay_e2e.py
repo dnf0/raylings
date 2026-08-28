@@ -46,7 +46,19 @@ def ray_cluster() -> Generator[dict[str, Any], None, None]:
 
     if address_env:
         # 1. Explicit RAY_ADDRESS provided (e.g. ray://localhost:10001 or auto)
-        ray.init(address=address_env, runtime_env=runtime_env, ignore_reinit_error=True)
+        import time
+
+        last_err: Exception | None = None
+        for attempt in range(5):
+            try:
+                ray.init(address=address_env, runtime_env=runtime_env, ignore_reinit_error=True)
+                last_err = None
+                break
+            except Exception as e:
+                last_err = e
+                time.sleep(2)
+        if last_err is not None:
+            raise last_err
     else:
         # 2. Try auto-connecting to an existing local cluster
         try:

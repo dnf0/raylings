@@ -56,9 +56,11 @@ markdown_extensions:
 
 nav:
   - Overview: index.md
+  - Interactive Playground: playground.md
   - Getting Started: getting-started.md
   - Onboarding Guide: onboarding-guide.md
   - Curriculum Syllabus: syllabus.md
+  - Curriculum Plugins: plugins.md
   - CLI Reference: cli-reference.md
   - Troubleshooting: troubleshooting.md
   - Cloud & KubeRay: cloud-kuberay.md
