@@ -142,6 +142,15 @@ def list_command(
     tracker = get_state_tracker()
     completed_set = tracker.get_completed_set()
 
+    completed_count = len(
+        {
+            ex.name
+            for ex in manifest.all_exercises
+            if ex.name in completed_set
+            or (ex.file_path.exists() and not runner.check_marker(ex.file_path))
+        }
+    )
+
     if as_json:
         import json
 
@@ -150,7 +159,8 @@ def list_command(
             ex_data = []
             for ex in ch.exercises:
                 has_marker = runner.check_marker(ex.file_path) if ex.file_path.exists() else False
-                completed = ex.name in completed_set
+                is_done = (not has_marker) if ex.file_path.exists() else False
+                completed = (ex.name in completed_set) or is_done
                 ex_data.append(
                     {
                         "name": ex.name,
@@ -161,6 +171,7 @@ def list_command(
                         "hints": ex.hints,
                         "requires_cluster": ex.requires_cluster,
                         "completed": completed,
+                        "is_done": is_done,
                         "has_marker": has_marker,
                         "exists": ex.file_path.exists(),
                     }
@@ -187,7 +198,6 @@ def list_command(
         return
 
     render_banner()
-    completed_count = len(completed_set.intersection({ex.name for ex in manifest.all_exercises}))
     render_progress(manifest, completed_count=completed_count)
 
 
@@ -201,12 +211,20 @@ def progress_command(
 ) -> None:
     """Display overall progress summary and current active exercise."""
     manifest = get_manifest()
+    runner = ExerciseRunner()
     watcher = ExerciseWatcher()
     current_ex = watcher.find_current_exercise()
     tracker = get_state_tracker()
     completed_set = tracker.get_completed_set()
 
-    completed_count = len(completed_set.intersection({ex.name for ex in manifest.all_exercises}))
+    completed_count = len(
+        {
+            ex.name
+            for ex in manifest.all_exercises
+            if ex.name in completed_set
+            or (ex.file_path.exists() and not runner.check_marker(ex.file_path))
+        }
+    )
     total = len(manifest.all_exercises)
     percentage = (completed_count / total * 100.0) if total > 0 else 0.0
 

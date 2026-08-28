@@ -27,19 +27,30 @@ class ExerciseRunner:
     """Executes exercises and canonical solutions in isolated subprocesses."""
 
     def check_marker(self, path: Path) -> bool:
-        """Check if the given file contains the 'I AM NOT DONE' marker.
+        """Check if the given file contains the 'I AM NOT DONE' marker or unfilled blanks.
 
         Args:
             path: Filesystem path to the exercise file.
 
         Returns:
-            bool: True if marker exists in the file content, False otherwise.
+            bool: True if marker or placeholder exists in the file content, False otherwise.
         """
         if not path.exists():
             return False
         try:
             content = path.read_text(encoding="utf-8")
-            return NOT_DONE_MARKER in content
+            has_not_done_comment = (
+                "I AM NOT DONE" in content
+                or "# I AM NOT DONE" in content
+                or "// I AM NOT DONE" in content
+                or "<!-- I AM NOT DONE -->" in content
+            )
+            has_unfilled_blank = (
+                "___" in content
+                or "/* ??? */" in content
+                or "<!-- ANSWER -->" in content
+            )
+            return has_not_done_comment or has_unfilled_blank
         except Exception:
             return False
 

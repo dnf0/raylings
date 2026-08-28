@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { ProgressResponse } from './types';
+import { getEffectiveWorkspaceRoot } from './pathUtils';
 
 const execAsync = promisify(exec);
 
@@ -32,7 +33,7 @@ export class RaylingsStatusBar implements vscode.Disposable {
 
     this.isUpdating = true;
     const executablePath = config.get<string>('executablePath', 'raylings');
-    const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+    const workspaceRoot = getEffectiveWorkspaceRoot();
 
     try {
       const { stdout } = await execAsync(`${executablePath} progress --json`, {
@@ -42,7 +43,7 @@ export class RaylingsStatusBar implements vscode.Disposable {
       const data: ProgressResponse = JSON.parse(stdout.trim());
 
       if (data.is_finished) {
-        this.statusBarItem.text = `⚡ Raylings: 🎉 100% Completed! (66/66)`;
+        this.statusBarItem.text = `⚡ Raylings: 🎉 100% Completed! (${data.total}/${data.total})`;
         this.statusBarItem.tooltip = 'All Raylings exercises completed! Click to view progress summary.';
       } else {
         const nextName = data.current_exercise || 'None';

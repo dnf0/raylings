@@ -286,3 +286,26 @@ def test_ui_render_cluster_status():
     render_cluster_status(cluster_info_stopped, console=test_console)
     out_stopped = test_console.export_text()
     assert "Stopped" in out_stopped or "Inactive" in out_stopped or "Offline" in out_stopped
+
+
+def test_runner_detects_placeholder_markers(tmp_path: Path):
+    """Verify check_marker detects comments and blank placeholders."""
+    runner = ExerciseRunner()
+
+    # Test legacy and alternate comment formats
+    for comment in ["# I AM NOT DONE", "// I AM NOT DONE", "<!-- I AM NOT DONE -->"]:
+        f = tmp_path / f"test_{abs(hash(comment))}.py"
+        f.write_text(f"{comment}\ndef verify(): pass\n")
+        assert runner.check_marker(f) is True
+
+    # Test cloze blank placeholders
+    for placeholder in ["___", "/* ??? */", "<!-- ANSWER -->"]:
+        f = tmp_path / f"test_{abs(hash(placeholder))}.py"
+        f.write_text(f"x = {placeholder}\ndef verify(): pass\n")
+        assert runner.check_marker(f) is True
+
+    # Test clean file without marker
+    clean_f = tmp_path / "clean.py"
+    clean_f.write_text("def verify(): pass\n")
+    assert runner.check_marker(clean_f) is False
+
