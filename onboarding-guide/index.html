@@ -1102,7 +1102,7 @@
 <h3 id="tour-step-breakdown">Tour Step Breakdown</h3>
 <pre class="mermaid"><code>flowchart TD
     S1["Step 1: Core Primitives&lt;br/&gt;&lt;i&gt;Tasks, Actors, Plasma&lt;/i&gt;"] --&gt; S2["Step 2: Preflight Doctor&lt;br/&gt;&lt;i&gt;5-point health check&lt;/i&gt;"]
-    S2 --&gt; S3["Step 3: First Exercise&lt;br/&gt;&lt;i&gt;basics01 &amp; '# I AM NOT DONE'&lt;/i&gt;"]
+    S2 --&gt; S3["Step 3: First Exercise&lt;br/&gt;&lt;i&gt;basics01 &amp; @ray.remote&lt;/i&gt;"]
     S3 --&gt; S4["Step 4: Live Watcher&lt;br/&gt;&lt;i&gt;Keyboard navigation&lt;/i&gt;"]
     S4 --&gt; S5["Step 5: VS Code Integration&lt;br/&gt;&lt;i&gt;Sidebar &amp; Status Bar&lt;/i&gt;"]</code></pre>
 <h4 id="step-1-welcome-distributed-primitives">Step 1: Welcome &amp; Distributed Primitives</h4>
@@ -1119,7 +1119,7 @@
 </ul>
 <h4 id="step-3-solving-your-first-exercise-basics01py">Step 3: Solving Your First Exercise (<code>basics01.py</code>)</h4>
 <ul>
-<li><strong>Focus</strong>: Understanding the exercise workflow and the <code># I AM NOT DONE</code> marker.</li>
+<li><strong>Focus</strong>: Understanding the exercise workflow, <code># TODO:</code> prompts, and <code>verify()</code> assertions.</li>
 <li><strong>Key Concepts</strong>: Decorating functions with <code>@ray.remote</code>, asynchronous scheduling with <code>.remote()</code>, blocking retrieval with <code>ray.get()</code>.</li>
 <li><strong>Suggested Command</strong>: <code>raylings run exercises/01_basics/basics01.py</code></li>
 </ul>
@@ -1301,9 +1301,8 @@
 <h3 id="how-state-is-updated">How State is Updated</h3>
 <ol>
 <li>When you run an exercise via <code>raylings watch</code> or <code>raylings run</code>:</li>
-<li>Raylings inspects the file for the <code># I AM NOT DONE</code> marker.</li>
 <li>It executes the Python script in an isolated subprocess.</li>
-<li>If the script exits with status code <code>0</code> <strong>AND</strong> no <code># I AM NOT DONE</code> marker is found, the exercise is marked as completed.</li>
+<li>If the script exits with status code <code>0</code> (all <code>verify()</code> assertions pass), the exercise is marked as completed.</li>
 <li>The state tracker writes the result to <code>.raylings_state.json</code>:</li>
 </ol>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
@@ -1334,7 +1333,7 @@
 </span></code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Resetting Progress</p>
-<p>To reset your progress and start over, simply delete <code>.raylings_state.json</code> or re-add the <code># I AM NOT DONE</code> marker to your exercise files.</p>
+<p>To reset your progress and start over, simply delete <code>.raylings_state.json</code> or reset your exercises via git.</p>
 </div>
 
 
