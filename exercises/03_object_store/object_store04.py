@@ -1,26 +1,20 @@
-"""Chapter 3: Plasma Object Store & Zero-Copy - Exercise 4: Object Spilling & Memory Limits.
-
-Ray's in-memory object store (Plasma) has a fixed capacity (by default ~30% of system RAM).
-What happens when your workload generates more objects than will fit in RAM?
-
-Object Spilling:
-When the Plasma object store approaches capacity, Ray's object manager automatically
-"spills" cold (least recently used) objects to local disk storage (or cloud storage like S3).
-When a task or the driver subsequently calls `ray.get()` on a spilled object, Ray transparently
-reads the data back from disk into memory without user intervention.
-
-Key Concepts:
-1. Automatic Spilling: Enables jobs to process datasets larger than available RAM.
-2. Object Lifecycle & GC: Objects are pinned in Plasma as long as at least one Python
-   `ObjectRef` points to them. When all references go out of scope (or are `del`'d),
-   Ray reclaims the shared memory.
-
-Your Task:
-- Create a series of objects in Plasma using `ray.put()`.
-- Store the `ObjectRef`s in a list.
-- Retrieve and verify values from the earliest and latest stored objects.
-- Demonstrate reference cleanup: delete references and verify memory is reclaimable.
 """
+Exercise: exercises/03_object_store/object_store04.py
+Topic: Plasma Object Spilling & Bounded Capacity
+
+Context & Why:
+The Plasma object store operates in a pre-allocated shared memory partition (typically 30% of system RAM).
+When total active objects exceed available Plasma memory, Ray's object manager automatically
+**spills** cold objects to local NVMe disk or cloud storage (e.g. S3), restoring them transparently when requested.
+
+Understanding object references and avoiding leaked `ObjectRef`s prevents excessive disk thrashing.
+
+Instructions:
+1. Configure object spilling parameters or observe object lifecycle behavior.
+2. Verify that Ray handles objects larger than individual worker memory seamlessly.
+"""
+
+# I AM NOT DONE
 
 import numpy as np
 import ray

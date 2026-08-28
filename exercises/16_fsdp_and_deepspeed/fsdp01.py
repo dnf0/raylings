@@ -1,32 +1,18 @@
-"""Chapter 16: DeepSpeed & PyTorch FSDP - Exercise 1: PyTorch FSDP with Ray Train ScalingConfig.
-
-Fully Sharded Data Parallel (FSDP) shards model parameters, gradients, and optimizer states across
-data-parallel workers, enabling training of models that exceed the memory capacity of a single device.
-
-Key Concepts:
-- `ShardingStrategy.FULL_SHARD`: Shards parameters, gradients, and optimizer states (ZeRO-3 equivalent).
-  During forward/backward passes, parameters are gathered on-the-fly and freed immediately.
-- `ShardingStrategy.SHARD_GRAD_OP`: Shards gradients and optimizer states while retaining parameters
-  during forward/backward computation (ZeRO-2 equivalent).
-- `Auto-Wrap Policy`: `size_based_auto_wrap_policy` automatically identifies submodules with parameter
-  counts exceeding a threshold and wraps them into distinct FSDP units for overlapped communication.
-- `TorchTrainer & ScalingConfig`: Coordinates distributed Ray workers, initializing the process group
-  and executing the training loop.
-
-Your Task:
-- In `wrap_fsdp_model(model, sharding_strategy, min_num_params)`:
-  - Construct a size-based auto-wrap policy using `functools.partial(size_based_auto_wrap_policy, min_num_params=min_num_params)`.
-  - Wrap and return the model using `FSDP(model, auto_wrap_policy=auto_wrap_policy, sharding_strategy=sharding_strategy, device_id=torch.device("cpu"))`.
-- In `train_loop(config)`:
-  - Instantiate `ToyNet()`.
-  - Wrap the model using `wrap_fsdp_model(model, sharding_strategy=strategy)`.
-  - Create an `Adam` optimizer over `fsdp_model.parameters()`.
-  - Run the training loop for `epochs` iterations:
-    - Zero gradients, compute forward pass, calculate MSE loss against target `y`.
-    - Run backward pass and step optimizer.
-    - Track initial loss (epoch 0) and final loss.
-  - Report metrics using `ray.train.report(...)` and return `{"initial_loss": initial_loss, "final_loss": final_loss}`.
 """
+Exercise: exercises/16_fsdp_and_deepspeed/fsdp01.py
+Topic: PyTorch FSDP with Ray Train ScalingConfig
+
+Context & Why:
+PyTorch Fully Sharded Data Parallel (FSDP) shards model parameters, gradients, and optimizer states
+across data-parallel workers. Ray Train coordinates the multi-worker cluster and wraps modules with
+FSDP auto-wrapping policies.
+
+Instructions:
+1. Configure FSDP wrapping and Ray Train `TorchTrainer`.
+2. Verify parameter sharding and loss convergence across workers.
+"""
+
+# I AM NOT DONE
 
 import functools
 import os

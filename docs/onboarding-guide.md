@@ -87,7 +87,7 @@ raylings doctor
 │ Python Version            │ ✓ PASS │ Python 3.12.3 (>= 3.10)        │
 │ Ray Installation          │ ✓ PASS │ Ray v2.43.0 installed          │
 │ Ray Daemon / Cluster      │ ✓ PASS │ Cluster session active         │
-│ Exercises Manifest        │ ✓ PASS │ Found 66 exercises in 14 chap  │
+│ Exercises Manifest        │ ✓ PASS │ Found 81 exercises in 18 chap  │
 │ System Resources          │ ✓ PASS │ 10 logical CPUs, 32.0 GB RAM   │
 └───────────────────────────┴────────┴────────────────────────────────┘
 
@@ -101,7 +101,7 @@ Summary: 5 passed, 0 warnings, 0 failed
 | **Python Version** | Python `>= 3.10` | `PASS` / `FAIL` | **Yes** | Upgrade Python via `uv python install 3.12` or `pyenv`. |
 | **Ray Installation** | `ray` importable and healthy | `PASS` / `FAIL` | **Yes** | Run `uv pip install ray[default]` or `pip install ray`. |
 | **Ray Daemon / Cluster** | Background cluster reachable | `PASS` / `WARN` | No | Auto-starts during exercises, or run `raylings daemon start`. |
-| **Exercises Manifest** | `exercises/` populated with 66 files | `PASS` / `WARN` | No | Run `raylings init` to extract bundled exercises. |
+| **Exercises Manifest** | `exercises/` populated with 81 files | `PASS` / `WARN` | No | Run `raylings init` to extract bundled exercises. |
 | **System Resources** | Minimum 2 CPUs and >= 4GB RAM | `PASS` / `WARN` | No | Warning shown if running on single-core containers. |
 
 ### JSON Diagnostic Payloads
@@ -167,12 +167,12 @@ graph LR
 ### Key Extension Features
 
 1. **Curriculum Explorer Tree View**:
-   - Displays all 14 chapters in an expandable sidebar view.
+   - Displays all 18 chapters in an expandable sidebar view.
    - Distinct icons for completed (`✓`), pending (`○`), and active (`►`) exercises.
    - Click any exercise to open it immediately in the editor.
 
 2. **Status Bar Cluster & Progress Monitor**:
-   - Shows live cluster status (e.g. `$(zap) Ray: 4 Nodes | 12/66 Done`).
+   - Shows live cluster status (e.g. `$(zap) Ray: 4 Nodes | 12/81 Done`).
    - Click to open the Ray Dashboard or trigger preflight diagnostics.
 
 3. **Auto-Run on File Save**:
@@ -226,7 +226,7 @@ raylings progress
 Output:
 
 ```text
-Progress: [====================>                    ] 33.3% (22/66 completed)
+Progress: [====================>                    ] 33.3% (27/81 completed)
 Current Exercise: exercises/05_fault_tolerance/fault01.py
 ```
 
@@ -238,8 +238,8 @@ raylings progress --json
 
 ```json
 {
-  "total": 66,
-  "completed": 22,
+  "total": 81,
+  "completed": 27,
   "percentage": 33.3,
   "current_exercise": "fault01",
   "current_path": "exercises/05_fault_tolerance/fault01.py",

@@ -1,31 +1,25 @@
-"""Chapter 1: Ray Core Foundations - Exercise 3: Parallel Pipeline Execution.
-
-A very common mistake when learning Ray is calling `ray.get()` immediately after
-launching each remote task inside a loop:
-
-    # ❌ ANTI-PATTERN (Sequential Execution):
-    results = []
-    for x in data:
-        ref = slow_task.remote(x)
-        results.append(ray.get(ref))  # Blocks immediately! No parallelism!
-
-Calling `ray.get()` blocks the driver until that single task finishes, forcing tasks
-to run sequentially one after another.
-
-    # ✓ PROPER PATTERN (Parallel Execution):
-    refs = [slow_task.remote(x) for x in data]  # Launch all tasks concurrently
-    results = ray.get(refs)                     # Wait for all tasks in parallel
-
-Key Concepts:
-1. Ray tasks run asynchronously in background workers as soon as `.remote()` is called.
-2. Collecting `ObjectRef`s allows the Ray scheduler to distribute work concurrently
-   across available CPU cores.
-
-Your Task:
-- Refactor the sequential loop in `run_parallel()` to launch all 4 tasks concurrently.
-- Fetch all results with a single `ray.get(refs)` call.
-- The total parallel execution time must be significantly less than sequential time!
 """
+Exercise: exercises/01_basics/basics03.py
+Topic: Parallel Pipeline Execution
+
+Context & Why:
+A classic distributed computing anti-pattern is calling `ray.get()` inside a task submission loop:
+```python
+# ❌ Anti-pattern (Sequential Stall):
+for x in data:
+    ref = task.remote(x)
+    results.append(ray.get(ref))  # Blocks immediately! Destroys concurrency!
+```
+Calling `ray.get()` synchronously pauses the Python driver process until that specific worker finishes.
+To achieve true parallelism across all available CPU cores, you must submit all tasks first to populate
+the scheduler's queue, and then wait on the batch of ObjectRefs.
+
+Instructions:
+1. Fix `run_parallel()` so that all tasks are dispatched concurrently before calling `ray.get()`.
+2. Confirm that parallel execution completes significantly faster than sequential execution.
+"""
+
+# I AM NOT DONE
 
 import time
 

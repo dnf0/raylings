@@ -1,19 +1,18 @@
-"""Chapter 12: Ray Serve - Exercise 4: Streaming Responses with FastApi & Generators.
-
-Ray Serve natively supports token streaming (e.g. for LLMs) using async generators
-and FastAPI integration.
-
-Key Concepts:
-- `async def generate(self, prompt: str)`: Async generator yielding token chunks.
-- When querying via `DeploymentHandle`, iterating over `handle.remote()` streams tokens.
-
-Your Task:
-- In `StreamingLLM`:
-  - Implement async generator `stream_tokens(self, words: list[str])` yielding each word with a trailing space.
-- In `verify()`:
-  - Query `handle.stream_tokens.remote(["Ray", "is", "fast"])`.
-  - Collect streamed tokens into a single joined string and verify `"Ray is fast "`.
 """
+Exercise: exercises/12_ray_serve/serve04.py
+Topic: Autoscaling & Replica Dynamics in Ray Serve
+
+Context & Why:
+Traffic spikes require rapid horizontal scaling of model replicas.
+`autoscaling_config={"min_replicas": 1, "max_replicas": 5, "target_ongoing_requests": 2}`
+instructs Ray Serve controller to monitor queue depth and scale replica actors automatically.
+
+Instructions:
+1. Configure `autoscaling_config` on a deployment.
+2. Verify dynamic replica scaling under simulated request load.
+"""
+
+# I AM NOT DONE
 
 import os
 

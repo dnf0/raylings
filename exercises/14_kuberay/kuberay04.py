@@ -1,20 +1,16 @@
-"""Chapter 14: KubeRay - Exercise 4: Autoscaling with KEDA & Ray Autoscaler.
-
-KubeRay integrates with the Ray native autoscaler to dynamically provision Kubernetes
-pods as pending tasks and resource demands surge.
-
-Key Concepts:
-- `pending_resources`: Unsatisfied CPU/GPU/custom resource requests in Ray GCS.
-- `calculate_desired_replicas`: Determines replica count to meet pending demand within [min, max].
-
-Your Task:
-- In `autoscaler_step(current_replicas: int, min_replicas: int, max_replicas: int, pending_cpus: int, cpus_per_worker: int) -> int`:
-  - Calculate required worker pods: `ceil(pending_cpus / cpus_per_worker)`.
-  - Clamp target replica count between `min_replicas` and `max_replicas`.
-  - Return desired replicas.
-- In `verify()`:
-  - Test scale-up and scale-down calculations under various workloads.
 """
+Exercise: exercises/14_kuberay/kuberay04.py
+Topic: Autoscaling with KEDA & Ray Autoscaler
+
+Context & Why:
+Kubernetes Event-driven Autoscaling (KEDA) scales KubeRay worker pods based on queue depth, Prometheus metrics,
+or Ray autoscaler demands, dynamically adapting Kubernetes capacity to real-time workload spikes.
+
+Instructions:
+1. Configure autoscaler scaling policies and min/max worker replicas.
+"""
+
+# I AM NOT DONE
 
 import math
 

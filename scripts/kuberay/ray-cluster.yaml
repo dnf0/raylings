@@ -26,6 +26,11 @@ spec:
               requests:
                 cpu: "500m"
                 memory: "1Gi"
+            env:
+              - name: RAY_memory_monitor_refresh_ms
+                value: "0"
+              - name: RAY_ENABLE_UV_RUN_RUNTIME_ENV
+                value: "0"
             ports:
               - containerPort: 6379
                 name: gcs
@@ -58,3 +63,8 @@ spec:
                 requests:
                   cpu: "500m"
                   memory: "1Gi"
+              env:
+                - name: RAY_memory_monitor_refresh_ms
+                  value: "0"
+                - name: RAY_ENABLE_UV_RUN_RUNTIME_ENV
+                  value: "0"

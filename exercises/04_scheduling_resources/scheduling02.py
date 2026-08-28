@@ -1,28 +1,20 @@
-"""Chapter 4: Scheduling & Resources - Exercise 2: Node Affinity Scheduling.
-
-In multi-node clusters, you frequently need fine-grained control over where tasks execute:
-1. Data Locality: Scheduling a compute task on the exact physical node where disk data resides.
-2. Hardware Pairing: Pinning specific tasks to particular specialized nodes.
-
-Ray provides `NodeAffinitySchedulingStrategy` in `ray.util.scheduling_strategies`:
-- `node_id`: The hex Node ID string (e.g. `ray.get_runtime_context().get_node_id()`).
-- `soft`: If `False` (hard affinity), the task will ONLY execute on that node (or fail/block if unavailable).
-  If `True` (soft affinity), Ray prefers that node but falls back to other available nodes.
-
-Example:
-    from ray.util.scheduling_strategies import NodeAffinitySchedulingStrategy
-
-    strategy = NodeAffinitySchedulingStrategy(node_id=target_node, soft=False)
-    ref = my_task.options(scheduling_strategy=strategy).remote()
-
-Your Task:
-- Define a `@ray.remote` function `get_running_node_id() -> str` that returns
-  `ray.get_runtime_context().get_node_id()`.
-- In `verify()`, retrieve the local driver's `node_id` using `ray.get_runtime_context().get_node_id()`.
-- Create a `NodeAffinitySchedulingStrategy` targeting that `node_id` with `soft=False`.
-- Schedule `get_running_node_id` using `.options(scheduling_strategy=strategy)`.
-- Verify the returned node ID matches the expected node ID.
 """
+Exercise: exercises/04_scheduling_resources/scheduling02.py
+Topic: Node Affinity Scheduling Strategy
+
+Context & Why:
+In heterogeneous multi-node clusters, specific nodes may possess specialized hardware (local NVMe scratch,
+high-bandwidth networking, or InfiniBand interconnects).
+
+`NodeAffinitySchedulingStrategy` allows pinning tasks or actors to specific cluster nodes by node ID,
+or specifying soft affinity preferences.
+
+Instructions:
+1. Retrieve the current node ID via `ray.get_runtime_context().get_node_id()`.
+2. Schedule an actor specifically on that target node using `NodeAffinitySchedulingStrategy`.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.util.scheduling_strategies import NodeAffinitySchedulingStrategy

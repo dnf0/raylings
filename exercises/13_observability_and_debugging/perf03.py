@@ -1,22 +1,18 @@
-"""Chapter 13: Observability - Exercise 3: Ray Metrics & Cluster Introspection.
-
-Ray exposes system metrics (CPU, RAM, GCS state, actor lifecycle) for Prometheus & Grafana.
-
-Key Concepts:
-- `ray.util.state.list_actors()`: Lists all alive and dead actor instances with PIDs and resources.
-- `ray.nodes()`: Reports active physical/virtual nodes, IP addresses, and remaining resources.
-
-Your Task:
-- In `MonitoredWorker`:
-  - An actor with `ping() -> str` returning `"pong"`.
-- In `inspect_cluster() -> tuple[int, int]`:
-  - Launch 2 `MonitoredWorker` actors and call `ping.remote()`.
-  - Query `actors = ray.util.state.list_actors()` and count alive actors.
-  - Query `nodes = ray.nodes()` and count active nodes with `node["Alive"] is True`.
-  - Return `(num_alive_actors, num_active_nodes)`.
-- In `verify()`:
-  - Assert that at least 2 alive actors and 1 active node are detected.
 """
+Exercise: exercises/13_observability_and_debugging/perf03.py
+Topic: Ray Metrics & Prometheus State APIs
+
+Context & Why:
+Ray exports cluster telemetry (CPU, GPU, Plasma memory, task queues, actor counts) via standard
+Prometheus endpoints and the `ray.util.state` Python SDK.
+Querying state APIs enables building automated health dashboards and autoscaling controllers.
+
+Instructions:
+1. Query cluster metrics and actor states using `ray.util.state`.
+2. Assert expected task completion metrics.
+"""
+
+# I AM NOT DONE
 
 import os
 

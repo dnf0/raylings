@@ -1,28 +1,19 @@
-"""Chapter 15: Distributed LLM Serving & vLLM - Exercise 4: Speculative Decoding with Draft & Target Workers.
-
-Speculative Decoding accelerates autoregressive inference by generating multiple candidate tokens
-using a fast, lightweight draft model and verifying them in parallel with a large target model.
-
-Key Concepts:
-- `Draft Model Worker`: Quickly generates $K$ speculative tokens autoregressively.
-- `Target Model Worker`: Validates all $K$ tokens in a single batch forward pass.
-- `Speculative Verification Loop`:
-  - Compares draft tokens against target predictions sequentially.
-  - If draft token matches: accepts the draft token.
-  - On first mismatch: rejects remaining draft tokens, emits target model's corrected token, and halts round.
-  - If all $K$ draft tokens match: accepts all $K$ tokens plus an additional bonus token from the target model.
-
-Your Task:
-- In `SpeculativeEngine.generate(prompt, total_length)`:
-  - While `len(sequence) < total_length`:
-    - Generate `k_speculative` draft tokens from `draft_worker`.
-    - Evaluate candidates in a single batch call with `target_worker`.
-    - Implement the verification loop:
-      - Compare `draft_tokens[i]` with `target_tokens[i]`.
-      - On match: append `draft_tok` and increment `self.accepted_draft_tokens`.
-      - On mismatch: append `target_tok` (the correction) and break out of the draft loop.
-    - If all draft tokens matched and sequence is not full, append `target_tokens[len(draft_tokens)]` (the bonus token).
 """
+Exercise: exercises/15_vllm_and_llms/vllm04.py
+Topic: Speculative Decoding with Draft & Target Workers
+
+Context & Why:
+LLM token generation is memory-bandwidth bound.
+**Speculative Decoding** uses a fast draft model to generate $K$ candidate tokens cheaply,
+and a large target model to verify all $K$ tokens in parallel in a single forward pass,
+achieving 2-3x latency reduction.
+
+Instructions:
+1. Implement draft generation and parallel target verification loop.
+2. Verify exact sequence matching.
+"""
+
+# I AM NOT DONE
 
 import os
 from typing import Any

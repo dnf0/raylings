@@ -41,8 +41,8 @@ def test_cli_list():
     res_json = runner.invoke(app, ["list", "--json"])
     assert res_json.exit_code == 0
     data = json.loads(res_json.stdout)
-    assert data["total_exercises"] == 78
-    assert len(data["chapters"]) == 17
+    assert data["total_exercises"] == 81
+    assert len(data["chapters"]) == 18
     assert data["chapters"][0]["name"] == "01_basics"
 
 
@@ -58,7 +58,7 @@ def test_cli_progress():
     res_json = runner.invoke(app, ["progress", "--json"])
     assert res_json.exit_code == 0
     data = json.loads(res_json.stdout)
-    assert data["total"] == 78
+    assert data["total"] == 81
     assert "completed" in data
     assert "percentage" in data
 

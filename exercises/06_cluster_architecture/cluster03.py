@@ -1,29 +1,20 @@
-"""Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 3: Simulating Node Failure.
-
-In production clusters, worker nodes may terminate abruptly due to Spot instance preemption,
-hardware faults, or Kubernetes node drain events.
-
-When a node terminates:
-1. GCS Heartbeat Timeout: The GCS detects missed heartbeats from the node's Raylet.
-2. Node Status Update: GCS marks the node `Alive = False` in the cluster registry.
-3. Work Rescheduling: Any new or retryable work is routed to the surviving nodes.
-
-You can simulate node failures using `cluster.remove_node(worker_node)`:
-```python
-cluster.remove_node(worker_node)
-# The cluster continues operating with remaining nodes!
-```
-
-Your Task:
-- Define a `@ray.remote` function `compute_task(x: int) -> int` that returns `x + 100`.
-- In `verify()`:
-  - Create a 2-node cluster (head node + 1 worker node).
-  - Connect with `ray.init(address=cluster.address)`.
-  - Terminate the worker node with `cluster.remove_node(worker_node)`.
-  - Execute `compute_task.remote(42)` on the remaining head node.
-  - Assert the task successfully returns 142.
-  - Assert that exactly 1 node remains alive in `ray.nodes()`.
 """
+Exercise: exercises/06_cluster_architecture/cluster03.py
+Topic: Ray Job Submission API
+
+Context & Why:
+In production, machine learning jobs are submitted to remote Ray clusters using the **Job Submission API**
+(`ray.job_submission.JobSubmissionClient`).
+
+This client allows submitting scripts, packaging dependencies via `runtime_env`, streaming remote logs,
+and monitoring job status via REST over HTTP (port 8265).
+
+Instructions:
+1. Submit a job programmatically using `JobSubmissionClient`.
+2. Poll job status until success and inspect execution logs.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.cluster_utils import Cluster

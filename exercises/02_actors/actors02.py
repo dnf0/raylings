@@ -1,24 +1,21 @@
-"""Chapter 2: Distributed State & Actors - Exercise 2: Actor Method Calls & State Mutation.
-
-In a distributed environment, managing concurrent state safely usually requires
-complex locking primitives (mutexes, semaphores). Ray Actors simplify this:
-
-By default, an Actor executes its method calls SEQUENTIALLY in the exact FIFO order
-they arrive in its mailbox.
-
-Key Guarantees:
-1. No Race Conditions on Instance State: Because only one method executes at a time
-   on the actor process, `self.balance += amount` is atomic with respect to other method calls.
-2. FIFO Execution: Method calls dispatched from a single worker/driver are executed in order.
-
-Your Task:
-- Implement a `BankAccount` actor:
-  - `deposit(amount: float) -> float`: increases balance, appends `"deposit: <amount>"` to history, returns new balance.
-  - `withdraw(amount: float) -> bool`: if balance >= amount, decreases balance, appends `"withdraw: <amount>"` to history, returns True; otherwise returns False.
-  - `get_balance() -> float`: returns current balance.
-  - `get_history() -> list[str]`: returns transaction history list.
-- Perform a series of transactions and verify balance and history.
 """
+Exercise: exercises/02_actors/actors02.py
+Topic: Actor Method Calls & State Mutation
+
+Context & Why:
+In a distributed environment, managing concurrent state safely usually requires complex locking
+primitives (mutexes, semaphores). Ray Actors simplify this by executing incoming method calls
+sequentially in the exact FIFO order they arrive in the actor's message queue.
+
+Because only one method executes at a time within an actor process, state mutations like
+`self.balance += amount` are inherently thread-safe and free from data races without manual locks.
+
+Instructions:
+1. Implement `BankAccount` actor with `deposit`, `withdraw`, `get_balance`, and `get_history` methods.
+2. Perform deposits and withdrawals, and assert accurate final balance and transaction logs.
+"""
+
+# I AM NOT DONE
 
 import ray
 

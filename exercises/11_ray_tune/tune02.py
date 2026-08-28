@@ -1,22 +1,18 @@
-"""Chapter 11: Ray Tune - Exercise 2: ASHA / HyperBand Schedulers for Early Stopping.
-
-Asynchronous Successive Halving Algorithm (ASHA) dynamically prunes underperforming
-trials at intermediate milestones, saving 5x-10x compute compared to naive grid search.
-
-Key Concepts:
-- `ASHAScheduler(metric='loss', mode='min', max_t=10, grace_period=2, reduction_factor=2)`:
-  Allows trials to run for `grace_period` steps before ranking and terminating bottom performers.
-- `tune.TuneConfig(scheduler=asha, num_samples=6)`: Configures search scheduler.
-
-Your Task:
-- In `train_step(config: dict)`:
-  - Simulate 5 training steps: for `step` in range(5), `loss = config["base_loss"] / (step + 1)`.
-  - Report `{"step": step, "loss": loss}` on each step.
-- In `verify()`:
-  - Configure `ASHAScheduler(metric="loss", mode="min", max_t=5, grace_period=1)`.
-  - Run `Tuner` with 4 trials exploring `base_loss` in `[1.0, 5.0, 10.0, 20.0]`.
-  - Assert best result minimized loss (< 0.25).
 """
+Exercise: exercises/11_ray_tune/tune02.py
+Topic: ASHA Early Stopping Trial Scheduler
+
+Context & Why:
+Training unpromising hyperparameter configurations to completion wastes massive compute resources.
+The **Asynchronous Successive Halving Algorithm (ASHA)** aggressively terminates underperforming trials
+early, reallocating compute to the top-performing configurations.
+
+Instructions:
+1. Configure `ASHAScheduler(metric="loss", mode="min", grace_period=1)`.
+2. Verify early termination of poor trials.
+"""
+
+# I AM NOT DONE
 
 import os
 
@@ -34,7 +30,8 @@ def train_step(config: dict) -> None:
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
 
-    # TODO: Configure ASHAScheduler and run Tuner
+    # TODO: Configure ASHAScheduler
+    # WHY: ASHA scheduler prunes bottom-quartile trials early, saving over 70% of compute time. and run Tuner
     results = None
 
     assert results is not None, "Results must not be None"

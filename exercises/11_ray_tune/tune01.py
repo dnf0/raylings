@@ -1,23 +1,18 @@
-"""Chapter 11: Ray Tune - Exercise 1: Search Spaces & Distributed Trials.
-
-Ray Tune is an industry-standard library for distributed hyperparameter optimization.
-It manages trial scheduling, resource allocation, and distributed evaluation across clusters.
-
-Key Concepts:
-- `tune.grid_search([...])` or `tune.choice([...])`: Defines categorical or discrete hyperparameter spaces.
-- `ray.tune.report(metrics)`: Transmits trial metrics back to the Tune coordinator.
-- `tune.Tuner(trainable, param_space=...)`: Configures and manages trial runs.
-- `results.get_best_result(metric=..., mode=...)`: Finds the optimal trial outcome.
-
-Your Task:
-- In `trainable(config: dict)`:
-  - Calculate `score = 1.0 / (1.0 + abs(config["lr"] - 0.05))`.
-  - Report `{"score": score}` via `tune.report()`.
-- In `verify()`:
-  - Define `param_space = {"lr": tune.grid_search([0.01, 0.05, 0.1]), "batch_size": tune.choice([16, 32])}`.
-  - Execute `tuner = tune.Tuner(trainable, param_space=param_space).fit()`.
-  - Assert that the best result achieves `best_result.config["lr"] == 0.05`.
 """
+Exercise: exercises/11_ray_tune/tune01.py
+Topic: Ray Tune Search Spaces & Distributed Grid Search
+
+Context & Why:
+Hyperparameter tuning is embarrassingly parallel. Ray Tune manages distributed trials across cluster nodes.
+Defining search spaces with `tune.choice()`, `tune.uniform()`, or `tune.loguniform()` allows exploring
+hyperparameters with maximum concurrency.
+
+Instructions:
+1. Define a hyperparameter search space.
+2. Run `Tuner.fit()` and inspect the best trial hyperparameters.
+"""
+
+# I AM NOT DONE
 
 import os
 

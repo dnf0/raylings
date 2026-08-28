@@ -1,42 +1,17 @@
-"""Chapter 5: Fault Tolerance & Recovery - Exercise 4: Actor State Checkpointing.
-
-When running distributed workloads on Spot Instances or preemptible machines, an actor
-might be restarted from scratch. While `max_restarts` spins up a fresh actor process,
-the actor's in-memory variables revert to their initial state unless explicitly restored.
-
-Production Checkpointing Pattern:
-1. State Persistence: The actor periodically writes a checkpoint (to local disk, S3, or GCS)
-   during state modifications.
-2. Startup Recovery: In `__init__`, the actor checks if a checkpoint file exists and
-   restores its internal state.
-
-Example:
-    @ray.remote(max_restarts=2, max_task_retries=0)
-    class CheckpointWorker:
-        def __init__(self, ckpt_path: Path):
-            self.ckpt_path = ckpt_path
-            self.step = self._load()
-
-        def _load(self):
-            if self.ckpt_path.exists():
-                text = self.ckpt_path.read_text().strip()
-                return int(text) if text else 0
-            return 0
-
-Your Task:
-- Define a `@ray.remote(max_restarts=2, max_task_retries=0)` actor `CheckpointCounter`:
-  - `__init__(self, checkpoint_file: str)`:
-    - Checks if `checkpoint_file` exists. If so, reads non-empty integer count; otherwise initializes to 0.
-  - `increment(self) -> int`:
-    - Increments `self.count`, writes `str(self.count)` to `checkpoint_file`, and returns `self.count`.
-  - `crash(self) -> None`:
-    - Calls `os._exit(1)` to simulate abrupt process death.
-  - `get_count(self) -> int`: returns `self.count`.
-- In `verify()`:
-  - Increment count to 5.
-  - Crash the actor.
-  - Call `get_count()` on the restarted actor and assert state was restored to 5!
 """
+Exercise: exercises/05_fault_tolerance/fault04.py
+Topic: Spot Instance Preemption & Graceful Draining
+
+Context & Why:
+In cloud environments, spot/preemptible instances can be terminated with minimal notice (e.g. 30 seconds).
+Ray intercepts SIGTERM signals and coordinates graceful node draining, evicting actors and flushing
+object caches before node shutdown.
+
+Instructions:
+1. Implement a preemption-aware actor with clean shutdown handlers.
+"""
+
+# I AM NOT DONE
 
 import os
 import tempfile

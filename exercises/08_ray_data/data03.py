@@ -1,39 +1,20 @@
-"""Chapter 8: Ray Data for High-Throughput ETL - Exercise 3: Stateful Transforms with ActorPoolStrategy.
-
-When applying heavy ML models (e.g. HuggingFace Transformers, PyTorch ResNets), loading
-model weights in every task introduces severe overhead.
-Ray Data allows you to define stateful transforms as callable Python classes and run them
-across an elastic actor pool using `ActorPoolStrategy`.
-
-Pattern:
-```python
-class MLPredictor:
-    def __init__(self):
-        # Initialized ONCE per worker actor
-        self.model = load_my_model()
-
-    def __call__(self, batch: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
-        batch["prediction"] = self.model.predict(batch["feature"])
-        return batch
-
-predictions = ds.map_batches(
-    MLPredictor,
-    compute=ray.data.ActorPoolStrategy(min_size=1, max_size=2),
-    batch_format="numpy",
-)
-```
-
-Your Task:
-- Define a class `ModelScorer`:
-  - `__init__(self)`: Initializes `self.bias = 100`.
-  - `__call__(self, batch: dict[str, np.ndarray]) -> dict[str, np.ndarray]`:
-    - Adds `batch["score"] = batch["raw_val"] + self.bias`.
-    - Returns the updated batch.
-- In `verify()`:
-  - Create dataset from `[{'raw_val': i} for i in range(20)]`.
-  - Apply `ds.map_batches(ModelScorer, compute=ray.data.ActorPoolStrategy(min_size=1, max_size=2), batch_format="numpy")`.
-  - Check the output count and verify that the first item has `score == 100`.
 """
+Exercise: exercises/08_ray_data/data03.py
+Topic: Stateful Batch Inference with ActorPoolStrategy
+
+Context & Why:
+When performing batch inference with neural networks or heavy ML models, re-initializing the model
+inside every task is prohibitively slow.
+
+Passing `compute=ray.data.ActorPoolStrategy(min_size=N, max_size=M)` to `map_batches()` creates
+a persistent pool of actor workers that keep model weights pinned in GPU/CPU memory across stream batches.
+
+Instructions:
+1. Define an inference class with a `__call__` method.
+2. Execute `map_batches(InferenceClass, compute=ActorPoolStrategy(min_size=2))`.
+"""
+
+# I AM NOT DONE
 
 import numpy as np
 import ray

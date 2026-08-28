@@ -1,40 +1,22 @@
-"""Chapter 2: Distributed State & Actors - Exercise 3: Passing Actor Handles.
-
-In Ray, `ActorHandle`s can be passed as arguments to other `@ray.remote` tasks or actors.
-When a worker receives an `ActorHandle`, it can invoke methods on that actor directly!
-
-This pattern is widely used for:
-1. Distributed Aggregators: Multiple worker actors sending intermediate metrics/results
-   to a single centralized actor.
-2. Progress Tracking: Long-running actors reporting step completions to a coordinator actor.
-3. Coordination & Barrier Synchronization across distributed workers.
-
-Example:
-    @ray.remote
-    class ProgressTracker:
-        def __init__(self): self.completed = 0
-        def report(self): self.completed += 1
-
-    @ray.remote
-    class Worker:
-        def __init__(self, tracker_handle):
-            self.tracker = tracker_handle
-
-        def do_work(self):
-            ray.get(self.tracker.report.remote())
-
-Your Task:
-- Define a `@ray.remote` class `MetricsLogger` with:
-  - `log(worker_id: str, count: int) -> None`: records `count` items processed by `worker_id` in a dictionary `self.records`.
-  - `get_total() -> int`: returns the sum of all counts recorded.
-- Define a `@ray.remote` class `BatchWorker` with:
-  - `__init__(self, worker_id: str, logger: ActorHandle) -> None`
-  - `process(self, items: list[int]) -> int`:
-    - Computes `total = sum(items)`
-    - Logs items processed by calling `ray.get(self.logger.log.remote(self.worker_id, len(items)))`
-    - Returns `total`
-- Create 3 `BatchWorker` actors passing the `MetricsLogger` handle, process batches in parallel, and verify total logged count is 9.
 """
+Exercise: exercises/02_actors/actors03.py
+Topic: Passing Actor Handles for Distributed Coordination
+
+Context & Why:
+In Ray, `ActorHandle`s are first-class serializable objects that can be passed as arguments
+to other remote tasks and actors. Any worker receiving an `ActorHandle` can invoke remote methods
+on that shared actor instance.
+
+This pattern is widely used in distributed machine learning for centralized parameter servers,
+global metric aggregators, distributed barrier synchronization, and progress tracking.
+
+Instructions:
+1. Define a `MetricTracker` actor that aggregates counts from multiple worker tasks.
+2. Pass the `MetricTracker` handle into multiple concurrent `@ray.remote` tasks.
+3. Verify that all workers successfully reported their progress to the single actor.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.actor import ActorHandle

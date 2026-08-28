@@ -1,21 +1,18 @@
-"""Chapter 11: Ray Tune - Exercise 3: Population-Based Training (PBT).
-
-Population-Based Training (PBT) combines parallel search with dynamic evolutionary
-hyperparameter mutation. Top-performing agents pass their checkpoints and mutated
-hyperparameters to underperforming agents during training.
-
-Key Concepts:
-- `PopulationBasedTraining`: Periodically exploits top models and explores hyperparameter mutations.
-- Checkpoint persistence allows worker weights to be transferred across trials dynamically.
-
-Your Task:
-- In `pbt_trainable(config: dict)`:
-  - Simulate training loop where `accuracy = config.get("factor", 1.0) * (step + 1)`.
-  - Report accuracy on each of 3 steps.
-- In `verify()`:
-  - Configure `PopulationBasedTraining(metric="accuracy", mode="max", perturbation_interval=1)`.
-  - Run `Tuner` across 2 trials and assert max accuracy is achieved.
 """
+Exercise: exercises/11_ray_tune/tune03.py
+Topic: Population-Based Training (PBT)
+
+Context & Why:
+**Population-Based Training (PBT)** dynamically explores hyperparameters while training a population
+of neural networks simultaneously. Underperforming networks periodically replace their weights with
+top-performing networks ('exploit') and mutate their hyperparameters ('explore').
+
+Instructions:
+1. Configure `PopulationBasedTraining` scheduler.
+2. Verify parameter mutation during trial evolution.
+"""
+
+# I AM NOT DONE
 
 import os
 
@@ -33,7 +30,8 @@ def pbt_trainable(config: dict) -> None:
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
 
-    # TODO: Configure PopulationBasedTraining and Tuner
+    # TODO: Configure PopulationBasedTraining
+    # WHY: PBT optimizes dynamic schedules (e.g. learning rate schedules) by evolving models in real time. and Tuner
     results = None
 
     assert results is not None, "Results must not be None"

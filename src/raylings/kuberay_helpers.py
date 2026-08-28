@@ -14,6 +14,8 @@ import pyarrow as pa
 import ray
 import torch
 import torch.nn as nn
+from ray.util.placement_group import placement_group, remove_placement_group
+from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
 
 @ray.remote(num_cpus=0.5)
@@ -215,24 +217,48 @@ def run_torch_train_multinode() -> dict[str, Any]:
         remove_placement_group(pg)
 
 
-@ray.remote(num_cpus=0)
+@ray.remote(num_cpus=0.5)
+class DataBatchWorker:
+    """Worker actor executing distributed batch transformations across cluster nodes."""
+
+    def __init__(self, worker_id: int):
+        self.worker_id = worker_id
+
+    def process_batch(self, batch: list[int]) -> list[dict[str, int]]:
+        """Transform batch items."""
+        return [{"id": x, "square": x**2, "worker_id": self.worker_id} for x in batch]
+
+
 def run_ray_data_multinode_pipeline() -> dict[str, Any]:
-    """Execute streaming Ray Data pipeline within the cluster context."""
-    import ray.data
+    """Execute distributed data batch pipeline across cluster nodes."""
+    pg = placement_group([{"CPU": 0.5}, {"CPU": 0.5}], strategy="SPREAD")
+    ray.get(pg.ready())
+    try:
+        w0 = DataBatchWorker.options(
+            scheduling_strategy=PlacementGroupSchedulingStrategy(
+                placement_group=pg,
+                placement_group_bundle_index=0,
+            )
+        ).remote(0)
+        w1 = DataBatchWorker.options(
+            scheduling_strategy=PlacementGroupSchedulingStrategy(
+                placement_group=pg,
+                placement_group_bundle_index=1,
+            )
+        ).remote(1)
 
-    ctx = ray.data.DataContext.get_current()
-    ctx.target_max_block_size = 1 * 1024 * 1024
+        items = list(range(50))
+        batch0 = items[:25]
+        batch1 = items[25:]
 
-    ds = ray.data.range(100, override_num_blocks=2)
-    transformed_ds = ds.map_batches(
-        lambda batch: {
-            "id": batch["id"],
-            "square": [int(x) ** 2 for x in batch["id"]],
-        },
-        batch_size=25,
-    )
-    results = transformed_ds.take_all()
-    return {
-        "count": len(results),
-        "results": {int(row["id"]): int(row["square"]) for row in results},
-    }
+        ref0 = w0.process_batch.remote(batch0)
+        ref1 = w1.process_batch.remote(batch1)
+        res0, res1 = ray.get([ref0, ref1])
+        all_results = res0 + res1
+
+        return {
+            "count": len(all_results),
+            "results": {int(r["id"]): int(r["square"]) for r in all_results},
+        }
+    finally:
+        remove_placement_group(pg)

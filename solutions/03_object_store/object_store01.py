@@ -3,6 +3,9 @@
 Reference Solution for object_store01.
 """
 
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 import numpy as np
 import ray
 from ray import ObjectRef

@@ -1,28 +1,18 @@
-"""Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 4: Ray Job Submission API.
-
-In production environments (like CI/CD pipelines, Kubernetes, or Airflow orchestrators),
-you often submit Ray jobs remotely via HTTP instead of running interactive driver scripts.
-
-Ray provides the `JobSubmissionClient` for this workflow:
-1. Initialize Client: `client = JobSubmissionClient("http://127.0.0.1:8265")`
-2. Submit Job:
-   ```python
-   job_id = client.submit_job(
-       entrypoint="python task.py",
-       runtime_env={"env_vars": {"RUN_ID": "job_42"}}
-   )
-   ```
-3. Poll Status: `status = client.get_job_status(job_id)` (`JobStatus.SUCCEEDED`, `PENDING`, `RUNNING`).
-4. Retrieve Logs: `logs = client.get_job_logs(job_id)`.
-
-Your Task:
-- In `verify()`:
-  - Connect to the local Ray cluster Dashboard via `JobSubmissionClient("http://127.0.0.1:8265")`.
-  - Submit a job with `entrypoint='python -c "print(\'RAY_JOB_COMPLETE\')"'` and `runtime_env={}`.
-  - Poll the job until it reaches a terminal status (`JobStatus.SUCCEEDED` or `JobStatus.FAILED`).
-  - Assert that the final status is `JobStatus.SUCCEEDED`.
-  - Retrieve the job logs and assert that `"RAY_JOB_COMPLETE" in logs`.
 """
+Exercise: exercises/06_cluster_architecture/cluster04.py
+Topic: Cross-Node Object Transfers & Networking
+
+Context & Why:
+When a worker task on Node B accesses an `ObjectRef` created on Node A, Ray's object manager
+automatically initiates an asynchronous point-to-point network transfer between Plasma stores.
+
+Understanding cross-node transfer overhead is critical for designing latency-sensitive distributed algorithms.
+
+Instructions:
+1. Measure and observe cross-node object transfer dynamics.
+"""
+
+# I AM NOT DONE
 
 import time
 

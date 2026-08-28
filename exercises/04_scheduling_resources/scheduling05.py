@@ -1,22 +1,20 @@
-"""Chapter 4: Scheduling & Resources - Exercise 5: Gang Scheduling & Multi-Bundle Lifecycle.
-
-Gang Scheduling is the practice of scheduling all related distributed processes simultaneously
-to avoid deadlocks (where worker A holds resource 1 waiting for worker B, while worker B holds
-resource 2 waiting for worker A).
-
-Ray Placement Groups guarantee atomic gang allocation:
-1. Creation: `pg = placement_group(bundles, strategy=...)`
-2. Readiness Barrier: `ray.get(pg.ready())` blocks until ALL bundles are allocated.
-3. Introspection: `placement_group_table(pg)` returns metadata and state (`"CREATED"`).
-4. Teardown: `remove_placement_group(pg)` frees up cluster resources.
-
-Your Task:
-- In `verify()`:
-  - Create a placement group with 3 bundles of `{"CPU": 0.25}` using `strategy="PACK"`.
-  - Wait for the placement group to be ready.
-  - Query the placement group table with `placement_group_table(pg)` and assert `state == "CREATED"`.
-  - Clean up the placement group using `remove_placement_group(pg)`.
 """
+Exercise: exercises/04_scheduling_resources/scheduling05.py
+Topic: Gang Scheduling with Multi-Bundle Placement Groups
+
+Context & Why:
+Distributed training algorithms (e.g. PyTorch DDP, Ring All-Reduce) require all $N$ workers to be
+ready simultaneously before training begins. If only $N-1$ workers are scheduled, the job deadlocks.
+
+Ray's placement groups provide **gang scheduling**: `ray.util.placement_group(...)` waits until ALL
+bundles can be reserved atomically before allowing any worker to start, preventing resource deadlock.
+
+Instructions:
+1. Define a multi-bundle placement group and wait for readiness using `pg.ready()`.
+2. Schedule gang workers into the reserved bundles.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.util.placement_group import (

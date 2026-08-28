@@ -1,20 +1,18 @@
-"""Chapter 18: Distributed Quantitative Finance - Exercise 1: Monte Carlo Option Pricing.
-
-Monte Carlo simulation is a core computational workload in quantitative finance,
-used for pricing complex derivative contracts and simulating underlying asset paths
-governed by Geometric Brownian Motion (GBM):
-    S_T = S_0 * exp((r - 0.5 * sigma^2) * T + sigma * sqrt(T) * Z)
-where Z ~ Normal(0, 1).
-
-Key Concepts:
-1. Sharded Path Generation: Generating millions of asset price paths across a pool of Ray actors.
-2. Vectorized Payoff Evaluation: Evaluating European Call payoff max(S_T - K, 0) and discounting by exp(-r*T).
-3. Variance Reduction: Combining results across distributed worker batches.
-
-Your Task:
-- Implement `MonteCarloPricingWorker.price_european_call_batch` to simulate `num_paths` trajectories.
-- Coordinate multiple worker actors to compute the aggregate option price.
 """
+Exercise: exercises/18_quant_finance/finance01.py
+Topic: Distributed Monte Carlo Black-Scholes Option Pricing
+
+Context & Why:
+Quantitative finance relies heavily on Monte Carlo simulations to price exotic derivatives.
+Simulating millions of Geometric Brownian Motion (GBM) price paths across Ray worker tasks
+achieves linear scaling and near-instant pricing.
+
+Instructions:
+1. Implement distributed Monte Carlo simulation across Ray tasks.
+2. Aggregate discounted payoff estimates and verify pricing accuracy against analytical Black-Scholes.
+"""
+
+# I AM NOT DONE
 
 import math
 import os

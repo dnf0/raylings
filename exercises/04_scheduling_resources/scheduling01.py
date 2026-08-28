@@ -1,32 +1,21 @@
-"""Chapter 4: Scheduling & Resources - Exercise 1: Fractional & Custom Resources.
-
-In Ray, tasks and actors are scheduled dynamically based on resource declarations.
-Ray does NOT enforce physical OS isolation (cgroups) for CPUs; rather, resource declarations
-act as logical scheduling tokens.
-
-Key Resource Features:
-1. Fractional CPUs: You can request `< 1.0` CPU (e.g. `num_cpus=0.25`), allowing multiple
-   lightweight I/O tasks or actors to share a single CPU core.
-2. Custom Resources: You can define arbitrary cluster resource tags (e.g. `resources={"custom_accelerator": 1}`,
-   `"A100": 2`, `"fpga": 1`) when starting nodes or `ray.init(resources={...})`. Tasks requesting
-   those resources will only be scheduled on nodes possessing available tokens.
-
-Example:
-    @ray.remote(num_cpus=0.5)
-    def io_bound_task(url: str):
-        ...
-
-    @ray.remote(resources={"custom_accelerator": 1})
-    def accelerator_task(matrix):
-        ...
-
-Your Task:
-- Define a `@ray.remote` function `light_task(val: int) -> int` that requests `0.25` CPU and returns `val * 2`.
-- Define a `@ray.remote` function `accelerator_task(val: int) -> int` that requests 1 unit of `"custom_accelerator"`
-  and returns `val ** 2`.
-- In `verify()`, launch 4 `light_task`s concurrently and 2 `accelerator_task`s concurrently.
-- Collect the results and verify their correctness.
 """
+Exercise: exercises/04_scheduling_resources/scheduling01.py
+Topic: Fractional CPUs and Custom Hardware Resources
+
+Context & Why:
+Ray's scheduler treats physical resources as logical quotas. You can specify fractional CPU requirements
+(`num_cpus=0.25`), allowing 4 tasks to share a single CPU core, or request custom named resources
+(e.g., `resources={"accelerator": 1}`).
+
+This enables fine-grained multi-tenancy, co-locating light I/O workers on shared cores while reserving
+dedicated hardware for heavy compute tasks.
+
+Instructions:
+1. Configure a task with fractional CPU requirements (`num_cpus=0.5`).
+2. Launch multiple concurrent tasks and verify that Ray schedules them efficiently.
+"""
+
+# I AM NOT DONE
 
 import ray
 

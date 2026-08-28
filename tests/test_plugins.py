@@ -4,9 +4,9 @@ from typer.testing import CliRunner
 
 from raylings.cli import app
 from raylings.manifest import get_manifest
+from raylings.models import Chapter, Exercise
 from raylings.plugins import (
     PluginRegistry,
-    get_plugin_registry,
 )
 from raylings.plugins.base import RaylingsPlugin
 from raylings.plugins.finance import FinancePlugin
@@ -47,15 +47,44 @@ def test_plugin_registry_discovery():
 def test_manifest_plugin_integration():
     """Verify get_manifest() merges registered plugin chapters when requested."""
     manifest = get_manifest()
-    # By default, core chapters are 1-17
     initial_chapter_count = len(manifest.chapters)
-    assert initial_chapter_count >= 17
+    assert initial_chapter_count >= 18
 
-    registry = get_plugin_registry()
+    class CustomTestPlugin(RaylingsPlugin):
+        def __init__(self) -> None:
+            super().__init__(
+                name="custom_test",
+                title="Custom Extension Pack",
+                version="0.1.0",
+                description="Custom test plugin",
+                author="Test Author",
+            )
+
+        def get_chapters(self) -> list[Chapter]:
+            return [
+                Chapter(
+                    number=19,
+                    name="19_custom",
+                    title="Distributed Custom Extension",
+                    description="Custom plugin chapter",
+                    exercises=[
+                        Exercise(
+                            name="custom01",
+                            title="Custom Exercise",
+                            path="exercises/19_custom/custom01.py",
+                            chapter_name="19_custom",
+                            hints=["A valid test hint."],
+                        )
+                    ],
+                )
+            ]
+
+    registry = PluginRegistry()
+    registry.register(CustomTestPlugin())
     extended_manifest = registry.extend_manifest(manifest)
-    assert len(extended_manifest.chapters) >= initial_chapter_count + 1
-    ch18 = next(ch for ch in extended_manifest.chapters if ch.number == 18)
-    assert ch18.title == "Distributed Quantitative Finance"
+    assert len(extended_manifest.chapters) == initial_chapter_count + 1
+    ch19 = next(ch for ch in extended_manifest.chapters if ch.number == 19)
+    assert ch19.title == "Distributed Custom Extension"
 
 
 def test_cli_plugins_list():

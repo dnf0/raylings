@@ -1,28 +1,20 @@
-"""Chapter 5: Fault Tolerance & Recovery - Exercise 1: Automatic Task Retries.
-
-In distributed computing, transient failures (network blips, memory spikes, spot interruptions)
-are inevitable. Ray provides automatic retry mechanisms for tasks:
-
-- `max_retries`: Number of times Ray will re-execute a task if the worker process crashes
-  or (when `retry_exceptions=True`) if an exception is raised.
-  Default is 3. Set to `-1` for infinite retries or `0` to disable.
-- `retry_exceptions`: If `True`, user-level application exceptions will trigger retries.
-  You can also pass a list of specific exception types, e.g. `retry_exceptions=[ConnectionError, TimeoutError]`.
-
-Example:
-    @ray.remote(max_retries=3, retry_exceptions=True)
-    def flaky_network_call(attempt_file: str):
-        ...
-
-Your Task:
-- Define a `@ray.remote(max_retries=3, retry_exceptions=True)` function `unstable_task(attempt_file: str) -> str`:
-  - Reads the current attempt count from `attempt_file` (0 if file does not exist).
-  - Writes `attempts + 1` to `attempt_file`.
-  - If `attempts < 2`, raises `RuntimeError("Transient glitch!")`.
-  - Otherwise, returns `"success_on_retry"`.
-- In `verify()`, run `unstable_task` and assert that it successfully resolves to `"success_on_retry"`
-  after 2 retries (total 3 attempts).
 """
+Exercise: exercises/05_fault_tolerance/fault01.py
+Topic: Automatic Task Retries & Idempotency
+
+Context & Why:
+Transient hardware glitches, spot instance interruptions, or network drops can cause remote tasks to fail.
+Ray provides built-in task retries:
+`@ray.remote(max_retries=3, retry_exceptions=True)` instructs Ray to automatically resubmit failed tasks.
+
+Tasks must be **idempotent** (producing the same result when executed multiple times without side-effects).
+
+Instructions:
+1. Configure `max_retries=3` on an unreliable task.
+2. Verify that transient worker exceptions are caught and retried until successful.
+"""
+
+# I AM NOT DONE
 
 import tempfile
 from pathlib import Path

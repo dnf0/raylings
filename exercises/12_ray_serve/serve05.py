@@ -1,24 +1,18 @@
-"""Chapter 12: Ray Serve - Exercise 5: Serve Autoscaling Policies.
-
-Ray Serve features intelligent autoscaling that dynamically provisions actor replicas
-based on real-time request queue depth and latency targets.
-
-Key Concepts:
-- `autoscaling_config={
-    "min_replicas": 1,
-    "max_replicas": 4,
-    "target_ongoing_requests": 2,
-}`:
-  Directs Serve to maintain 2 ongoing requests per replica.
-- Allows cost optimization: scales down to `min_replicas` during quiet periods, and scales up under load.
-
-Your Task:
-- In `AutoscaledWorker`:
-  - Decorate with `@serve.deployment(autoscaling_config={"min_replicas": 1, "max_replicas": 3, "target_ongoing_requests": 1})`.
-  - Return `{"status": "ok", "id": request_id}`.
-- In `verify()`:
-  - Deploy and test multiple concurrent requests.
 """
+Exercise: exercises/12_ray_serve/serve05.py
+Topic: Streaming LLM Token Responses via Async Generators
+
+Context & Why:
+For Large Language Models (LLMs), waiting for the entire sequence to generate creates high Time-To-First-Token (TTFT)
+latency for users.
+Ray Serve supports streaming HTTP responses using Python `async def` generators and `StreamingResponse`.
+
+Instructions:
+1. Implement an async generator deployment yielding token chunks.
+2. Stream chunks to client in real time.
+"""
+
+# I AM NOT DONE
 
 import os
 

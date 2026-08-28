@@ -1,20 +1,18 @@
-"""Chapter 18: Distributed Quantitative Finance - Exercise 3: High-Frequency Market Tick Analytics with Ray Data.
-
-In high-frequency quantitative trading, millions of market order events and trades
-arrive per second. Computing real-time Volume-Weighted Average Price (VWAP):
-    VWAP = sum(Price_i * Volume_i) / sum(Volume_i)
-requires high-throughput streaming batch pipelines with zero-copy vectorized transformations.
-
-Key Concepts:
-1. Streaming Ingestion: Consuming tick batches into Ray Data streaming pipelines.
-2. Vectorized Windowing: Computing dollar volumes and cumulative quantities per symbol.
-3. Stateful Stream Filtering: Discarding anomalous quotes (spread outliers) without stalling throughput.
-
-Your Task:
-- Implement `compute_tick_metrics` in `map_batches` to compute `dollar_volume` (`price * volume`).
-- Filter out bad ticks where `spread <= 0`.
-- Compute final global VWAP across all processed market events.
 """
+Exercise: exercises/18_quant_finance/finance03.py
+Topic: Streaming Market Tick Analytics & Rolling VWAP
+
+Context & Why:
+High-frequency trading systems process millions of market tick events per second.
+Ray Data streaming pipelines ingest trade ticks and compute continuous Volume-Weighted Average Price (VWAP)
+across partitioned equity tickers with bounded memory.
+
+Instructions:
+1. Implement Ray Data streaming pipeline for tick ingestion.
+2. Calculate rolling VWAP per instrument symbol.
+"""
+
+# I AM NOT DONE
 
 import os
 import random

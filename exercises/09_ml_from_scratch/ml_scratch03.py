@@ -1,3 +1,21 @@
+"""
+Exercise: exercises/09_ml_from_scratch/ml_scratch03.py
+Topic: Ring All-Reduce Distributed Gradient Synchronization
+
+Context & Why:
+In large-scale distributed training, centralized parameter servers become network bottlenecks.
+**Ring All-Reduce** (used by NCCL and Horovod) arranges $N$ workers in a logical ring.
+Each worker only communicates with its immediate neighbor, reducing gradients in $2(N-1)$ ring transfers.
+
+Total communication volume per worker is independent of cluster size $N$, enabling linear scaling.
+
+Instructions:
+1. Implement a Ring All-Reduce exchange across Ray worker actors.
+2. Verify that all workers reach synchronized gradient consensus.
+"""
+
+# I AM NOT DONE
+
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 3: Ring All-Reduce Primitive.
 
 Ring All-Reduce is the algorithm that powers multi-GPU communication libraries like NCCL and Horovod.

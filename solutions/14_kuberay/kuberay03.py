@@ -3,6 +3,9 @@
 Reference Solution for kuberay03.
 """
 
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 from typing import Any
 
 

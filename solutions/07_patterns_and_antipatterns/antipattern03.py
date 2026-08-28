@@ -3,6 +3,9 @@
 Reference Solution for antipattern03.
 """
 
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 import ray
 from ray.util.actor_pool import ActorPool
 

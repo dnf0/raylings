@@ -1,25 +1,20 @@
-"""Chapter 4: Scheduling & Resources - Exercise 4: Placement Groups & PACK Strategy.
-
-When building latency-critical distributed systems (such as high-speed actor pipelines or
-local shared-memory training workers), you often want tasks/actors co-located on the
-SAME physical node to maximize zero-copy shared memory performance.
-
-The `PACK` (or `STRICT_PACK`) strategy places all requested resource bundles on the
-same node:
-```python
-pg = placement_group([{"CPU": 0.5}, {"CPU": 0.5}], strategy="PACK")
-ray.get(pg.ready())
-```
-
-Your Task:
-- Define a `@ray.remote(num_cpus=0.5)` actor `ColocatedWorker` with:
-  - `__init__(self, name: str)`: stores `self.name = name` and `self.node_id = ray.get_runtime_context().get_node_id()`
-  - `get_info(self) -> tuple[str, str]`: returns `(self.name, self.node_id)`
-- In `verify()`, create a placement group with 2 bundles of `{"CPU": 0.5}` using `strategy="PACK"`.
-- Wait for the placement group to be ready.
-- Instantiate 2 `ColocatedWorker` actors into bundle 0 and bundle 1 of the placement group.
-- Retrieve their info and verify that both actors were scheduled on the exact SAME node ID.
 """
+Exercise: exercises/04_scheduling_resources/scheduling04.py
+Topic: Placement Groups: STRICT_PACK Strategy
+
+Context & Why:
+Conversely, the `STRICT_PACK` strategy guarantees that all bundles in the placement group are
+co-located on the **same physical node**.
+
+This minimizes network latency and maximizes shared-memory Plasma throughput for tightly-coupled
+collaborative tasks (e.g. multi-GPU model parallel forward passes).
+
+Instructions:
+1. Create a placement group with `strategy="STRICT_PACK"`.
+2. Schedule actors into the co-located bundles.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.util.placement_group import placement_group

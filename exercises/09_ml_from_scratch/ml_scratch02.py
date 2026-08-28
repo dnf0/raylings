@@ -1,3 +1,21 @@
+"""
+Exercise: exercises/09_ml_from_scratch/ml_scratch02.py
+Topic: Asynchronous Parameter Server Architecture (Hogwild!)
+
+Context & Why:
+In heterogeneous clusters where workers have differing speeds, synchronous parameter updates suffer
+from the **straggler problem** (fast workers sit idle waiting for the slowest worker).
+
+In **Asynchronous Parameter Servers**, workers pull weights and push gradients independently
+without waiting for peers. While gradients may be slightly stale, total training throughput is maximized.
+
+Instructions:
+1. Implement asynchronous non-blocking gradient updates on the parameter server.
+2. Verify convergence under asynchronous updates.
+"""
+
+# I AM NOT DONE
+
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 2: Synchronous Gradient Averaging.
 
 In distributed deep learning:

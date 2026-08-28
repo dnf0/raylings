@@ -1,20 +1,18 @@
-"""Chapter 14: KubeRay - Exercise 2: RayJob CRD & Batch Job Lifecycle.
-
-The `RayJob` CRD allows submitting non-interactive batch workloads (ETL, distributed training)
-to an ephemeral or existing Ray cluster and automatically tearing it down when complete.
-
-Key Concepts:
-- `kind: RayJob`
-- `spec.entrypoint`: CLI command to execute inside driver container.
-- `spec.shutdownAfterJobFinishes: true`: Automatically garbage collects compute after job finishes.
-- `spec.ttlSecondsAfterFinished`: Kubernetes TTL controller cleanup delay.
-
-Your Task:
-- In `build_ray_job_crd(name: str, entrypoint: str, ttl_seconds: int) -> dict`:
-  - Build a valid `RayJob` CRD with `shutdownAfterJobFinishes=True` and `ttlSecondsAfterFinished`.
-- In `verify()`:
-  - Validate that the manifest includes entrypoint and TTL cleanup parameters.
 """
+Exercise: exercises/14_kuberay/kuberay02.py
+Topic: RayJob CRD & Ephemeral Batch Execution
+
+Context & Why:
+For batch ML workflows, maintaining static clusters is expensive.
+The `RayJob` CRD creates an ephemeral Ray cluster, submits your job script, streams logs, and
+automatically deletes the worker pods upon job completion.
+
+Instructions:
+1. Author a `RayJob` specification with shutdown policies.
+2. Verify job lifecycle transitions.
+"""
+
+# I AM NOT DONE
 
 from typing import Any
 

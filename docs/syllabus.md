@@ -1,6 +1,6 @@
 # Complete Curriculum Syllabus 📚
 
-The Raylings curriculum consists of **17 comprehensive chapters** containing **78 hands-on exercises**. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, and cloud-native Kubernetes orchestration.
+The Raylings curriculum consists of **18 comprehensive chapters** containing **81 hands-on exercises**. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, cloud-native Kubernetes orchestration, and quantitative domain applications.
 
 ---
 
@@ -20,11 +20,12 @@ The Raylings curriculum consists of **17 comprehensive chapters** containing **7
 | **10** | [`10_ray_train_and_tune`](#chapter-10-10_ray_train_and_tune-ray-train-distributed-deep-learning) | **Ray Train & Distributed Deep Learning** | 4 | TorchTrainer, ScalingConfig, Distributed Checkpointing | Advanced |
 | **11** | [`11_ray_tune`](#chapter-11-11_ray_tune-scalable-hyperparameter-tuning) | **Ray Tune: Scalable Hyperparameter Tuning** | 3 | Search Spaces, ASHA Scheduler, Population-Based Training | Advanced |
 | **12** | [`12_ray_serve`](#chapter-12-12_ray_serve-ray-serve-production-model-serving) | **Ray Serve & Production Model Serving** | 5 | HTTP Deployments, Request Batching, Pipeline DAGs | Advanced |
-| **13** | [`13_observability_and_debugging`](#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging) | **Observability & Memory Debugging** | 3 | Chrome Timelines, Plasma Leak Profiling, State APIs | Expert |
+| **13** | [`13_observability_and_debugging`](#chapter-13-13_observability_and_debugging-observability-memory-debugging) | **Observability & Memory Debugging** | 3 | Chrome Timelines, Plasma Leak Profiling, State APIs | Expert |
 | **14** | [`14_kuberay`](#chapter-14-14_kuberay-kuberay-cloud-native-ray-on-kubernetes) | **KubeRay & Cloud-Native Kubernetes** | 5 | RayCluster CRD, RayJob, RayService, KEDA Autoscaling | Expert |
 | **15** | [`15_vllm_and_llms`](#chapter-15-15_vllm_and_llms-distributed-llm-serving-vllm) | **Distributed LLM Serving & vLLM** | 4 | Tensor Parallelism, PagedAttention, Multi-LoRA, Speculative Decoding | Expert |
 | **16** | [`16_fsdp_and_deepspeed`](#chapter-16-16_fsdp_and_deepspeed-deepspeed-pytorch-fsdp) | **DeepSpeed & PyTorch FSDP** | 4 | Fully Sharded Data Parallel, ZeRO Memory Optimization, Fault Recovery | Expert |
 | **17** | [`17_multimodal_and_vectors`](#chapter-17-17_multimodal_and_vectors-multimodal-vector-ray-data) | **Multimodal & Vector Ray Data** | 4 | Streaming Multimodal ETL, ActorPool Embeddings, Vector Stores | Expert |
+| **18** | [`18_quant_finance`](#chapter-18-18_quant_finance-distributed-quantitative-finance) | **Distributed Quantitative Finance** | 3 | Monte Carlo Options, Historical VaR/CVaR, Streaming VWAP Analytics | Expert |
 
 ---
 
@@ -98,105 +99,105 @@ Covers automatic failure recovery, task retries, actor reconstruction, and linea
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
 | `fault01` | `exercises/05_fault_tolerance/fault01.py` | **Automatic Task Retries** — Configuring `max_retries` and `retry_exceptions` for idempotent task resilience. |
-| `fault02` | `exercises/05_fault_tolerance/fault02.py` | **Actor Failure & Restart Recovery** — Rebuilding actor state automatically using `max_restarts` and checkpointing. |
-| `fault03` | `exercises/05_fault_tolerance/fault03.py` | **Lineage Reconstruction** — Recomputing lost object store buffers using the deterministic lineage DAG. |
-| `fault04` | `exercises/05_fault_tolerance/fault04.py` | **Spot Instance & Preemption Handling** — Graceful failure handling during spot instance termination. |
+| `fault02` | `exercises/05_fault_tolerance/fault02.py` | **Actor Restarts & State Loss** — Managing state recovery upon actor failure with `max_restarts`. |
+| `fault03` | `exercises/05_fault_tolerance/fault03.py` | **Lineage Recomputation** — Automatic object recreation when Plasma objects are lost during node failure. |
+| `fault04` | `exercises/05_fault_tolerance/fault04.py` | **Spot Instance & Preemption Handling** — Graceful handling of node drain signals and actor migration. |
 
 ---
 
 ### Chapter 6: `06_cluster_architecture` - Cluster Topology & Multi-Node Simulation
 
-Covers cluster architecture (Head Node, Raylets, GCS), multi-node simulation in Python, and programmatic job submission.
+Covers cluster architecture, Global Control Store (GCS), Raylet schedulers, multi-node testing, and the Ray Job Submission API.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `cluster01` | `exercises/06_cluster_architecture/cluster01.py` | **Head Node, Workers & GCS** — Inspecting cluster nodes, heartbeats, and metadata via `ray.nodes()`. |
-| `cluster02` | `exercises/06_cluster_architecture/cluster02.py` | **Programmatic Cluster Simulation** — Simulating dynamic multi-node topologies using `ray.cluster_utils.Cluster`. |
-| `cluster03` | `exercises/06_cluster_architecture/cluster03.py` | **Simulating Node Death & Rescheduling** — Testing scheduler behavior when worker nodes disappear dynamically. |
-| `cluster04` | `exercises/06_cluster_architecture/cluster04.py` | **Ray Job Submission API** — Packaging and submitting jobs remotely with `ray.job_submission.JobSubmissionClient`. |
+| `cluster01` | `exercises/06_cluster_architecture/cluster01.py` | **Head vs Worker Architecture** — Inspecting GCS state, node tables, and Raylet communication. |
+| `cluster02` | `exercises/06_cluster_architecture/cluster02.py` | **Multi-Node Testing with Cluster Utils** — Simulating multi-node topologies in local tests using `ray.cluster_utils.Cluster`. |
+| `cluster03` | `exercises/06_cluster_architecture/cluster03.py` | **Ray Job Submission API** — Submitting and monitoring remote jobs via `JobSubmissionClient`. |
+| `cluster04` | `exercises/06_cluster_architecture/cluster04.py` | **Cross-Node Object Transfers** — Measuring bandwidth and serialization overhead across simulated physical nodes. |
 
 ---
 
 ### Chapter 7: `07_patterns_and_antipatterns` - Production Patterns & Anti-Patterns
 
-Identifies critical architectural bottlenecks and teaches production-grade distributed patterns.
+Covers real-world production anti-patterns, pipeline stalls, micro-task overhead, actor bottlenecks, and tree aggregations.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `antipattern01` | `exercises/07_patterns_and_antipatterns/antipattern01.py` | **Fixing ray.get() Inside Tasks** — Eliminating blocking dependency stalls by passing ObjectRefs directly. |
-| `antipattern02` | `exercises/07_patterns_and_antipatterns/antipattern02.py` | **Fixing Fine-Grained Overhead** — Amortizing scheduling overhead by batching micro-tasks into coarse chunks. |
-| `antipattern03` | `exercises/07_patterns_and_antipatterns/antipattern03.py` | **Fixing Actor Bottlenecks** — Decoupling high-frequency read/write pathways with actor replication pools. |
-| `antipattern04` | `exercises/07_patterns_and_antipatterns/antipattern04.py` | **Tree-Reduce Reduction** — Replacing $O(N)$ linear aggregation with $O(\log N)$ logarithmic tree reduction. |
+| `antipattern01` | `exercises/07_patterns_and_antipatterns/antipattern01.py` | **Nested ray.get() Bottlenecks** — Eliminating nested driver blocking in distributed pipelines. |
+| `antipattern02` | `exercises/07_patterns_and_antipatterns/antipattern02.py` | **Micro-Task Chunking** — Grouping fine-grained tasks into optimal batch sizes to eliminate scheduler overhead. |
+| `antipattern03` | `exercises/07_patterns_and_antipatterns/antipattern03.py` | **Actor Bottleneck Elimination** — Sharding high-contention actor state across dynamic actor pools. |
+| `antipattern04` | `exercises/07_patterns_and_antipatterns/antipattern04.py` | **Tree-Structured Distributed Aggregation** — Implementing $O(\log N)$ tree reductions to prevent single-driver memory saturation. |
 
 ---
 
 ### Chapter 8: `08_ray_data` - Ray Data for High-Throughput ETL
 
-Covers streaming data pipelines, block partitioning, vectorized batch transformations, and PyTorch dataloader integration.
+Covers distributed streaming datasets, block partitioning, vectorized transformations, and streaming backpressure.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `data01` | `exercises/08_ray_data/data01.py` | **Datasets & Block Partitioning** — Ingesting data, inspecting block partitions (`ds.num_blocks()`), and repartitioning. |
-| `data02` | `exercises/08_ray_data/data02.py` | **map vs map_batches** — Accelerating transformations with PyArrow/NumPy vectorized batch processing. |
-| `data03` | `exercises/08_ray_data/data03.py` | **Stateful Transforms with ActorPoolStrategy** — Reusing initialized model weights across data blocks. |
-| `data04` | `exercises/08_ray_data/data04.py` | **Streaming Pipelines & Backpressure** — Streaming infinite or multi-gigabyte datasets with bounded RAM usage. |
-| `data05` | `exercises/08_ray_data/data05.py` | **PyTorch DataLoader Interop** — Zero-copy streaming into PyTorch training loops using `ds.iter_torch_batches()`. |
+| `data01` | `exercises/08_ray_data/data01.py` | **Dataset Ingestion & Block Partitioning** — Reading distributed data into partitioned Ray Dataset blocks. |
+| `data02` | `exercises/08_ray_data/data02.py` | **Vectorized Batch Transformations** — High-throughput transforms with `map_batches` and PyArrow tables. |
+| `data03` | `exercises/08_ray_data/data03.py` | **ActorPool Batch Compute** — Stateful neural network batch inference with `compute=ActorPoolStrategy(...)`. |
+| `data04` | `exercises/08_ray_data/data04.py` | **Streaming Backpressure & Windowing** — Bounded memory execution preventing driver OOM on large streaming datasets. |
+| `data05` | `exercises/08_ray_data/data05.py` | **PyTorch DataLoader Interoperability** — Streaming Ray Data directly into distributed PyTorch training loops. |
 
 ---
 
 ### Chapter 9: `09_ml_from_scratch` - Distributed ML Primitives from Scratch
 
-Builds core distributed machine learning building blocks directly on top of Ray Core actors and tasks.
+Covers implementing fundamental distributed machine learning building blocks from first principles.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `ml_scratch01` | `exercises/09_ml_from_scratch/ml_scratch01.py` | **Distributed Parameter Server** — Implementing central parameter storage and worker gradient updates. |
-| `ml_scratch02` | `exercises/09_ml_from_scratch/ml_scratch02.py` | **Async vs Sync Gradient Averaging** — Comparing lock-step synchronization vs asynchronous stale gradient updates. |
-| `ml_scratch03` | `exercises/09_ml_from_scratch/ml_scratch03.py` | **Ring All-Reduce Implementation** — Building 2-phase Scatter-Reduce and Allgather across a logical actor ring. |
-| `ml_scratch04` | `exercises/09_ml_from_scratch/ml_scratch04.py` | **Distributed Data-Parallel Trainer** — Assembling a custom multi-worker DDP training harness. |
+| `ml_scratch01` | `exercises/09_ml_from_scratch/ml_scratch01.py` | **Synchronous Parameter Server** — Centralized parameter storage with barrier-synchronized gradient updates. |
+| `ml_scratch02` | `exercises/09_ml_from_scratch/ml_scratch02.py` | **Asynchronous Parameter Server** — High-throughput non-blocking parameter updates with staleness tolerance. |
+| `ml_scratch03` | `exercises/09_ml_from_scratch/ml_scratch03.py` | **Ring All-Reduce Communication** — Decentralized gradient reduction ring minimizing communication bandwidth. |
+| `ml_scratch04` | `exercises/09_ml_from_scratch/ml_scratch04.py` | **Distributed Linear Regression Trainer** — End-to-end data-parallel SGD trainer with distributed Ray workers. |
 
 ---
 
 ### Chapter 10: `10_ray_train_and_tune` - Ray Train & Distributed Deep Learning
 
-Covers production distributed training using PyTorch and Ray Train (`TorchTrainer`), data sharding, and checkpointing.
+Covers PyTorch Distributed Data Parallel (DDP) training with Ray Train.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `train01` | `exercises/10_ray_train_and_tune/train01.py` | **PyTorch TorchTrainer & ScalingConfig** — Setting up multi-worker DDP training loops with `TorchTrainer`. |
-| `train02` | `exercises/10_ray_train_and_tune/train02.py` | **Distributed DataLoader via DataConfig** — Auto-sharding datasets across distributed training workers. |
-| `train03` | `exercises/10_ray_train_and_tune/train03.py` | **Multi-Worker Gradient Sync & Metrics** — Synchronizing models with `prepare_model` and reporting metrics with `ray.train.report`. |
-| `train04` | `exercises/10_ray_train_and_tune/train04.py` | **Distributed Checkpointing & Fault Recovery** — Saving and resuming training states from durable checkpoints. |
+| `train01` | `exercises/10_ray_train_and_tune/train01.py` | **TorchTrainer & ScalingConfig** — Distributed PyTorch training coordination across multi-worker CPU/GPU clusters. |
+| `train02` | `exercises/10_ray_train_and_tune/train02.py` | **Distributed Data Sharding & Loading** — Sharding datasets across distributed DDP workers with `ray.train.torch.prepare_data_loader`. |
+| `train03` | `exercises/10_ray_train_and_tune/train03.py` | **Distributed Checkpointing & Metrics** — Reporting training loss metrics and persisting distributed checkpoints with `ray.train.report`. |
+| `train04` | `exercises/10_ray_train_and_tune/train04.py` | **Fault-Tolerant Elastic Worker Recovery** — Recovering training sessions seamlessly from checkpoints upon worker interruption. |
 
 ---
 
 ### Chapter 11: `11_ray_tune` - Scalable Hyperparameter Tuning
 
-Covers search space exploration, early-stopping schedulers, and Population-Based Training.
+Covers distributed hyperparameter optimization algorithms and trial schedulers.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `tune01` | `exercises/11_ray_tune/tune01.py` | **Search Spaces & Distributed Trials** — Defining hyperparameter spaces (`tune.uniform`, `tune.choice`) and fitting Tuners. |
-| `tune02` | `exercises/11_ray_tune/tune02.py` | **ASHA / HyperBand Schedulers** — Terminating poorly performing trials early with `ASHAScheduler`. |
-| `tune03` | `exercises/11_ray_tune/tune03.py` | **Population-Based Training (PBT)** — Dynamic hyperparameter mutation and weight exploitation during training. |
+| `tune01` | `exercises/11_ray_tune/tune01.py` | **Tune Search Spaces & Grid Search** — Defining distributed search spaces with `tune.choice` and `tune.uniform`. |
+| `tune02` | `exercises/11_ray_tune/tune02.py` | **ASHA Early Stopping Scheduler** — Aggressive trial pruning with Asynchronous Successive Halving Algorithm. |
+| `tune03` | `exercises/11_ray_tune/tune03.py` | **Population-Based Training (PBT)** | Dynamic hyperparameter exploration and weight inheritance during training. |
 
 ---
 
 ### Chapter 12: `12_ray_serve` - Ray Serve & Production Model Serving
 
-Covers production-grade HTTP model serving, dynamic request batching, DAG composition, streaming token responses, and autoscaling.
+Covers production inference architectures, request batching, multi-model pipelines, and streaming.
 
 | Exercise | File Path | Topic & Learning Objective |
 | :--- | :--- | :--- |
-| `serve01` | `exercises/12_ray_serve/serve01.py` | **Ray Serve Deployments & HTTP Ingress** — Defining `@serve.deployment` classes and binding HTTP entrypoints. |
-| `serve02` | `exercises/12_ray_serve/serve02.py` | **Dynamic Request Batching (@serve.batch)** — Coalescing concurrent HTTP requests into unified vectorized batches. |
-| `serve03` | `exercises/12_ray_serve/serve03.py` | **Multi-Model Composable Pipelines (DAGs)** — Chaining preprocessing, inference, and postprocessing deployments. |
-| `serve04` | `exercises/12_ray_serve/serve04.py` | **Streaming Responses with FastAPI** — Streaming real-time tokens from LLM deployments using Python generators. |
-| `serve05` | `exercises/12_ray_serve/serve05.py` | **Serve Autoscaling Policies** — Scaling replicas dynamically based on `target_ongoing_requests`. |
+| `serve01` | `exercises/12_ray_serve/serve01.py` | **First Serve Deployment & HTTP Ingress** — Defining `@serve.deployment` classes and handling HTTP requests. |
+| `serve02` | `exercises/12_ray_serve/serve02.py` | **Dynamic Request Batching with @serve.batch** — Micro-batching individual HTTP requests to maximize GPU throughput. |
+| `serve03` | `exercises/12_ray_serve/serve03.py` | **Multi-Model Pipeline DAGs** — Composing complex multi-stage deployment graphs with `ray.serve.deployment`. |
+| `serve04` | `exercises/12_ray_serve/serve04.py` | **Autoscaling & Replica Dynamics** — Configuring `autoscaling_config` for traffic-driven elasticity. |
+| `serve05` | `exercises/12_ray_serve/serve05.py` | **Streaming LLM Token Responses** — Streaming token responses chunk-by-chunk using async generators. |
 
 ---
 
-### Chapter 13: `13_observability_and_debugging` - Observability, Profiling & Memory Debugging
+### Chapter 13: `13_observability_and_debugging` - Observability & Memory Debugging
 
 Covers distributed profiling, execution timelines, memory debugging, and Prometheus state APIs.
 
@@ -259,3 +260,14 @@ Covers streaming multimodal ETL pipelines, high-throughput batch embedding extra
 | `data_genai03` | `exercises/17_multimodal_and_vectors/data_genai03.py` | **Dynamic Token Length Bucketing & Padding Optimization** — Grouping variable-length sequences into length buckets to minimize wasteful padding tokens and attention mask overhead. |
 | `data_genai04` | `exercises/17_multimodal_and_vectors/data_genai04.py` | **Streaming Parallel Ingestion into Vector Databases** — Authoring custom Ray Data `Datasink` classes for partition-aware, high-throughput parallel upserts into vector indices. |
 
+---
+
+### Chapter 18: `18_quant_finance` - Distributed Quantitative Finance
+
+Covers high-throughput financial risk simulations, distributed derivatives pricing, Value at Risk (VaR/CVaR) calculations, and streaming market tick analytics.
+
+| Exercise | File Path | Topic & Learning Objective |
+| :--- | :--- | :--- |
+| `finance01` | `exercises/18_quant_finance/finance01.py` | **Distributed Monte Carlo Black-Scholes Option Pricing** — Simulating parallel Geometric Brownian Motion (GBM) asset price paths across Ray tasks and aggregating discounted call payoffs. |
+| `finance02` | `exercises/18_quant_finance/finance02.py` | **Portfolio Value at Risk (VaR) & CVaR Stress Simulation** — Estimating empirical Value at Risk ($95\%$ and $99\%$ percentiles) and Conditional VaR (Expected Shortfall) across multi-asset portfolio returns. |
+| `finance03` | `exercises/18_quant_finance/finance03.py` | **Streaming Market Tick Analytics & Rolling VWAP** — Ingesting high-frequency trade ticks through Ray Data streaming pipelines to compute continuous Volume-Weighted Average Price (VWAP) across instrument partitions. |

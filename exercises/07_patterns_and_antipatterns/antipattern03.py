@@ -1,34 +1,20 @@
-"""Chapter 7: Production Patterns & Anti-Patterns - Exercise 3: Fixing Actor Bottlenecks.
-
-Anti-Pattern: The Single Monolithic Actor Bottleneck.
-By default, Ray actors execute method invocations sequentially on a single thread.
-If 100 client tasks all call methods on a single actor instance, all 100 requests queue up
-behind each other in FIFO order, creating a severe serial bottleneck regardless of cluster size.
-
-Correct Pattern: Actor Pools / Sharding.
-When workloads are stateless or partitionable, instantiate a pool of N worker actors
-and use `ray.util.ActorPool` or round-robin dispatching to distribute concurrent requests
-evenly across the pool:
-
-```python
-from ray.util.actor_pool import ActorPool
-
-workers = [WorkerActor.remote() for _ in range(4)]
-pool = ActorPool(workers)
-
-# Parallel map across the actor pool
-results = list(pool.map(lambda a, v: a.process.remote(v), items))
-```
-
-Your Task:
-- Define a `@ray.remote` actor class `StatelessWorker`:
-  - Method `compute(self, x: int) -> int`: returns `x * 10`.
-- In `verify()`:
-  - Create a list of 4 `StatelessWorker` actors.
-  - Create an `ActorPool(workers)`.
-  - Use `pool.map(lambda a, v: a.compute.remote(v), [1, 2, 3, 4, 5, 6, 7, 8])` to process all 8 values.
-  - Collect the mapped results as a list and assert it equals `[10, 20, 30, 40, 50, 60, 70, 80]`.
 """
+Exercise: exercises/07_patterns_and_antipatterns/antipattern03.py
+Topic: Actor Bottleneck Elimination via Sharding
+
+Context & Why:
+Because a single Ray actor executes method calls sequentially, routing high-throughput traffic
+from 100 workers to a single centralized actor creates a severe serialization bottleneck.
+
+Sharding the actor state across an Actor Pool or partitioning keys across multiple independent actors
+allows concurrent reads and writes, achieving horizontal scalability.
+
+Instructions:
+1. Partition workloads across a pool of shard actors instead of a single bottleneck actor.
+2. Verify throughput gains.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.util.actor_pool import ActorPool

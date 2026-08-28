@@ -1,28 +1,17 @@
-"""Chapter 8: Ray Data for High-Throughput ETL - Exercise 4: Filtering, Selection & Aggregation.
-
-Ray Data provides relational operations to filter, select columns, and aggregate distributed datasets
-in a single pipelined execution graph:
-
-Key APIs:
-- `ds.filter(fn)`: Filters rows satisfying a predicate function `row -> bool`.
-- `ds.select_columns(cols)`: Drops unneeded columns for zero-copy projection.
-- `ds.sum(on="col")` / `ds.mean(on="col")`: Computes distributed aggregations across blocks.
-
-Example:
-```python
-filtered = ds.filter(lambda row: row["age"] >= 18)
-projected = filtered.select_columns(["age", "score"])
-avg_score = projected.mean(on="score")
-```
-
-Your Task:
-- In `verify()`:
-  - Create dataset from `[{'val': i, 'category': 'even' if i % 2 == 0 else 'odd'} for i in range(100)]`.
-  - Filter for rows where `category == 'even'`.
-  - Select only column `['val']`.
-  - Compute the sum of `val` across the filtered dataset using `filtered.sum(on='val')`.
-  - Assert that the sum is `2450` (sum of all even numbers from 0 to 98).
 """
+Exercise: exercises/08_ray_data/data04.py
+Topic: Streaming Backpressure & Bounded Memory Windows
+
+Context & Why:
+When reading a 10TB dataset, loading all data into memory at once causes Out-Of-Memory (OOM) crashes.
+Ray Data streams blocks through an execution pipeline using **dynamic backpressure**:
+upstream operators only produce new blocks when downstream operators have capacity to consume them.
+
+Instructions:
+1. Configure bounded streaming windows and iterate through dataset batches without memory explosion.
+"""
+
+# I AM NOT DONE
 
 import ray
 import ray.data

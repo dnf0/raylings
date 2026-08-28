@@ -1,3 +1,22 @@
+"""
+Exercise: exercises/09_ml_from_scratch/ml_scratch01.py
+Topic: Synchronous Parameter Server Architecture
+
+Context & Why:
+The **Parameter Server** pattern is a foundational distributed machine learning architecture.
+A centralized `ParameterServer` actor holds global model weights. Multiple stateless `Worker` tasks
+fetch the latest weights, compute gradients on local data batches, and send gradients back.
+
+In the **Synchronous** variant, the server waits for gradients from ALL workers before applying
+an optimizer step, ensuring mathematical equivalence to large-batch SGD.
+
+Instructions:
+1. Implement `ParameterServer` actor and distributed `Worker` gradient computation tasks.
+2. Implement synchronous barrier update.
+"""
+
+# I AM NOT DONE
+
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 1: Distributed Parameter Server.
 
 The Parameter Server (PS) architecture is a fundamental distributed training pattern.

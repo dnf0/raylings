@@ -1,22 +1,18 @@
-"""Chapter 12: Ray Serve - Exercise 1: Ray Serve Deployments & Ingress.
-
-Ray Serve is a scalable model serving framework built on Ray actors.
-Deployments are stateful actor replicas exposed via HTTP or Python `DeploymentHandle`.
-
-Key Concepts:
-- `@serve.deployment`: Decorates Python class or function as a Serve deployment.
-- `serve.run(Deployment.bind())`: Deploys the application locally or to a cluster.
-- `handle = serve.run(...)` or `handle = deployment.bind()`: Provides async callable handle.
-
-Your Task:
-- In `TextGenerator`:
-  - Decorate with `@serve.deployment(name="text_gen")`.
-  - Implement `__call__(self, prompt: str) -> str` returning `f"Generated: {prompt.upper()}"`.
-- In `verify()`:
-  - Run the deployment: `handle = serve.run(TextGenerator.bind())`.
-  - Send request via `handle.remote("raylings")`.
-  - Assert response is `"Generated: RAYLINGS"`.
 """
+Exercise: exercises/12_ray_serve/serve01.py
+Topic: Ray Serve HTTP Deployment & Ingress
+
+Context & Why:
+Ray Serve is a scalable model serving library built on Ray actors.
+Decorating a class with `@serve.deployment` turns it into an autoscaling, HTTP-accessible microservice
+with built-in request routing and load balancing.
+
+Instructions:
+1. Define a `@serve.deployment` class with `__call__(self, request)`.
+2. Deploy the application with `serve.run()` and query via HTTP client.
+"""
+
+# I AM NOT DONE
 
 import os
 
