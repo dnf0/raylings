@@ -2,7 +2,7 @@
   "name": "raylings-vscode",
   "displayName": "Raylings: Master Python Ray",
   "description": "VS Code and Cursor extension for Raylings: learn distributed Python Ray through interactive exercises, progress tracking, and instant execution",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "license": "Apache-2.0",
   "publisher": "dnf0",
   "repository": {
@@ -86,6 +86,16 @@
       {
         "command": "raylings.openExercise",
         "title": "Open Exercise File",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.openExerciseFile",
+        "title": "Open Specific Exercise File",
+        "category": "Raylings"
+      },
+      {
+        "command": "raylings.initExercises",
+        "title": "Initialize Exercises",
         "category": "Raylings"
       }
     ],

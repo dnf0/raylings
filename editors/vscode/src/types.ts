@@ -7,6 +7,7 @@ export interface ExerciseData {
   hints: string[];
   requires_cluster: boolean;
   completed: boolean;
+  is_done?: boolean;
   has_marker: boolean;
   exists: boolean;
 }

@@ -3,6 +3,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as path from 'path';
 import { ChapterData, ExerciseData, ListResponse } from './types';
+import { getEffectiveWorkspaceRoot, resolveExercisePath } from './pathUtils';
 
 const execAsync = promisify(exec);
 
@@ -50,7 +51,7 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
   public async loadExercises(): Promise<void> {
     const config = vscode.workspace.getConfiguration('raylings');
     const executablePath = config.get<string>('executablePath', 'raylings');
-    const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+    const workspaceRoot = getEffectiveWorkspaceRoot();
 
     try {
       const { stdout } = await execAsync(`${executablePath} list --json`, {
@@ -73,14 +74,15 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
       await this.loadExercises();
     }
 
-    const workspaceRoot =
-      vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+    const workspaceRoot = getEffectiveWorkspaceRoot();
 
     if (!element) {
       // Root level: Group exercises by Chapter
       return this.chapters.map((ch) => {
         const total = ch.exercises.length;
-        const completed = ch.exercises.filter((e) => e.completed).length;
+        const completed = ch.exercises.filter(
+          (e) => e.completed || (!e.has_marker && e.exists)
+        ).length;
         const isAllDone = total > 0 && completed === total;
         const label = `Ch ${String(ch.number).padStart(2, '0')}: ${ch.title} (${completed}/${total})`;
 
@@ -102,7 +104,7 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
     if (element.contextValue === 'chapter' && element.chapter) {
       // Child level: Exercises in Chapter
       return element.chapter.exercises.map((ex) => {
-        const isCompleted = ex.completed;
+        const isCompleted = ex.completed || (!ex.has_marker && ex.exists);
         const label = `${ex.name}: ${ex.title}`;
         const node = new TreeItemNode(
           label,
@@ -116,15 +118,10 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
           ? new vscode.ThemeIcon('pass')
           : new vscode.ThemeIcon('circle-outline');
 
-        const absPath = path.isAbsolute(ex.path)
-          ? ex.path
-          : path.resolve(workspaceRoot, ex.path);
-        const fileUri = vscode.Uri.file(absPath);
-
         node.command = {
-          command: 'vscode.open',
+          command: 'raylings.openExerciseFile',
           title: 'Open Exercise',
-          arguments: [fileUri],
+          arguments: [ex.path],
         };
 
         const statusText = isCompleted ? 'Completed ✓' : 'Incomplete ⏳';
