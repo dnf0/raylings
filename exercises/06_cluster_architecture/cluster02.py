@@ -1,37 +1,20 @@
-"""Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 2: Programmatic Cluster Simulation.
-
-To test multi-node behaviors (distributed scheduling, cross-node data transfer, scale-up)
-without launching real cloud VMs, Ray provides `ray.cluster_utils.Cluster`.
-
-`Cluster` allows you to programmatically spawn a mock multi-node Ray cluster on a single machine:
-```python
-from ray.cluster_utils import Cluster
-
-cluster = Cluster()
-head_node = cluster.add_node(num_cpus=2)
-ray.init(address=cluster.address)
-
-# Dynamically add worker nodes:
-worker_node = cluster.add_node(num_cpus=2)
-
-# Verify cluster expanded to 2 nodes:
-assert len([n for n in ray.nodes() if n["Alive"]]) == 2
-
-# Clean up
-ray.shutdown()
-cluster.shutdown()
-```
-
-Your Task:
-- Define a `@ray.remote` function `probe_worker(x: int) -> int` that returns `x * 10`.
-- In `verify()`:
-  - Create a `Cluster()` instance and add a head node with 1 CPU.
-  - Connect to the cluster via `ray.init(address=cluster.address)`.
-  - Add a second worker node with 1 CPU.
-  - Launch 4 `probe_worker` tasks across the multi-node cluster and collect their results.
-  - Assert that total active nodes in `ray.nodes()` is 2.
-  - Gracefully shutdown Ray and the cluster.
 """
+Exercise: exercises/06_cluster_architecture/cluster02.py
+Topic: Multi-Node Testing with Cluster Utils
+
+Context & Why:
+Testing distributed edge cases (network partitions, multi-node scheduling, cross-node serialization)
+locally on a single machine can be challenging.
+
+`ray.cluster_utils.Cluster` allows starting simulated multi-node Ray clusters directly inside
+Python test processes, adding and removing worker nodes programmatically.
+
+Instructions:
+1. Instantiate a simulated 2-node cluster with `ray.cluster_utils.Cluster`.
+2. Verify task distribution across the simulated nodes.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.cluster_utils import Cluster

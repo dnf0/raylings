@@ -1,16 +1,18 @@
-"""Chapter 10: Ray Train - Exercise 2: Distributed DataLoader via Data Sharding.
-
-Ray Train automatically partitions datasets across distributed training workers.
-
-Your Task:
-- In `train_loop(config)`:
-  - Retrieve the worker data shard via `shard = ray.train.get_dataset_shard("train")`.
-  - Iterate over batches with `shard.iter_torch_batches(batch_size=5)`.
-  - Count total samples processed on this worker and return `{"worker_samples": total_samples}`.
-- In `verify()`:
-  - Pass a 50-item dataset to `TorchTrainer` with 2 workers.
-  - Assert that each worker processed exactly 25 samples.
 """
+Exercise: exercises/10_ray_train_and_tune/train02.py
+Topic: Distributed Dataset Sharding in Ray Train
+
+Context & Why:
+In DDP training, each worker rank must only process its assigned shard of data to prevent redundant gradient computations.
+`ray.train.torch.prepare_data_loader(loader)` or `ray.train.get_dataset_shard("train")` automatically
+partitions data across ranks with zero manual math.
+
+Instructions:
+1. Shard dataset across training workers using Ray Train data APIs.
+2. Verify each worker receives unique data partitions.
+"""
+
+# I AM NOT DONE
 
 import os
 

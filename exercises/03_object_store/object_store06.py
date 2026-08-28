@@ -1,25 +1,20 @@
-"""Chapter 3: Plasma Object Store & Zero-Copy - Exercise 6: Custom Serializers with ray.util.
-
-Ray serializes Python objects into the Plasma store using optimized PyArrow and CloudPickle engines.
-However, for custom data structures, high-performance C-struct wrappers, or objects that cannot
-be cleanly pickled by default, Ray provides `ray.util.register_serializer`.
-
-Key Concepts:
-1. `ray.util.register_serializer(cls, serializer=..., deserializer=...)`:
-   - `serializer(obj) -> serialized_data`: Converts a custom object into serializable primitives (e.g. bytes, tuple).
-   - `deserializer(serialized_data) -> obj`: Reconstructs the original object from the primitives.
-2. Speed & Compression: Custom serializers can strip unnecessary overhead or compress data before
-   writing to shared memory.
-
-Your Task:
-- Define a custom class `Vector3D` representing 3D spatial coordinates `(x, y, z)`.
-- Implement `serialize_vector(vec: Vector3D) -> tuple[float, float, float]` and
-  `deserialize_vector(data: tuple[float, float, float]) -> Vector3D`.
-- Register them using `ray.util.register_serializer`.
-- Pass a `Vector3D` instance to a remote task `@ray.remote def compute_magnitude(v: Vector3D) -> float`
-  which calculates `math.sqrt(v.x**2 + v.y**2 + v.z**2)`.
-- Verify the returned magnitude.
 """
+Exercise: exercises/03_object_store/object_store06.py
+Topic: Custom Object Serializers with ray.util
+
+Context & Why:
+Ray uses PyArrow and Cloudpickle to serialize objects. For complex domain objects, custom C++ types,
+or network handles, default pickling can be slow or unsupported.
+
+`ray.util.register_serializer` allows defining custom, highly optimized serialization and deserialization
+hooks, ensuring fast transfers and compact memory footprints.
+
+Instructions:
+1. Register a custom serializer and deserializer for a domain data class.
+2. Pass instances through Ray tasks and verify exact reconstruction.
+"""
+
+# I AM NOT DONE
 
 import math
 
@@ -57,6 +52,7 @@ def verify() -> None:
     ray.init(ignore_reinit_error=True)
 
     # TODO: Register custom serializer
+    # WHY: Custom serializers bypass generic pickle overhead for domain-specific data structures.
     # ray.util.register_serializer(
     #     Vector3D,
     #     serializer=serialize_vector,

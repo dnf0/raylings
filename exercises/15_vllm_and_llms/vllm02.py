@@ -1,30 +1,18 @@
-"""Chapter 15: Distributed LLM Serving & vLLM - Exercise 2: PagedAttention & KV-Cache Block Management.
-
-PagedAttention eliminates KV-cache memory fragmentation by managing memory in fixed-size
-physical blocks, translating logical token positions into physical block addresses via block tables.
-
-Key Concepts:
-- `Block Tables`: Maps each sequence's logical token blocks to non-contiguous physical memory blocks.
-- `Dynamic Allocation`: As new tokens are generated autoregressively, new physical blocks are
-  allocated on-demand only when existing blocks are full (`curr_len % block_size == 0`).
-- `Prefix Caching & Block Sharing`: Identical prompt prefixes share physical blocks via reference
-  counting, reducing memory footprint across concurrent requests.
-
-Your Task:
-- In `PagedKVCacheManager.allocate_sequence(seq_id, prompt_tokens)`:
-  - Slice `prompt_tokens` into chunks of `self.block_size`.
-  - Check if a full chunk is in `self.prefix_cache`; if so, reuse that physical block and increment its ref count.
-  - Otherwise, pop a new block from `self.free_blocks`, set ref count = 1, and cache the prefix chunk.
-  - Store the resulting block table and sequence length.
-- In `PagedKVCacheManager.append_token(seq_id, token_id)`:
-  - If the current sequence length is a multiple of `self.block_size`, allocate a new physical block from `self.free_blocks`.
-  - Increment `self.seq_lengths[seq_id]` and return `(physical_block_id, offset)`.
-- In `PagedKVCacheManager.translate_logical_to_physical(seq_id, logical_token_idx)`:
-  - Compute `logical_block_idx = logical_token_idx // self.block_size` and `offset = logical_token_idx % self.block_size`.
-  - Return `(self.block_tables[seq_id][logical_block_idx], offset)`.
-- In `PagedKVCacheManager.free_sequence(seq_id)`:
-  - Decrement ref counts for all allocated blocks in `seq_id`. Reclaim blocks with ref count == 0 back to `self.free_blocks`.
 """
+Exercise: exercises/15_vllm_and_llms/vllm02.py
+Topic: PagedAttention & KV-Cache Block Management
+
+Context & Why:
+Standard autoregressive generation suffers from severe GPU memory fragmentation due to dynamic sequence lengths.
+**PagedAttention** (pioneered by vLLM) allocates Key-Value (KV) cache in non-contiguous physical blocks,
+using a logical-to-physical block table (similar to OS virtual memory paging).
+
+Instructions:
+1. Implement dynamic physical block allocation and logical block table mapping.
+2. Verify prefix block sharing across prompts.
+"""
+
+# I AM NOT DONE
 
 import os
 

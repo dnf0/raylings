@@ -1,19 +1,17 @@
-"""Chapter 14: KubeRay - Exercise 3: RayService CRD & Zero-Downtime Serving.
-
-The `RayService` CRD manages production Ray Serve deployments on Kubernetes, providing
-automated zero-downtime rolling upgrades and Kubernetes Service ingress.
-
-Key Concepts:
-- `kind: RayService`
-- `spec.serveConfigV2`: Multi-application Serve configuration YAML or dictionary.
-- `spec.upgradeStrategy`: Rollout policy (e.g. `Rollout`, `None`).
-
-Your Task:
-- In `build_ray_service_crd(name: str, app_name: str, route_prefix: str, import_path: str) -> dict`:
-  - Construct a `RayService` CRD specifying `serveConfigV2` with applications list.
-- In `verify()`:
-  - Assert that application route prefix and deployment import path are valid.
 """
+Exercise: exercises/14_kuberay/kuberay03.py
+Topic: RayService CRD & Zero-Downtime Serving
+
+Context & Why:
+`RayService` CRD manages Ray Serve deployments on Kubernetes, providing rolling upgrades, health probes,
+and zero-downtime traffic switching across cluster upgrades.
+
+Instructions:
+1. Author a `RayService` CRD spec.
+2. Verify multi-deployment service definitions.
+"""
+
+# I AM NOT DONE
 
 from typing import Any
 

@@ -1,36 +1,20 @@
-"""Chapter 3: Plasma Object Store & Zero-Copy - Exercise 5: Handling & Resolving Nested ObjectRefs.
-
-A subtle nuance in distributed programming with Ray occurs when tasks return other `ObjectRef`s,
-or when `ObjectRef`s are placed inside data structures (lists, dictionaries, dataclasses).
-
-Nested ObjectRefs:
-If remote task `A` invokes remote task `B` and returns `B`'s `ObjectRef`:
-
-    @ray.remote
-    def inner_task(x):
-        return x * 10
-
-    @ray.remote
-    def outer_task(x):
-        return inner_task.remote(x)  # Returns an ObjectRef!
-
-    ref = outer_task.remote(5)       # ref is an ObjectRef[ObjectRef[int]]
-    nested_ref = ray.get(ref)        # First get() returns the inner ObjectRef
-    final_val = ray.get(nested_ref)  # Second get() returns the actual value (50)
-
-Key Rules:
-1. `ray.get(ObjectRef[ObjectRef[T]])` yields `ObjectRef[T]`.
-2. When a task receives a dictionary containing `ObjectRef`s (`{"key": ref}`), Ray does NOT
-   automatically dereference refs nested inside containers—the task receives the `ObjectRef`
-   and must call `ray.get()` on it if needed.
-
-Your Task:
-- Define `@ray.remote def subtask(val: int) -> int` that returns `val + 100`.
-- Define `@ray.remote def master_task(values: list[int]) -> list[ObjectRef]` that launches
-  a `subtask.remote(v)` for each value and returns the list of `ObjectRef`s.
-- Write a helper `resolve_nested(outer_ref: ObjectRef) -> list[int]` that resolves both the
-  outer list and all nested inner `ObjectRef`s into a plain list of integers.
 """
+Exercise: exercises/03_object_store/object_store05.py
+Topic: Resolving Nested ObjectRefs
+
+Context & Why:
+When a remote task returns another `ObjectRef` (e.g. dynamic task spawning), Ray creates a nested
+future: `ObjectRef[ObjectRef[T]]`.
+
+Calling `ray.get()` once only unpacks the outer reference, returning an inner `ObjectRef`.
+To obtain the final value, Ray provides automatic dereferencing or double-get patterns.
+
+Instructions:
+1. Implement nested task execution.
+2. Unpack nested `ObjectRef`s to retrieve the underlying payload.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray import ObjectRef

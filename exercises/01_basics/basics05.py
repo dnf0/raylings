@@ -1,26 +1,24 @@
-"""Chapter 1: Ray Core Foundations - Exercise 5: Dynamic Completion with ray.wait().
-
-When running multiple tasks with varying execution times, `ray.get(refs)` blocks until
-EVERY task has completed. If 9 tasks take 0.01s and 1 task takes 10s, `ray.get()` makes
-you wait 10s before you can inspect ANY of the 9 finished tasks.
-
-`ray.wait()` solves this by returning as soon as a specified number of tasks finish:
-
-    ready_refs, unready_refs = ray.wait(
-        object_refs,
-        num_returns=1,      # Number of completed refs to wait for (default: 1)
-        timeout=None,       # Maximum time to block (default: None = wait indefinitely)
-    )
-
-Key Concepts:
-1. `ray.wait()` does not return Python values—it returns lists of `ObjectRef`s: `(ready_refs, unready_refs)`.
-2. You can use a `while unready_refs:` loop to stream and process results in real-time as tasks finish.
-
-Your Task:
-- Implement `process_as_completed(durations)` using a `while unready_refs:` loop with `ray.wait()`.
-- Collect the results in the order that tasks actually finish.
-- Fast tasks should appear in the results list before slower tasks!
 """
+Exercise: exercises/01_basics/basics05.py
+Topic: Dynamic Completion Processing with ray.wait()
+
+Context & Why:
+When running heterogeneous distributed tasks with varying runtimes, `ray.get(refs)` blocks until
+the slowest task completes. If 99 tasks finish in 10ms and 1 task takes 10s, `ray.get(refs)` forces
+the driver to sit idle for 10s before processing any finished data.
+
+`ray.wait(object_refs, num_returns=1, timeout=None)` solves this by returning two lists:
+`(ready_refs, unready_refs)` as soon as `num_returns` tasks are completed.
+Using a `while unready_refs:` loop enables streaming pipeline architectures, where downstream
+processing begins immediately as tasks finish.
+
+Instructions:
+1. Implement `process_as_completed(tasks_config)` using `ray.wait()` inside a `while unready_refs:` loop.
+2. In each iteration, extract completed task IDs from `ready_refs` and update `unready_refs`.
+3. Return task IDs in the order they finished.
+"""
+
+# I AM NOT DONE
 
 import time
 

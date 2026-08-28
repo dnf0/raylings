@@ -1,31 +1,24 @@
-"""Chapter 2: Distributed State & Actors - Exercise 4: Async Actors & Concurrency.
-
-By default, an actor executes one method call at a time. If a method does I/O
-(e.g., waiting on an API, querying a database, or calling `asyncio.sleep`), standard
-actors will block other incoming method calls until that I/O completes.
-
-Ray supports Async Actors to achieve high-throughput concurrent I/O:
-1. Define methods using `async def` and `await`.
-2. Configure `@ray.remote(max_concurrency=N)` (where `N` is the maximum number of
-   concurrent coroutines running on the actor's event loop).
-
-Example:
-    @ray.remote(max_concurrency=10)
-    class AsyncFetcher:
-        async def fetch(self, url):
-            await asyncio.sleep(1.0)  # Non-blocking pause
-            return f"data from {url}"
-
-Key Differences:
-- Standard Actor: Processes 1 call at a time sequentially.
-- Async Actor: Processes up to `max_concurrency` calls concurrently on a single thread event loop.
-
-Your Task:
-- Decorate `AsyncRateLimiter` with `@ray.remote(max_concurrency=5)`.
-- Implement `async def process_request(self, req_id: int, delay: float) -> str`.
-- Issue 4 requests concurrently (each with a 0.08s delay).
-- Verify that all requests complete and total elapsed time is under 0.20s (proving concurrent execution rather than 4 * 0.08s = 0.32s).
 """
+Exercise: exercises/02_actors/actors04.py
+Topic: Async Actors & Coroutine Concurrency
+
+Context & Why:
+By default, Ray actors execute one method call at a time. If an actor method performs I/O
+(e.g., waiting for external REST APIs, database queries, or network requests), the actor sits idle,
+blocking all other incoming calls in its mailbox.
+
+Ray solves this with **Async Actors**:
+1. Define methods using `async def` and `await`.
+2. Configure `@ray.remote(max_concurrency=N)` to allow up to `N` coroutines to run concurrently
+   on the actor's single-threaded `asyncio` event loop.
+
+Instructions:
+1. Define an async actor with `@ray.remote(max_concurrency=10)`.
+2. Implement an `async def fetch_data(self, url: str)` method using `await asyncio.sleep(...)`.
+3. Verify that multiple async requests run concurrently with significant speedup over sequential execution.
+"""
+
+# I AM NOT DONE
 
 import asyncio  # noqa: F401
 import time  # noqa: F401

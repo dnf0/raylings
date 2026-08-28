@@ -1,34 +1,19 @@
-"""Chapter 16: DeepSpeed & PyTorch FSDP - Exercise 2: DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 Memory Partitioning.
-
-DeepSpeed ZeRO (Zero Redundancy Optimizer) eliminates memory redundancies across distributed data-parallel
-workers by partitioning optimizer states (ZeRO-1), gradients (ZeRO-2), and model parameters (ZeRO-3).
-
-Key Concepts:
-- `ZeRO-1 (Pos)`: Partitions optimizer states across $N$ ranks ($1/N$ optimizer state memory per worker).
-- `ZeRO-2 (Pos+g)`: Partitions optimizer states AND gradients across $N$ ranks. Workers use `ReduceScatter`
-  to aggregate and partition gradients during backward pass.
-- `ZeRO-3 (Pos+g+p)`: Partitions optimizer states, gradients, AND model parameters across $N$ ranks.
-  Workers use `AllGather` to reconstruct parameters on-the-fly during forward/backward passes.
-- `Collective Communication`:
-  - `ReduceScatter`: Sums/averages gradients across ranks and scatters the respective shard to each worker.
-  - `AllGather`: Collects sharded parameters from each worker and concatenates into full tensor.
-
-Your Task:
-- In `calculate_zero_memory(num_params, world_size, stage, bytes_per_param)`:
-  - Calculate per-worker memory requirements for parameters, gradients, and optimizer states across ZeRO stages 0, 1, 2, 3.
-  - Return a dictionary with keys `"params"`, `"gradients"`, `"opt_states"`, and `"total"`.
-- In `ZeROWorker.step(grad_shard)`:
-  - Update local Adam 1st moment ($m$) and 2nd moment ($v$) buffers with `grad_shard`.
-  - Apply bias corrections $m_{hat} = m / (1 - \beta_1^t)$ and $v_{hat} = v / (1 - \beta_2^t)$.
-  - Update `self.param_shard` in-place and return the updated shard.
-- In `reduce_scatter(worker_grads, world_size)`:
-  - Compute the mean gradient across all `worker_grads`.
-  - Split the averaged gradient into `world_size` equal shards and return the list of shards.
-- In `zero_stage3_distributed_step(workers, worker_grads)`:
-  - Reduce-scatter `worker_grads` across `workers`.
-  - Invoke `.step.remote(grad_shard)` on each worker actor.
-  - Fetch results with `ray.get()` and all-gather the shards into the full updated parameter tensor.
 """
+Exercise: exercises/16_fsdp_and_deepspeed/fsdp02.py
+Topic: DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 Memory Partitioning
+
+Context & Why:
+DeepSpeed Zero Redundancy Optimizer (ZeRO) partitions memory:
+- **ZeRO-1**: Partitions optimizer states (4x memory reduction).
+- **ZeRO-2**: Partitions optimizer states + gradients (8x memory reduction).
+- **ZeRO-3**: Partitions optimizer states + gradients + model parameters (linear scaling with world size).
+
+Instructions:
+1. Simulate ZeRO memory partitioning and AllGather / ReduceScatter actor communication.
+2. Verify memory reduction per ZeRO stage.
+"""
+
+# I AM NOT DONE
 
 import os
 from typing import Any

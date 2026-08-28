@@ -1,34 +1,17 @@
-"""Chapter 17: Multimodal & Vector Ray Data Pipelines - Exercise 4: Streaming Parallel Ingestion into Vector Databases.
-
-After extracting multimodal embeddings, millions of vectors must be persisted into high-throughput
-vector databases (e.g. LanceDB, Milvus, Qdrant, Pinecone, or pgvector).
-Naive row-by-row insertion or uncoordinated client connections create severe network bottlenecks
-and database connection exhaustion.
-
-Ray Data solves this by providing custom `Datasink` implementations that stream transformed blocks
-directly into partitioned database clusters with connection pooling, partitioned batching,
-and idempotent parallel upserts.
-
-Key Concepts:
-- `Custom Datasink`: Subclassing `ray.data.Datasink` allows plugging external storage engines
-  and vector indices directly into Ray Data's distributed streaming execution graph.
-- `BlockAccessor & Vectorized Extraction`: `BlockAccessor.for_block(block).to_numpy()` accesses
-  in-memory block arrays with zero copy for efficient batch routing.
-- `Partition-Aware Batch Routing`: Partitioning incoming records by shard key (e.g., `doc_id % num_partitions`)
-  groups writes by destination index partition, minimizing cross-node lock contention.
-
-Your Task:
-- In `MockVectorIndexStore`:
-  - In `upsert_batch(partition_id, records)`:
-    - Idempotently insert each `(doc_id, vector)` pair into `self.partitions[partition_id]`.
-    - Return the count of records inserted.
-- In `VectorDatabaseDatasink`:
-  - In `write(blocks, ctx)`:
-    - Iterate over `blocks` and convert each block using `BlockAccessor.for_block(block).to_numpy()`.
-    - Route records into local partition buffers based on `doc_id % self.num_partitions`.
-    - Dispatch batch upserts to `self.store_actor.upsert_batch.remote(part_id, buffer)` for all populated buffers.
-    - Await remote futures via `ray.get()` and return the total number of records written.
 """
+Exercise: exercises/17_multimodal_and_vectors/data_genai04.py
+Topic: Streaming Parallel Ingestion into Vector Databases
+
+Context & Why:
+Ingesting billions of vectors into vector stores (Milvus, Qdrant, Pinecone) requires high-throughput parallel writers.
+Custom Ray Data `Datasink` classes stream and write vector partitions in parallel across worker nodes.
+
+Instructions:
+1. Implement custom vector store `Datasink`.
+2. Stream embeddings into partitioned vector index.
+"""
+
+# I AM NOT DONE
 
 import os
 from collections.abc import Iterable

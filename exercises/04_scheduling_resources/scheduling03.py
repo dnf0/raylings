@@ -1,39 +1,21 @@
-"""Chapter 4: Scheduling & Resources - Exercise 3: Placement Groups & SPREAD Strategy.
-
-Placement Groups allow you to atomically reserve groups of resource bundles across a cluster.
-They are essential for:
-1. Gang Scheduling: Guaranteeing all necessary workers can be scheduled together before starting.
-2. Topology Control: Packing tasks together for low-latency communication (PACK) or spreading
-   them out across failure domains / nodes (SPREAD).
-
-Placement Group Strategies:
-- `STRICT_SPREAD`: Each bundle MUST be placed on a separate node (fails if not enough nodes).
-- `SPREAD`: Ray places bundles on different nodes on a best-effort basis.
-- `STRICT_PACK`: All bundles MUST be placed on the exact same single node.
-- `PACK`: Ray tries to pack bundles on as few nodes as possible.
-
-To schedule a task or actor into a placement group:
-```python
-from ray.util.placement_group import placement_group
-from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
-
-# Create placement group with 2 CPU bundles
-pg = placement_group([{"CPU": 1}, {"CPU": 1}], strategy="SPREAD")
-ray.get(pg.ready())  # Block until resources are reserved
-
-# Schedule task into bundle 0
-strategy = PlacementGroupSchedulingStrategy(placement_group=pg, placement_group_bundle_index=0)
-ref = my_task.options(scheduling_strategy=strategy).remote()
-```
-
-Your Task:
-- Define a `@ray.remote(num_cpus=0.5)` function `spread_worker(worker_id: int) -> dict[str, int]`
-  that returns `{"worker_id": worker_id, "status": 1}`.
-- In `verify()`, create a placement group with 2 bundles of `{"CPU": 0.5}` each using `strategy="SPREAD"`.
-- Wait for the placement group to be ready using `ray.get(pg.ready())`.
-- Schedule 2 `spread_worker` tasks into bundle 0 and bundle 1 respectively.
-- Collect and verify the results.
 """
+Exercise: exercises/04_scheduling_resources/scheduling03.py
+Topic: Placement Groups: STRICT_SPREAD Strategy
+
+Context & Why:
+Placement groups allow reserving compute bundles atomically across cluster nodes.
+The `STRICT_SPREAD` strategy guarantees that each bundle in the placement group is placed
+on a **completely distinct physical node**.
+
+This is crucial for high-availability services and fault-tolerant replicated systems where no two
+worker replicas should share the same fault domain.
+
+Instructions:
+1. Create a placement group with `strategy="STRICT_SPREAD"`.
+2. Schedule worker actors across the placement group bundles.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.util.placement_group import placement_group

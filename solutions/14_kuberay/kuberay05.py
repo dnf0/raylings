@@ -3,6 +3,10 @@
 Reference Solution for kuberay05.
 """
 
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
+
 
 class SimulatedK8sCluster:
     def __init__(self, desired_replicas: int) -> None:

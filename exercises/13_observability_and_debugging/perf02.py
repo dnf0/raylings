@@ -1,22 +1,19 @@
-"""Chapter 13: Observability - Exercise 2: Diagnosing Object Store Memory.
-
-Ray's shared-memory object store (Plasma) holds immutable distributed objects.
-Understanding ObjectRef lifecycle and memory pinning prevents distributed memory leaks.
-
-Key Concepts:
-- `ray.util.state.list_objects()`: Returns metadata on all objects in the cluster store.
-- When an ObjectRef goes out of scope (or is explicitly deleted via `del ref`),
-  its Plasma memory becomes eligible for garbage collection.
-
-Your Task:
-- In `allocate_and_inspect_objects() -> int`:
-  - Put a large payload `ray.put([0] * 100_000)` into the object store.
-  - Query `objects = ray.util.state.list_objects()`.
-  - Count objects with `data_size > 50_000`.
-  - Return the count.
-- In `verify()`:
-  - Assert that at least 1 large object is detected in the object store.
 """
+Exercise: exercises/13_observability_and_debugging/perf02.py
+Topic: Diagnosing Memory Leaks with ray memory
+
+Context & Why:
+Holding onto `ObjectRef`s in global Python variables or long-lived actor state prevents Plasma from
+garbage-collecting the underlying shared memory buffers.
+`ray.util.state.list_objects()` or `ray.experimental.internal_kv` APIs inspect active object references,
+pinned memory allocations, and spilled bytes across nodes.
+
+Instructions:
+1. Identify and release leaked ObjectRefs.
+2. Verify memory reclamation in the object store.
+"""
+
+# I AM NOT DONE
 
 import os
 

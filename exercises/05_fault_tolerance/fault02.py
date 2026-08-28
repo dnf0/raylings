@@ -1,34 +1,19 @@
-"""Chapter 5: Fault Tolerance & Recovery - Exercise 2: Actor Failure & Automatic Restarts.
-
-Unlike stateless tasks, actors maintain internal state in their worker process memory.
-If an actor process crashes (due to OOM, segfault, or machine death):
-- By default (`max_restarts=0`), any subsequent calls to the actor raise `RayActorError`.
-- If `max_restarts > 0`, Ray automatically restarts the actor process up to `max_restarts` times!
-- When the actor is recreated, subsequent method invocations succeed on the new actor process.
-
-Example:
-    @ray.remote(max_restarts=2, max_task_retries=0)
-    class ResilientService:
-        def __init__(self):
-            self.count = 0
-
-        def crash(self):
-            os._exit(1)
-
-        def ping(self):
-            return "alive"
-
-Your Task:
-- Define a `@ray.remote(max_restarts=2, max_task_retries=0)` actor `SelfHealingActor` with:
-  - `__init__(self)`: initializes `self.created_at = time.time()`
-  - `ping(self) -> str`: returns `"pong"`
-  - `crash(self) -> None`: immediately terminates the actor process using `os._exit(1)`
-- In `verify()`:
-  - Create an instance of `SelfHealingActor`.
-  - Verify `ping()` returns `"pong"`.
-  - Call `crash()` (catch and ignore the `Exception` caused by the crashing process).
-  - Verify that subsequent calls to `ping()` succeed and return `"pong"` as Ray restarts the actor!
 """
+Exercise: exercises/05_fault_tolerance/fault02.py
+Topic: Actor Restarts & State Recovery
+
+Context & Why:
+Unlike stateless tasks, when a stateful actor process crashes, its in-memory state is lost.
+Configuring `@ray.remote(max_restarts=2)` instructs Ray to automatically restart the actor process.
+
+Actors can recover state by loading checkpoints from persistent storage inside their `__init__` method.
+
+Instructions:
+1. Configure `max_restarts=2` on a stateful actor.
+2. Simulate worker process failure and verify that Ray restarts the actor.
+"""
+
+# I AM NOT DONE
 
 import os
 import time

@@ -1,16 +1,18 @@
-"""Chapter 10: Ray Train - Exercise 1: PyTorch TorchTrainer & ScalingConfig.
-
-Ray Train provides distributed deep learning orchestration for PyTorch (DDP).
-
-Your Task:
-- In `train_loop(config)`:
-  - Create model `nn.Linear(1, 1)` wrapped in `ray.train.torch.prepare_model(model)`.
-  - Train with SGD for 20 steps on `x = torch.tensor([[1.0], [2.0]]), y = torch.tensor([[2.0], [4.0]])`.
-  - Report and return `{"loss": final_loss}`.
-- In `verify()`:
-  - Run `TorchTrainer(train_loop, scaling_config=ScalingConfig(num_workers=2, use_gpu=False))`.
-  - Assert that final loss is < 0.5.
 """
+Exercise: exercises/10_ray_train_and_tune/train01.py
+Topic: TorchTrainer & ScalingConfig Distributed PyTorch
+
+Context & Why:
+`ray.train.torch.TorchTrainer` provides native orchestration for PyTorch Distributed Data Parallel (DDP).
+`ScalingConfig(num_workers=2, use_gpu=False)` coordinates worker processes, sets up `torch.distributed`
+process groups (NCCL/Gloo), and handles rank assignments automatically.
+
+Instructions:
+1. Define a distributed training function.
+2. Instantiate `TorchTrainer` with `ScalingConfig(num_workers=2)` and execute `trainer.fit()`.
+"""
+
+# I AM NOT DONE
 
 import os
 

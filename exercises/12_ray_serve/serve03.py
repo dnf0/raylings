@@ -1,20 +1,18 @@
-"""Chapter 12: Ray Serve - Exercise 3: Composable Multi-Model Pipelines (DAGs).
-
-Ray Serve allows composing deployments into computational graphs (DAGs), where one
-deployment passes requests or handles to downstream model deployments.
-
-Key Concepts:
-- `Pipeline.bind(stage1_handle, stage2_handle)`: Connects deployment handles declaratively.
-- Enables multi-stage pipelines: Preprocessing -> Embedding -> LLM / Classifier -> Postprocessing.
-
-Your Task:
-- In `Tokenizer`: Deployment returning `prompt.strip().lower()`.
-- In `Classifier`: Deployment returning `{"label": "positive" if "good" in text else "neutral"}`.
-- In `Pipeline`: Takes both handles and pipes tokenizer output into classifier.
-- In `verify()`:
-  - Deploy pipeline: `app = Pipeline.bind(Tokenizer.bind(), Classifier.bind())`.
-  - Query with `"  VERY GOOD PRODUCT  "` and verify `{"label": "positive"}`.
 """
+Exercise: exercises/12_ray_serve/serve03.py
+Topic: Multi-Model Pipeline DAGs in Ray Serve
+
+Context & Why:
+Production AI applications rarely consist of a single model; they chain text preprocessing,
+tokenization, multiple neural models, and postprocessing.
+Ray Serve allows composing deployments into a Direct Acyclic Graph (DAG) with type-safe deployment handles.
+
+Instructions:
+1. Build a pipeline connecting an Ingestion deployment to an Inference deployment.
+2. Route requests through the deployment graph.
+"""
+
+# I AM NOT DONE
 
 import os
 

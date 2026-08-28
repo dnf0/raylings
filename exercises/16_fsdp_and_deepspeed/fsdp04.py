@@ -1,35 +1,17 @@
-"""Chapter 16: DeepSpeed & PyTorch FSDP - Exercise 4: Elastic Fault-Tolerant Distributed Checkpoints.
-
-In large-scale distributed training, gathering all model and optimizer parameters onto rank 0 for monolithic
-checkpoint saving introduces severe network bottlenecks and out-of-memory crashes. Sharded distributed
-checkpointing enables each worker to persist its local parameter and optimizer partition independently.
-
-Key Concepts:
-- `Sharded State Saving`: Each rank saves only its local parameter slice (`rank_{i}_model.pt`) and optimizer
-  partition (`rank_{i}_optim.pt`), avoiding single-node aggregation.
-- `Atomic Metadata`: A centralized coordinator (rank 0) writes a lightweight atomic metadata descriptor
-  (`metadata.json`) referencing step index, world size, and configuration.
-- `Elastic Recovery`: Upon worker preemption or failure, replacement worker actors instantiate, parse
-  `metadata.json`, and restore their assigned rank shards to resume training without loss of progress.
-
-Your Task:
-- In `save_sharded_checkpoint(checkpoint_dir, step, rank, world_size, model_shard, optim_shard, metadata)`:
-  - Save `model_shard` to `checkpoint_dir/rank_{rank}_model.pt` via `torch.save`.
-  - Save `optim_shard` to `checkpoint_dir/rank_{rank}_optim.pt` via `torch.save`.
-  - If `rank == 0`, write `metadata.json` containing `step`, `world_size`, and extra `metadata`.
-  - Return the path to `model_file`.
-- In `load_sharded_checkpoint(checkpoint_dir, rank)`:
-  - Read `checkpoint_dir/metadata.json` to extract `step` and `meta_content`.
-  - Load `model_shard` from `rank_{rank}_model.pt` and `optim_shard` from `rank_{rank}_optim.pt`.
-  - Return `(step, model_shard, optim_shard, meta_content)`.
-- In `ShardedTrainWorker.save_checkpoint(checkpoint_dir, metadata)`:
-  - Extract `model_shard = {"weight_shard": self.weight_shard.data.clone()}` and optimizer state dict.
-  - Call `save_sharded_checkpoint(...)` and return the result.
-- In `ShardedTrainWorker.restore_checkpoint(checkpoint_dir)`:
-  - Call `load_sharded_checkpoint(checkpoint_dir, self.rank)`.
-  - Restore `self.weight_shard.data`, optimizer state dict, and update `self.step_idx`.
-  - Return `self.step_idx`.
 """
+Exercise: exercises/16_fsdp_and_deepspeed/fsdp04.py
+Topic: Elastic Fault-Tolerant Distributed Checkpoints
+
+Context & Why:
+Saving multi-terabyte checkpoints to a single file causes I/O bottlenecks.
+Distributed Checkpointing saves sharded state dictionaries in parallel across all worker ranks,
+with atomic metadata enabling elastic resumption if world size changes.
+
+Instructions:
+1. Implement distributed sharded state saving and fault recovery.
+"""
+
+# I AM NOT DONE
 
 import json
 import os

@@ -1,20 +1,16 @@
-"""Chapter 14: KubeRay - Exercise 5: Kubernetes Fault Tolerance & Pod Evictions.
-
-In Kubernetes environments (especially on Spot / Preemptible instances), worker pods
-can be evicted at any time. KubeRay and Ray combine to detect lost nodes and re-schedule actors.
-
-Key Concepts:
-- Pod eviction triggers Ray GCS node dead event.
-- Tasks with `max_retries > 0` and actors with `max_restarts > 0` are automatically rescheduled.
-
-Your Task:
-- In `SimulatedK8sCluster`:
-  - Maintain active pods `self.pods: list[str]`.
-  - Implement `evict_pod(pod_name: str)`: Removes pod from `self.pods` and adds to `self.evicted`.
-  - Implement `reconcile()`: If `len(self.pods) < self.desired_replicas`, spawns replacement pods.
-- In `verify()`:
-  - Evict a pod, run reconcile(), and assert replacement pod was provisioned.
 """
+Exercise: exercises/14_kuberay/kuberay05.py
+Topic: Kubernetes Fault Tolerance & Pod Evictions
+
+Context & Why:
+In Kubernetes, worker pods can be evicted due to node drain, out-of-memory (OOMKilled), or spot preemption.
+KubeRay coordinates with Ray's GCS to re-spawn replacement pods and reconstruct lost state.
+
+Instructions:
+1. Handle simulated pod eviction and verify cluster recovery.
+"""
+
+# I AM NOT DONE
 
 
 class SimulatedK8sCluster:

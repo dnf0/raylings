@@ -1,29 +1,19 @@
-"""Chapter 15: Distributed LLM Serving & vLLM - Exercise 1: Tensor Parallelism & Worker Actor Groups.
-
-Tensor Parallelism (TP) partitions individual weight matrices across multiple worker actors
-to fit large model layers across GPU/node memory and parallelize matrix multiplication.
-
-Key Concepts:
-- `ColumnParallelLinear`: Shards the weight matrix along columns (output dimension).
-  Each worker computes `X @ W1_shard`, producing a slice of the hidden activation.
-- `RowParallelLinear`: Shards the weight matrix along rows (input dimension).
-  Each worker takes its slice of the hidden activation and computes `H_shard @ W2_shard`.
-- `All-Reduce (Sum)`: Sums partial outputs across all TP workers to recover the full layer output:
-  `Output = sum(H_shard_i @ W2_shard_i) == X @ W1 @ W2`.
-
-Your Task:
-- In `shard_weights(w1, w2, world_size)`:
-  - Split `w1` column-wise (axis 1) across `world_size` workers.
-  - Split `w2` row-wise (axis 0) across `world_size` workers.
-- In `TPWorker.forward(x)`:
-  - Compute local column-parallel projection `h_shard = x @ self.w1_shard`.
-  - Compute local row-parallel projection `z_shard = h_shard @ self.w2_shard`.
-  - Return `z_shard`.
-- In `tensor_parallel_forward(workers, x)`:
-  - Invoke `.forward.remote(x)` on each worker in `workers`.
-  - Retrieve results via `ray.get()`.
-  - All-reduce (sum) the outputs across all workers along axis 0.
 """
+Exercise: exercises/15_vllm_and_llms/vllm01.py
+Topic: Tensor Parallelism & Ray Worker Actor Groups
+
+Context & Why:
+Large Language Models (e.g. 70B parameters) exceed single-GPU memory.
+**Tensor Parallelism (TP)** shards linear projection matrices across multiple Ray worker actors:
+- `ColumnParallelLinear` splits weight matrix columns across workers.
+- `RowParallelLinear` splits weight rows and performs an All-Reduce sum across workers.
+
+Instructions:
+1. Implement sharded linear forward passes across 2 Ray worker actors.
+2. Perform All-Reduce sum and assert mathematical equivalence to single-actor baseline.
+"""
+
+# I AM NOT DONE
 
 import os
 from typing import Any

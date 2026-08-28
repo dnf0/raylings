@@ -1,33 +1,18 @@
-"""Chapter 8: Ray Data for High-Throughput ETL - Exercise 2: Vectorized Batch Transforms (map_batches).
-
-While `ds.map(fn)` executes a Python function row-by-row, `ds.map_batches(fn, batch_format='numpy')`
-processes entire tabular blocks using SIMD vectorized operations in NumPy or PyArrow.
-This achieves 10x-50x higher throughput by eliminating Python per-row overhead.
-
-Batch Function Signature:
-When `batch_format="numpy"`, the transform function receives a `dict[str, np.ndarray]`
-and returns a `dict[str, np.ndarray]`.
-
-```python
-import numpy as np
-
-def normalize_batch(batch: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
-    batch["normalized"] = batch["val"] / 100.0
-    return batch
-
-transformed_ds = ds.map_batches(normalize_batch, batch_format="numpy")
-```
-
-Your Task:
-- Define a batch transformation function `scale_and_filter_batch(batch: dict) -> dict`:
-  - Adds a new column `batch["scaled"] = batch["x"] * 10`.
-  - Returns the updated batch dict.
-- In `verify()`:
-  - Create a dataset from `[{'x': i} for i in range(50)]`.
-  - Apply `ds.map_batches(scale_and_filter_batch, batch_format="numpy")`.
-  - Take the first 3 rows using `transformed.take(3)`.
-  - Verify that the first 3 rows contain `[{'x': 0, 'scaled': 0}, {'x': 1, 'scaled': 10}, {'x': 2, 'scaled': 20}]`.
 """
+Exercise: exercises/08_ray_data/data02.py
+Topic: Vectorized Batch Transformations with map_batches
+
+Context & Why:
+Processing items row-by-row in Python (`map()`) incurs heavy per-row interpretation overhead.
+`map_batches(fn, batch_format="pyarrow" | "numpy" | "pandas")` passes zero-copy columnar chunks
+to your transformation function, allowing vectorized SIMD execution via NumPy and PyArrow C-libraries.
+
+Instructions:
+1. Apply `map_batches` with vectorized NumPy / PyArrow transformations.
+2. Verify throughput improvements over row-wise operations.
+"""
+
+# I AM NOT DONE
 
 import numpy as np
 import ray
@@ -48,6 +33,7 @@ def verify() -> None:
     ds = ray.data.from_items(items)
 
     # TODO: Apply map_batches
+    # WHY: map_batches operates on zero-copy columnar Arrow batches to achieve maximum throughput.
     # transformed = ds.map_batches(scale_and_filter_batch, batch_format="numpy")
     # sample_rows = transformed.take(3)
     sample_rows = []

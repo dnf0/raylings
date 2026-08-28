@@ -3,6 +3,9 @@
 Reference Solution for scheduling02.
 """
 
+import os
+
+os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"
 import ray
 from ray.util.scheduling_strategies import NodeAffinitySchedulingStrategy
 

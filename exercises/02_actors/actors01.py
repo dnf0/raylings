@@ -1,42 +1,29 @@
-"""Chapter 2: Distributed State & Actors - Exercise 1: Stateful Actor Lifecycle.
-
-While Ray tasks are stateless functions, Ray Actors are stateful Python classes.
-Decorating a Python class with `@ray.remote` turns it into an Actor.
-
-Key Concepts:
-1. Actor Instantiation: Calling `MyActor.remote(*args)` creates a dedicated worker
-   process on the cluster and runs `__init__`. It returns an `ActorHandle`.
-2. Method Invocations: Calling `actor.my_method.remote(*args)` sends a message to
-   the actor process and returns an `ObjectRef` representing the method's return value.
-3. State Preservation: An actor maintains its internal instance state (`self.xxx`)
-   across multiple method calls for its entire lifetime.
-
-Example:
-    @ray.remote
-    class Counter:
-        def __init__(self):
-            self.value = 0
-        def inc(self):
-            self.value += 1
-            return self.value
-
-    c = Counter.remote()
-    ref1 = c.inc.remote()
-    print(ray.get(ref1))  # 1
-    ref2 = c.inc.remote()
-    print(ray.get(ref2))  # 2
-
-Your Task:
-- Decorate `Counter` with `@ray.remote`.
-- Implement `increment(step)`, `decrement(step)`, and `get_count()`.
-- Instantiate `counter = Counter.remote(initial_value=10)`.
-- Increment by 5, decrement by 3, and verify the final count is 12.
 """
+Exercise: exercises/02_actors/actors01.py
+Topic: Stateful Actor Lifecycle & Remote Classes
+
+Context & Why:
+While Ray tasks are stateless functions, Ray Actors are stateful Python classes.
+Decorating a Python class with `@ray.remote` transforms it into a dedicated, long-running
+worker process that preserves internal instance state (`self.xxx`) across method calls.
+
+When you call `MyActor.remote(*args)`, Ray provisions a worker process, executes `__init__`,
+and returns an `ActorHandle`. Subsequent method invocations `actor.method.remote()` send
+messages to the actor's FIFO mailbox and return `ObjectRef` futures.
+
+Instructions:
+1. Decorate `Counter` with `@ray.remote`.
+2. Instantiate `Counter.remote(initial_val=10)` to receive an `ActorHandle`.
+3. Invoke `increment.remote(5)` and `get_count.remote()`, then verify with `ray.get()`.
+"""
+
+# I AM NOT DONE
 
 import ray
 
 
 # TODO: Decorate this class with @ray.remote
+# WHY: Decorating a class with @ray.remote instructs Ray to manage instances as dedicated stateful worker processes.
 class Counter:
     def __init__(self, initial_value: int = 0) -> None:
         self.count = initial_value

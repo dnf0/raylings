@@ -1,32 +1,18 @@
-"""Chapter 17: Multimodal & Vector Ray Data Pipelines - Exercise 1: Streaming Multimodal Image & Audio ETL.
-
-Modern GenAI pipelines process heterogeneous multimodal inputs (e.g. high-resolution images,
-audio spectrograms, video frames, and tokenized text). In-memory dataset transformations on
-uncompressed multimodal arrays can rapidly exhaust host RAM if eagerly materialized.
-
-Ray Data solves this with lazy streaming execution, zero-copy PyArrow tensor extensions,
-and automatic memory backpressure between producer and consumer stages.
-
-Key Concepts:
-- `PyArrow Tensor Extensions`: `ArrowTensorArray.from_numpy()` packages multi-dimensional
-  NumPy arrays (e.g., shape `[3, 32, 32]`) into Apache Arrow tensor columns without copying.
-- `Vectorized map_batches`: Executes batch transformations (image normalization, spectrogram log-scaling)
-  directly on NumPy/Arrow zero-copy blocks.
-- `Streaming iter_batches`: Consumes processed data lazily in fixed-size windows with backpressure,
-  preventing OOM errors during downstream ingestion or model training.
-
-Your Task:
-- In `transform_multimodal_batch(batch)`:
-  - Convert `batch["image"]` to `float32`, scale by `1.0 / 255.0`, and standardize using
-    `mean = [0.485, 0.456, 0.406]` and `std = [0.229, 0.224, 0.225]` reshaped to `(1, 3, 1, 1)`.
-  - Compute log power spectrogram: `np.log1p(np.maximum(0.0, batch["spectrogram"]))`.
-  - Return the updated batch dictionary containing `"id"`, `"image"`, and `"spectrogram"`.
-- In `pack_to_arrow_tensor_table(batch)`:
-  - Wrap `batch["image"]` and `batch["spectrogram"]` using `ArrowTensorArray.from_numpy()`.
-  - Create and return a `pa.Table` with columns `["id", "image", "spectrogram"]`.
-- In `stream_pipeline_batches(ds, batch_size)`:
-  - Stream batches using `ds.iter_batches(batch_size=batch_size, batch_format="numpy")` and return them.
 """
+Exercise: exercises/17_multimodal_and_vectors/data_genai01.py
+Topic: Streaming Multimodal Image & Audio ETL
+
+Context & Why:
+Multimodal pipelines process heterogeneous tensors (images, spectrograms, text).
+Ray Data leverages PyArrow tensor extension types to stream and transform multimodal datasets
+with zero-copy memory mapping and bounded memory usage.
+
+Instructions:
+1. Process multimodal records with PyArrow tensor extensions.
+2. Verify streaming batch throughput.
+"""
+
+# I AM NOT DONE
 
 import os
 from typing import Any

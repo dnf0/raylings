@@ -1,30 +1,18 @@
-"""Chapter 6: Cluster Topology & Multi-Node Architecture - Exercise 1: Head Node, Workers & GCS.
-
-A Ray cluster consists of:
-1. Head Node: Runs the Global Control Store (GCS), API server, Dashboard, and Autoscaler.
-2. Worker Nodes: Run Raylets (scheduler and object store) and execute worker processes.
-3. Global Control Store (GCS): Centralized metadata store (actors, placement groups, node registry).
-
-Ray provides programmatic cluster introspection via `ray.nodes()`:
-- Returns a list of dictionaries describing all nodes known to the GCS.
-- Each entry contains `NodeID`, `NodeName` (IP), `Alive` (boolean), and `Resources` dictionary.
-
-Example:
-    nodes = ray.nodes()
-    for n in nodes:
-        if n["Alive"]:
-            print(f"Active node: {n['NodeID']} with CPUs: {n['Resources'].get('CPU')}")
-
-Your Task:
-- Define a helper function `get_alive_node_count() -> int` that queries `ray.nodes()` and counts
-  nodes where `n["Alive"] is True`.
-- Define a helper function `get_total_cluster_cpus() -> float` that sums up `n["Resources"].get("CPU", 0.0)`
-  across all active nodes.
-- In `verify()`:
-  - Initialize Ray.
-  - Assert `get_alive_node_count() >= 1`.
-  - Assert `get_total_cluster_cpus() >= 1.0`.
 """
+Exercise: exercises/06_cluster_architecture/cluster01.py
+Topic: Head Node vs Worker Node Architecture & GCS
+
+Context & Why:
+A Ray cluster consists of one **Head Node** and zero or more **Worker Nodes**.
+The Head node hosts the Global Control Store (GCS), which manages metadata, actor registration,
+and cluster-wide heartbeat monitoring. Every node runs a **Raylet** (local scheduler and Plasma store).
+
+Instructions:
+1. Query cluster state using `ray.nodes()`.
+2. Inspect node IP addresses, alive status, and available compute resources.
+"""
+
+# I AM NOT DONE
 
 import ray
 

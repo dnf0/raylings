@@ -1,29 +1,20 @@
-"""Chapter 4: Scheduling & Resources - Exercise 6: Dynamic Runtime Environments.
-
-In production clusters, different jobs or even different tasks within the same job may require
-different environment variables, dependencies, or configuration without restarting the cluster.
-
-Ray's `runtime_env` API provides per-task / per-actor environment isolation:
-- `env_vars`: Dictionary of environment variables to inject into worker processes.
-- `pip`: List of python packages or requirements file.
-- `py_modules` / `working_dir`: Code directories packaged and sent to workers.
-
-Example:
-    @ray.remote
-    def read_config():
-        return os.environ.get("ENVIRONMENT_MODE")
-
-    ref = read_config.options(
-        runtime_env={"env_vars": {"ENVIRONMENT_MODE": "production"}}
-    ).remote()
-
-Your Task:
-- Define a `@ray.remote` function `read_env_var(key: str) -> str | None` that returns
-  `os.environ.get(key)`.
-- In `verify()`, schedule `read_env_var` with a `runtime_env` that sets `"RAYLINGS_STAGE": "eval_v2"`
-  and `"MODEL_TIMEOUT": "30s"`.
-- Verify the task returns `"eval_v2"` for `"RAYLINGS_STAGE"` and `"30s"` for `"MODEL_TIMEOUT"`.
 """
+Exercise: exercises/04_scheduling_resources/scheduling06.py
+Topic: Dynamic Runtime Environments (runtime_env)
+
+Context & Why:
+Different tasks or actors in the same cluster may require conflicting third-party packages, environment
+variables, or local directory dependencies.
+
+Ray `runtime_env` dynamically provisions isolated virtual environments, installs pip packages on the fly,
+and syncs files to worker nodes before executing the task.
+
+Instructions:
+1. Configure `@ray.remote(runtime_env={"env_vars": {...}})`.
+2. Verify that worker processes execute with the custom environment variables.
+"""
+
+# I AM NOT DONE
 
 import os
 

@@ -1,21 +1,19 @@
-"""Chapter 12: Ray Serve - Exercise 2: Dynamic Request Batching (@serve.batch).
-
-High-throughput ML serving requires micro-batching concurrent individual HTTP requests
-into unified batches to saturate GPU tensors and vectorized operations.
-
-Key Concepts:
-- `@serve.batch(max_batch_size=4, batch_wait_timeout_s=0.1)`: Decorates a method to coalesce calls.
-- Individual client callers see normal 1-to-1 semantics, while Serve automatically batches under the hood.
-
-Your Task:
-- In `BatchedPredictor`:
-  - Define `@serve.batch(max_batch_size=4, batch_wait_timeout_s=0.2)` on `batch_predict(self, numbers: list[int]) -> list[int]`.
-  - In `batch_predict`, double each number: `[n * 2 for n in numbers]`.
-  - In `__call__(self, number: int) -> int`, delegate to `await self.batch_predict(number)`.
-- In `verify()`:
-  - Dispatch 4 concurrent requests in parallel via `handle.remote(n)`.
-  - Assert that all 4 returned the doubled values `[2, 4, 6, 8]`.
 """
+Exercise: exercises/12_ray_serve/serve02.py
+Topic: Dynamic Dynamic Request Batching with @serve.batch
+
+Context & Why:
+Machine learning models (especially GPUs) achieve peak throughput when processing batches rather than
+single requests.
+`@serve.batch(max_batch_size=8, batch_wait_timeout_s=0.05)` dynamically buffers individual incoming HTTP
+requests into a single vectorized batch before passing it to the inference function.
+
+Instructions:
+1. Decorate inference method with `@serve.batch`.
+2. Send multiple concurrent requests and verify they are processed in batches.
+"""
+
+# I AM NOT DONE
 
 import os
 

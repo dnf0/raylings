@@ -1,16 +1,18 @@
-"""Chapter 10: Ray Train - Exercise 4: Distributed Checkpointing & Fault Recovery.
-
-Checkpointing allows training jobs to persist model weights periodically and recover
-seamlessly from hardware crashes or Spot instance preemption.
-
-Your Task:
-- In `train_loop(config)`:
-  - Train model for 5 steps.
-  - In a `tempfile.TemporaryDirectory()`, save weights `torch.save(model.state_dict(), path)`.
-  - Create `checkpoint = Checkpoint.from_directory(temp_dir)` and call `ray.train.report(..., checkpoint=checkpoint)`.
-- In `verify()`:
-  - Run `TorchTrainer`, verify `result.checkpoint` exists, restore and load weights.
 """
+Exercise: exercises/10_ray_train_and_tune/train04.py
+Topic: Fault-Tolerant Training & Elastic Worker Recovery
+
+Context & Why:
+When training deep neural networks for days on spot instances, worker preemption is inevitable.
+Ray Train integrates with `RunConfig(failure_config=FailureConfig(max_failures=3))` to automatically
+re-provision failed workers and resume training from the latest valid checkpoint.
+
+Instructions:
+1. Configure failure recovery in `RunConfig`.
+2. Simulate worker failure and verify seamless training resumption.
+"""
+
+# I AM NOT DONE
 
 import os
 

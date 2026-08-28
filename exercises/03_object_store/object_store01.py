@@ -1,26 +1,21 @@
-"""Chapter 3: Plasma Object Store & Zero-Copy - Exercise 1: Zero-Copy Plasma Reads.
-
-Ray features an in-memory distributed object store called Plasma (allocated in shared memory,
-such as `/dev/shm` on Linux or POSIX shared memory on macOS).
-
-Zero-Copy Reads:
-When large numerical datasets (such as NumPy arrays or PyArrow tables) are stored in Plasma
-via `ray.put()`, worker processes on the same node do NOT need to deserialize or duplicate
-the memory. Instead, Ray maps the shared memory buffer directly into each worker's address space.
-
-Key Properties:
-1. Shared Memory: Multiple worker tasks on the same machine read the same physical RAM.
-2. Read-Only Protection: To prevent one worker from corrupting shared memory for other workers,
-   NumPy arrays deserialized via zero-copy have `flags.writeable = False`.
-3. Massive Throughput: Enables gigabytes of data to be read across workers with 0ms copy overhead.
-
-Your Task:
-- Define a remote task `@ray.remote def compute_stats(arr: np.ndarray) -> tuple[float, float]`
-  that returns `(float(np.mean(arr)), float(np.std(arr)))`.
-- Put a NumPy array of 1,000 numbers into Plasma with `ray.put()`.
-- Retrieve the array locally with `ray.get()` and verify that `arr.flags.writeable` is `False`.
-- Pass the `ObjectRef` to `compute_stats.remote()` and verify stats.
 """
+Exercise: exercises/03_object_store/object_store01.py
+Topic: Zero-Copy Plasma Shared Memory Reads
+
+Context & Why:
+Ray features an in-memory shared-memory object store called **Plasma**.
+When large NumPy arrays, PyArrow tables, or tensors are stored in Plasma, worker processes on the
+same physical machine can read them via memory-mapped shared buffers with **zero memory copies**
+and zero deserialization overhead.
+
+This allows multiple worker tasks to read a 10GB dataset concurrently without consuming 10GB RAM per worker.
+
+Instructions:
+1. Allocate a NumPy array and store it in the Plasma object store via `ray.put(arr)`.
+2. Pass the `ObjectRef` to a worker task and verify that the worker receives a read-only view of the data.
+"""
+
+# I AM NOT DONE
 
 import numpy as np
 import ray

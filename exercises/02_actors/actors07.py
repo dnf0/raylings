@@ -1,32 +1,21 @@
-"""Chapter 2: Distributed State & Actors - Exercise 7: ActorPool Dynamic Load Balancing.
-
-When you have a pool of stateful actors (e.g., loaded neural network models, database connections)
-and a stream of incoming items to process, manually tracking which actor is busy and which is idle
-is tedious and error-prone.
-
-`ray.util.ActorPool` solves this by providing dynamic load-balancing across a pool of actors:
-1. `pool = ActorPool(actors)`: Wraps a list of actor handles.
-2. `pool.map(fn, values)`: Dispatches items across the pool, sending each next item to
-   whichever actor becomes idle first.
-3. `pool.submit(fn, value)` / `pool.get_next()`: Pulls results in completion order.
-
-Example:
-    @ray.remote
-    class Worker:
-        def process(self, x): return x * 2
-
-    actors = [Worker.remote() for _ in range(3)]
-    pool = ActorPool(actors)
-    results = list(pool.map(lambda a, v: a.process.remote(v), [1, 2, 3, 4, 5]))
-    # results == [2, 4, 6, 8, 10]
-
-Your Task:
-- Define `@ray.remote class TextTransformer:` with method `transform(text: str) -> str` that returns `text.upper()`.
-- Instantiate 3 `TextTransformer` actors.
-- Wrap them in a `ray.util.ActorPool`.
-- Use `pool.map()` to transform a list of words: `["ray", "actors", "distributed", "plasma", "scalability"]`.
-- Verify transformed results.
 """
+Exercise: exercises/02_actors/actors07.py
+Topic: ActorPool Dynamic Load Balancing
+
+Context & Why:
+When you have multiple worker actors (e.g., loaded neural networks, inference engines) and a batch of
+tasks to process, manually tracking which actor is busy and which is idle is complex.
+
+`ray.util.ActorPool` manages an elastic pool of actors, automatically routing each new work item
+to whichever actor becomes idle first. This maximizes resource utilization and prevents worker starvation.
+
+Instructions:
+1. Create a list of 3 `Worker` actor handles.
+2. Wrap them in `ray.util.ActorPool(actors)`.
+3. Use `pool.map()` to process a list of inputs and collect transformed outputs.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray.util.actor_pool import ActorPool  # noqa: F401

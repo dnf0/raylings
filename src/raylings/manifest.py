@@ -954,6 +954,44 @@ def build_manifest() -> Manifest:
                 ),
             ],
         ),
+        Chapter(
+            number=18,
+            name="18_quant_finance",
+            title="Quantitative Finance & Monte Carlo Engines",
+            description="Distributed derivative pricing, portfolio VaR/CVaR risk models, and streaming market tick analytics",
+            exercises=[
+                Exercise(
+                    name="finance01",
+                    title="Distributed Monte Carlo Option Pricing",
+                    path="exercises/18_quant_finance/finance01.py",
+                    chapter_name="18_quant_finance",
+                    hints=[
+                        "Simulate Geometric Brownian Motion (GBM) paths in parallel Ray tasks.",
+                        "Discount expected payoff back to present value using risk-free rate r.",
+                    ],
+                ),
+                Exercise(
+                    name="finance02",
+                    title="Portfolio VaR & CVaR Risk Simulation",
+                    path="exercises/18_quant_finance/finance02.py",
+                    chapter_name="18_quant_finance",
+                    hints=[
+                        "Distribute portfolio scenario simulations across Ray workers.",
+                        "Compute empirical 95% and 99% Value at Risk (VaR) and Conditional VaR (Expected Shortfall).",
+                    ],
+                ),
+                Exercise(
+                    name="finance03",
+                    title="Streaming Market Tick Analytics & Rolling VWAP",
+                    path="exercises/18_quant_finance/finance03.py",
+                    chapter_name="18_quant_finance",
+                    hints=[
+                        "Use Ray Data streaming to process high-frequency tick events.",
+                        "Compute Volume-Weighted Average Price (VWAP) continuously per equity ticker symbol.",
+                    ],
+                ),
+            ],
+        ),
     ]
     return Manifest(chapters=chapters)
 

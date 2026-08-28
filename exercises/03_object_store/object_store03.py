@@ -1,28 +1,21 @@
-"""Chapter 3: Plasma Object Store & Zero-Copy - Exercise 3: Object Immutability & Read-Only Semantics.
-
-Objects residing in Ray's Plasma object store are strictly IMMUTABLE.
-
-Why?
-If multiple worker processes or threads share the exact same physical memory buffer
-via zero-copy, allowing one worker to mutate that memory in-place would silently corrupt
-the data for all other workers reading it.
-
-Behavior:
-1. In-place Mutation Fails: Trying to write to a zero-copy array (`arr[0] = 99`) raises:
-   `ValueError: assignment destination is read-only`.
-2. Safe Mutation via `.copy()`: If a task needs to modify an array in-place (e.g. applying
-   transformations or data normalization), it must make an explicit mutable copy:
-   `mutable_arr = arr.copy()`.
-
-Your Task:
-- Define a remote function `normalize_array(arr: np.ndarray) -> np.ndarray` that:
-  - Demonstrates safe mutation by creating a copy: `arr_copy = arr.copy()`
-  - Replaces all negative values in `arr_copy` with `0.0`
-  - Returns `arr_copy`
-- Store a numpy array with negative values in Plasma with `ray.put()`.
-- Test that directly mutating the array retrieved from Plasma raises `ValueError`.
-- Process the array through `normalize_array.remote()` and verify the returned result.
 """
+Exercise: exercises/03_object_store/object_store03.py
+Topic: Object Immutability & Safe Buffer Copies
+
+Context & Why:
+To ensure data consistency across concurrent readers without lock contention, objects stored in
+Ray's Plasma store are strictly **immutable**. NumPy arrays retrieved from Plasma have their
+`flags.writeable` set to `False`.
+
+Attempting to mutate an in-place Plasma buffer directly (`arr[0] = 99`) raises a `ValueError`.
+To modify data, workers must explicitly create a mutable copy via `arr.copy()`.
+
+Instructions:
+1. Retrieve an array from Plasma and observe that in-place mutation fails.
+2. Create an explicit copy via `.copy()` before performing mutations.
+"""
+
+# I AM NOT DONE
 
 import numpy as np
 import ray

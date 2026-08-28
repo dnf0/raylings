@@ -45,18 +45,18 @@ def test_all_curriculum_syntax_and_markers():
     from raylings.runner import NOT_DONE_MARKER
 
     manifest = get_manifest()
-    assert len(manifest.all_exercises) == 78
+    assert len(manifest.all_exercises) == 81
 
     for ex in manifest.all_exercises:
-        # Check skeleton (clean Python without magic markers)
+        # Check skeleton (clean Python with NOT_DONE_MARKER)
         assert ex.file_path.exists(), f"Missing exercise skeleton: {ex.file_path}"
         code_skel = ex.file_path.read_text(encoding="utf-8")
-        assert NOT_DONE_MARKER not in code_skel, (
-            f"Exercise {ex.name} unexpectedly contains legacy '{NOT_DONE_MARKER}'"
+        assert NOT_DONE_MARKER in code_skel, (
+            f"Exercise {ex.name} missing required '{NOT_DONE_MARKER}'"
         )
         ast.parse(code_skel, filename=str(ex.file_path))
 
-        # Check solution (clean Python, valid syntax)
+        # Check solution (clean Python, valid syntax, NO marker)
         assert ex.solution_path.exists(), f"Missing solution: {ex.solution_path}"
         code_sol = ex.solution_path.read_text(encoding="utf-8")
         assert NOT_DONE_MARKER not in code_sol, (

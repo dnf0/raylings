@@ -1,31 +1,20 @@
-"""Chapter 3: Plasma Object Store & Zero-Copy - Exercise 2: ray.put() vs Implicit Serialization.
-
-When you pass a standard Python object (e.g., large array, dataset, model weights)
-as an argument to multiple remote tasks:
-
-    # ❌ ANTI-PATTERN (Repetitive Serialization):
-    for _ in range(10):
-        worker_task.remote(large_data)  # Serializes and copies `large_data` 10 times!
-
-Each call implicitly copies and serializes `large_data` into the task specification,
-wasting CPU cycles, memory, and IPC bandwidth.
-
-    # ✓ PROPER PATTERN (Explicit ray.put):
-    data_ref = ray.put(large_data)      # Stored ONCE in Plasma object store
-    for _ in range(10):
-        worker_task.remote(data_ref)    # Passes only a 28-byte pointer!
-
-Key Rules:
-1. If data size is > 100KB and passed to more than one task, ALWAYS use `ray.put()`.
-2. Ray automatically de-references `data_ref` before passing the data to the task function.
-
-Your Task:
-- Define a remote task `@ray.remote def process_slice(matrix: np.ndarray, row_idx: int) -> float`
-  that returns the sum of the specified row `float(matrix[row_idx].sum())`.
-- Put a 50x50 matrix into the object store once with `ray.put()`.
-- Launch 4 parallel tasks passing `matrix_ref` to calculate the row sum for rows 0, 10, 20, 30.
-- Retrieve all results and verify against NumPy calculations.
 """
+Exercise: exercises/03_object_store/object_store02.py
+Topic: ray.put() vs Implicit Parameter Serialization
+
+Context & Why:
+When you pass a large Python object (e.g. 50MB array) as a raw argument to 100 remote tasks,
+Ray implicitly serializes and copies that 50MB object 100 separate times!
+
+Calling `ref = ray.put(large_data)` once, and then passing `ref` to the 100 tasks, stores the object
+in Plasma **exactly once**. All 100 tasks receive lightweight references, reducing network/memory overhead from 5GB to 50MB.
+
+Instructions:
+1. Use `ray.put(large_matrix)` to pre-allocate shared memory before launching multiple worker tasks.
+2. Pass the resulting `ObjectRef` to all tasks.
+"""
+
+# I AM NOT DONE
 
 import numpy as np
 import ray

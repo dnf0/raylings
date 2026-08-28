@@ -1,15 +1,17 @@
-"""Chapter 10: Ray Train - Exercise 3: Multi-Worker Gradient Sync & Metrics.
-
-In PyTorch DDP, worker processes maintain synchronized parameters via All-Reduce.
-
-Your Task:
-- In `train_loop(config)`:
-  - Discover `world_size = ray.train.get_context().get_world_size()`.
-  - Train model for 3 epochs.
-  - Return `{"epoch": 2, "world_size": world_size}`.
-- In `verify()`:
-  - Run 2-worker TorchTrainer and verify world_size is 2 and epoch is 2.
 """
+Exercise: exercises/10_ray_train_and_tune/train03.py
+Topic: Distributed Metrics Reporting & Checkpoint Persistence
+
+Context & Why:
+`ray.train.report(metrics={"loss": loss}, checkpoint=checkpoint)` streams training loss/accuracy
+to the driver and saves distributed model checkpoints to cloud or shared storage without blocking the training loop.
+
+Instructions:
+1. Call `ray.train.report` with epoch loss and PyTorch model state dictionary.
+2. Verify checkpoints are persisted.
+"""
+
+# I AM NOT DONE
 
 import os
 

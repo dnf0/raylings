@@ -1,36 +1,23 @@
-"""Chapter 1: Ray Core Foundations - Exercise 6: Multiple Returns in Remote Tasks.
-
-By default, calling a remote function returns a single `ObjectRef`, even if that
-function returns a Python tuple:
-
-    @ray.remote
-    def func():
-        return 1, 2
-
-    ref = func.remote()          # Returns a SINGLE ObjectRef representing (1, 2)
-    val1, val2 = ray.get(ref)    # Must get the whole tuple at once
-
-If you want the remote function to return multiple distinct `ObjectRef`s, configure
-`num_returns=N` in the `@ray.remote` decorator:
-
-    @ray.remote(num_returns=2)
-    def func():
-        return 1, 2
-
-    ref1, ref2 = func.remote()   # Returns TWO separate ObjectRefs!
-    val1 = ray.get(ref1)         # Can get or pass ref1 independently
-    val2 = ray.get(ref2)         # Can get or pass ref2 independently
-
-Key Benefits:
-1. Downstream tasks can depend on just `ref1` without blocking on `ref2`.
-2. Enables clean decomposition of pipeline stages (e.g. splitting datasets into features and labels).
-
-Your Task:
-- Define `@ray.remote(num_returns=2) def split_stats(numbers: list[int]) -> tuple[int, int]`
-  that returns the minimum and maximum of the given list.
-- Call `split_stats.remote([42, 10, 99, 3, 55])` and unpack the two `ObjectRef`s.
-- Retrieve and verify min and max separately using `ray.get()`.
 """
+Exercise: exercises/01_basics/basics06.py
+Topic: Multiple Return Values in Remote Tasks (num_returns)
+
+Context & Why:
+By default, `@ray.remote` functions return a single `ObjectRef`, even if the Python function
+returns a tuple. When downstream tasks only need a subset of the returned data, returning a single
+tuple forces all downstream tasks to depend on the entire tuple.
+
+Configuring `@ray.remote(num_returns=N)` instructs Ray to partition the return values into `N`
+distinct, independent `ObjectRef`s. Downstream tasks can subscribe to specific return elements,
+enabling finer-grained dependency graphs and avoiding unnecessary data transfers.
+
+Instructions:
+1. Configure `split_stats` with `@ray.remote(num_returns=2)`.
+2. Unpack the two returned ObjectRefs: `min_ref, max_ref = split_stats.remote(numbers)`.
+3. Retrieve and verify both values independently.
+"""
+
+# I AM NOT DONE
 
 import ray
 

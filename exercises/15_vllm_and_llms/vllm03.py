@@ -1,3 +1,19 @@
+"""
+Exercise: exercises/15_vllm_and_llms/vllm03.py
+Topic: Dynamic Multi-LoRA Adapter Serving
+
+Context & Why:
+Serving hundreds of fine-tuned domain models simultaneously by loading separate base models is impossible.
+**Multi-LoRA serving** keeps one shared base model in memory, dynamically applying low-rank adapter matrices
+($A 	imes B$) per request with LRU cache eviction.
+
+Instructions:
+1. Implement dynamic LoRA adapter dispatch and forward computation.
+2. Verify multi-tenant adapter outputs.
+"""
+
+# I AM NOT DONE
+
 r"""Chapter 15: Distributed LLM Serving & vLLM - Exercise 3: Dynamic Multi-LoRA Adapter Serving.
 
 Multi-LoRA serving enables serving hundreds of customized fine-tuned adapters on top of a shared

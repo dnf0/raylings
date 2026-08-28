@@ -1,23 +1,18 @@
-"""Chapter 13: Observability - Exercise 1: Ray Execution Profiling & Chrome Timelines.
-
-Ray provides built-in execution timeline profiling via `ray.timeline(filename=...)`.
-The exported JSON trace follows the Chrome Tracing / Perfetto format, showing exact
-task dispatch, deserialization, execution durations, and cluster scheduling gaps.
-
-Key Concepts:
-- `ray.timeline(filename="timeline.json")`: Exports distributed execution profiling events.
-- Compatible with Chrome Tracing (`chrome://tracing`) and Perfetto (`ui.perfetto.dev`).
-
-Your Task:
-- In `compute_work(task_id: int) -> int`:
-  - Remote task performing `task_id ** 2`.
-- In `dump_execution_timeline(filepath: str) -> list[dict]`:
-  - Launch 3 `compute_work.remote()` tasks and wait for them via `ray.get`.
-  - Export trace events using `ray.timeline(filename=filepath)`.
-  - Load and return the JSON events list from `filepath`.
-- In `verify()`:
-  - Assert that timeline events were generated and contain task profiling traces.
 """
+Exercise: exercises/13_observability_and_debugging/perf01.py
+Topic: Execution Profiling & Chrome Tracing with ray.timeline()
+
+Context & Why:
+Diagnosing stragglers and serialization bottlenecks in distributed systems requires visual execution traces.
+`ray.timeline(filename="timeline.json")` exports complete Chrome Tracing / Perfetto JSON files
+recording exact start, run, and completion timestamps for all tasks and actors across cluster nodes.
+
+Instructions:
+1. Instrument task execution and export trace events with `ray.timeline()`.
+2. Verify trace file generation and timeline event structure.
+"""
+
+# I AM NOT DONE
 
 import json
 import os

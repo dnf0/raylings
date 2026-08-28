@@ -1,20 +1,18 @@
-"""Chapter 14: KubeRay - Exercise 1: RayCluster Custom Resource (CRD).
-
-KubeRay manages declarative Ray clusters on Kubernetes using the `RayCluster` CRD.
-
-Key Concepts:
-- `apiVersion: ray.io/v1`, `kind: RayCluster`
-- `spec.headGroupSpec`: Defines head node pod template, Ray start parameters, and ports.
-- `spec.workerGroupSpecs`: Defines worker pod pools with `minReplicas`, `maxReplicas`, and resource limits.
-
-Your Task:
-- In `build_ray_cluster_crd(name: str, ray_version: str, min_workers: int, max_workers: int) -> dict`:
-  - Construct a valid `RayCluster` CRD dictionary.
-  - Configure `headGroupSpec` with rayStartParams `{"dashboard-host": "0.0.0.0"}`.
-  - Configure `workerGroupSpecs` with `groupName: "default-worker"`, `minReplicas`, and `maxReplicas`.
-- In `verify()`:
-  - Generate the CRD and validate required KubeRay schema fields and replica bounds.
 """
+Exercise: exercises/14_kuberay/kuberay01.py
+Topic: RayCluster Custom Resource Definition (CRD)
+
+Context & Why:
+The KubeRay Operator manages Ray clusters natively on Kubernetes.
+The `RayCluster` CRD declaratively specifies head pod and worker group pod templates, CPU/memory limits,
+GPU tolerations, and container images.
+
+Instructions:
+1. Author a valid `RayCluster` YAML spec.
+2. Validate head and worker group configurations.
+"""
+
+# I AM NOT DONE
 
 from typing import Any
 

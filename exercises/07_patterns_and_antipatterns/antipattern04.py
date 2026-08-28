@@ -1,42 +1,20 @@
-"""Chapter 7: Production Patterns & Anti-Patterns - Exercise 4: Tree-Structured Reduction (Tree-Reduce).
-
-Anti-Pattern: Linear Accumulation on the Driver.
-If you have 1,024 distributed partial results and call `ray.get()` on all 1,024 refs to sum
-them sequentially in Python on the driver, you create an O(N) memory and bandwidth bottleneck
-on the driver node.
-
-Correct Pattern: Tree-Structured Reduction (Tree-Reduce).
-Combine pairs of results in parallel across the cluster using a binary tree reduction DAG!
-This reduces driver communication to 1 single object and parallelizes aggregation depth to O(log2 N).
-
-```python
-@ray.remote
-def add_pair(a: int, b: int) -> int:
-    return a + b
-
-# Tree-reduce loop:
-refs = [produce_partial.remote(i) for i in range(16)]
-while len(refs) > 1:
-    next_refs = []
-    for i in range(0, len(refs), 2):
-        if i + 1 < len(refs):
-            next_refs.append(add_pair.remote(refs[i], refs[i + 1]))
-        else:
-            next_refs.append(refs[i])
-    refs = next_refs
-total = ray.get(refs[0])
-```
-
-Your Task:
-- Define `@ray.remote` task `add_pair(a: int, b: int) -> int`: returns `a + b`.
-- Define `@ray.remote` task `produce_leaf(val: int) -> int`: returns `val`.
-- Implement a function `tree_reduce(refs: list[ray.ObjectRef]) -> ray.ObjectRef`:
-  - Reduces the list of `ObjectRef`s in pairs until a single root `ObjectRef` remains.
-- In `verify()`:
-  - Create 8 leaf refs for values `[1, 2, 3, 4, 5, 6, 7, 8]` using `produce_leaf.remote(x)`.
-  - Pass the leaf refs into `tree_reduce`.
-  - Assert the resolved sum is `36`.
 """
+Exercise: exercises/07_patterns_and_antipatterns/antipattern04.py
+Topic: Tree-Structured Distributed Aggregation
+
+Context & Why:
+Aggregating $N$ items on a single driver process with `sum(ray.get(refs))` requires transferring all
+$N$ results back to the driver's memory, creating an $O(N)$ network and memory bottleneck.
+
+A **Tree Aggregate** recursively pairs and reduces intermediate results across distributed workers in
+log_k(N) steps. The driver only ever receives the single final scalar result.
+
+Instructions:
+1. Implement a recursive tree reduction using `@ray.remote` aggregator tasks.
+2. Verify O(log N) aggregation depth.
+"""
+
+# I AM NOT DONE
 
 import ray
 

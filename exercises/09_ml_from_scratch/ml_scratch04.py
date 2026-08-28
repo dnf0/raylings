@@ -1,3 +1,18 @@
+"""
+Exercise: exercises/09_ml_from_scratch/ml_scratch04.py
+Topic: Distributed Data-Parallel Linear Regression Trainer
+
+Context & Why:
+Combining Ray tasks, actors, and object store primitives allows building complete end-to-end
+data-parallel training pipelines from scratch without external ML frameworks.
+
+Instructions:
+1. Build a distributed data-parallel linear regression trainer.
+2. Verify loss convergence on synthetic regression data.
+"""
+
+# I AM NOT DONE
+
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 4: Distributed Data-Parallel Trainer.
 
 In Distributed Data-Parallel (DDP) training:

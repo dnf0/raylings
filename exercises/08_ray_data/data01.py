@@ -1,23 +1,20 @@
-"""Chapter 8: Ray Data for High-Throughput ETL - Exercise 1: Datasets & Block Partitioning.
-
-Ray Data provides distributed data processing for ML pipelines and ETL workloads.
-Unlike Spark or Pandas, Ray Data is designed from the ground up for streaming execution,
-heterogeneous CPU/GPU compute, and zero-copy integration with PyTorch/TensorFlow.
-
-Key Concepts:
-- `ray.data.from_items(items)`: Creates a dataset from a list of dicts.
-- `ds.repartition(num_blocks=k)`: Redistributes data across `k` balanced blocks for parallelism.
-- `ds.materialize()`: Executes lazy transformations into an in-memory `MaterializedDataset`.
-- `ds.num_blocks()`: Returns the number of physical partitions/blocks in the materialized dataset.
-- `ds.count()`: Computes total number of rows.
-
-Your Task:
-- In `verify()`:
-  - Create a dataset of 100 items with `items = [{'val': i, 'squared': i * i} for i in range(100)]` using `ray.data.from_items(items)`.
-  - Repartition into 4 blocks and materialize using `ds.repartition(num_blocks=4).materialize()`.
-  - Assert that `ds.num_blocks() == 4`.
-  - Assert that `ds.count() == 100`.
 """
+Exercise: exercises/08_ray_data/data01.py
+Topic: Ray Data Ingestion & Block Partitioning
+
+Context & Why:
+Ray Data is a scalable, distributed data processing engine designed for ML datasets.
+Datasets in Ray Data are partitioned into **Blocks** (backed by Apache Arrow tables).
+Each block is stored in the Plasma object store and processed independently across workers.
+
+Controlling block count (`override_num_blocks`) ensures balanced parallelism and prevents memory spills.
+
+Instructions:
+1. Create a Ray Dataset using `ray.data.from_items()` or `read_parquet()`.
+2. Inspect block partitioning, schema, and dataset count.
+"""
+
+# I AM NOT DONE
 
 import ray
 import ray.data

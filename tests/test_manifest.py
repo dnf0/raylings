@@ -13,9 +13,9 @@ from raylings.models import Chapter, Exercise, ExerciseStatus, Manifest
 def test_manifest_loads_all_chapters():
     manifest = get_manifest()
     assert isinstance(manifest, Manifest)
-    assert len(manifest.chapters) == 17
+    assert len(manifest.chapters) == 18
     assert all(isinstance(ch, Chapter) for ch in manifest.chapters)
-    assert len(manifest.all_exercises) == 78
+    assert len(manifest.all_exercises) == 81
     first = manifest.all_exercises[0]
     assert first.name == "basics01"
     assert first.chapter_name == "01_basics"
@@ -23,9 +23,9 @@ def test_manifest_loads_all_chapters():
 
 def test_unique_exercise_names_and_sequential_chapters():
     manifest = get_manifest()
-    # Ensure sequential chapter numbering 1..17
+    # Ensure sequential chapter numbering 1..18
     chapter_numbers = [ch.number for ch in manifest.chapters]
-    assert chapter_numbers == list(range(1, 18))
+    assert chapter_numbers == list(range(1, 19))
 
     # Ensure all exercise names are unique
     exercise_names = [ex.name for ex in manifest.all_exercises]
@@ -77,6 +77,11 @@ def test_get_exercise_by_name():
     genai_ex = get_exercise_by_name("data_genai01")
     assert genai_ex is not None
     assert genai_ex.chapter_name == "17_multimodal_and_vectors"
+
+    # Chapter 18 exercise lookup
+    finance_ex = get_exercise_by_name("finance01")
+    assert finance_ex is not None
+    assert finance_ex.chapter_name == "18_quant_finance"
 
     # Non-existent exercise
     assert get_exercise_by_name("non_existent_exercise") is None

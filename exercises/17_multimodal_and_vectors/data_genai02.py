@@ -1,38 +1,18 @@
-"""Chapter 17: Multimodal & Vector Ray Data Pipelines - Exercise 2: Accelerated Batch Embeddings with ActorPoolStrategy.
-
-High-throughput embedding pipelines (e.g. for Vector Search, RAG indexing, or contrastive learning)
-require extracting dense representations from millions of text or image records.
-Re-initializing heavy neural models (such as BERT, CLIP, or SentenceTransformers) on every
-individual task incurs catastrophic model loading latency and memory churn.
-
-Ray Data addresses this using stateful callable classes mapped via `ActorPoolStrategy`.
-Actors load model weights into device memory once during `__init__`, and subsequent
-batches are streamed through the existing actor pool with zero serialization overhead.
-
-Key Concepts:
-- `ActorPoolStrategy(min_size=K, max_size=K)`: Spawns an actor pool of persistent workers
-  that maintain stateful neural weights in memory across batch invocations.
-- `Vectorized map_batches`: Feeds micro-batches to actor workers, maximizing hardware
-  vectorization (SIMD / Tensor Cores).
-- `Zero-Copy In-Flight Execution`: Avoids copying intermediate activations by transforming
-  directly between NumPy/PyTorch/Arrow memory buffers.
-
-Your Task:
-- In `BatchEmbeddingExtractor`:
-  - In `__init__(self, in_features, embedding_dim, normalize)`:
-    - Initialize a PyTorch linear projection `nn.Linear(in_features, embedding_dim, bias=False)`.
-    - Set the model to evaluation mode (`self.model.eval()`).
-    - Record `self.worker_pid = os.getpid()`.
-  - In `__call__(self, batch)`:
-    - Convert `batch["tokens"]` to a PyTorch float tensor.
-    - Inside `torch.no_grad()`, compute projected embeddings: `self.model(x)`.
-    - If `self.normalize` is True, apply L2 normalization: `torch.nn.functional.normalize(emb, p=2, dim=-1)`.
-    - Return dict containing `"doc_id"`, `"embedding"` (NumPy array of shape `[batch_size, embedding_dim]`),
-      and `"worker_pid"` array filled with `self.worker_pid`.
-- In `extract_embeddings_distributed(ds, min_workers, max_workers, batch_size)`:
-  - Map `BatchEmbeddingExtractor` over `ds` using `compute=ray.data.ActorPoolStrategy(min_size=min_workers, max_size=max_workers)`
-    with the specified `batch_size` and `batch_format="numpy"`.
 """
+Exercise: exercises/17_multimodal_and_vectors/data_genai02.py
+Topic: Accelerated Batch Embeddings with ActorPoolStrategy
+
+Context & Why:
+Extracting vector embeddings from millions of documents requires persistent neural encoder models.
+`dataset.map_batches(Encoder, compute=ActorPoolStrategy(min_size=2))` keeps embedding models loaded
+in worker memory, streaming documents through GPU/CPU encoder pools.
+
+Instructions:
+1. Implement batch embedding extractor with `ActorPoolStrategy`.
+2. Verify embedding generation and normalization.
+"""
+
+# I AM NOT DONE
 
 import os
 from typing import Any

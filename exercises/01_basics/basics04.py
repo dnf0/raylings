@@ -1,39 +1,25 @@
-"""Chapter 1: Ray Core Foundations - Exercise 4: Passing ObjectRefs to Tasks.
-
-One of Ray's most powerful features is building dynamic task graphs (DAGs).
-You can pass an `ObjectRef` directly as an argument to another `@ray.remote` task!
-
-When an `ObjectRef` is passed as an argument to a remote task:
-1. Ray automatically detects the task dependency.
-2. The downstream task is queued until the upstream task finishes.
-3. Ray passes the DE-REFERENCED value (the actual Python object) to the downstream function.
-4. The driver program never needs to call `ray.get()` until it needs the final result!
-
-Example:
-    @ray.remote
-    def generate(x): return x * 2
-
-    @ray.remote
-    def add(a, b): return a + b
-
-    # No ray.get() needed between tasks!
-    ref1 = generate.remote(5)
-    ref2 = generate.remote(10)
-    final_ref = add.remote(ref1, ref2)  # add receives (10, 20)
-    result = ray.get(final_ref)         # returns 30
-
-Your Task:
-- Define three remote functions:
-  1. `generate_val(x: int) -> int`: returns `x * 3`
-  2. `add(a: int, b: int) -> int`: returns `a + b`
-  3. `cube(x: int) -> int`: returns `x ** 3`
-- Construct a task graph:
-  - Generate value `a_ref` from `2` (should produce 6)
-  - Generate value `b_ref` from `4` (should produce 12)
-  - Pass `a_ref` and `b_ref` into `add.remote(...)` to get `sum_ref` (should produce 18)
-  - Pass `sum_ref` into `cube.remote(...)` to get `final_ref` (should produce 18**3 = 5832)
-- Call `ray.get()` only on `final_ref`.
 """
+Exercise: exercises/01_basics/basics04.py
+Topic: Passing ObjectRefs Directly to Downstream Tasks (DAG Construction)
+
+Context & Why:
+Ray allows constructing dynamic Direct Acyclic Graphs (DAGs) without pulling intermediate data
+back to the driver. When you pass an `ObjectRef` directly as an argument to another `@ray.remote` task,
+Ray automatically:
+1. Infers the data dependency between upstream and downstream tasks.
+2. Holds the downstream task in the scheduler until the upstream task completes.
+3. Automatically dereferences the `ObjectRef` inside the worker before executing the downstream function.
+
+This avoids transferring megabytes or gigabytes of intermediate data back to the driver node,
+preventing memory bottlenecks and high serialization overhead.
+
+Instructions:
+1. Complete `build_pipeline(x, y)` to chain `generate_val`, `add`, and `cube` tasks.
+2. Pass ObjectRefs directly between tasks without calling `ray.get()` in the pipeline builder.
+3. Return the final `ObjectRef`.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray import ObjectRef

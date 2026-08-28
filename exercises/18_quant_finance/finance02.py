@@ -1,18 +1,18 @@
-"""Chapter 18: Distributed Quantitative Finance - Exercise 2: Distributed Portfolio Value-at-Risk (VaR).
-
-Value-at-Risk (VaR) measures the maximum potential loss on an investment portfolio
-over a defined time horizon at a given confidence level (e.g., 99%).
-Expected Shortfall (CVaR) computes the average loss given that the loss exceeds the VaR threshold.
-
-Key Concepts:
-1. Covariance Sharding: Sharding multi-asset correlated return simulations across Ray actors.
-2. Distributed Loss Aggregation: Merging simulated portfolio P&L vectors in parallel.
-3. Percentile & Tail Loss Extraction: Computing 99% VaR and 99% CVaR.
-
-Your Task:
-- Implement `PortfolioRiskWorker.simulate_portfolio_returns` to simulate `n_scenarios` P&L values.
-- Calculate 99% Value-at-Risk and Expected Shortfall from the combined simulations.
 """
+Exercise: exercises/18_quant_finance/finance02.py
+Topic: Portfolio Value at Risk (VaR) & CVaR Stress Simulation
+
+Context & Why:
+Risk management systems must calculate Value at Risk (VaR) and Conditional Value at Risk (CVaR / Expected Shortfall)
+across millions of historical market scenarios and multi-asset portfolios.
+Ray distributes portfolio stress simulations across workers, aggregating loss distributions.
+
+Instructions:
+1. Simulate correlated portfolio returns across Ray tasks.
+2. Compute empirical 95% and 99% VaR and CVaR metrics.
+"""
+
+# I AM NOT DONE
 
 import math
 import os

@@ -1,26 +1,23 @@
-"""Chapter 2: Distributed State & Actors - Exercise 5: Threaded Actors for Blocking I/O.
-
-In the previous exercise, we used `async def` for non-blocking coroutines.
-However, what if your actor methods call legacy synchronous libraries or blocking C-extensions
-that do NOT support Python's `async/await` (e.g. `time.sleep`, synchronous DB drivers, OpenCV)?
-
-Ray provides Threaded Actors for this use case:
-If you define standard synchronous `def` methods (without `async`) AND specify
-`@ray.remote(max_concurrency=N)`, Ray spawns a Python ThreadPool inside the actor process
-to handle up to `N` method invocations concurrently!
-
-Key Concepts:
-1. `max_concurrency=N` + `async def` -> Coroutine concurrency on a single thread event loop.
-2. `max_concurrency=N` + `def` (synchronous) -> Thread-based concurrency via a worker thread pool.
-3. Thread Safety: When using threaded actors with synchronous methods mutating shared `self.state`,
-   standard threading locks (`threading.Lock`) should be used if modifying shared data structures.
-
-Your Task:
-- Define `@ray.remote(max_concurrency=4) class ThreadedComputeActor:`.
-- Implement synchronous `def blocking_task(self, task_id: int, duration: float) -> int` using `time.sleep(duration)`.
-- Dispatch 4 blocking calls concurrently.
-- Verify that execution runs in parallel across the actor's thread pool in < 0.20s.
 """
+Exercise: exercises/02_actors/actors05.py
+Topic: Threaded Actors for Blocking Synchronous I/O
+
+Context & Why:
+While `async def` works for non-blocking coroutines, legacy Python libraries and C-extensions
+often make synchronous blocking calls (e.g. OpenCV image processing, blocking DB drivers, `time.sleep`).
+
+Ray supports **Threaded Actors**:
+If you define standard synchronous `def` methods (without `async`) AND specify
+`@ray.remote(max_concurrency=N)`, Ray provisions an internal `ThreadPool` inside the actor process
+to handle up to `N` synchronous invocations concurrently across multiple OS threads.
+
+Instructions:
+1. Define `@ray.remote(max_concurrency=4) class ThreadedComputeActor:`.
+2. Implement synchronous `blocking_task` using `time.sleep(duration)`.
+3. Verify that 4 concurrent tasks execute in parallel on the threaded actor.
+"""
+
+# I AM NOT DONE
 
 import threading
 import time  # noqa: F401

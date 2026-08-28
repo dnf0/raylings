@@ -1,33 +1,18 @@
-"""Chapter 16: DeepSpeed & PyTorch FSDP - Exercise 3: Mixed Precision & Activation Checkpointing.
-
-Peak training memory consists of model states (parameters, gradients, optimizer states) plus activation memory.
-Activation checkpointing trades a small compute overhead (~20-30%) for dramatic activation memory savings (40-90%)
-by freeing intermediate activations during the forward pass and recomputing them on-the-fly during backpropagation.
-
-Key Concepts:
-- `Activation Checkpointing (`torch.utils.checkpoint.checkpoint`)`: Evaluates a sub-module during the forward
-  pass without storing its internal activations in the autograd graph, recomputing them in the backward pass.
-- `torch.autocast`: Runs matrix operations in half-precision (e.g. `torch.bfloat16` or `torch.float16`),
-  reducing memory bandwidth and throughput demands while maintaining FP32 stability.
-- `Saved Tensors Tracking`: `torch.autograd.graph.saved_tensors_hooks` intercepts tensor saving during the
-  forward pass to inspect exact memory footprint and tensor counts.
-
-Your Task:
-- In `DeepSequentialModel.forward(x)`:
-  - Iterate through `self.blocks`.
-  - If `self.use_checkpointing` is True and `self.training` is True, invoke `checkpoint(block, x, use_reentrant=False)`.
-  - Otherwise, compute `x = block(x)` directly.
-  - Return `self.head(x)`.
-- In `measure_saved_activation_memory(model, x)`:
-  - Use `torch.autograd.graph.saved_tensors_hooks(pack_hook, unpack_hook)` to track total saved bytes and count.
-  - Run forward pass `out = model(x)`, compute `loss = out.sum()`, and run `loss.backward()`.
-  - Return `(saved_bytes, saved_count, x.grad.clone())`.
-- In `MixedPrecisionWorker.train_step(x, target, use_autocast)`:
-  - Zero gradients.
-  - Run forward pass inside `torch.autocast(device_type="cpu", dtype=torch.bfloat16, enabled=use_autocast)`.
-  - Compute MSE loss, run backward pass, and step the optimizer.
-  - Return `{"loss": float(loss.item())}`.
 """
+Exercise: exercises/16_fsdp_and_deepspeed/fsdp03.py
+Topic: Mixed Precision & Activation Checkpointing
+
+Context & Why:
+During backpropagation, saving intermediate activations for large transformer layers consumes massive memory.
+**Activation Checkpointing** discards activations during the forward pass and recomputes them during backward,
+saving up to 60% activation memory at minimal compute cost.
+
+Instructions:
+1. Wrap transformer layers with activation checkpointing and mixed precision autocasting.
+2. Verify memory savings.
+"""
+
+# I AM NOT DONE
 
 import os
 

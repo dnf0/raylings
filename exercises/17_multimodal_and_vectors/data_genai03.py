@@ -1,38 +1,17 @@
-"""Chapter 17: Multimodal & Vector Ray Data Pipelines - Exercise 3: Dynamic Token Length Bucketing & Padding Optimization.
-
-In LLM pre-training, fine-tuning, and embedding extraction, inputs exhibit variable sequence lengths.
-To perform batched tensor operations on GPUs/TPUs, sequences within each batch must be padded
-to the maximum sequence length in that batch.
-
-Naive batching groups arbitrary documents together. When a short sequence (e.g. 16 tokens)
-is paired with a long document (e.g. 512 tokens), 496 tokens (over 96%) are wasted padding tokens,
-wasting memory bandwidth and matrix multiplication FLOPs.
-
-Dynamic length bucketing groups sequences of similar lengths into matched bins before micro-batching,
-dramatically minimizing padding token overhead (>50% reduction).
-
-Key Concepts:
-- `Length Bucketing / Sorting`: Grouping or sorting dataset items by `seq_len` ensures that
-  within any micro-batch, sequence lengths are nearly uniform.
-- `Dynamic In-Batch Padding`: Instead of padding all batches globally to `MAX_SEQ_LEN` (e.g., 2048 or 4096),
-  each batch is padded dynamically only to the local maximum length of that specific batch.
-- `Attention Mask Generation`: Produces binary masks (`1` for real tokens, `0` for `<pad>`)
-  alongside padded `input_ids` for transformer attention kernels.
-
-Your Task:
-- In `pad_token_batch(batch, pad_token_id)`:
-  - Find `max_len = max(len(toks) for toks in batch["tokens"])`.
-  - For each sample, pad `tokens` up to `max_len` using `pad_token_id` (default `0`).
-  - Construct `attention_mask` (`1` for token, `0` for padding).
-  - Compute total actual tokens and total padding tokens.
-  - Return dict with `"doc_id"`, `"input_ids"`, `"attention_mask"`, `"actual_tokens"`, and `"pad_tokens"`.
-- In `compute_batch_padding_stats(batches)`:
-  - Sum `actual_tokens` and `pad_tokens` across all batches.
-  - Calculate `padding_ratio = total_pad / (total_actual + total_pad)`.
-  - Return `(total_actual, total_pad, padding_ratio)`.
-- In `create_bucketed_dataset(ds)`:
-  - Sort or bucket `ds` by `"seq_len"` so that sequences of similar lengths are placed adjacent to each other.
 """
+Exercise: exercises/17_multimodal_and_vectors/data_genai03.py
+Topic: Dynamic Token Length Bucketing & Padding Optimization
+
+Context & Why:
+Padding all text sequences in a batch to the global maximum length wastes massive compute on padding tokens.
+**Length Bucketing** clusters sequences of similar lengths into the same mini-batch, minimizing padding overhead.
+
+Instructions:
+1. Implement length bucketing on variable-length text records.
+2. Verify reduced padding token counts.
+"""
+
+# I AM NOT DONE
 
 import os
 from typing import Any

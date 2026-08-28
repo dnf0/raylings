@@ -1,23 +1,25 @@
-"""Chapter 1: Ray Core Foundations - Exercise 2: ObjectRefs and ray.get().
-
-In Ray, calling a remote function does NOT return the computed value directly.
-Instead, it immediately returns an `ObjectRef`—a lightweight identifier representing
-a future value that will be computed asynchronously on a cluster worker.
-
-Key Concepts:
-1. `ObjectRef`: A 28-byte unique identifier representing an object residing in Ray's
-   distributed object store.
-2. `ray.get(object_ref)`: Blocks until the object is available and deserializes it.
-3. Batch `ray.get([ref1, ref2, ...])`: Ray can wait on and retrieve an entire list of
-   `ObjectRef`s in parallel with a single call, which is much more efficient than calling
-   `ray.get()` one by one.
-
-Your Task:
-- Define a remote function `multiply(a: int, b: int) -> int`.
-- Launch 5 parallel tasks calculating `i * 10` for `i` in `range(5)`.
-- Store the list of `ObjectRef`s.
-- Retrieve all 5 results in a single `ray.get(refs)` call.
 """
+Exercise: exercises/01_basics/basics02.py
+Topic: ObjectRefs and ray.get() Batch Retrieval
+
+Context & Why:
+In Ray, calling a remote function does NOT return the computed value directly.
+Instead, it immediately returns an `ObjectRef`—a lightweight 28-byte unique identifier
+representing a future value stored in Ray's distributed Plasma object store.
+
+Calling `ray.get(ref)` sequentially in a loop blocks the driver on each individual task,
+defeating parallelism. Instead, Ray allows passing a list of ObjectRefs to `ray.get([ref1, ref2, ...])`.
+This batch retrieval instructs the Ray core worker to wait for all objects in parallel and
+deserialize them efficiently in a single operation.
+
+Instructions:
+1. Decorate `multiply` with `@ray.remote`.
+2. Launch 5 parallel tasks calculating `i * 10` for `i` in `range(5)` using list comprehension.
+3. Collect the `ObjectRef`s in a list.
+4. Retrieve all 5 results in parallel with a single `ray.get(refs)` call.
+"""
+
+# I AM NOT DONE
 
 import ray
 from ray import ObjectRef

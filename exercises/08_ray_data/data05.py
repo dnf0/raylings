@@ -1,29 +1,19 @@
-"""Chapter 8: Ray Data for High-Throughput ETL - Exercise 5: PyTorch DataLoader Interop (iter_torch_batches).
-
-Feeding data into PyTorch models efficiently is critical for high GPU utilization.
-Ray Data provides `ds.iter_torch_batches(batch_size=B)` which streams mini-batches directly
-as PyTorch `torch.Tensor`s with zero-copy memory transfers:
-
-Key Parameters:
-- `batch_size`: Number of samples per batch tensor.
-- `dtypes`: Optional dict mapping column names to `torch.dtype` (e.g. `torch.float32`, `torch.int64`).
-- `device`: Optional PyTorch device (e.g. `"cpu"` or `"cuda"`).
-
-Example:
-```python
-for batch in ds.iter_torch_batches(batch_size=32):
-    features = batch["features"]  # torch.Tensor of shape (32, ...)
-    labels = batch["label"]       # torch.Tensor of shape (32,)
-    # Forward pass: model(features)
-```
-
-Your Task:
-- In `verify()`:
-  - Create dataset from `[{'x': float(i), 'y': float(i * 2)} for i in range(16)]`.
-  - Iterate over `ds.iter_torch_batches(batch_size=4)`.
-  - Accumulate batch count and verify the shapes of `batch['x']` and `batch['y']` are `torch.Size([4])`.
-  - Assert that exactly 4 mini-batches were produced.
 """
+Exercise: exercises/08_ray_data/data05.py
+Topic: PyTorch DataLoader Interoperability
+
+Context & Why:
+Ray Data provides seamless zero-copy streaming into distributed PyTorch training loops via
+`dataset.iter_torch_batches(batch_size=B, prefetch_batches=P)`.
+
+This replaces standard PyTorch `DataLoader` with multi-node distributed streaming, prefetching, and sharding.
+
+Instructions:
+1. Convert a Ray Dataset into PyTorch tensors using `iter_torch_batches()`.
+2. Iterate batches in a simulated training loop.
+"""
+
+# I AM NOT DONE
 
 import ray
 import ray.data
