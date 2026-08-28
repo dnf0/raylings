@@ -1,6 +1,7 @@
 # Raylings ⚡
 
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://dnf0.github.io/raylings/)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/dnf0.raylings-vscode?logo=visual-studio-code&label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=dnf0.raylings-vscode)
 [![CI](https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg)](https://github.com/dnf0/raylings/actions)
 [![KubeRay CI](https://github.com/dnf0/raylings/actions/workflows/kuberay-e2e.yml/badge.svg)](https://github.com/dnf0/raylings/actions)
 [![Playground](https://img.shields.io/badge/Playground-⚡%20Try%20in%20Browser-blueviolet)](https://dnf0.github.io/raylings/playground/)
@@ -317,7 +318,18 @@ Raylings provides an official extension for **Visual Studio Code** and **Cursor*
 
 ### 📦 Extension Installation
 
-#### Via Command Line (VSIX)
+#### Via VS Code / Cursor Marketplace (Recommended)
+
+1. Open the Extensions view (`Ctrl+Shift+X` / `Cmd+Shift+X`).
+2. Search for **`Raylings`** (published by `dnf0`) and click **Install**.
+3. Or install via command line:
+   ```bash
+   code --install-extension dnf0.raylings-vscode
+   # Or for Cursor
+   cursor --install-extension dnf0.raylings-vscode
+   ```
+
+#### Via Release VSIX File
 
 ```bash
 # For VS Code
@@ -326,12 +338,6 @@ code --install-extension dist/raylings-vscode.vsix
 # For Cursor
 cursor --install-extension dist/raylings-vscode.vsix
 ```
-
-#### Via Editor UI (VSIX)
-
-1. Open the Extensions view (`Ctrl+Shift+X` / `Cmd+Shift+X`).
-2. Click the **`...`** (Views and More Actions) menu in the top-right corner of the Extensions pane.
-3. Select **Install from VSIX...** and choose `dist/raylings-vscode.vsix` (available from the repository root after packaging or downloaded from GitHub Releases).
 
 ---
 

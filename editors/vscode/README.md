@@ -6,7 +6,7 @@ An interactive visual companion for **Raylings**, the interactive curriculum des
 
 ## ✨ Features
 
-- **⚡ Activity Bar Exercise Explorer**: Browse all 14 curriculum chapters and 66 exercises with real-time completion checkmarks (`✓`), pending badges (`⏳`), and exercise metadata.
+- **⚡ Activity Bar Exercise Explorer**: Browse all 18 curriculum chapters and 81 exercises with real-time completion checkmarks (`✓`), pending badges (`⏳`), and exercise metadata.
 - **📊 Real-Time Status Bar Tracker**: View current chapter completion percentages and jump straight to your next incomplete exercise in one click.
 - **🚀 Auto-Run on Save**: Edit an exercise file in `exercises/**/*.py`, save, and get instant feedback in the Raylings output pane.
 - **💡 Progressive Hint Reveal**: Browse multi-tier progressive hints directly within VS Code without spoiling solutions.

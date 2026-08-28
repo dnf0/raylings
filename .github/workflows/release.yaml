@@ -83,3 +83,12 @@ jobs:
           packages-dir: dist-python/
           password: ${{ secrets.PYPI_API_TOKEN }}
           skip-existing: true
+
+      - name: Publish to VS Code Marketplace
+        if: ${{ env.VSCE_PAT != '' }}
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          cd editors/vscode
+          npx @vscode/vsce publish --packagePath ../../dist/raylings-vscode.vsix --pat "${{ secrets.VSCE_PAT }}" --no-dependencies
+

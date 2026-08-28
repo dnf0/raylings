@@ -164,6 +164,18 @@ graph LR
     Commands --> DaemonCtrl
 ```
 
+### Installation
+
+Install **`Raylings: Master Python Ray`** directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=dnf0.raylings-vscode) or via command line:
+
+```bash
+# For Visual Studio Code
+code --install-extension dnf0.raylings-vscode
+
+# For Cursor
+cursor --install-extension dnf0.raylings-vscode
+```
+
 ### Key Extension Features
 
 1. **Curriculum Explorer Tree View**:
