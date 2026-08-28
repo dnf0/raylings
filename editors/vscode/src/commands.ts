@@ -1,15 +1,13 @@
 import * as vscode from 'vscode';
-import { exec } from 'child_process';
-import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { RaylingsTreeProvider } from './exerciseTree';
 import { RaylingsStatusBar } from './statusBar';
-import { HintResponse, ListResponse, ProgressResponse, RunResponse } from './types';
+import { HintResponse, ListResponse, RunResponse } from './types';
 import { getEffectiveWorkspaceRoot, resolveExercisePath } from './pathUtils';
-
-const execAsync = promisify(exec);
+import { cliBridge } from './cliBridge';
+import { BUNDLED_CHAPTERS } from './curriculumManifest';
 
 let outputChannel: vscode.OutputChannel | undefined;
 
@@ -25,14 +23,8 @@ export function registerCommands(
   treeProvider?: RaylingsTreeProvider,
   statusBar?: RaylingsStatusBar
 ): void {
-  const getExecutable = (): string => {
-    const config = vscode.workspace.getConfiguration('raylings');
-    return config.get<string>('executablePath', 'raylings');
-  };
-
   // 1. Open Specific Exercise File (with 1-Click Auto-Init UX)
   const openExerciseFileHandler = async (filePath?: string | vscode.Uri) => {
-    const executablePath = getExecutable();
     const workspaceRoot = getEffectiveWorkspaceRoot();
 
     let rawPath: string;
@@ -66,10 +58,8 @@ export function registerCommands(
           const out = getOutputChannel();
           out.show(true);
           out.appendLine(`⚡ Initializing Raylings exercises in ${targetDir}...`);
-          const { stdout } = await execAsync(`${executablePath} init`, {
-            cwd: targetDir,
-          });
-          out.appendLine(stdout);
+          const res = await cliBridge.init(targetDir);
+          out.appendLine(res.message);
           vscode.window.showInformationMessage('✨ Raylings exercises initialized successfully! 🎉');
           await Promise.all([
             treeProvider?.refresh(),
@@ -112,49 +102,51 @@ export function registerCommands(
   context.subscriptions.push(
     vscode.commands.registerCommand('raylings.openNextExercise', async () => {
       const workspaceRoot = getEffectiveWorkspaceRoot();
-      const executablePath = getExecutable();
 
       try {
-        const { stdout } = await execAsync(`${executablePath} list --json`, {
-          cwd: workspaceRoot,
-        });
-        const data: ListResponse = JSON.parse(stdout.trim());
-
+        const data: ListResponse = await cliBridge.list(workspaceRoot);
         const allExercises = (data.chapters || []).flatMap((ch) => ch.exercises);
         const nextExercise = allExercises.find(
           (ex) => !ex.completed && (ex.has_marker || !ex.exists)
         );
 
-        if (!nextExercise) {
-          vscode.window.showInformationMessage(
-            '🎉 Congratulations! You have completed all Raylings exercises!'
-          );
+        if (nextExercise) {
+          await vscode.commands.executeCommand('raylings.openExerciseFile', nextExercise.path);
           return;
         }
+      } catch {
+        // Fallback to bundled curriculum and local disk check
+      }
 
-        await vscode.commands.executeCommand('raylings.openExerciseFile', nextExercise.path);
-      } catch (err: any) {
-        // Fallback to progress --json if list fails
-        try {
-          const { stdout } = await execAsync(`${executablePath} progress --json`, {
-            cwd: workspaceRoot,
-          });
-          const data: ProgressResponse = JSON.parse(stdout.trim());
-
-          if (data.is_finished || !data.current_path) {
-            vscode.window.showInformationMessage(
-              '🎉 Congratulations! You have completed all Raylings exercises!'
-            );
+      for (const chapter of BUNDLED_CHAPTERS) {
+        for (const ex of chapter.exercises) {
+          const fullPath = resolveExercisePath(ex.path, workspaceRoot);
+          let isDone = false;
+          if (fs.existsSync(fullPath) && !fs.statSync(fullPath).isDirectory()) {
+            try {
+              const content = fs.readFileSync(fullPath, 'utf8');
+              const hasMarker =
+                content.includes('# I AM NOT DONE') ||
+                content.includes('// I AM NOT DONE') ||
+                content.includes('<!-- I AM NOT DONE -->') ||
+                content.includes('___') ||
+                content.includes('/* ??? */') ||
+                content.includes('<!-- ANSWER -->');
+              isDone = !hasMarker;
+            } catch {
+              isDone = false;
+            }
+          }
+          if (!isDone) {
+            await vscode.commands.executeCommand('raylings.openExerciseFile', ex.path);
             return;
           }
-
-          await vscode.commands.executeCommand('raylings.openExerciseFile', data.current_path);
-        } catch (innerErr: any) {
-          vscode.window.showErrorMessage(
-            `Failed to determine next exercise: ${innerErr.message || err.message}`
-          );
         }
       }
+
+      vscode.window.showInformationMessage(
+        '🎉 Congratulations! You have completed all Raylings exercises!'
+      );
     })
   );
 
@@ -186,19 +178,13 @@ export function registerCommands(
 
       const workspaceRoot = getEffectiveWorkspaceRoot();
       try {
-        const { stdout } = await execAsync(
-          `${getExecutable()} run ${targetName} --json`,
-          {
-            cwd: workspaceRoot,
-          }
-        );
-        const result: RunResponse = JSON.parse(stdout.trim());
+        const result: RunResponse = await cliBridge.run(targetName, workspaceRoot);
 
         if (result.passed) {
           out.appendLine(`✅ Exercise passed cleanly!`);
           vscode.window.showInformationMessage(`✅ ${targetName} passed! Ready for next exercise.`);
         } else {
-          out.appendLine(`❌ Exercise failed or contains '# I AM NOT DONE':`);
+          out.appendLine(`❌ Exercise failed or contains '# I AM NOT DONE' / blank placeholders:`);
           if (result.output) {
             out.appendLine(result.output);
           }
@@ -212,7 +198,7 @@ export function registerCommands(
 
         await Promise.all([treeProvider?.refresh(), statusBar?.update()]);
       } catch (err: any) {
-        out.appendLine(`❌ Error running exercise:\n${err.stdout || err.message}`);
+        out.appendLine(`❌ Error running exercise:\n${err.message || String(err)}`);
         vscode.window.showErrorMessage(
           `Execution failed for ${targetName}. Check Raylings output.`
         );
@@ -232,35 +218,46 @@ export function registerCommands(
       }
 
       const workspaceRoot = getEffectiveWorkspaceRoot();
+      let hints: string[] = [];
+      let exerciseTitle = targetName;
+
       try {
-        const cmd = targetName
-          ? `${getExecutable()} hint ${targetName} --json`
-          : `${getExecutable()} hint --json`;
-        const { stdout } = await execAsync(cmd, { cwd: workspaceRoot });
-        const data: HintResponse = JSON.parse(stdout.trim());
-
-        if (!data.hints || data.hints.length === 0) {
-          vscode.window.showInformationMessage(
-            `No hints available for ${data.name || 'this exercise'}.`
-          );
-          return;
+        const data: HintResponse = await cliBridge.hint(targetName || 'basics01', undefined, workspaceRoot);
+        hints = data.hints || [];
+        if (data.name) {
+          exerciseTitle = data.name;
         }
-
-        const items = data.hints.map((hint, idx) => ({
-          label: `💡 Level ${idx + 1} Hint`,
-          description: hint,
-        }));
-
-        const selected = await vscode.window.showQuickPick(items, {
-          title: `⚡ Progressive Hints for ${data.name}`,
-          placeHolder: 'Select a hint level to reveal details',
-        });
-
-        if (selected) {
-          vscode.window.showInformationMessage(`💡 [${data.name}] ${selected.description}`);
+      } catch {
+        // Fallback to embedded curriculum hints
+        for (const chapter of BUNDLED_CHAPTERS) {
+          const match = chapter.exercises.find((e) => e.name === targetName);
+          if (match) {
+            hints = match.hints;
+            exerciseTitle = `${match.name}: ${match.title}`;
+            break;
+          }
         }
-      } catch (err: any) {
-        vscode.window.showErrorMessage(`Failed to fetch hint: ${err.message}`);
+      }
+
+      if (!hints || hints.length === 0) {
+        vscode.window.showInformationMessage(
+          `No hints available for ${exerciseTitle || 'this exercise'}.`
+        );
+        return;
+      }
+
+      const items = hints.map((hint, idx) => ({
+        label: `💡 Level ${idx + 1} Hint`,
+        description: hint,
+      }));
+
+      const selected = await vscode.window.showQuickPick(items, {
+        title: `⚡ Progressive Hints for ${exerciseTitle}`,
+        placeHolder: 'Select a hint level to reveal details',
+      });
+
+      if (selected) {
+        vscode.window.showInformationMessage(`💡 [${exerciseTitle}] ${selected.description}`);
       }
     })
   );
@@ -269,15 +266,20 @@ export function registerCommands(
   context.subscriptions.push(
     vscode.commands.registerCommand('raylings.startWatcher', () => {
       const workspaceRoot = getEffectiveWorkspaceRoot();
+      const resolved = cliBridge.resolveCommand(workspaceRoot);
+      const cmdStr = [...resolved.argsPrefix, 'watch'].join(' ');
+      const fullCmd = `${resolved.command} ${cmdStr}`.trim();
+
       let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Watcher');
       if (!terminal) {
         terminal = vscode.window.createTerminal({
           name: 'Raylings Watcher',
           cwd: workspaceRoot,
+          env: cliBridge.getEnhancedEnv(),
         });
       }
       terminal.show();
-      terminal.sendText(`${getExecutable()} watch`);
+      terminal.sendText(fullCmd);
     })
   );
 
@@ -294,10 +296,8 @@ export function registerCommands(
       const out = getOutputChannel();
       out.show(true);
       out.appendLine(`⚡ Initializing Raylings workspace in ${targetDir}...`);
-      const { stdout } = await execAsync(`${getExecutable()} init`, {
-        cwd: targetDir,
-      });
-      out.appendLine(stdout);
+      const res = await cliBridge.init(targetDir);
+      out.appendLine(res.message);
       vscode.window.showInformationMessage(
         `✨ Raylings workspace initialized successfully in ${targetDir}! 🎉`
       );
@@ -378,36 +378,42 @@ export function registerCommands(
  * Launch the interactive onboarding tour in a dedicated terminal.
  */
 export function startTourCommand(): void {
-  const config = vscode.workspace.getConfiguration('raylings');
-  const executable = config.get<string>('executablePath', 'raylings');
   const workspaceRoot = getEffectiveWorkspaceRoot();
+  const resolved = cliBridge.resolveCommand(workspaceRoot);
+  const cmdStr = [...resolved.argsPrefix, 'tour'].join(' ');
+  const fullCmd = `${resolved.command} ${cmdStr}`.trim();
+
   let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Tour');
   if (!terminal) {
     terminal = vscode.window.createTerminal({
       name: 'Raylings Tour',
       cwd: workspaceRoot,
+      env: cliBridge.getEnhancedEnv(),
     });
   }
   terminal.show();
-  terminal.sendText(`${executable} tour`);
+  terminal.sendText(fullCmd);
 }
 
 /**
  * Launch the preflight doctor diagnostics in a dedicated terminal.
  */
 export function runDoctorCommand(): void {
-  const config = vscode.workspace.getConfiguration('raylings');
-  const executable = config.get<string>('executablePath', 'raylings');
   const workspaceRoot = getEffectiveWorkspaceRoot();
+  const resolved = cliBridge.resolveCommand(workspaceRoot);
+  const cmdStr = [...resolved.argsPrefix, 'doctor'].join(' ');
+  const fullCmd = `${resolved.command} ${cmdStr}`.trim();
+
   let terminal = vscode.window.terminals.find((t) => t.name === 'Raylings Doctor');
   if (!terminal) {
     terminal = vscode.window.createTerminal({
       name: 'Raylings Doctor',
       cwd: workspaceRoot,
+      env: cliBridge.getEnhancedEnv(),
     });
   }
   terminal.show();
-  terminal.sendText(`${executable} doctor`);
+  terminal.sendText(fullCmd);
 }
 
 /**
