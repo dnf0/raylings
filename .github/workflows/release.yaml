@@ -90,5 +90,5 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           cd editors/vscode
-          npx @vscode/vsce publish --packagePath ../../dist/raylings-vscode.vsix --pat "${{ secrets.VSCE_PAT }}" --no-dependencies
+          npx @vscode/vsce publish --packagePath ../../dist/raylings-vscode.vsix --pat "${{ secrets.VSCE_PAT }}" --no-dependencies --skip-duplicate
 
