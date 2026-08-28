@@ -215,11 +215,15 @@ def run_torch_train_multinode() -> dict[str, Any]:
         remove_placement_group(pg)
 
 
+@ray.remote(num_cpus=0)
 def run_ray_data_multinode_pipeline() -> dict[str, Any]:
     """Execute streaming Ray Data pipeline within the cluster context."""
     import ray.data
 
-    ds = ray.data.range(100)
+    ctx = ray.data.DataContext.get_current()
+    ctx.target_max_block_size = 1 * 1024 * 1024
+
+    ds = ray.data.range(100, override_num_blocks=2)
     transformed_ds = ds.map_batches(
         lambda batch: {
             "id": batch["id"],

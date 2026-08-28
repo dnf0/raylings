@@ -183,7 +183,7 @@ def test_kuberay_ray_train_torch_multinode(ray_cluster: dict[str, Any]) -> None:
 
 def test_kuberay_ray_data_multinode_streaming(ray_cluster: dict[str, Any]) -> None:
     """Verify streaming Ray Data map pipeline across cluster nodes."""
-    res = run_ray_data_multinode_pipeline()
+    res = ray.get(run_ray_data_multinode_pipeline.remote())
 
     assert res["count"] == 100, f"Expected 100 results, got {res['count']}"
     assert len(res["results"]) == 100, "Duplicate record IDs detected"
