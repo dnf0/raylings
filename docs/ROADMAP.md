@@ -9,7 +9,7 @@ This document outlines the strategic backlog, upcoming features, and long-term r
 ```mermaid
 mindmap
   root((Raylings Roadmap))
-    Track 1: Distributed AI Curriculum
+    Track 1: Distributed AI Curriculum [Done]
       Chapter 15: vLLM & LLM Serving
       Chapter 16: DeepSpeed & PyTorch FSDP
       Chapter 17: Multimodal & Vector Ray Data
@@ -21,9 +21,10 @@ mindmap
       Automated Kind / KubeRay CI Testing
       Multi-Node E2E Pytest Suite
       Remote Head Node Client Execution
-    Track 4: Distribution & Ecosystem
-      PyPI Trusted Publisher Automation
+    Track 4: Ecosystem & WASM [Done]
       Interactive Pyodide / WASM Sandbox
+      Pluggable Curriculum Plugin Registry
+      Quantitative Finance Pack Ch 18
 ```
 
 ---
@@ -82,9 +83,14 @@ Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced di
 
 ---
 
-## Track 4: Ecosystem & Community (Backlog 📋)
+## Track 4: Ecosystem & Community (Completed ✅)
 
-1. **Browser-Based Interactive Sandbox**:
-   - Lightweight WASM / WebAssembly Pyodide playground for exploring foundational Ray concepts in the browser without local Python installation.
-2. **Community Exercise Registry**:
-   - Pluggable exercise packs for domain-specific ecosystems (e.g. BioRay, Ray Geospatial, Ray Finance).
+1. **Browser-Based Interactive WASM Playground**:
+   - Pure-Python in-memory Ray simulation engine (`src/raylings/wasm_compat.py`) supporting `ray.init`, `ray.shutdown`, `ray.remote` tasks and actors, `ray.put`, `ray.get`, `ActorPool`, and `ray.data` Dataset operations inside Pyodide / WebAssembly runtimes.
+   - Monaco Editor + TailwindCSS interactive web playground (`docs/assets/playground.html` & `docs/playground.md`) with catalog JSON bundling (`docs/assets/playground_catalog.json`), real-time execution, hint reveals, solution diffs, and live simulated cluster telemetry.
+2. **Pluggable Curriculum Architecture & Domain Plugin Registry**:
+   - Extensible `RaylingsPlugin` protocol (`src/raylings/plugins/base.py`) with automatic discovery via Python entry points (`raylings.plugins`).
+   - CLI management suite (`raylings plugins list`, `raylings plugins info <name>`, `raylings plugins validate <path>`).
+   - Reference Quantitative Finance curriculum pack (`exercises/18_quant_finance/` and `src/raylings/plugins/finance.py`) featuring Monte Carlo option pricing, distributed portfolio VaR/CVaR, and streaming market tick analytics.
+   - Comprehensive Plugin Authoring & Distribution Guide (`docs/plugins.md`).
+
