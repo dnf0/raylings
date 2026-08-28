@@ -115,21 +115,13 @@ cluster_wait() {
 }
 
 cluster_forward() {
-    log_info "Resolving Ray head pod..."
-    local HEAD_POD
-    HEAD_POD=$(kubectl get pod -l ray.io/node-type=head -n "${NAMESPACE}" -o jsonpath='{.items[0].metadata.name}')
-    if [[ -z "${HEAD_POD}" ]]; then
-        log_error "No Ray head pod found in namespace '${NAMESPACE}'."
-        exit 1
-    fi
-
-    log_info "Starting background port-forwarding for pod/${HEAD_POD} (10001, 8265)..."
+    log_info "Starting background port-forwarding for svc/${RAY_CLUSTER_NAME}-head-svc (10001, 8265)..."
 
     # Kill existing port-forward on port 10001 or 8265 if running
     pkill -f "kubectl port-forward.*10001" 2>/dev/null || true
 
     local LOG_FILE="/tmp/kuberay-port-forward.log"
-    nohup kubectl port-forward --address 0.0.0.0 "pod/${HEAD_POD}" 10001:10001 8265:8265 -n "${NAMESPACE}" > "${LOG_FILE}" 2>&1 &
+    nohup kubectl port-forward --address 0.0.0.0 "svc/${RAY_CLUSTER_NAME}-head-svc" 10001:10001 8265:8265 -n "${NAMESPACE}" > "${LOG_FILE}" 2>&1 &
     local PF_PID=$!
     disown "$PF_PID" 2>/dev/null || true
 
