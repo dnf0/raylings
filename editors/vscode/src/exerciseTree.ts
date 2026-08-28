@@ -1,11 +1,9 @@
 import * as vscode from 'vscode';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import * as path from 'path';
+import * as fs from 'fs';
 import { ChapterData, ExerciseData, ListResponse } from './types';
 import { getEffectiveWorkspaceRoot, resolveExercisePath } from './pathUtils';
-
-const execAsync = promisify(exec);
+import { BUNDLED_CHAPTERS } from './curriculumManifest';
+import { cliBridge } from './cliBridge';
 
 export class TreeItemNode extends vscode.TreeItem {
   constructor(
@@ -49,19 +47,56 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
   }
 
   public async loadExercises(): Promise<void> {
-    const config = vscode.workspace.getConfiguration('raylings');
-    const executablePath = config.get<string>('executablePath', 'raylings');
     const workspaceRoot = getEffectiveWorkspaceRoot();
 
+    // 1. Initialize with deep clone of bundled curriculum manifest
+    const baseChapters: ChapterData[] = JSON.parse(JSON.stringify(BUNDLED_CHAPTERS));
+
+    // 2. Directly scan local workspace files for completion & existence
+    for (const chapter of baseChapters) {
+      for (const ex of chapter.exercises) {
+        const fullPath = resolveExercisePath(ex.path, workspaceRoot);
+        if (fs.existsSync(fullPath) && !fs.statSync(fullPath).isDirectory()) {
+          ex.exists = true;
+          try {
+            const content = fs.readFileSync(fullPath, 'utf8');
+            const hasNotDone =
+              content.includes('# I AM NOT DONE') ||
+              content.includes('// I AM NOT DONE') ||
+              content.includes('<!-- I AM NOT DONE -->');
+            const hasBlank =
+              content.includes('___') ||
+              content.includes('/* ??? */') ||
+              content.includes('<!-- ANSWER -->');
+            const hasMarker = hasNotDone || hasBlank;
+
+            ex.has_marker = hasMarker;
+            ex.is_done = !hasMarker;
+            ex.completed = !hasMarker;
+          } catch {
+            ex.has_marker = true;
+            ex.is_done = false;
+            ex.completed = false;
+          }
+        } else {
+          ex.exists = false;
+          ex.has_marker = true;
+          ex.is_done = false;
+          ex.completed = false;
+        }
+      }
+    }
+
+    this.chapters = baseChapters;
+
+    // 3. Attempt dynamic query via CLI bridge in background to augment with tracker state if available
     try {
-      const { stdout } = await execAsync(`${executablePath} list --json`, {
-        cwd: workspaceRoot,
-        timeout: 15000,
-      });
-      const data: ListResponse = JSON.parse(stdout.trim());
-      this.chapters = data.chapters || [];
-    } catch (err) {
-      console.error('Error loading exercises via raylings list --json:', err);
+      const data: ListResponse = await cliBridge.list(workspaceRoot);
+      if (data && Array.isArray(data.chapters) && data.chapters.length > 0) {
+        this.chapters = data.chapters;
+      }
+    } catch {
+      // Gracefully continue using filesystem-scanned bundled manifest
     }
   }
 
@@ -74,21 +109,19 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
       await this.loadExercises();
     }
 
-    const workspaceRoot = getEffectiveWorkspaceRoot();
-
     if (!element) {
       // Root level: Group exercises by Chapter
       return this.chapters.map((ch) => {
         const total = ch.exercises.length;
         const completed = ch.exercises.filter(
-          (e) => e.completed || (!e.has_marker && e.exists)
+          (e) => e.is_done === true || e.completed === true || (!e.has_marker && e.exists)
         ).length;
         const isAllDone = total > 0 && completed === total;
         const label = `Ch ${String(ch.number).padStart(2, '0')}: ${ch.title} (${completed}/${total})`;
 
         const node = new TreeItemNode(
           label,
-          vscode.TreeItemCollapsibleState.Collapsed,
+          isAllDone ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.Expanded,
           'chapter',
           ch
         );
@@ -104,7 +137,7 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
     if (element.contextValue === 'chapter' && element.chapter) {
       // Child level: Exercises in Chapter
       return element.chapter.exercises.map((ex) => {
-        const isCompleted = ex.completed || (!ex.has_marker && ex.exists);
+        const isCompleted = ex.is_done === true || ex.completed === true || (!ex.has_marker && ex.exists);
         const label = `${ex.name}: ${ex.title}`;
         const node = new TreeItemNode(
           label,
@@ -116,6 +149,8 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
 
         node.iconPath = isCompleted
           ? new vscode.ThemeIcon('pass')
+          : ex.exists
+          ? new vscode.ThemeIcon('circle-large')
           : new vscode.ThemeIcon('circle-outline');
 
         node.command = {
@@ -124,7 +159,7 @@ export class RaylingsTreeProvider implements vscode.TreeDataProvider<TreeItemNod
           arguments: [ex.path],
         };
 
-        const statusText = isCompleted ? 'Completed ✓' : 'Incomplete ⏳';
+        const statusText = isCompleted ? 'Completed ✓' : ex.exists ? 'In Progress ⏳' : 'Not Initialized 📦';
         const tooltip = new vscode.MarkdownString();
         tooltip.isTrusted = true;
         tooltip.appendMarkdown(`### ⚡ ${ex.title}\n\n`);

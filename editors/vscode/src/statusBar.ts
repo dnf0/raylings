@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import * as fs from 'fs';
 import { ProgressResponse } from './types';
-import { getEffectiveWorkspaceRoot } from './pathUtils';
-
-const execAsync = promisify(exec);
+import { getEffectiveWorkspaceRoot, resolveExercisePath } from './pathUtils';
+import { cliBridge } from './cliBridge';
+import { BUNDLED_CHAPTERS } from './curriculumManifest';
 
 export class RaylingsStatusBar implements vscode.Disposable {
   private statusBarItem: vscode.StatusBarItem;
@@ -32,37 +31,74 @@ export class RaylingsStatusBar implements vscode.Disposable {
     }
 
     this.isUpdating = true;
-    const executablePath = config.get<string>('executablePath', 'raylings');
     const workspaceRoot = getEffectiveWorkspaceRoot();
 
     try {
-      const { stdout } = await execAsync(`${executablePath} progress --json`, {
-        cwd: workspaceRoot,
-        timeout: 10000,
-      });
-      const data: ProgressResponse = JSON.parse(stdout.trim());
-
-      if (data.is_finished) {
-        this.statusBarItem.text = `⚡ Raylings: 🎉 100% Completed! (${data.total}/${data.total})`;
-        this.statusBarItem.tooltip = 'All Raylings exercises completed! Click to view progress summary.';
-      } else {
-        const nextName = data.current_exercise || 'None';
-        this.statusBarItem.text = `⚡ Raylings: ${data.completed}/${data.total} (${data.percentage}%) | Next: ${nextName}`;
-        this.statusBarItem.tooltip = new vscode.MarkdownString(
-          `**⚡ Raylings Interactive Curriculum**\n\n` +
-          `- **Progress:** ${data.completed} / ${data.total} exercises (${data.percentage}%)\n` +
-          `- **Current Exercise:** \`${nextName}\`\n\n` +
-          `*Click to jump to next incomplete exercise*`
-        );
+      const data: ProgressResponse = await cliBridge.progress(workspaceRoot);
+      if (data && typeof data.completed === 'number') {
+        if (data.is_finished) {
+          this.statusBarItem.text = `⚡ Raylings: 🎉 100% Completed! (${data.total}/${data.total})`;
+          this.statusBarItem.tooltip = 'All Raylings exercises completed! Click to view progress summary.';
+        } else {
+          const nextName = data.current_exercise || 'None';
+          this.statusBarItem.text = `⚡ Raylings: ${data.completed}/${data.total} (${data.percentage}%) | Next: ${nextName}`;
+          this.statusBarItem.tooltip = new vscode.MarkdownString(
+            `**⚡ Raylings Interactive Curriculum**\n\n` +
+            `- **Progress:** ${data.completed} / ${data.total} exercises (${data.percentage}%)\n` +
+            `- **Current Exercise:** \`${nextName}\`\n\n` +
+            `*Click to jump to next incomplete exercise*`
+          );
+        }
+        this.statusBarItem.show();
+        return;
       }
-      this.statusBarItem.show();
     } catch {
-      this.statusBarItem.text = `⚡ Raylings: Ready`;
-      this.statusBarItem.tooltip = 'Raylings extension active. Click to open next exercise.';
-      this.statusBarItem.show();
-    } finally {
-      this.isUpdating = false;
+      // Fallback to direct disk inspection
     }
+
+    // Direct filesystem calculation fallback
+    let total = 0;
+    let completed = 0;
+    let nextEx: string | null = null;
+
+    for (const chapter of BUNDLED_CHAPTERS) {
+      for (const ex of chapter.exercises) {
+        total++;
+        const fullPath = resolveExercisePath(ex.path, workspaceRoot);
+        let done = false;
+        if (fs.existsSync(fullPath) && !fs.statSync(fullPath).isDirectory()) {
+          try {
+            const content = fs.readFileSync(fullPath, 'utf8');
+            const hasNotDone =
+              content.includes('# I AM NOT DONE') ||
+              content.includes('// I AM NOT DONE') ||
+              content.includes('<!-- I AM NOT DONE -->');
+            const hasBlank =
+              content.includes('___') ||
+              content.includes('/* ??? */') ||
+              content.includes('<!-- ANSWER -->');
+            done = !hasNotDone && !hasBlank;
+          } catch {
+            done = false;
+          }
+        }
+        if (done) {
+          completed++;
+        } else if (!nextEx) {
+          nextEx = ex.name;
+        }
+      }
+    }
+
+    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+    if (completed === total && total > 0) {
+      this.statusBarItem.text = `⚡ Raylings: 🎉 100% Completed! (${completed}/${total})`;
+    } else {
+      this.statusBarItem.text = `⚡ Raylings: ${completed}/${total} (${pct}%) | Next: ${nextEx || 'basics01'}`;
+    }
+    this.statusBarItem.tooltip = `Raylings progress: ${completed}/${total} exercises completed (${pct}%). Click to open next exercise.`;
+    this.statusBarItem.show();
+    this.isUpdating = false;
   }
 
   public dispose(): void {
