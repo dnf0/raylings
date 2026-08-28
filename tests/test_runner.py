@@ -308,4 +308,3 @@ def test_runner_detects_placeholder_markers(tmp_path: Path):
     clean_f = tmp_path / "clean.py"
     clean_f.write_text("def verify(): pass\n")
     assert runner.check_marker(clean_f) is False
-

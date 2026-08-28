@@ -46,9 +46,7 @@ class ExerciseRunner:
                 or "<!-- I AM NOT DONE -->" in content
             )
             has_unfilled_blank = (
-                "___" in content
-                or "/* ??? */" in content
-                or "<!-- ANSWER -->" in content
+                "___" in content or "/* ??? */" in content or "<!-- ANSWER -->" in content
             )
             return has_not_done_comment or has_unfilled_blank
         except Exception:
