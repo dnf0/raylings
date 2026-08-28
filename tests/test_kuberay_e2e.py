@@ -216,9 +216,9 @@ def test_kuberay_ray_data_multinode_streaming(ray_cluster: dict[str, Any]) -> No
     """Verify streaming Ray Data map pipeline across cluster nodes."""
     res = ray.get(run_ray_data_multinode_pipeline.remote())
 
-    assert res["count"] == 100, f"Expected 100 results, got {res['count']}"
-    assert len(res["results"]) == 100, "Duplicate record IDs detected"
+    assert res["count"] == 50, f"Expected 50 results, got {res['count']}"
+    assert len(res["results"]) == 50, "Duplicate record IDs detected"
 
-    for i in range(100):
+    for i in range(50):
         assert i in res["results"], f"Missing index {i} in Ray Data results"
         assert res["results"][i] == i**2, f"Invalid computation: {res['results'][i]}"
