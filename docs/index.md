@@ -1,6 +1,18 @@
 # Raylings ⚡
 
-**Raylings** is an interactive, hands-on CLI learning environment for [Python Ray](https://www.ray.io/), inspired by [Rustlings](https://github.com/rust-lang/rustlings). It guides you through the distributed systems landscape—from foundational `@ray.remote` tasks and stateful actors to high-throughput Ray Data streaming, distributed PyTorch training with Ray Train, scalable model serving with Ray Serve, and production Kubernetes orchestration with KubeRay.
+[![Playground](https://img.shields.io/badge/Playground-⚡%20Try%20in%20Browser-blueviolet)](https://dnf0.github.io/raylings/playground/)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://dnf0.github.io/raylings/)
+[![CI](https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg)](https://github.com/dnf0/raylings/actions)
+[![KubeRay CI](https://github.com/dnf0/raylings/actions/workflows/kuberay-e2e.yml/badge.svg)](https://github.com/dnf0/raylings/actions)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+**Raylings** is an interactive, hands-on CLI learning environment for [Python Ray](https://www.ray.io/), inspired by [Rustlings](https://github.com/rust-lang/rustlings) and [Ziglings](https://codeberg.org/ziglings/exercises). It guides you through the distributed systems landscape—from foundational `@ray.remote` tasks and stateful actors to high-throughput Ray Data streaming, distributed PyTorch training with Ray Train, scalable model serving with Ray Serve, production Kubernetes orchestration with KubeRay, vLLM tensor parallelism, and pluggable financial modeling packs.
+
+> ⚡ **Try it now in your browser!** No installation required: [**Interactive WebAssembly Playground**](playground.md) ([⚡ Try in Browser](https://dnf0.github.io/raylings/playground/)).
+
+<p align="center">
+  <img src="assets/demo.svg" alt="Raylings Terminal Demo" width="840">
+</p>
 
 ---
 
@@ -8,12 +20,14 @@
 
 Distributed computing can feel daunting with abstract concepts like actor handles, Plasma object store zero-copy buffers, placement group gang-scheduling, and distributed all-reduce topologies.
 
-Raylings takes a **learn-by-fixing** approach:
+Raylings takes a **guided, test-driven micro-learning** approach:
 
-1. You are presented with small, focused Python exercises that contain intentional bugs, incomplete implementations, or anti-patterns.
-2. The live watcher monitors your filesystem, automatically running tests whenever you save.
-3. You edit the exercise, fix the bug or implement the distributed primitive, remove the `# I AM NOT DONE` marker, and save.
-4. Raylings instantly verifies your solution and advances you to the next topic.
+1. **Active Debugging & Iteration**: You are presented with small, focused Python exercises that contain intentional bugs, incomplete implementations, or anti-patterns, accompanied by `# TODO:` directives and `# WHY:` architectural explanations.
+2. **Instant Feedback Loop & Interactive Hotkeys**: The live watcher monitors your filesystem, automatically running tests whenever you save (< 50ms).
+3. **Dual-Mode Learning (Offline WASM & Live Cluster)**:
+   - **Offline WASM Mode**: Zero cluster setup required. The pure-Python WebAssembly simulator validates tasks, actors, object store references, and dataset transformations directly in-memory or in your browser.
+   - **Live Cluster Mode**: Seamlessly connect to a local Ray session, remote Ray cluster, or multi-node Kubernetes `KubeRay` cluster (`ray://localhost:10001`). Exercises provision real actors and verify distributed execution across nodes.
+4. **Progressive Hints**: When stuck, multi-tiered hints (`raylings hint <exercise>`) nudge you in the right direction without spoiling the answer.
 
 ---
 
@@ -21,13 +35,21 @@ Raylings takes a **learn-by-fixing** approach:
 
 <div class="grid cards" markdown>
 
--   :material-book-open-page-variant:{ .lg .middle } **14 Comprehensive Chapters**
+-   :material-book-open-page-variant:{ .lg .middle } **18 Comprehensive Chapters**
 
     ---
 
-    66 progressive exercises covering Ray Core, Plasma Object Store, Resource Scheduling, Fault Tolerance, Ray Data, ML from Scratch, Ray Train, Ray Tune, Ray Serve, Observability, and KubeRay.
+    81 progressive exercises covering Ray Core, Plasma Object Store, Resource Scheduling, Fault Tolerance, Ray Data, ML from Scratch, Ray Train, Ray Tune, Ray Serve, Observability, KubeRay, vLLM/LLMs, DeepSpeed/FSDP, Multimodal Vectors, and Quant Finance.
 
     [:octicons-arrow-right-24: Explore Curriculum](syllabus.md)
+
+-   :material-web:{ .lg .middle } **Zero-Install WASM Playground**
+
+    ---
+
+    Run Python 3.12, Monaco Editor, and in-memory Ray simulation 100% client-side inside your web browser via Pyodide WebAssembly.
+
+    [:octicons-arrow-right-24: Launch Playground](playground.md)
 
 -   :material-eye-refresh:{ .lg .middle } **Zero-Friction Live Watcher**
 
@@ -69,6 +91,22 @@ Raylings takes a **learn-by-fixing** approach:
 
     [:octicons-arrow-right-24: Telemetry Reference](cli-reference.md#raylings-top-raylings-metrics)
 
+-   :material-puzzle:{ .lg .middle } **Pluggable Curriculum Registry**
+
+    ---
+
+    Extensible plugin architecture (`raylings plugins`) for authoring, distributing, and loading external domain packs (e.g., Chapter 18 Quantitative Finance).
+
+    [:octicons-arrow-right-24: Plugin Architecture](plugins.md)
+
+-   :material-kubernetes:{ .lg .middle } **Cloud & KubeRay Multi-Node**
+
+    ---
+
+    Automated KinD 3-node cluster orchestration (`scripts/kuberay/`) and end-to-end integration test suite verifying remote Ray client execution and DDP across Kubernetes pods.
+
+    [:octicons-arrow-right-24: KubeRay Guide](cloud-kuberay.md)
+
 -   :material-auto-fix:{ .lg .middle } **Exercise Scaffolding CLI**
 
     ---
@@ -77,7 +115,7 @@ Raylings takes a **learn-by-fixing** approach:
 
     [:octicons-arrow-right-24: Scaffolder Reference](cli-reference.md#raylings-new-raylings-new-exercise)
 
--   :material-microsoft-visual-studio-code:{ .lg .middle } **Native VS Code Extension**
+-   :material-microsoft-visual-studio-code:{ .lg .middle } **Native VS Code & Cursor Extension**
 
     ---
 
@@ -118,52 +156,54 @@ flowchart TD
 
 ## 🏗️ System Architecture
 
-Raylings is built with a modular, decoupled architecture consisting of an interactive CLI runtime, a daemon lifecycle manager, a persistent state store, and an extensible IDE bridge.
-
-```mermaid
-graph TB
-    subgraph UserInterface["User Interfaces"]
-        CLI["CLI Driver (Typer + Rich)"]
-        VSCode["VS Code Native Extension"]
-    end
-
-    subgraph CoreEngine["Raylings Core Engine"]
-        Watcher["Exercise Watcher (Watchfiles)"]
-        Runner["Exercise Runner (Subprocess Isolation)"]
-        StateTracker["State Tracker (~/.raylings_state.json)"]
-        TourEngine["Tour & Diagnostic Engine"]
-    end
-
-    subgraph DaemonLayer["Ray Session Manager"]
-        Daemon["Ray Daemon Session (Shared Cluster)"]
-    end
-
-    subgraph RayCluster["Underlying Ray Runtime"]
-        GCS["Global Control Store (GCS)"]
-        Plasma["Plasma In-Memory Object Store"]
-        Raylets["Worker Raylets & Task Scheduler"]
-    end
-
-    CLI --> Watcher
-    CLI --> TourEngine
-    CLI --> StateTracker
-    VSCode --> CLI
-    Watcher --> Runner
-    Runner --> Daemon
-    Daemon --> GCS
-    Daemon --> Plasma
-    Daemon --> Raylets
+```
+                                  +-----------------------+
+                                  |     User Terminal     |
+                                  +-----------+-----------+
+                                              |
+                                              v
+                                  +-----------------------+
+                                  |   Raylings CLI (Typer)|
+                                  +-----------+-----------+
+                                              |
+                     +------------------------+------------------------+
+                     |                                                 |
+                     v                                                 v
+         +-----------------------+                         +-----------------------+
+         |  File Watcher Engine  |                         | Rich UI & TUI Engine  |
+         |      (watchfiles)     |                         |  (split-pane / top)   |
+         +-----------+-----------+                         +-----------------------+
+                     |
+                     v
+         +-----------------------+
+         |  Curriculum Manifest  |  (18 Chapters / 81 Exercises)
+         +-----------+-----------+
+                     |
+                     v
+         +-----------------------+
+         |   Exercise Runner     |
+         +-----------+-----------+
+                     |
+        +------------+------------+
+        |                         |
+        v                         v
++----------------+       +-------------------+
+| Pure-Python    |       | Live Ray Cluster  |
+| In-Memory WASM |  OR   | & KubeRay Multi-  |
+| Ray Simulator  |       | Node Adapter      |
++----------------+       +-------------------+
 ```
 
 ---
 
 ## ⚡ Quick Navigation
 
-Ready to start learning distributed Ray? Pick a destination below:
-
 - [**Getting Started**](getting-started.md) — Prerequisites, installation (`uv` / `pip`), and your first 5 minutes.
+- [**Interactive Playground**](playground.md) — WebAssembly-powered Monaco editor learning in the browser.
 - [**Onboarding Guide**](onboarding-guide.md) — Guided tour, doctor diagnostics, and VS Code integration.
-- [**Curriculum Syllabus**](syllabus.md) — Detailed breakdown of all 14 chapters and 66 exercises.
+- [**Curriculum Syllabus**](syllabus.md) — Detailed breakdown of all 18 chapters and 81 exercises.
+- [**Plugin Architecture**](plugins.md) — Extensible domain packs and custom curriculum authoring.
+- [**Cloud & KubeRay Guide**](cloud-kuberay.md) — Multi-node KinD testing, remote execution, and Helm deployment.
 - [**CLI Reference**](cli-reference.md) — Comprehensive reference manual for all commands and options.
 - [**Troubleshooting**](troubleshooting.md) — Solutions for port conflicts, memory spilling, and DDP deadlocks.
 - [**Contributing**](contributing.md) — How to author new exercises and contribute to Raylings.
