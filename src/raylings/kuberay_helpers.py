@@ -222,7 +222,7 @@ def run_ray_data_multinode_pipeline() -> dict[str, Any]:
 
     ctx = ray.data.DataContext.get_current()
     ctx.target_max_block_size = 1 * 1024 * 1024
-    ctx.execution_options.resource_limits.num_cpus = 1
+    ctx.execution_options.resource_limits = ray.data.ExecutionResources(cpu=1)
 
     ds = ray.data.from_items([{"id": i} for i in range(100)])
     transformed_ds = ds.map_batches(
@@ -231,7 +231,6 @@ def run_ray_data_multinode_pipeline() -> dict[str, Any]:
             "square": [int(x) ** 2 for x in batch["id"]],
         },
         batch_size=25,
-        compute="tasks",
     )
     results = transformed_ds.take_all()
     return {
