@@ -587,10 +587,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging" class="md-nav__link">
+  <a href="#chapter-13-13_observability_and_debugging-observability-memory-debugging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Chapter 13: 13_observability_and_debugging - Observability, Profiling &amp; Memory Debugging
+        Chapter 13: 13_observability_and_debugging - Observability &amp; Memory Debugging
       
     </span>
   </a>
@@ -635,6 +635,17 @@
     <span class="md-ellipsis">
       
         Chapter 17: 17_multimodal_and_vectors - Multimodal &amp; Vector Ray Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chapter-18-18_quant_finance-distributed-quantitative-finance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 18: 18_quant_finance - Distributed Quantitative Finance
       
     </span>
   </a>
@@ -998,10 +1009,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging" class="md-nav__link">
+  <a href="#chapter-13-13_observability_and_debugging-observability-memory-debugging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Chapter 13: 13_observability_and_debugging - Observability, Profiling &amp; Memory Debugging
+        Chapter 13: 13_observability_and_debugging - Observability &amp; Memory Debugging
       
     </span>
   </a>
@@ -1052,6 +1063,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#chapter-18-18_quant_finance-distributed-quantitative-finance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter 18: 18_quant_finance - Distributed Quantitative Finance
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1078,7 +1100,7 @@
 
 
 <h1 id="complete-curriculum-syllabus">Complete Curriculum Syllabus 📚</h1>
-<p>The Raylings curriculum consists of <strong>17 comprehensive chapters</strong> containing <strong>78 hands-on exercises</strong>. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, and cloud-native Kubernetes orchestration.</p>
+<p>The Raylings curriculum consists of <strong>18 comprehensive chapters</strong> containing <strong>81 hands-on exercises</strong>. The syllabus is designed to take you from core distributed primitives to production-scale AI training, serving, cloud-native Kubernetes orchestration, and quantitative domain applications.</p>
 <hr />
 <h2 id="curriculum-overview">🗺️ Curriculum Overview</h2>
 <table>
@@ -1191,7 +1213,7 @@
 </tr>
 <tr>
 <td style="text-align: center;"><strong>13</strong></td>
-<td style="text-align: left;"><a href="#chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging"><code>13_observability_and_debugging</code></a></td>
+<td style="text-align: left;"><a href="#chapter-13-13_observability_and_debugging-observability-memory-debugging"><code>13_observability_and_debugging</code></a></td>
 <td style="text-align: left;"><strong>Observability &amp; Memory Debugging</strong></td>
 <td style="text-align: center;">3</td>
 <td style="text-align: left;">Chrome Timelines, Plasma Leak Profiling, State APIs</td>
@@ -1227,6 +1249,14 @@
 <td style="text-align: left;"><strong>Multimodal &amp; Vector Ray Data</strong></td>
 <td style="text-align: center;">4</td>
 <td style="text-align: left;">Streaming Multimodal ETL, ActorPool Embeddings, Vector Stores</td>
+<td style="text-align: left;">Expert</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>18</strong></td>
+<td style="text-align: left;"><a href="#chapter-18-18_quant_finance-distributed-quantitative-finance"><code>18_quant_finance</code></a></td>
+<td style="text-align: left;"><strong>Distributed Quantitative Finance</strong></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">Monte Carlo Options, Historical VaR/CVaR, Streaming VWAP Analytics</td>
 <td style="text-align: left;">Expert</td>
 </tr>
 </tbody>
@@ -1433,23 +1463,23 @@
 <tr>
 <td style="text-align: left;"><code>fault02</code></td>
 <td style="text-align: left;"><code>exercises/05_fault_tolerance/fault02.py</code></td>
-<td style="text-align: left;"><strong>Actor Failure &amp; Restart Recovery</strong> — Rebuilding actor state automatically using <code>max_restarts</code> and checkpointing.</td>
+<td style="text-align: left;"><strong>Actor Restarts &amp; State Loss</strong> — Managing state recovery upon actor failure with <code>max_restarts</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>fault03</code></td>
 <td style="text-align: left;"><code>exercises/05_fault_tolerance/fault03.py</code></td>
-<td style="text-align: left;"><strong>Lineage Reconstruction</strong> — Recomputing lost object store buffers using the deterministic lineage DAG.</td>
+<td style="text-align: left;"><strong>Lineage Recomputation</strong> — Automatic object recreation when Plasma objects are lost during node failure.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>fault04</code></td>
 <td style="text-align: left;"><code>exercises/05_fault_tolerance/fault04.py</code></td>
-<td style="text-align: left;"><strong>Spot Instance &amp; Preemption Handling</strong> — Graceful failure handling during spot instance termination.</td>
+<td style="text-align: left;"><strong>Spot Instance &amp; Preemption Handling</strong> — Graceful handling of node drain signals and actor migration.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-6-06_cluster_architecture-cluster-topology-multi-node-simulation">Chapter 6: <code>06_cluster_architecture</code> - Cluster Topology &amp; Multi-Node Simulation</h3>
-<p>Covers cluster architecture (Head Node, Raylets, GCS), multi-node simulation in Python, and programmatic job submission.</p>
+<p>Covers cluster architecture, Global Control Store (GCS), Raylet schedulers, multi-node testing, and the Ray Job Submission API.</p>
 <table>
 <thead>
 <tr>
@@ -1462,28 +1492,28 @@
 <tr>
 <td style="text-align: left;"><code>cluster01</code></td>
 <td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster01.py</code></td>
-<td style="text-align: left;"><strong>Head Node, Workers &amp; GCS</strong> — Inspecting cluster nodes, heartbeats, and metadata via <code>ray.nodes()</code>.</td>
+<td style="text-align: left;"><strong>Head vs Worker Architecture</strong> — Inspecting GCS state, node tables, and Raylet communication.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>cluster02</code></td>
 <td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster02.py</code></td>
-<td style="text-align: left;"><strong>Programmatic Cluster Simulation</strong> — Simulating dynamic multi-node topologies using <code>ray.cluster_utils.Cluster</code>.</td>
+<td style="text-align: left;"><strong>Multi-Node Testing with Cluster Utils</strong> — Simulating multi-node topologies in local tests using <code>ray.cluster_utils.Cluster</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>cluster03</code></td>
 <td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster03.py</code></td>
-<td style="text-align: left;"><strong>Simulating Node Death &amp; Rescheduling</strong> — Testing scheduler behavior when worker nodes disappear dynamically.</td>
+<td style="text-align: left;"><strong>Ray Job Submission API</strong> — Submitting and monitoring remote jobs via <code>JobSubmissionClient</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>cluster04</code></td>
 <td style="text-align: left;"><code>exercises/06_cluster_architecture/cluster04.py</code></td>
-<td style="text-align: left;"><strong>Ray Job Submission API</strong> — Packaging and submitting jobs remotely with <code>ray.job_submission.JobSubmissionClient</code>.</td>
+<td style="text-align: left;"><strong>Cross-Node Object Transfers</strong> — Measuring bandwidth and serialization overhead across simulated physical nodes.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-7-07_patterns_and_antipatterns-production-patterns-anti-patterns">Chapter 7: <code>07_patterns_and_antipatterns</code> - Production Patterns &amp; Anti-Patterns</h3>
-<p>Identifies critical architectural bottlenecks and teaches production-grade distributed patterns.</p>
+<p>Covers real-world production anti-patterns, pipeline stalls, micro-task overhead, actor bottlenecks, and tree aggregations.</p>
 <table>
 <thead>
 <tr>
@@ -1496,28 +1526,28 @@
 <tr>
 <td style="text-align: left;"><code>antipattern01</code></td>
 <td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern01.py</code></td>
-<td style="text-align: left;"><strong>Fixing ray.get() Inside Tasks</strong> — Eliminating blocking dependency stalls by passing ObjectRefs directly.</td>
+<td style="text-align: left;"><strong>Nested ray.get() Bottlenecks</strong> — Eliminating nested driver blocking in distributed pipelines.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>antipattern02</code></td>
 <td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern02.py</code></td>
-<td style="text-align: left;"><strong>Fixing Fine-Grained Overhead</strong> — Amortizing scheduling overhead by batching micro-tasks into coarse chunks.</td>
+<td style="text-align: left;"><strong>Micro-Task Chunking</strong> — Grouping fine-grained tasks into optimal batch sizes to eliminate scheduler overhead.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>antipattern03</code></td>
 <td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern03.py</code></td>
-<td style="text-align: left;"><strong>Fixing Actor Bottlenecks</strong> — Decoupling high-frequency read/write pathways with actor replication pools.</td>
+<td style="text-align: left;"><strong>Actor Bottleneck Elimination</strong> — Sharding high-contention actor state across dynamic actor pools.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>antipattern04</code></td>
 <td style="text-align: left;"><code>exercises/07_patterns_and_antipatterns/antipattern04.py</code></td>
-<td style="text-align: left;"><strong>Tree-Reduce Reduction</strong> — Replacing $O(N)$ linear aggregation with $O(\log N)$ logarithmic tree reduction.</td>
+<td style="text-align: left;"><strong>Tree-Structured Distributed Aggregation</strong> — Implementing $O(\log N)$ tree reductions to prevent single-driver memory saturation.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-8-08_ray_data-ray-data-for-high-throughput-etl">Chapter 8: <code>08_ray_data</code> - Ray Data for High-Throughput ETL</h3>
-<p>Covers streaming data pipelines, block partitioning, vectorized batch transformations, and PyTorch dataloader integration.</p>
+<p>Covers distributed streaming datasets, block partitioning, vectorized transformations, and streaming backpressure.</p>
 <table>
 <thead>
 <tr>
@@ -1530,33 +1560,33 @@
 <tr>
 <td style="text-align: left;"><code>data01</code></td>
 <td style="text-align: left;"><code>exercises/08_ray_data/data01.py</code></td>
-<td style="text-align: left;"><strong>Datasets &amp; Block Partitioning</strong> — Ingesting data, inspecting block partitions (<code>ds.num_blocks()</code>), and repartitioning.</td>
+<td style="text-align: left;"><strong>Dataset Ingestion &amp; Block Partitioning</strong> — Reading distributed data into partitioned Ray Dataset blocks.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>data02</code></td>
 <td style="text-align: left;"><code>exercises/08_ray_data/data02.py</code></td>
-<td style="text-align: left;"><strong>map vs map_batches</strong> — Accelerating transformations with PyArrow/NumPy vectorized batch processing.</td>
+<td style="text-align: left;"><strong>Vectorized Batch Transformations</strong> — High-throughput transforms with <code>map_batches</code> and PyArrow tables.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>data03</code></td>
 <td style="text-align: left;"><code>exercises/08_ray_data/data03.py</code></td>
-<td style="text-align: left;"><strong>Stateful Transforms with ActorPoolStrategy</strong> — Reusing initialized model weights across data blocks.</td>
+<td style="text-align: left;"><strong>ActorPool Batch Compute</strong> — Stateful neural network batch inference with <code>compute=ActorPoolStrategy(...)</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>data04</code></td>
 <td style="text-align: left;"><code>exercises/08_ray_data/data04.py</code></td>
-<td style="text-align: left;"><strong>Streaming Pipelines &amp; Backpressure</strong> — Streaming infinite or multi-gigabyte datasets with bounded RAM usage.</td>
+<td style="text-align: left;"><strong>Streaming Backpressure &amp; Windowing</strong> — Bounded memory execution preventing driver OOM on large streaming datasets.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>data05</code></td>
 <td style="text-align: left;"><code>exercises/08_ray_data/data05.py</code></td>
-<td style="text-align: left;"><strong>PyTorch DataLoader Interop</strong> — Zero-copy streaming into PyTorch training loops using <code>ds.iter_torch_batches()</code>.</td>
+<td style="text-align: left;"><strong>PyTorch DataLoader Interoperability</strong> — Streaming Ray Data directly into distributed PyTorch training loops.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-9-09_ml_from_scratch-distributed-ml-primitives-from-scratch">Chapter 9: <code>09_ml_from_scratch</code> - Distributed ML Primitives from Scratch</h3>
-<p>Builds core distributed machine learning building blocks directly on top of Ray Core actors and tasks.</p>
+<p>Covers implementing fundamental distributed machine learning building blocks from first principles.</p>
 <table>
 <thead>
 <tr>
@@ -1569,28 +1599,28 @@
 <tr>
 <td style="text-align: left;"><code>ml_scratch01</code></td>
 <td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch01.py</code></td>
-<td style="text-align: left;"><strong>Distributed Parameter Server</strong> — Implementing central parameter storage and worker gradient updates.</td>
+<td style="text-align: left;"><strong>Synchronous Parameter Server</strong> — Centralized parameter storage with barrier-synchronized gradient updates.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ml_scratch02</code></td>
 <td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch02.py</code></td>
-<td style="text-align: left;"><strong>Async vs Sync Gradient Averaging</strong> — Comparing lock-step synchronization vs asynchronous stale gradient updates.</td>
+<td style="text-align: left;"><strong>Asynchronous Parameter Server</strong> — High-throughput non-blocking parameter updates with staleness tolerance.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ml_scratch03</code></td>
 <td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch03.py</code></td>
-<td style="text-align: left;"><strong>Ring All-Reduce Implementation</strong> — Building 2-phase Scatter-Reduce and Allgather across a logical actor ring.</td>
+<td style="text-align: left;"><strong>Ring All-Reduce Communication</strong> — Decentralized gradient reduction ring minimizing communication bandwidth.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ml_scratch04</code></td>
 <td style="text-align: left;"><code>exercises/09_ml_from_scratch/ml_scratch04.py</code></td>
-<td style="text-align: left;"><strong>Distributed Data-Parallel Trainer</strong> — Assembling a custom multi-worker DDP training harness.</td>
+<td style="text-align: left;"><strong>Distributed Linear Regression Trainer</strong> — End-to-end data-parallel SGD trainer with distributed Ray workers.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-10-10_ray_train_and_tune-ray-train-distributed-deep-learning">Chapter 10: <code>10_ray_train_and_tune</code> - Ray Train &amp; Distributed Deep Learning</h3>
-<p>Covers production distributed training using PyTorch and Ray Train (<code>TorchTrainer</code>), data sharding, and checkpointing.</p>
+<p>Covers PyTorch Distributed Data Parallel (DDP) training with Ray Train.</p>
 <table>
 <thead>
 <tr>
@@ -1603,28 +1633,28 @@
 <tr>
 <td style="text-align: left;"><code>train01</code></td>
 <td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train01.py</code></td>
-<td style="text-align: left;"><strong>PyTorch TorchTrainer &amp; ScalingConfig</strong> — Setting up multi-worker DDP training loops with <code>TorchTrainer</code>.</td>
+<td style="text-align: left;"><strong>TorchTrainer &amp; ScalingConfig</strong> — Distributed PyTorch training coordination across multi-worker CPU/GPU clusters.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>train02</code></td>
 <td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train02.py</code></td>
-<td style="text-align: left;"><strong>Distributed DataLoader via DataConfig</strong> — Auto-sharding datasets across distributed training workers.</td>
+<td style="text-align: left;"><strong>Distributed Data Sharding &amp; Loading</strong> — Sharding datasets across distributed DDP workers with <code>ray.train.torch.prepare_data_loader</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>train03</code></td>
 <td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train03.py</code></td>
-<td style="text-align: left;"><strong>Multi-Worker Gradient Sync &amp; Metrics</strong> — Synchronizing models with <code>prepare_model</code> and reporting metrics with <code>ray.train.report</code>.</td>
+<td style="text-align: left;"><strong>Distributed Checkpointing &amp; Metrics</strong> — Reporting training loss metrics and persisting distributed checkpoints with <code>ray.train.report</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>train04</code></td>
 <td style="text-align: left;"><code>exercises/10_ray_train_and_tune/train04.py</code></td>
-<td style="text-align: left;"><strong>Distributed Checkpointing &amp; Fault Recovery</strong> — Saving and resuming training states from durable checkpoints.</td>
+<td style="text-align: left;"><strong>Fault-Tolerant Elastic Worker Recovery</strong> — Recovering training sessions seamlessly from checkpoints upon worker interruption.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-11-11_ray_tune-scalable-hyperparameter-tuning">Chapter 11: <code>11_ray_tune</code> - Scalable Hyperparameter Tuning</h3>
-<p>Covers search space exploration, early-stopping schedulers, and Population-Based Training.</p>
+<p>Covers distributed hyperparameter optimization algorithms and trial schedulers.</p>
 <table>
 <thead>
 <tr>
@@ -1637,23 +1667,23 @@
 <tr>
 <td style="text-align: left;"><code>tune01</code></td>
 <td style="text-align: left;"><code>exercises/11_ray_tune/tune01.py</code></td>
-<td style="text-align: left;"><strong>Search Spaces &amp; Distributed Trials</strong> — Defining hyperparameter spaces (<code>tune.uniform</code>, <code>tune.choice</code>) and fitting Tuners.</td>
+<td style="text-align: left;"><strong>Tune Search Spaces &amp; Grid Search</strong> — Defining distributed search spaces with <code>tune.choice</code> and <code>tune.uniform</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>tune02</code></td>
 <td style="text-align: left;"><code>exercises/11_ray_tune/tune02.py</code></td>
-<td style="text-align: left;"><strong>ASHA / HyperBand Schedulers</strong> — Terminating poorly performing trials early with <code>ASHAScheduler</code>.</td>
+<td style="text-align: left;"><strong>ASHA Early Stopping Scheduler</strong> — Aggressive trial pruning with Asynchronous Successive Halving Algorithm.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>tune03</code></td>
 <td style="text-align: left;"><code>exercises/11_ray_tune/tune03.py</code></td>
-<td style="text-align: left;"><strong>Population-Based Training (PBT)</strong> — Dynamic hyperparameter mutation and weight exploitation during training.</td>
+<td style="text-align: left;"><strong>Population-Based Training (PBT)</strong></td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="chapter-12-12_ray_serve-ray-serve-production-model-serving">Chapter 12: <code>12_ray_serve</code> - Ray Serve &amp; Production Model Serving</h3>
-<p>Covers production-grade HTTP model serving, dynamic request batching, DAG composition, streaming token responses, and autoscaling.</p>
+<p>Covers production inference architectures, request batching, multi-model pipelines, and streaming.</p>
 <table>
 <thead>
 <tr>
@@ -1666,32 +1696,32 @@
 <tr>
 <td style="text-align: left;"><code>serve01</code></td>
 <td style="text-align: left;"><code>exercises/12_ray_serve/serve01.py</code></td>
-<td style="text-align: left;"><strong>Ray Serve Deployments &amp; HTTP Ingress</strong> — Defining <code>@serve.deployment</code> classes and binding HTTP entrypoints.</td>
+<td style="text-align: left;"><strong>First Serve Deployment &amp; HTTP Ingress</strong> — Defining <code>@serve.deployment</code> classes and handling HTTP requests.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>serve02</code></td>
 <td style="text-align: left;"><code>exercises/12_ray_serve/serve02.py</code></td>
-<td style="text-align: left;"><strong>Dynamic Request Batching (@serve.batch)</strong> — Coalescing concurrent HTTP requests into unified vectorized batches.</td>
+<td style="text-align: left;"><strong>Dynamic Request Batching with @serve.batch</strong> — Micro-batching individual HTTP requests to maximize GPU throughput.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>serve03</code></td>
 <td style="text-align: left;"><code>exercises/12_ray_serve/serve03.py</code></td>
-<td style="text-align: left;"><strong>Multi-Model Composable Pipelines (DAGs)</strong> — Chaining preprocessing, inference, and postprocessing deployments.</td>
+<td style="text-align: left;"><strong>Multi-Model Pipeline DAGs</strong> — Composing complex multi-stage deployment graphs with <code>ray.serve.deployment</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>serve04</code></td>
 <td style="text-align: left;"><code>exercises/12_ray_serve/serve04.py</code></td>
-<td style="text-align: left;"><strong>Streaming Responses with FastAPI</strong> — Streaming real-time tokens from LLM deployments using Python generators.</td>
+<td style="text-align: left;"><strong>Autoscaling &amp; Replica Dynamics</strong> — Configuring <code>autoscaling_config</code> for traffic-driven elasticity.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>serve05</code></td>
 <td style="text-align: left;"><code>exercises/12_ray_serve/serve05.py</code></td>
-<td style="text-align: left;"><strong>Serve Autoscaling Policies</strong> — Scaling replicas dynamically based on <code>target_ongoing_requests</code>.</td>
+<td style="text-align: left;"><strong>Streaming LLM Token Responses</strong> — Streaming token responses chunk-by-chunk using async generators.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h3 id="chapter-13-13_observability_and_debugging-observability-profiling-memory-debugging">Chapter 13: <code>13_observability_and_debugging</code> - Observability, Profiling &amp; Memory Debugging</h3>
+<h3 id="chapter-13-13_observability_and_debugging-observability-memory-debugging">Chapter 13: <code>13_observability_and_debugging</code> - Observability &amp; Memory Debugging</h3>
 <p>Covers distributed profiling, execution timelines, memory debugging, and Prometheus state APIs.</p>
 <table>
 <thead>
@@ -1857,6 +1887,35 @@
 <td style="text-align: left;"><code>data_genai04</code></td>
 <td style="text-align: left;"><code>exercises/17_multimodal_and_vectors/data_genai04.py</code></td>
 <td style="text-align: left;"><strong>Streaming Parallel Ingestion into Vector Databases</strong> — Authoring custom Ray Data <code>Datasink</code> classes for partition-aware, high-throughput parallel upserts into vector indices.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="chapter-18-18_quant_finance-distributed-quantitative-finance">Chapter 18: <code>18_quant_finance</code> - Distributed Quantitative Finance</h3>
+<p>Covers high-throughput financial risk simulations, distributed derivatives pricing, Value at Risk (VaR/CVaR) calculations, and streaming market tick analytics.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise</th>
+<th style="text-align: left;">File Path</th>
+<th style="text-align: left;">Topic &amp; Learning Objective</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>finance01</code></td>
+<td style="text-align: left;"><code>exercises/18_quant_finance/finance01.py</code></td>
+<td style="text-align: left;"><strong>Distributed Monte Carlo Black-Scholes Option Pricing</strong> — Simulating parallel Geometric Brownian Motion (GBM) asset price paths across Ray tasks and aggregating discounted call payoffs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>finance02</code></td>
+<td style="text-align: left;"><code>exercises/18_quant_finance/finance02.py</code></td>
+<td style="text-align: left;"><strong>Portfolio Value at Risk (VaR) &amp; CVaR Stress Simulation</strong> — Estimating empirical Value at Risk ($95\%$ and $99\%$ percentiles) and Conditional VaR (Expected Shortfall) across multi-asset portfolio returns.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>finance03</code></td>
+<td style="text-align: left;"><code>exercises/18_quant_finance/finance03.py</code></td>
+<td style="text-align: left;"><strong>Streaming Market Tick Analytics &amp; Rolling VWAP</strong> — Ingesting high-frequency trade ticks through Ray Data streaming pipelines to compute continuous Volume-Weighted Average Price (VWAP) across instrument partitions.</td>
 </tr>
 </tbody>
 </table>

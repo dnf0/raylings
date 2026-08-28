@@ -1125,7 +1125,7 @@
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│ Python Version            │ ✓ PASS │ Python 3.12.3 (&gt;= 3.10)        │
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│ Ray Installation          │ ✓ PASS │ Ray v2.43.0 installed          │
 </span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│ Ray Daemon / Cluster      │ ✓ PASS │ Cluster session active         │
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│ Exercises Manifest        │ ✓ PASS │ Found 66 exercises in 14 chap  │
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│ Exercises Manifest        │ ✓ PASS │ Found 81 exercises in 18 chap  │
 </span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│ System Resources          │ ✓ PASS │ 10 logical CPUs, 32.0 GB RAM   │
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>└───────────────────────────┴────────┴────────────────────────────────┘
 </span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
@@ -1166,7 +1166,7 @@
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Exercises Manifest</strong></td>
-<td style="text-align: left;"><code>exercises/</code> populated with 66 files</td>
+<td style="text-align: left;"><code>exercises/</code> populated with 81 files</td>
 <td style="text-align: center;"><code>PASS</code> / <code>WARN</code></td>
 <td style="text-align: center;">No</td>
 <td style="text-align: left;">Run <code>raylings init</code> to extract bundled exercises.</td>
@@ -1231,7 +1231,7 @@
 <h3 id="key-extension-features">Key Extension Features</h3>
 <ol>
 <li><strong>Curriculum Explorer Tree View</strong>:</li>
-<li>Displays all 14 chapters in an expandable sidebar view.</li>
+<li>Displays all 18 chapters in an expandable sidebar view.</li>
 <li>Distinct icons for completed (<code>✓</code>), pending (<code>○</code>), and active (<code>►</code>) exercises.</li>
 <li>
 <p>Click any exercise to open it immediately in the editor.</p>
@@ -1239,7 +1239,7 @@
 <li>
 <p><strong>Status Bar Cluster &amp; Progress Monitor</strong>:</p>
 </li>
-<li>Shows live cluster status (e.g. <code>$(zap) Ray: 4 Nodes | 12/66 Done</code>).</li>
+<li>Shows live cluster status (e.g. <code>$(zap) Ray: 4 Nodes | 12/81 Done</code>).</li>
 <li>
 <p>Click to open the Ray Dashboard or trigger preflight diagnostics.</p>
 </li>
@@ -1287,15 +1287,15 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>raylings<span class="w"> </span>progress
 </span></code></pre></div>
 <p>Output:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Progress: [====================&gt;                    ] 33.3% (22/66 completed)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Progress: [====================&gt;                    ] 33.3% (27/81 completed)
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Current Exercise: exercises/05_fault_tolerance/fault01.py
 </span></code></pre></div>
 <p>Or query in machine-readable JSON:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>raylings<span class="w"> </span>progress<span class="w"> </span>--json
 </span></code></pre></div>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">66</span><span class="p">,</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"completed"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">81</span><span class="p">,</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"completed"</span><span class="p">:</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span>
 </span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">"percentage"</span><span class="p">:</span><span class="w"> </span><span class="mf">33.3</span><span class="p">,</span>
 </span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">"current_exercise"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fault01"</span><span class="p">,</span>
 </span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nt">"current_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exercises/05_fault_tolerance/fault01.py"</span><span class="p">,</span>

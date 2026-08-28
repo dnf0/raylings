@@ -756,26 +756,46 @@
 
 
 <h1 id="raylings">Raylings ⚡</h1>
-<p><strong>Raylings</strong> is an interactive, hands-on CLI learning environment for <a href="https://www.ray.io/">Python Ray</a>, inspired by <a href="https://github.com/rust-lang/rustlings">Rustlings</a>. It guides you through the distributed systems landscape—from foundational <code>@ray.remote</code> tasks and stateful actors to high-throughput Ray Data streaming, distributed PyTorch training with Ray Train, scalable model serving with Ray Serve, and production Kubernetes orchestration with KubeRay.</p>
+<p><a href="https://dnf0.github.io/raylings/playground/"><img alt="Playground" src="https://img.shields.io/badge/Playground-⚡%20Try%20in%20Browser-blueviolet" /></a>
+<a href="https://dnf0.github.io/raylings/"><img alt="Docs" src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" /></a>
+<a href="https://github.com/dnf0/raylings/actions"><img alt="CI" src="https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg" /></a>
+<a href="https://github.com/dnf0/raylings/actions"><img alt="KubeRay CI" src="https://github.com/dnf0/raylings/actions/workflows/kuberay-e2e.yml/badge.svg" /></a>
+<a href="https://opensource.org/licenses/Apache-2.0"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
+<p><strong>Raylings</strong> is an interactive, hands-on CLI learning environment for <a href="https://www.ray.io/">Python Ray</a>, inspired by <a href="https://github.com/rust-lang/rustlings">Rustlings</a> and <a href="https://codeberg.org/ziglings/exercises">Ziglings</a>. It guides you through the distributed systems landscape—from foundational <code>@ray.remote</code> tasks and stateful actors to high-throughput Ray Data streaming, distributed PyTorch training with Ray Train, scalable model serving with Ray Serve, production Kubernetes orchestration with KubeRay, vLLM tensor parallelism, and pluggable financial modeling packs.</p>
+<blockquote>
+<p>⚡ <strong>Try it now in your browser!</strong> No installation required: <a href="playground/"><strong>Interactive WebAssembly Playground</strong></a> (<a href="https://dnf0.github.io/raylings/playground/">⚡ Try in Browser</a>).</p>
+</blockquote>
+<p align="center">
+  <img src="assets/demo.svg" alt="Raylings Terminal Demo" width="840">
+</p>
+
 <hr />
 <h2 id="the-raylings-philosophy">🎯 The Raylings Philosophy</h2>
 <p>Distributed computing can feel daunting with abstract concepts like actor handles, Plasma object store zero-copy buffers, placement group gang-scheduling, and distributed all-reduce topologies.</p>
-<p>Raylings takes a <strong>learn-by-fixing</strong> approach:</p>
+<p>Raylings takes a <strong>guided, test-driven micro-learning</strong> approach:</p>
 <ol>
-<li>You are presented with small, focused Python exercises that contain intentional bugs, incomplete implementations, or anti-patterns.</li>
-<li>The live watcher monitors your filesystem, automatically running tests whenever you save.</li>
-<li>You edit the exercise, fix the bug or implement the distributed primitive, remove the <code># I AM NOT DONE</code> marker, and save.</li>
-<li>Raylings instantly verifies your solution and advances you to the next topic.</li>
+<li><strong>Active Debugging &amp; Iteration</strong>: You are presented with small, focused Python exercises that contain intentional bugs, incomplete implementations, or anti-patterns, accompanied by <code># TODO:</code> directives and <code># WHY:</code> architectural explanations.</li>
+<li><strong>Instant Feedback Loop &amp; Interactive Hotkeys</strong>: The live watcher monitors your filesystem, automatically running tests whenever you save (&lt; 50ms).</li>
+<li><strong>Dual-Mode Learning (Offline WASM &amp; Live Cluster)</strong>:</li>
+<li><strong>Offline WASM Mode</strong>: Zero cluster setup required. The pure-Python WebAssembly simulator validates tasks, actors, object store references, and dataset transformations directly in-memory or in your browser.</li>
+<li><strong>Live Cluster Mode</strong>: Seamlessly connect to a local Ray session, remote Ray cluster, or multi-node Kubernetes <code>KubeRay</code> cluster (<code>ray://localhost:10001</code>). Exercises provision real actors and verify distributed execution across nodes.</li>
+<li><strong>Progressive Hints</strong>: When stuck, multi-tiered hints (<code>raylings hint &lt;exercise&gt;</code>) nudge you in the right direction without spoiling the answer.</li>
 </ol>
 <hr />
 <h2 id="key-features">🚀 Key Features</h2>
 <div class="grid cards">
 <ul>
 <li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg></span> <strong>14 Comprehensive Chapters</strong></p>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg></span> <strong>18 Comprehensive Chapters</strong></p>
 <hr />
-<p>66 progressive exercises covering Ray Core, Plasma Object Store, Resource Scheduling, Fault Tolerance, Ray Data, ML from Scratch, Ray Train, Ray Tune, Ray Serve, Observability, and KubeRay.</p>
+<p>81 progressive exercises covering Ray Core, Plasma Object Store, Resource Scheduling, Fault Tolerance, Ray Data, ML from Scratch, Ray Train, Ray Tune, Ray Serve, Observability, KubeRay, vLLM/LLMs, DeepSpeed/FSDP, Multimodal Vectors, and Quant Finance.</p>
 <p><a href="syllabus/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Explore Curriculum</a></p>
+</li>
+<li>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2m-5.15 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56M14.34 14H9.66c-.1-.66-.16-1.32-.16-2s.06-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2M12 19.96c-.83-1.2-1.5-2.53-1.91-3.96h3.82c-.41 1.43-1.08 2.76-1.91 3.96M8 8H5.08A7.92 7.92 0 0 1 9.4 4.44C8.8 5.55 8.35 6.75 8 8m-2.92 8H8c.35 1.25.8 2.45 1.4 3.56A8 8 0 0 1 5.08 16m-.82-2C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2M12 4.03c.83 1.2 1.5 2.54 1.91 3.97h-3.82c.41-1.43 1.08-2.77 1.91-3.97M18.92 8h-2.95a15.7 15.7 0 0 0-1.38-3.56c1.84.63 3.37 1.9 4.33 3.56M12 2C6.47 2 2 6.5 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> <strong>Zero-Install WASM Playground</strong></p>
+<hr />
+<p>Run Python 3.12, Monaco Editor, and in-memory Ray simulation 100% client-side inside your web browser via Pyodide WebAssembly.</p>
+<p><a href="playground/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Launch Playground</a></p>
 </li>
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3m6 9.5 1.8-1.8c-.5-.4-1.1-.7-1.8-.7-1.4 0-2.5 1.1-2.5 2.5S16.6 21 18 21c.8 0 1.5-.4 2-1h1.7c-.6 1.5-2 2.5-3.7 2.5-2.2 0-4-1.8-4-4s1.8-4 4-4c1.1 0 2.1.4 2.8 1.2l1.2-1.2v4zm-5.9 1s-.1 0 0 0C7 19.5 2.7 16.4 1 12c1.7-4.4 6-7.5 11-7.5s9.3 3.1 11 7.5c-.2.4-.4.9-.6 1.3-1.1-.8-2.4-1.3-3.9-1.3-.5 0-1 .1-1.5.2V12c0-2.8-2.2-5-5-5s-5 2.2-5 5 2.2 5 5 5h.2c-.1.5-.2 1-.2 1.5 0 .3 0 .7.1 1"/></svg></span> <strong>Zero-Friction Live Watcher</strong></p>
@@ -808,13 +828,25 @@
 <p><a href="cli-reference/#raylings-top-raylings-metrics"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Telemetry Reference</a></p>
 </li>
 <li>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5A2.5 2.5 0 0 0 10.5 1 2.5 2.5 0 0 0 8 3.5V5H4a2 2 0 0 0-2 2v3.8h1.5c1.5 0 2.7 1.2 2.7 2.7S5 16.2 3.5 16.2H2V20a2 2 0 0 0 2 2h3.8v-1.5c0-1.5 1.2-2.7 2.7-2.7s2.7 1.2 2.7 2.7V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5"/></svg></span> <strong>Pluggable Curriculum Registry</strong></p>
+<hr />
+<p>Extensible plugin architecture (<code>raylings plugins</code>) for authoring, distributing, and loading external domain packs (e.g., Chapter 18 Quantitative Finance).</p>
+<p><a href="plugins/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Plugin Architecture</a></p>
+</li>
+<li>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.95 13.5h-.23c-.18.11-.26.32-.18.5l.86 2.11c.83-.53 1.46-1.32 1.79-2.25l-2.23-.36zm-3.45.29a.415.415 0 0 0-.38-.29h-.08l-2.22.37c.33.92.96 1.7 1.79 2.23l.85-2.07V14c.04-.05.04-.14.04-.21m1.83.81a.38.38 0 0 0-.51-.15c-.07.05-.12.08-.15.15h-.01l-1.09 1.97c.78.26 1.62.31 2.43.12.14-.03.29-.07.43-.12l-1.09-1.97zm3.45-4.57L14.1 11.5l.01.03a.37.37 0 0 0-.04.53q.075.09.18.12l.01.01 2.17.62c.07-.97-.14-1.95-.65-2.78m-3.11.16c.01.21.18.37.39.36.08 0 .15-.02.21-.05h.01l1.83-1.31a4.45 4.45 0 0 0-2.57-1.24zm-1.94.31c.17.11.4.08.52-.09.05-.06.07-.13.08-.21h.01l.12-2.25c-.15.02-.3.05-.46.08-.8.18-1.54.58-2.12 1.16l1.84 1.31zm-.99 1.69c.2-.05.32-.26.26-.46 0-.08-.05-.14-.11-.19v-.01L8.21 10c-.52.86-.74 1.84-.63 2.82l2.16-.62zm1.64.66.62.3.62-.3.15-.67-.43-.53h-.69l-.43.53zm10.89 1.32L20.5 6.5c-.09-.42-.37-.76-.74-.94l-7.17-3.43c-.37-.17-.81-.17-1.19 0L4.24 5.56c-.37.18-.65.52-.74.94l-1.77 7.67c-.05.2-.05.4 0 .59.01.06.03.12.05.18.03.09.08.19.13.27.03.04.05.08.09.11l4.95 6.18c.02 0 .05.04.05.06.1.09.19.16.28.22.12.08.26.14.4.17.11.05.23.05.32.05h8.12c.07 0 .14-.03.2-.05.05-.01.1-.03.14-.04.04-.02.07-.03.11-.05.05-.02.1-.05.15-.08.12-.08.23-.18.33-.28l.15-.2 4.8-5.98c.1-.12.17-.25.22-.38.02-.06.04-.12.05-.18.05-.19.05-.4 0-.59m-7.43 2.99c.02.06.04.12.07.17-.04.08-.06.17-.03.26.12.24.23.46.38.68.08.11.16.23.24.34 0 .03.03.08.04.12.12.2.06.46-.15.59s-.47.05-.59-.15c-.01-.03-.02-.05-.03-.08-.02-.03-.04-.09-.06-.09-.05-.15-.09-.28-.12-.41-.09-.25-.17-.49-.3-.72a.38.38 0 0 0-.21-.14l-.08-.16c-1.29.48-2.7.48-3.97-.01l-.1.18c-.07.01-.14.04-.19.09-.14.24-.24.49-.33.77-.03.13-.07.26-.12.4-.02 0-.04.07-.06.1a.43.43 0 0 1-.81-.29c.01-.03.03-.05.04-.08.04-.03.04-.08.04-.11.09-.12.16-.23.24-.35.16-.21.29-.45.39-.69a.54.54 0 0 0-.03-.25l.07-.18a5.6 5.6 0 0 1-2.47-3.09l-.2.03a.4.4 0 0 0-.23-.09c-.27.05-.51.13-.77.22-.11.06-.24.11-.37.15-.03.01-.07.02-.13.03a.44.44 0 0 1-.54-.27c-.07-.23.04-.47.28-.55.02 0 .05-.01.08-.01v-.01h.01l.11-.02c.14-.04.28-.04.41-.04.26 0 .52-.06.77-.12.08-.05.14-.11.19-.19l.19-.05c-.21-1.36.1-2.73.86-3.87l-.14-.12c0-.09-.03-.18-.08-.25-.2-.17-.41-.32-.64-.45q-.18-.09-.36-.21c-.02-.02-.06-.05-.08-.07l-.01-.01c-.2-.16-.25-.42-.11-.63.09-.1.21-.15.35-.15q.165.015.3.12l.09.07c.1.09.19.2.28.3.18.19.37.37.58.52.08.04.17.05.26.03l.15.11c.75-.8 1.73-1.36 2.8-1.6.25-.06.52-.1.78-.12l.01-.18a.45.45 0 0 0 .14-.23c.01-.26-.01-.52-.05-.77-.03-.13-.05-.27-.06-.41V5.1c-.02-.24.15-.45.39-.48s.44.15.47.38v.22c-.01.14-.03.28-.06.41-.04.25-.06.51-.05.77.02.1.07.17.14.22l.01.19c1.36.12 2.62.73 3.56 1.72l.16-.12c.09.02.18.01.26-.03.21-.15.41-.33.58-.52.09-.1.18-.2.28-.3.03-.02.07-.06.1-.06.17-.18.44-.18.59 0 .19.16.18.43 0 .6 0 .02-.03.04-.06.06a2.495 2.495 0 0 1-.44.28c-.23.13-.45.28-.64.45-.06.07-.09.15-.08.24l-.16.14a5.44 5.44 0 0 1 .88 3.86l.19.05c.04.08.11.14.19.18.25.07.51.11.77.14h.41c.03.03.08.04.12.05.24.03.4.25.37.49-.05.23-.24.4-.48.37-.03-.01-.07-.01-.07-.02v-.01c-.06 0-.1-.01-.14-.02q-.195-.06-.36-.15c-.26-.1-.5-.17-.77-.21-.09 0-.17 0-.23.08-.07-.01-.13-.02-.19-.03-.41 1.31-1.31 2.41-2.47 3.11"/></svg></span> <strong>Cloud &amp; KubeRay Multi-Node</strong></p>
+<hr />
+<p>Automated KinD 3-node cluster orchestration (<code>scripts/kuberay/</code>) and end-to-end integration test suite verifying remote Ray client execution and DDP across Kubernetes pods.</p>
+<p><a href="cloud-kuberay/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> KubeRay Guide</a></p>
+</li>
+<li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.5 5.6 5 7l1.4-2.5L5 2l2.5 1.4L10 2 8.6 4.5 10 7zm12 9.8L22 14l-1.4 2.5L22 19l-2.5-1.4L17 19l1.4-2.5L17 14zM22 2l-1.4 2.5L22 7l-2.5-1.4L17 7l1.4-2.5L17 2l2.5 1.4zm-8.66 10.78 2.44-2.44-2.12-2.12-2.44 2.44zm1.03-5.49 2.34 2.34c.39.37.39 1.02 0 1.41L5.04 22.71c-.39.39-1.04.39-1.41 0l-2.34-2.34c-.39-.37-.39-1.02 0-1.41L12.96 7.29c.39-.39 1.04-.39 1.41 0"/></svg></span> <strong>Exercise Scaffolding CLI</strong></p>
 <hr />
 <p>Standardized generator (<code>raylings new</code>) to instantly scaffold exercise skeletons, reference solutions, validation harnesses, and manifest registration snippets.</p>
 <p><a href="cli-reference/#raylings-new-raylings-new-exercise"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Scaffolder Reference</a></p>
 </li>
 <li>
-<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 16.47V7.39l-6 4.54M2.22 9.19a.86.86 0 0 1-.02-1.15l1.2-1.11c.2-.18.69-.26 1.05 0l3.42 2.61 7.93-7.25c.32-.32.87-.45 1.5-.12l4 1.91c.36.21.7.54.7 1.15v13.5c0 .4-.29.83-.6 1l-4.4 2.1c-.32.13-.92.01-1.13-.2l-8.02-7.3-3.4 2.6c-.38.26-.85.19-1.05 0l-1.2-1.1c-.32-.33-.28-.87.05-1.2l3-2.7"/></svg></span> <strong>Native VS Code Extension</strong></p>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 16.47V7.39l-6 4.54M2.22 9.19a.86.86 0 0 1-.02-1.15l1.2-1.11c.2-.18.69-.26 1.05 0l3.42 2.61 7.93-7.25c.32-.32.87-.45 1.5-.12l4 1.91c.36.21.7.54.7 1.15v13.5c0 .4-.29.83-.6 1l-4.4 2.1c-.32.13-.92.01-1.13-.2l-8.02-7.3-3.4 2.6c-.38.26-.85.19-1.05 0l-1.2-1.1c-.32-.33-.28-.87.05-1.2l3-2.7"/></svg></span> <strong>Native VS Code &amp; Cursor Extension</strong></p>
 <hr />
 <p>Integrated sidebar curriculum tree view, auto-run on save, status bar cluster health indicators, and command palette integration for VS Code and Cursor.</p>
 <p><a href="onboarding-guide/#vs-code-native-extension"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> IDE Setup</a></p>
@@ -843,46 +875,51 @@
     H -- No --&gt; J[🏆 Mastered Python Ray!]</code></pre>
 <hr />
 <h2 id="system-architecture">🏗️ System Architecture</h2>
-<p>Raylings is built with a modular, decoupled architecture consisting of an interactive CLI runtime, a daemon lifecycle manager, a persistent state store, and an extensible IDE bridge.</p>
-<pre class="mermaid"><code>graph TB
-    subgraph UserInterface["User Interfaces"]
-        CLI["CLI Driver (Typer + Rich)"]
-        VSCode["VS Code Native Extension"]
-    end
-
-    subgraph CoreEngine["Raylings Core Engine"]
-        Watcher["Exercise Watcher (Watchfiles)"]
-        Runner["Exercise Runner (Subprocess Isolation)"]
-        StateTracker["State Tracker (~/.raylings_state.json)"]
-        TourEngine["Tour &amp; Diagnostic Engine"]
-    end
-
-    subgraph DaemonLayer["Ray Session Manager"]
-        Daemon["Ray Daemon Session (Shared Cluster)"]
-    end
-
-    subgraph RayCluster["Underlying Ray Runtime"]
-        GCS["Global Control Store (GCS)"]
-        Plasma["Plasma In-Memory Object Store"]
-        Raylets["Worker Raylets &amp; Task Scheduler"]
-    end
-
-    CLI --&gt; Watcher
-    CLI --&gt; TourEngine
-    CLI --&gt; StateTracker
-    VSCode --&gt; CLI
-    Watcher --&gt; Runner
-    Runner --&gt; Daemon
-    Daemon --&gt; GCS
-    Daemon --&gt; Plasma
-    Daemon --&gt; Raylets</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>                                  +-----------------------+
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                                  |     User Terminal     |
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                                  +-----------+-----------+
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                                              |
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                                              v
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                                  +-----------------------+
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                                  |   Raylings CLI (Typer)|
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                  +-----------+-----------+
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                                              |
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                     +------------------------+------------------------+
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>                     |                                                 |
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>                     v                                                 v
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>         +-----------------------+                         +-----------------------+
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>         |  File Watcher Engine  |                         | Rich UI &amp; TUI Engine  |
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>         |      (watchfiles)     |                         |  (split-pane / top)   |
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>         +-----------+-----------+                         +-----------------------+
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                     |
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                     v
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>         +-----------------------+
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>         |  Curriculum Manifest  |  (18 Chapters / 81 Exercises)
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>         +-----------+-----------+
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>                     |
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>                     v
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>         +-----------------------+
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>         |   Exercise Runner     |
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>         +-----------+-----------+
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>                     |
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        +------------+------------+
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        |                         |
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        v                         v
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>+----------------+       +-------------------+
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>| Pure-Python    |       | Live Ray Cluster  |
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>| In-Memory WASM |  OR   | &amp; KubeRay Multi-  |
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>| Ray Simulator  |       | Node Adapter      |
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>+----------------+       +-------------------+
+</span></code></pre></div>
 <hr />
 <h2 id="quick-navigation">⚡ Quick Navigation</h2>
-<p>Ready to start learning distributed Ray? Pick a destination below:</p>
 <ul>
 <li><a href="getting-started/"><strong>Getting Started</strong></a> — Prerequisites, installation (<code>uv</code> / <code>pip</code>), and your first 5 minutes.</li>
+<li><a href="playground/"><strong>Interactive Playground</strong></a> — WebAssembly-powered Monaco editor learning in the browser.</li>
 <li><a href="onboarding-guide/"><strong>Onboarding Guide</strong></a> — Guided tour, doctor diagnostics, and VS Code integration.</li>
-<li><a href="syllabus/"><strong>Curriculum Syllabus</strong></a> — Detailed breakdown of all 14 chapters and 66 exercises.</li>
+<li><a href="syllabus/"><strong>Curriculum Syllabus</strong></a> — Detailed breakdown of all 18 chapters and 81 exercises.</li>
+<li><a href="plugins/"><strong>Plugin Architecture</strong></a> — Extensible domain packs and custom curriculum authoring.</li>
+<li><a href="cloud-kuberay/"><strong>Cloud &amp; KubeRay Guide</strong></a> — Multi-node KinD testing, remote execution, and Helm deployment.</li>
 <li><a href="cli-reference/"><strong>CLI Reference</strong></a> — Comprehensive reference manual for all commands and options.</li>
 <li><a href="troubleshooting/"><strong>Troubleshooting</strong></a> — Solutions for port conflicts, memory spilling, and DDP deadlocks.</li>
 <li><a href="contributing/"><strong>Contributing</strong></a> — How to author new exercises and contribute to Raylings.</li>
