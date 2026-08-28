@@ -12,11 +12,13 @@
         <meta name="author" content="Raylings Contributors">
       
       
-        <link rel="canonical" href="https://dnf0.github.io/raylings/ROADMAP/">
+        <link rel="canonical" href="https://dnf0.github.io/raylings/plugins/">
       
       
-        <link rel="prev" href="../contributing/">
+        <link rel="prev" href="../syllabus/">
       
+      
+        <link rel="next" href="../cli-reference/">
       
       
         
@@ -27,7 +29,7 @@
     
     
       
-        <title>Roadmap & Backlog - Raylings</title>
+        <title>Curriculum Plugins - Raylings</title>
       
     
     
@@ -78,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#raylings-backlog-future-roadmap" class="md-skip">
+        <a href="#curriculum-plugin-extension-pack-architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Roadmap & Backlog
+              Curriculum Plugins
             
           </span>
         </div>
@@ -394,10 +396,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../plugins/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curriculum Plugins
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -413,6 +442,120 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-contract-raylingsplugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plugin Contract: RaylingsPlugin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packaging-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packaging &amp; Entry Points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-management-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Management &amp; Inspection
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI Management &amp; Inspection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-list-installed-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. List Installed Plugins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-inspect-plugin-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Inspect Plugin Details
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-validate-plugin-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Validate Plugin Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-plugin-chapter-18-distributed-quantitative-finance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Plugin: Chapter 18 (Distributed Quantitative Finance)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -529,37 +672,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap & Backlog
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../ROADMAP/" class="md-nav__link">
         
   
   
@@ -575,120 +691,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#roadmap-tracks-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🗺️ Roadmap Tracks Overview
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-1-next-gen-distributed-ai-curriculum-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chapter-15-distributed-llm-serving-with-vllm-ray" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chapter 15: Distributed LLM Serving with vLLM &amp; Ray
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#chapter-16-deepspeed-pytorch-fsdp-fully-sharded-data-parallel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chapter 16: DeepSpeed &amp; PyTorch FSDP (Fully Sharded Data Parallel)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#chapter-17-multimodal-vector-ray-data-pipelines" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chapter 17: Multimodal &amp; Vector Ray Data Pipelines
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-2-developer-tooling-cli-experience-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-3-cloud-enterprise-infrastructure-testing-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-4-ecosystem-community-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 4: Ecosystem &amp; Community (Completed ✅)
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -720,10 +722,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#roadmap-tracks-overview" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🗺️ Roadmap Tracks Overview
+        Overview
       
     </span>
   </a>
@@ -731,22 +733,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-1-next-gen-distributed-ai-curriculum-completed" class="md-nav__link">
+  <a href="#plugin-contract-raylingsplugin" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)
+        Plugin Contract: RaylingsPlugin
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packaging-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packaging &amp; Entry Points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-management-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Management &amp; Inspection
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI Management &amp; Inspection">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#chapter-15-distributed-llm-serving-with-vllm-ray" class="md-nav__link">
+  <a href="#1-list-installed-plugins" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Chapter 15: Distributed LLM Serving with vLLM &amp; Ray
+        1. List Installed Plugins
       
     </span>
   </a>
@@ -754,10 +778,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#chapter-16-deepspeed-pytorch-fsdp-fully-sharded-data-parallel" class="md-nav__link">
+  <a href="#2-inspect-plugin-details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Chapter 16: DeepSpeed &amp; PyTorch FSDP (Fully Sharded Data Parallel)
+        2. Inspect Plugin Details
       
     </span>
   </a>
@@ -765,10 +789,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#chapter-17-multimodal-vector-ray-data-pipelines" class="md-nav__link">
+  <a href="#3-validate-plugin-contract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Chapter 17: Multimodal &amp; Vector Ray Data Pipelines
+        3. Validate Plugin Contract
       
     </span>
   </a>
@@ -781,32 +805,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-2-developer-tooling-cli-experience-completed" class="md-nav__link">
+  <a href="#reference-plugin-chapter-18-distributed-quantitative-finance" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-3-cloud-enterprise-infrastructure-testing-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-4-ecosystem-community-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 4: Ecosystem &amp; Community (Completed ✅)
+        Reference Plugin: Chapter 18 (Distributed Quantitative Finance)
       
     </span>
   </a>
@@ -833,92 +835,88 @@
   
 
 
-<h1 id="raylings-backlog-future-roadmap">Raylings Backlog &amp; Future Roadmap</h1>
-<p>This document outlines the strategic backlog, upcoming features, and long-term roadmap for <strong>Raylings</strong>.</p>
+<h1 id="curriculum-plugin-extension-pack-architecture">Curriculum Plugin &amp; Extension Pack Architecture</h1>
+<p>Raylings features an open, pluggable curriculum architecture enabling domain specialists, research groups, and organizations to author, distribute, and register custom chapters and exercises using standard Python packaging mechanisms.</p>
 <hr />
-<h2 id="roadmap-tracks-overview">🗺️ Roadmap Tracks Overview</h2>
-<pre class="mermaid"><code>mindmap
-  root((Raylings Roadmap))
-    Track 1: Distributed AI Curriculum [Done]
-      Chapter 15: vLLM &amp; LLM Serving
-      Chapter 16: DeepSpeed &amp; PyTorch FSDP
-      Chapter 17: Multimodal &amp; Vector Ray Data
-    Track 2: Developer Tooling [Done]
-      Full-screen TUI raylings tui
-      Exercise Scaffolder CLI raylings new
-      Cluster Telemetry raylings top
-    Track 3: Cloud &amp; Infrastructure [Done]
-      Automated Kind / KubeRay CI Testing
-      Multi-Node E2E Pytest Suite
-      Remote Head Node Client Execution
-    Track 4: Ecosystem &amp; WASM [Done]
-      Interactive Pyodide / WASM Sandbox
-      Pluggable Curriculum Plugin Registry
-      Quantitative Finance Pack Ch 18</code></pre>
+<h2 id="overview">Overview</h2>
+<p>Raylings plugins allow you to:
+- Package custom domain curricula (e.g. Quantitative Finance, Bio-Informatics, Robotics, Geospatial Analytics).
+- Distribute extension packs via PyPI or internal Git repositories.
+- Automatically discover installed plugins via Python Entry Points (<code>raylings.plugins</code>).
+- Seamlessly integrate custom exercises into the CLI (<code>raylings list</code>, <code>raylings run</code>, <code>raylings verify</code>, <code>raylings watch</code>, <code>raylings tui</code>).</p>
 <hr />
-<h2 id="track-1-next-gen-distributed-ai-curriculum-completed">Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)</h2>
-<p>Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced distributed AI and Generative AI chapters (78 total exercises):</p>
-<h3 id="chapter-15-distributed-llm-serving-with-vllm-ray">Chapter 15: Distributed LLM Serving with vLLM &amp; Ray</h3>
+<h2 id="plugin-contract-raylingsplugin">Plugin Contract: <code>RaylingsPlugin</code></h2>
+<p>All plugins inherit from <a href="file:///Users/danielfisher/repos/raylings/src/raylings/plugins/base.py"><code>RaylingsPlugin</code></a>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">raylings.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chapter</span><span class="p">,</span> <span class="n">Exercise</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">raylings.plugins.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">RaylingsPlugin</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomPackPlugin</span><span class="p">(</span><span class="n">RaylingsPlugin</span><span class="p">):</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"robotics"</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Distributed Robotics &amp; Sim-to-Real RL"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"0.1.0"</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Distributed physics simulation and multi-agent robotics with Ray."</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Robotics Special Interest Group"</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_chapters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Chapter</span><span class="p">]:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="k">return</span> <span class="p">[</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            <span class="n">Chapter</span><span class="p">(</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                <span class="n">number</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                <span class="n">name</span><span class="o">=</span><span class="s2">"19_robotics"</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                <span class="n">title</span><span class="o">=</span><span class="s2">"Distributed Robotics Simulation"</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                <span class="n">description</span><span class="o">=</span><span class="s2">"Simulate parallel physics environments using Ray actors."</span><span class="p">,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                <span class="n">exercises</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>                    <span class="n">Exercise</span><span class="p">(</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>                        <span class="n">name</span><span class="o">=</span><span class="s2">"robotics01"</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>                        <span class="n">title</span><span class="o">=</span><span class="s2">"Parallel Isaac Sim Actor Environment"</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>                        <span class="n">path</span><span class="o">=</span><span class="s2">"exercises/19_robotics/robotics01.py"</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>                        <span class="n">chapter_name</span><span class="o">=</span><span class="s2">"19_robotics"</span><span class="p">,</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>                        <span class="n">hints</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>                            <span class="s2">"Instantiate headless simulation worker actors."</span><span class="p">,</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>                            <span class="s2">"Batch observations using ray.get()."</span><span class="p">,</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>                        <span class="p">],</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>                    <span class="p">),</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                <span class="p">],</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>            <span class="p">)</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="p">]</span>
+</span></code></pre></div>
+<hr />
+<h2 id="packaging-entry-points">Packaging &amp; Entry Points</h2>
+<p>To make your plugin discoverable by Raylings, register an entry point under the <code>raylings.plugins</code> group in your package's <code>pyproject.toml</code>:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[project]</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"raylings-robotics"</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="s2">"raylings&gt;=0.5.0"</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">]</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">[project.entry-points.</span><span class="s2">"raylings.plugins"</span><span class="k">]</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">robotics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"raylings_robotics.plugin:CustomPackPlugin"</span>
+</span></code></pre></div>
+<p>Once installed into your virtual environment (<code>pip install raylings-robotics</code> or <code>uv add raylings-robotics</code>), Raylings automatically discovers and loads the plugin.</p>
+<hr />
+<h2 id="cli-management-inspection">CLI Management &amp; Inspection</h2>
+<p>Raylings provides a dedicated <code>plugins</code> CLI group:</p>
+<h3 id="1-list-installed-plugins">1. List Installed Plugins</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>raylings<span class="w"> </span>plugins<span class="w"> </span>list
+</span></code></pre></div>
+<p>Displays an overview table of all installed plugins, version numbers, authors, and chapter counts.</p>
+<h3 id="2-inspect-plugin-details">2. Inspect Plugin Details</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>raylings<span class="w"> </span>plugins<span class="w"> </span>info<span class="w"> </span>finance
+</span></code></pre></div>
+<p>Displays metadata and lists all chapters and exercises provided by the plugin.</p>
+<h3 id="3-validate-plugin-contract">3. Validate Plugin Contract</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>raylings<span class="w"> </span>plugins<span class="w"> </span>validate<span class="w"> </span>raylings.plugins.finance:FinancePlugin
+</span></code></pre></div>
+<p>Validates that your plugin satisfies the <code>RaylingsPlugin</code> protocol, checks chapter numbering, verifies exercise file paths, and ensures no duplicate exercise identifiers exist.</p>
+<hr />
+<h2 id="reference-plugin-chapter-18-distributed-quantitative-finance">Reference Plugin: Chapter 18 (Distributed Quantitative Finance)</h2>
+<p>Raylings includes a built-in reference plugin <a href="file:///Users/danielfisher/repos/raylings/src/raylings/plugins/finance.py"><code>raylings.plugins.finance.FinancePlugin</code></a>:</p>
 <ul>
-<li><strong><code>vllm01.py</code></strong>: Multi-Worker Tensor Parallelism &amp; Model Partitioning across Ray Actors.</li>
-<li><strong><code>vllm02.py</code></strong>: PagedAttention &amp; Continuous Batching KV-cache memory dynamics.</li>
-<li><strong><code>vllm03.py</code></strong>: Dynamic Multi-LoRA Adapter Serving with Actor Pools.</li>
-<li><strong><code>vllm04.py</code></strong>: Speculative Decoding &amp; Draft Model Worker Coordination.</li>
+<li><strong>Exercise 1 (<code>finance01</code>)</strong>: Distributed Monte Carlo European Option Pricing with Actor Pool.</li>
+<li><strong>Exercise 2 (<code>finance02</code>)</strong>: Distributed Multi-Asset Portfolio Value-at-Risk (VaR) &amp; CVaR.</li>
+<li><strong>Exercise 3 (<code>finance03</code>)</strong>: Streaming High-Frequency Market Tick Analytics &amp; VWAP with Ray Data.</li>
 </ul>
-<h3 id="chapter-16-deepspeed-pytorch-fsdp-fully-sharded-data-parallel">Chapter 16: DeepSpeed &amp; PyTorch FSDP (Fully Sharded Data Parallel)</h3>
-<ul>
-<li><strong><code>fsdp01.py</code></strong>: PyTorch FSDP with Ray Train <code>ScalingConfig</code> &amp; multi-worker gradient sync.</li>
-<li><strong><code>fsdp02.py</code></strong>: DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 memory sharding across Ray workers.</li>
-<li><strong><code>fsdp03.py</code></strong>: Mixed Precision (BF16/FP8) &amp; Activation Checkpointing optimization.</li>
-<li><strong><code>fsdp04.py</code></strong>: Elastic fault-tolerant checkpoint save/resume to object storage.</li>
-</ul>
-<h3 id="chapter-17-multimodal-vector-ray-data-pipelines">Chapter 17: Multimodal &amp; Vector Ray Data Pipelines</h3>
-<ul>
-<li><strong><code>data_genai01.py</code></strong>: High-throughput streaming image and audio preprocessing with backpressure.</li>
-<li><strong><code>data_genai02.py</code></strong>: GPU-accelerated batch embedding extraction using <code>ActorPoolStrategy</code>.</li>
-<li><strong><code>data_genai03.py</code></strong>: Dynamic sequence length bucketing and padding minimization.</li>
-<li><strong><code>data_genai04.py</code></strong>: Parallel streaming dataset ingestion into vector databases (LanceDB / Milvus).</li>
-</ul>
-<hr />
-<h2 id="track-2-developer-tooling-cli-experience-completed">Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)</h2>
-<ol>
-<li><strong>Interactive Full-Screen TUI (<code>raylings tui</code>)</strong>:</li>
-<li>Built with Rich <code>Layout</code>, <code>Live</code>, and interactive non-blocking keystroke listener.</li>
-<li>Split-pane layout: live curriculum chapter outline with status badges on the left; syntax-highlighted code preview, real-time evaluation logs, progressive hint drawer, and cluster telemetry overlays on the right.</li>
-<li>Full keyboard navigation (<code>[r]</code> Run, <code>[h]</code> Hint, <code>[j/↓]</code> Down, <code>[k/↑]</code> Up, <code>[n]</code> Next, <code>[p]</code> Prev, <code>[t]</code> Telemetry, <code>[d]</code> Doctor, <code>[q]</code> Quit).</li>
-<li><strong>Exercise Scaffolding Tool (<code>raylings new</code> / <code>raylings new-exercise &lt;chapter&gt; &lt;name&gt;</code>)</strong>:</li>
-<li>Single command to generate skeleton exercise, canonical solution, verify harness, and manifest entry snippet.</li>
-<li>Options for <code>--title</code>, <code>--description</code>, <code>--dry-run</code>, and <code>--json</code>.</li>
-<li><strong>Cluster Health &amp; Telemetry Inspector (<code>raylings top</code> / <code>raylings metrics</code>)</strong>:</li>
-<li>Live terminal view of Plasma object store memory utilization, spill rate, worker CPU/GPU saturation, and GCS actor tables.</li>
-<li>Options for <code>--interval</code>, <code>--once</code>, and <code>--json</code>.</li>
-</ol>
-<hr />
-<h2 id="track-3-cloud-enterprise-infrastructure-testing-completed">Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)</h2>
-<ol>
-<li><strong>Automated Ephemeral Multi-Node KinD &amp; KubeRay CI</strong>:</li>
-<li>Automated cluster lifecycle management script (<code>scripts/kuberay/setup-kuberay.sh</code>) supporting <code>up</code>, <code>down</code>, <code>wait</code>, <code>forward</code>, and <code>status</code>.</li>
-<li>3-node KinD topology (<code>scripts/kuberay/kind-config.yaml</code>) with port mappings for Ray client (10001), dashboard (8265), and GCS (6379).</li>
-<li>Production-ready <code>RayCluster</code> CRD spec (<code>scripts/kuberay/ray-cluster.yaml</code>) with 1 head pod and 2 worker pods.</li>
-<li>Dedicated GitHub Actions workflow (<code>.github/workflows/kuberay-e2e.yml</code>) orchestrating ephemeral KinD clusters with automated diagnostic artifact collection on failure.</li>
-<li><strong>Multi-Node End-to-End Test Suite (<code>tests/test_kuberay_e2e.py</code>)</strong>:</li>
-<li>Comprehensive multi-node pytest suite testing node discovery, actor spread across distinct node IPs, <code>STRICT_SPREAD</code> placement groups, cross-node Plasma zero-copy transfers, and multi-node PyTorch <code>TorchTrainer</code> DDP gradient sync.</li>
-<li>Built-in graceful fallback to in-process multi-node simulation (<code>ray.cluster_utils.Cluster</code>).</li>
-<li><strong>Comprehensive Cloud &amp; KubeRay Deployment Guide (<code>docs/cloud-kuberay.md</code>)</strong>:</li>
-<li>Complete architecture diagrams, local provisioning instructions, remote Ray client execution commands, and troubleshooting recipes.</li>
-</ol>
-<hr />
-<h2 id="track-4-ecosystem-community-completed">Track 4: Ecosystem &amp; Community (Completed ✅)</h2>
-<ol>
-<li><strong>Browser-Based Interactive WASM Playground</strong>:</li>
-<li>Pure-Python in-memory Ray simulation engine (<code>src/raylings/wasm_compat.py</code>) supporting <code>ray.init</code>, <code>ray.shutdown</code>, <code>ray.remote</code> tasks and actors, <code>ray.put</code>, <code>ray.get</code>, <code>ActorPool</code>, and <code>ray.data</code> Dataset operations inside Pyodide / WebAssembly runtimes.</li>
-<li>Monaco Editor + TailwindCSS interactive web playground (<code>docs/assets/playground.html</code> &amp; <code>docs/playground.md</code>) with catalog JSON bundling (<code>docs/assets/playground_catalog.json</code>), real-time execution, hint reveals, solution diffs, and live simulated cluster telemetry.</li>
-<li><strong>Pluggable Curriculum Architecture &amp; Domain Plugin Registry</strong>:</li>
-<li>Extensible <code>RaylingsPlugin</code> protocol (<code>src/raylings/plugins/base.py</code>) with automatic discovery via Python entry points (<code>raylings.plugins</code>).</li>
-<li>CLI management suite (<code>raylings plugins list</code>, <code>raylings plugins info &lt;name&gt;</code>, <code>raylings plugins validate &lt;path&gt;</code>).</li>
-<li>Reference Quantitative Finance curriculum pack (<code>exercises/18_quant_finance/</code> and <code>src/raylings/plugins/finance.py</code>) featuring Monte Carlo option pricing, distributed portfolio VaR/CVaR, and streaming market tick analytics.</li>
-<li>Comprehensive Plugin Authoring &amp; Distribution Guide (<code>docs/plugins.md</code>).</li>
-</ol>
 
 
 

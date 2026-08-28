@@ -2,38 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://dnf0.github.io/raylings/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/ROADMAP/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/cli-reference/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/cloud-kuberay/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/contributing/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/getting-started/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/onboarding-guide/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
+    </url>
+    <url>
+         <loc>https://dnf0.github.io/raylings/playground/</loc>
+         <lastmod>2026-08-28</lastmod>
+    </url>
+    <url>
+         <loc>https://dnf0.github.io/raylings/plugins/</loc>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/syllabus/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
     <url>
          <loc>https://dnf0.github.io/raylings/troubleshooting/</loc>
-         <lastmod>2026-08-27</lastmod>
+         <lastmod>2026-08-28</lastmod>
     </url>
 </urlset>
