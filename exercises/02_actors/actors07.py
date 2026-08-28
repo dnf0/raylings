@@ -15,8 +15,6 @@ Instructions:
 3. Use `pool.map()` to process a list of inputs and collect transformed outputs.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.util.actor_pool import ActorPool  # noqa: F401
 

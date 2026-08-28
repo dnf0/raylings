@@ -14,8 +14,6 @@ Instructions:
 2. Inspect block partitioning, schema, and dataset count.
 """
 
-# I AM NOT DONE
-
 import ray
 import ray.data
 

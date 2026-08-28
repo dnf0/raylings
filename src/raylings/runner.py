@@ -10,6 +10,17 @@ from raylings.models import Exercise
 
 NOT_DONE_MARKER = "I AM NOT DONE"
 
+INCOMPLETE_MARKERS = (
+    "I AM NOT DONE",
+    "TODO",
+    "FIXME",
+    "___",
+    "/* ??? */",
+    "<!-- ANSWER -->",
+    "???",
+    "raise NotImplementedError",
+)
+
 
 @dataclass
 class RunResult:
@@ -27,7 +38,7 @@ class ExerciseRunner:
     """Executes exercises and canonical solutions in isolated subprocesses."""
 
     def check_marker(self, path: Path) -> bool:
-        """Check if the given file contains the 'I AM NOT DONE' marker or unfilled blanks.
+        """Check if the given file contains uncompleted cloze blanks or not-done markers.
 
         Args:
             path: Filesystem path to the exercise file.
@@ -39,16 +50,17 @@ class ExerciseRunner:
             return False
         try:
             content = path.read_text(encoding="utf-8")
-            has_not_done_comment = (
-                "I AM NOT DONE" in content
-                or "# I AM NOT DONE" in content
-                or "// I AM NOT DONE" in content
-                or "<!-- I AM NOT DONE -->" in content
+            return any(
+                marker in content
+                for marker in (
+                    "I AM NOT DONE",
+                    "___",
+                    "/* ??? */",
+                    "<!-- ANSWER -->",
+                    "???",
+                    "raise NotImplementedError",
+                )
             )
-            has_unfilled_blank = (
-                "___" in content or "/* ??? */" in content or "<!-- ANSWER -->" in content
-            )
-            return has_not_done_comment or has_unfilled_blank
         except Exception:
             return False
 

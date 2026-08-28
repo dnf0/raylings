@@ -12,8 +12,6 @@ Instructions:
 2. Deploy the application with `serve.run()` and query via HTTP client.
 """
 
-# I AM NOT DONE
-
 import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"

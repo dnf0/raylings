@@ -11,8 +11,6 @@ Instructions:
 2. Verify loss convergence on synthetic regression data.
 """
 
-# I AM NOT DONE
-
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 4: Distributed Data-Parallel Trainer.
 
 In Distributed Data-Parallel (DDP) training:

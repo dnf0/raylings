@@ -14,8 +14,6 @@ Instructions:
 2. Verify convergence under asynchronous updates.
 """
 
-# I AM NOT DONE
-
 r"""Chapter 9: Distributed ML Primitives from Scratch - Exercise 2: Synchronous Gradient Averaging.
 
 In distributed deep learning:

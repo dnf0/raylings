@@ -178,7 +178,7 @@ def test_ui_render_result_failed_marker(tmp_path: Path):
     test_console = Console(record=True)
     render_result(result, console=test_console)
     output = test_console.export_text()
-    assert "I AM NOT DONE" in output
+    assert "PENDING" in output or "incomplete" in output or "placeholder" in output
 
 
 def test_ui_render_result_failed_error(tmp_path: Path):

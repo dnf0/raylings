@@ -39,7 +39,7 @@ raylings tour --json
 ```mermaid
 flowchart TD
     S1["Step 1: Core Primitives<br/><i>Tasks, Actors, Plasma</i>"] --> S2["Step 2: Preflight Doctor<br/><i>5-point health check</i>"]
-    S2 --> S3["Step 3: First Exercise<br/><i>basics01 & '# I AM NOT DONE'</i>"]
+    S2 --> S3["Step 3: First Exercise<br/><i>basics01 & @ray.remote</i>"]
     S3 --> S4["Step 4: Live Watcher<br/><i>Keyboard navigation</i>"]
     S4 --> S5["Step 5: VS Code Integration<br/><i>Sidebar & Status Bar</i>"]
 ```
@@ -55,7 +55,7 @@ flowchart TD
 - **Suggested Command**: `raylings doctor`
 
 #### Step 3: Solving Your First Exercise (`basics01.py`)
-- **Focus**: Understanding the exercise workflow and the `# I AM NOT DONE` marker.
+- **Focus**: Understanding the exercise workflow, `# TODO:` prompts, and `verify()` assertions.
 - **Key Concepts**: Decorating functions with `@ray.remote`, asynchronous scheduling with `.remote()`, blocking retrieval with `ray.get()`.
 - **Suggested Command**: `raylings run exercises/01_basics/basics01.py`
 
@@ -214,9 +214,8 @@ Raylings tracks your completion progress using a lightweight JSON state file loc
 ### How State is Updated
 
 1. When you run an exercise via `raylings watch` or `raylings run`:
-   - Raylings inspects the file for the `# I AM NOT DONE` marker.
    - It executes the Python script in an isolated subprocess.
-   - If the script exits with status code `0` **AND** no `# I AM NOT DONE` marker is found, the exercise is marked as completed.
+   - If the script exits with status code `0` (all `verify()` assertions pass), the exercise is marked as completed.
 2. The state tracker writes the result to `.raylings_state.json`:
 
 ```json
@@ -260,4 +259,4 @@ raylings progress --json
 ```
 
 !!! tip "Resetting Progress"
-    To reset your progress and start over, simply delete `.raylings_state.json` or re-add the `# I AM NOT DONE` marker to your exercise files.
+    To reset your progress and start over, simply delete `.raylings_state.json` or reset your exercises via git.

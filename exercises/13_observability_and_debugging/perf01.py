@@ -12,8 +12,6 @@ Instructions:
 2. Verify trace file generation and timeline event structure.
 """
 
-# I AM NOT DONE
-
 import json
 import os
 import tempfile

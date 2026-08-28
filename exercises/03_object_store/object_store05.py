@@ -14,8 +14,6 @@ Instructions:
 2. Unpack nested `ObjectRef`s to retrieve the underlying payload.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray import ObjectRef
 

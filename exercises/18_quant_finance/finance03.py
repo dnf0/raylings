@@ -12,8 +12,6 @@ Instructions:
 2. Calculate rolling VWAP per instrument symbol.
 """
 
-# I AM NOT DONE
-
 import os
 import random
 

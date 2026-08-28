@@ -14,8 +14,6 @@ Instructions:
 2. Verify that transient worker exceptions are caught and retried until successful.
 """
 
-# I AM NOT DONE
-
 import tempfile
 from pathlib import Path
 

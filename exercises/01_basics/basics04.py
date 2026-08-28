@@ -19,8 +19,6 @@ Instructions:
 3. Return the final `ObjectRef`.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray import ObjectRef
 

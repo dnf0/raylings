@@ -556,7 +556,8 @@ def create_tui_layout(
                 res_text.append(f"✗ FAILED (exit code {res.exit_code})\n\n", style="bold red")
                 if res.has_not_done_marker:
                     res_text.append(
-                        "Marker 'I AM NOT DONE' is still present in file.\n\n", style="yellow"
+                        "File contains incomplete placeholders or pending tasks.\n\n",
+                        style="yellow",
                     )
                 if res.error:
                     res_text.append(res.error, style="red")

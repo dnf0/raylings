@@ -14,8 +14,6 @@ Instructions:
 2. Poll job status until success and inspect execution logs.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.cluster_utils import Cluster
 

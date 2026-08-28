@@ -12,8 +12,6 @@ Instructions:
 2. Verify multi-tenant adapter outputs.
 """
 
-# I AM NOT DONE
-
 r"""Chapter 15: Distributed LLM Serving & vLLM - Exercise 3: Dynamic Multi-LoRA Adapter Serving.
 
 Multi-LoRA serving enables serving hundreds of customized fine-tuned adapters on top of a shared

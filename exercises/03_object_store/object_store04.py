@@ -14,8 +14,6 @@ Instructions:
 2. Verify that Ray handles objects larger than individual worker memory seamlessly.
 """
 
-# I AM NOT DONE
-
 import numpy as np
 import ray
 from ray import ObjectRef

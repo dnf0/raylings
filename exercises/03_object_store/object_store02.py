@@ -14,8 +14,6 @@ Instructions:
 2. Pass the resulting `ObjectRef` to all tasks.
 """
 
-# I AM NOT DONE
-
 import numpy as np
 import ray
 from ray import ObjectRef

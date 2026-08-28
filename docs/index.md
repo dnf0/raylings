@@ -142,7 +142,7 @@ flowchart TD
     A[Start: raylings watch] --> B[Load Current Exercise]
     B --> C[Inspect Code & Read Hints]
     C --> D[Edit in IDE & Save File]
-    D --> E{Tests Pass & '# I AM NOT DONE' Removed?}
+    D --> E{Tests & Assertions Pass?}
     E -- No --> F[Render Diagnostics & Stack Trace]
     F --> C
     E -- Yes --> G[🎉 Mark Completed in State]

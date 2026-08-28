@@ -25,30 +25,22 @@ CHAPTER_1_3_EXERCISES = get_chapter_exercises([1, 2, 3])
 
 
 @pytest.mark.parametrize("exercise", CHAPTER_1_3_EXERCISES, ids=lambda ex: ex.name)
-def test_exercise_file_has_marker_and_fails_initially(exercise: Exercise):
-    """Verify that every exercise file exists, has the marker, and fails by default."""
+def test_exercise_file_fails_initially(exercise: Exercise):
+    """Verify that every exercise file exists and fails initially."""
     runner = ExerciseRunner()
     ex_path = Path(exercise.path)
     assert ex_path.exists(), f"Exercise file missing: {ex_path}"
 
-    has_marker = runner.check_marker(ex_path)
-    assert has_marker is True, f"Exercise {exercise.name} must have '# I AM NOT DONE' marker"
-
     result = runner.run_exercise(exercise, timeout=30.0)
-    assert result.passed is False, (
-        f"Exercise {exercise.name} should fail when marker is present or uncompleted"
-    )
+    assert result.passed is False, f"Exercise {exercise.name} should fail initially until completed"
 
 
 @pytest.mark.parametrize("exercise", CHAPTER_1_3_EXERCISES, ids=lambda ex: ex.name)
 def test_solution_file_passes_cleanly(exercise: Exercise):
-    """Verify that every reference solution exists, has no marker, and passes cleanly."""
+    """Verify that every reference solution exists and passes cleanly."""
     runner = ExerciseRunner()
     sol_path = exercise.solution_path
     assert sol_path.exists(), f"Solution file missing: {sol_path}"
-
-    has_marker = runner.check_marker(sol_path)
-    assert has_marker is False, f"Solution {sol_path} must NOT contain the '# I AM NOT DONE' marker"
 
     result = runner.run_solution(exercise, timeout=45.0)
     assert result.passed is True, (

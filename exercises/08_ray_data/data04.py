@@ -11,8 +11,6 @@ Instructions:
 1. Configure bounded streaming windows and iterate through dataset batches without memory explosion.
 """
 
-# I AM NOT DONE
-
 import ray
 import ray.data
 

@@ -34,7 +34,7 @@ Every exercise in Raylings follows a strict 4-part contract to ensure high curri
 
 ```mermaid
 graph TD
-    A["1. Exercise File<br/><code>exercises/XX_chap/ex01.py</code><br/><i>Contains '# I AM NOT DONE' & fails initially</i>"]
+    A["1. Exercise File<br/><code>exercises/XX_chap/ex01.py</code><br/><i>Clean skeleton & fails initially</i>"]
     B["2. Canonical Solution<br/><code>solutions/XX_chap/ex01.py</code><br/><i>Contains complete fix & passes with 0</i>"]
     C["3. Manifest Entry<br/><code>src/raylings/manifest.py</code><br/><i>Title, path, and progressive hints</i>"]
     D["4. Automated Test<br/><code>tests/test_curriculum.py</code><br/><i>Validates runner failure & solution success</i>"]
@@ -46,22 +46,20 @@ graph TD
 
 ### 1. The Exercise File (`exercises/XX_chapter/name.py`)
 
-- Must contain `# I AM NOT DONE` as the first non-comment line.
 - Must include a clear module docstring stating:
     - Exercise name
     - Topic
-    - Educational objective
-    - Key API references
-- Must have an intentional bug or incomplete TODO that causes the script to fail or raise `NotImplementedError` when executed unmodified.
-- Must contain an executable `if __name__ == "__main__":` block with assertions validating the solution.
+    - Educational objective / Context & Why
+    - Step-by-step instructions
+- Must have an intentional cloze blank (`None`, `???`, `___`, or empty placeholder) or incomplete `# TODO:` that causes the script to fail assertions or raise errors when executed unmodified.
+- Must contain an executable `verify()` function and `if __name__ == "__main__":` block with assertions validating the solution.
 
 ```python
-# I AM NOT DONE
 """
 Exercise: custom_example01.py
 Topic: Custom Actor Superpower
 
-Objective:
+Context & Why:
 Implement an actor method that safely computes distributed sums.
 """
 
@@ -75,19 +73,19 @@ class Summer:
 
     def add(self, value: int) -> int:
         # TODO: Implement addition logic
-        raise NotImplementedError("Implement add method")
+        pass
 
 
-def main() -> None:
+def verify() -> None:
     ray.init(ignore_reinit_error=True)
     summer = Summer.remote()
     res = ray.get(summer.add.remote(10))
     assert res == 10, f"Expected 10, got {res}"
-    print("Success!")
+    print("✓ Success!")
 
 
 if __name__ == "__main__":
-    main()
+    verify()
 ```
 
 ---
@@ -95,7 +93,6 @@ if __name__ == "__main__":
 ### 2. The Canonical Solution (`solutions/XX_chapter/name.py`)
 
 - Must be placed at the exact mirrored path under `solutions/` (e.g. `solutions/XX_chapter/name.py`).
-- Must **NOT** contain the `# I AM NOT DONE` marker.
 - Must implement the complete, correct solution.
 - Must exit cleanly with status code `0` when executed directly via Python.
 

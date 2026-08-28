@@ -12,8 +12,6 @@ Instructions:
 2. Aggregate discounted payoff estimates and verify pricing accuracy against analytical Black-Scholes.
 """
 
-# I AM NOT DONE
-
 import math
 import os
 import random

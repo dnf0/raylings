@@ -14,8 +14,6 @@ Instructions:
 2. Schedule an actor specifically on that target node using `NodeAffinitySchedulingStrategy`.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.util.scheduling_strategies import NodeAffinitySchedulingStrategy
 

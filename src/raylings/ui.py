@@ -8,7 +8,7 @@ from rich.table import Table
 from rich.text import Text
 
 from raylings.models import Exercise, Manifest
-from raylings.runner import NOT_DONE_MARKER, RunResult
+from raylings.runner import RunResult
 
 console = Console()
 
@@ -71,11 +71,11 @@ def render_result(result: RunResult, console: Console | None = None) -> None:
         if result.has_not_done_marker:
             marker_notice = Text()
             marker_notice.append(
-                f"Exercise {ex.name} still contains the '{NOT_DONE_MARKER}' marker.\n",
+                f"Exercise {ex.name} contains incomplete placeholders or pending tasks.\n",
                 style="bold yellow",
             )
             marker_notice.append(
-                "When you are ready to evaluate your solution, remove this line at the top of the file.\n",
+                "Complete the TODO tasks and placeholders in the file to evaluate your solution.\n",
                 style="yellow",
             )
             marker_notice.append(

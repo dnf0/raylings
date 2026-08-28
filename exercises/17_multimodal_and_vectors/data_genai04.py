@@ -11,8 +11,6 @@ Instructions:
 2. Stream embeddings into partitioned vector index.
 """
 
-# I AM NOT DONE
-
 import os
 from collections.abc import Iterable
 from typing import Any

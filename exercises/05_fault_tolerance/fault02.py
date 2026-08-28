@@ -13,8 +13,6 @@ Instructions:
 2. Simulate worker process failure and verify that Ray restarts the actor.
 """
 
-# I AM NOT DONE
-
 import os
 import time
 

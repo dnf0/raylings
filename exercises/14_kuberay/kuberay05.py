@@ -10,8 +10,6 @@ Instructions:
 1. Handle simulated pod eviction and verify cluster recovery.
 """
 
-# I AM NOT DONE
-
 
 class SimulatedK8sCluster:
     def __init__(self, desired_replicas: int) -> None:

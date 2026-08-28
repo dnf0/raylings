@@ -12,8 +12,6 @@ Instructions:
 2. Verify throughput improvements over row-wise operations.
 """
 
-# I AM NOT DONE
-
 import numpy as np
 import ray
 import ray.data

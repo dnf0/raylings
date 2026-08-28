@@ -11,8 +11,6 @@ Instructions:
 1. Implement a preemption-aware actor with clean shutdown handlers.
 """
 
-# I AM NOT DONE
-
 import os
 import tempfile
 import time

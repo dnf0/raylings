@@ -17,8 +17,6 @@ Instructions:
 3. Verify that 4 concurrent tasks execute in parallel on the threaded actor.
 """
 
-# I AM NOT DONE
-
 import threading
 import time  # noqa: F401
 

@@ -18,8 +18,6 @@ Instructions:
 3. Verify that multiple async requests run concurrently with significant speedup over sequential execution.
 """
 
-# I AM NOT DONE
-
 import asyncio  # noqa: F401
 import time  # noqa: F401
 

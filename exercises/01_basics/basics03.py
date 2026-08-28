@@ -19,8 +19,6 @@ Instructions:
 2. Confirm that parallel execution completes significantly faster than sequential execution.
 """
 
-# I AM NOT DONE
-
 import time
 
 import ray
