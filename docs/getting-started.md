@@ -152,8 +152,10 @@ Open `exercises/01_basics/basics01.py` in your editor, follow the `# TODO:` and 
 To get real-time code actions, inline hints, and solution diffing directly in VS Code or Cursor:
 
 ```bash
-# Install the extension from the release VSIX
-code --install-extension dist/raylings-vscode.vsix
+# Install directly from the VS Code Marketplace
+code --install-extension dnf0.raylings-vscode
+# Or for Cursor
+cursor --install-extension dnf0.raylings-vscode
 ```
 
 Explore the [**Interactive Onboarding Guide**](onboarding-guide.md) for full editor keybindings and walkthrough instructions.

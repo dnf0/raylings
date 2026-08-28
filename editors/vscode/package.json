@@ -2,7 +2,8 @@
   "name": "raylings-vscode",
   "displayName": "Raylings: Master Python Ray",
   "description": "VS Code and Cursor extension for Raylings: learn distributed Python Ray through interactive exercises, progress tracking, and instant execution",
-  "version": "0.1.0",
+  "version": "0.6.0",
+  "license": "Apache-2.0",
   "publisher": "dnf0",
   "repository": {
     "type": "git",
@@ -97,7 +98,7 @@
           {
             "id": "raylings.welcome.intro",
             "title": "Welcome to Raylings",
-            "description": "Master Distributed Python and AI Systems with Ray from Scratch through 66 hands-on exercises.\n[Start Interactive Tour](command:raylings.startTour)",
+            "description": "Master Distributed Python and AI Systems with Ray from Scratch through 81 hands-on exercises.\n[Start Interactive Tour](command:raylings.startTour)",
             "media": {
               "markdown": "walkthroughs/welcome.md"
             },
@@ -194,7 +195,8 @@
     "vscode:prepublish": "node esbuild.config.js --minify",
     "build": "node esbuild.config.js --minify",
     "compile": "node esbuild.config.js",
-    "watch": "node esbuild.config.js --watch"
+    "watch": "node esbuild.config.js --watch",
+    "package": "npx @vscode/vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

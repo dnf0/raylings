@@ -1,10 +1,10 @@
 # 🌲 Raylings Explorer & Sidebar
 
-Track your progress across all 14 chapters directly inside VS Code!
+Track your progress across all 18 chapters directly inside VS Code!
 
 ### 🧭 Raylings Sidebar Explorer
 - Click the **Raylings icon (⚡)** in the Activity Bar to open the exercise explorer.
-- Expand chapters to view all 66 exercises with real-time status badges:
+- Expand chapters to view all 81 exercises with real-time status badges:
   - `✓` **Passed / Completed**
   - `⏳` **Pending / Incomplete**
 - Click any exercise in the tree view to open it instantly in the editor.
