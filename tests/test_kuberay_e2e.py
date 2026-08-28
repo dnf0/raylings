@@ -116,21 +116,28 @@ def test_kuberay_cluster_node_discovery(ray_cluster: dict[str, Any]) -> None:
 def test_kuberay_actor_cross_node_scheduling(ray_cluster: dict[str, Any]) -> None:
     """Verify actor tasks are distributed across distinct physical/logical nodes."""
     probes = [WorkerNodeProbe.options(scheduling_strategy="SPREAD").remote() for _ in range(4)]
-    infos = ray.get([p.get_info.remote() for p in probes])
+    try:
+        infos = ray.get([p.get_info.remote() for p in probes])
 
-    node_ids = {info["node_id"] for info in infos}
-    assert len(node_ids) >= 2, (
-        f"Expected actors to be scheduled across >= 2 nodes, got node_ids: {node_ids}"
-    )
-
-    # In multi-host / KubeRay clusters with distinct IPs, verify IP distribution
-    alive_nodes = [n for n in ray.nodes() if n.get("Alive") is True]
-    cluster_ips = {n.get("NodeManagerAddress") for n in alive_nodes}
-    if len(cluster_ips) > 1:
-        actor_ips = {info["node_ip"] for info in infos}
-        assert len(actor_ips) >= 2, (
-            f"Expected actors across distinct IPs in multi-host cluster, got {actor_ips}"
+        node_ids = {info["node_id"] for info in infos}
+        assert len(node_ids) >= 2, (
+            f"Expected actors to be scheduled across >= 2 nodes, got node_ids: {node_ids}"
         )
+
+        # In multi-host / KubeRay clusters with distinct IPs, verify IP distribution
+        alive_nodes = [n for n in ray.nodes() if n.get("Alive") is True]
+        cluster_ips = {n.get("NodeManagerAddress") for n in alive_nodes}
+        if len(cluster_ips) > 1:
+            actor_ips = {info["node_ip"] for info in infos}
+            assert len(actor_ips) >= 2, (
+                f"Expected actors across distinct IPs in multi-host cluster, got {actor_ips}"
+            )
+    finally:
+        for p in probes:
+            try:
+                ray.kill(p)
+            except Exception:
+                pass
 
 
 def test_kuberay_placement_group_strict_spread(ray_cluster: dict[str, Any]) -> None:
@@ -140,6 +147,8 @@ def test_kuberay_placement_group_strict_spread(ray_cluster: dict[str, Any]) -> N
     ready = ray.get(pg.ready(), timeout=30)
     assert ready is not None, "Placement group failed to reach READY state"
 
+    actor_a = None
+    actor_b = None
     try:
         actor_a = WorkerNodeProbe.options(
             scheduling_strategy=PlacementGroupSchedulingStrategy(
@@ -171,6 +180,16 @@ def test_kuberay_placement_group_strict_spread(ray_cluster: dict[str, Any]) -> N
                 f"Actor B IP {info_b['node_ip']}"
             )
     finally:
+        if actor_a is not None:
+            try:
+                ray.kill(actor_a)
+            except Exception:
+                pass
+        if actor_b is not None:
+            try:
+                ray.kill(actor_b)
+            except Exception:
+                pass
         remove_placement_group(pg)
 
 
