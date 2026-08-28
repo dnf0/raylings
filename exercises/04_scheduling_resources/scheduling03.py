@@ -15,8 +15,6 @@ Instructions:
 2. Schedule worker actors across the placement group bundles.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.util.placement_group import placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy

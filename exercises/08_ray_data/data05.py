@@ -13,8 +13,6 @@ Instructions:
 2. Iterate batches in a simulated training loop.
 """
 
-# I AM NOT DONE
-
 import ray
 import ray.data
 import torch

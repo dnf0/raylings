@@ -14,8 +14,6 @@ Instructions:
 2. Verify that worker processes execute with the custom environment variables.
 """
 
-# I AM NOT DONE
-
 import os
 
 import ray

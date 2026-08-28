@@ -14,8 +14,6 @@ Instructions:
 2. Verify throughput gains.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.util.actor_pool import ActorPool
 

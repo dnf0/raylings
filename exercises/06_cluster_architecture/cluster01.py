@@ -12,8 +12,6 @@ Instructions:
 2. Inspect node IP addresses, alive status, and available compute resources.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

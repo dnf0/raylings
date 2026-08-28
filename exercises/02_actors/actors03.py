@@ -16,8 +16,6 @@ Instructions:
 3. Verify that all workers successfully reported their progress to the single actor.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.actor import ActorHandle
 

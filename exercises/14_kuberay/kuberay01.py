@@ -12,8 +12,6 @@ Instructions:
 2. Validate head and worker group configurations.
 """
 
-# I AM NOT DONE
-
 from typing import Any
 
 

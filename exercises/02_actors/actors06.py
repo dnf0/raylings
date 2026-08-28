@@ -17,8 +17,6 @@ Instructions:
 3. Retrieve the actor by name using `ray.get_actor("app_config_registry")` and verify values.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

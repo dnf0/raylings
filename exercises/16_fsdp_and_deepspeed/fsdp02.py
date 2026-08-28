@@ -13,8 +13,6 @@ Instructions:
 2. Verify memory reduction per ZeRO stage.
 """
 
-# I AM NOT DONE
-
 import os
 from typing import Any
 

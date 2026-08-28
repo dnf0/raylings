@@ -132,8 +132,8 @@ raylings run EXERCISE_NAME_OR_PATH [OPTIONS]
 
 #### Exit Codes
 
-- `0`: Exercise passed all assertions and does not contain `# I AM NOT DONE`.
-- `1`: Exercise failed assertions, timed out, or still contains `# I AM NOT DONE`.
+- `0`: Exercise passed all assertions and execution checks cleanly.
+- `1`: Exercise failed assertions, timed out, or encountered errors.
 
 #### Example
 

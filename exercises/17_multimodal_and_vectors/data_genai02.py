@@ -12,8 +12,6 @@ Instructions:
 2. Verify embedding generation and normalization.
 """
 
-# I AM NOT DONE
-
 import os
 from typing import Any
 

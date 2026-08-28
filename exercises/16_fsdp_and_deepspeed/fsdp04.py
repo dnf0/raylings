@@ -11,8 +11,6 @@ Instructions:
 1. Implement distributed sharded state saving and fault recovery.
 """
 
-# I AM NOT DONE
-
 import json
 import os
 import tempfile

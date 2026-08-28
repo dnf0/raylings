@@ -14,8 +14,6 @@ Instructions:
 2. Schedule actors into the co-located bundles.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.util.placement_group import placement_group
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy

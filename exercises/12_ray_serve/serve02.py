@@ -13,8 +13,6 @@ Instructions:
 2. Send multiple concurrent requests and verify they are processed in batches.
 """
 
-# I AM NOT DONE
-
 import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"

@@ -15,8 +15,6 @@ Instructions:
 2. Perform deposits and withdrawals, and assert accurate final balance and transaction logs.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

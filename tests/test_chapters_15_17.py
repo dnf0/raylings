@@ -1,8 +1,8 @@
-"""Test suite for Chapters 15 to 17 (Distributed LLM Serving, FSDP & DeepSpeed, Multimodal & Vectors).
+"""Test suite for Chapters 15 to 18 (Distributed LLM Serving, FSDP & DeepSpeed, Multimodal & Vectors, Quant Finance).
 
 Verifies:
-1. Exercise skeletons exist, contain the '# I AM NOT DONE' marker, and fail initially.
-2. Reference solutions exist, do not contain the marker, and pass cleanly.
+1. Exercise skeletons exist and fail initially.
+2. Reference solutions exist and pass cleanly.
 """
 
 import pytest
@@ -24,26 +24,24 @@ CHAPTER_15_17_EXERCISES = [
         "15_vllm_and_llms",
         "16_fsdp_and_deepspeed",
         "17_multimodal_and_vectors",
+        "18_quant_finance",
     ]
 ]
 
 
-def test_chapter_15_17_exercise_count() -> None:
-    """Verify that Chapters 15 to 17 contain 12 exercises in total."""
-    assert len(CHAPTER_15_17_EXERCISES) == 12, (
-        f"Expected 12 exercises for Ch 15-17, found {len(CHAPTER_15_17_EXERCISES)}"
+def test_chapter_15_18_exercise_count() -> None:
+    """Verify that Chapters 15 to 18 contain 15 exercises in total."""
+    assert len(CHAPTER_15_17_EXERCISES) == 15, (
+        f"Expected 15 exercises for Ch 15-18, found {len(CHAPTER_15_17_EXERCISES)}"
     )
 
 
 @pytest.mark.parametrize("exercise", CHAPTER_15_17_EXERCISES, ids=lambda ex: ex.name)
-def test_exercise_skeleton_fails_with_marker(exercise: Exercise) -> None:
-    """Verify that every exercise skeleton exists, contains the marker, and fails."""
+def test_exercise_skeleton_fails_initially(exercise: Exercise) -> None:
+    """Verify that every exercise skeleton exists and fails initially."""
     runner = ExerciseRunner()
     ex_path = exercise.file_path
     assert ex_path.exists(), f"Exercise file missing: {ex_path}"
-
-    has_marker = runner.check_marker(ex_path)
-    assert has_marker is True, f"Exercise {ex_path} must contain '# I AM NOT DONE' marker"
 
     result = runner.run_exercise(exercise, timeout=30.0)
     assert result.passed is False, f"Exercise skeleton {exercise.name} should fail initially"
@@ -51,13 +49,10 @@ def test_exercise_skeleton_fails_with_marker(exercise: Exercise) -> None:
 
 @pytest.mark.parametrize("exercise", CHAPTER_15_17_EXERCISES, ids=lambda ex: ex.name)
 def test_solution_file_passes_cleanly(exercise: Exercise) -> None:
-    """Verify that every reference solution exists, has no marker, and passes cleanly."""
+    """Verify that every reference solution exists and passes cleanly."""
     runner = ExerciseRunner()
     sol_path = exercise.solution_path
     assert sol_path.exists(), f"Solution file missing: {sol_path}"
-
-    has_marker = runner.check_marker(sol_path)
-    assert has_marker is False, f"Solution {sol_path} must NOT contain the marker"
 
     result = runner.run_solution(exercise, timeout=90.0)
     assert result.passed is True, (

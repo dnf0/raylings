@@ -12,8 +12,6 @@ Instructions:
 2. Verify parameter sharding and loss convergence across workers.
 """
 
-# I AM NOT DONE
-
 import functools
 import os
 from typing import Any

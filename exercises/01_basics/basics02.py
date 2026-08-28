@@ -19,8 +19,6 @@ Instructions:
 4. Retrieve all 5 results in parallel with a single `ray.get(refs)` call.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray import ObjectRef
 

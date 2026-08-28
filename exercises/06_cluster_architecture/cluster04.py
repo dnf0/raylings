@@ -12,8 +12,6 @@ Instructions:
 1. Measure and observe cross-node object transfer dynamics.
 """
 
-# I AM NOT DONE
-
 import time
 
 import ray

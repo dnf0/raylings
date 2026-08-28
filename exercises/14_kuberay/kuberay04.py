@@ -10,8 +10,6 @@ Instructions:
 1. Configure autoscaler scaling policies and min/max worker replicas.
 """
 
-# I AM NOT DONE
-
 import math
 
 

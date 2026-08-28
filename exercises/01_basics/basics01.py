@@ -19,8 +19,6 @@ Instructions:
 3. Submit the task asynchronously with `square.remote(7)` and retrieve the result via `ray.get()`.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

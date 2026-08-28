@@ -15,8 +15,6 @@ Instructions:
 2. Verify that batching significantly reduces total execution time.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

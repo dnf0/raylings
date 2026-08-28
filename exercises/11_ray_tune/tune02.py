@@ -12,8 +12,6 @@ Instructions:
 2. Verify early termination of poor trials.
 """
 
-# I AM NOT DONE
-
 import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"

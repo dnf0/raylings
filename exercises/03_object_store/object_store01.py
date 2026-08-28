@@ -15,8 +15,6 @@ Instructions:
 2. Pass the `ObjectRef` to a worker task and verify that the worker receives a read-only view of the data.
 """
 
-# I AM NOT DONE
-
 import numpy as np
 import ray
 from ray import ObjectRef

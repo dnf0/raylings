@@ -13,8 +13,6 @@ Instructions:
 2. Verify that lost object references are reconstructed on demand.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

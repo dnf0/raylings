@@ -14,8 +14,6 @@ Instructions:
 2. Verify O(log N) aggregation depth.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

@@ -17,8 +17,6 @@ Instructions:
 3. Retrieve and verify both values independently.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

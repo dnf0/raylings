@@ -14,8 +14,6 @@ Instructions:
 2. Execute `map_batches(InferenceClass, compute=ActorPoolStrategy(min_size=2))`.
 """
 
-# I AM NOT DONE
-
 import numpy as np
 import ray
 import ray.data

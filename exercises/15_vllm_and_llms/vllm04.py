@@ -13,8 +13,6 @@ Instructions:
 2. Verify exact sequence matching.
 """
 
-# I AM NOT DONE
-
 import os
 from typing import Any
 

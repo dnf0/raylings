@@ -11,8 +11,6 @@ Instructions:
 2. Verify reduced padding token counts.
 """
 
-# I AM NOT DONE
-
 import os
 from typing import Any
 

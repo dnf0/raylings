@@ -14,8 +14,6 @@ Instructions:
 2. Schedule gang workers into the reserved bundles.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.util.placement_group import (
     placement_group,

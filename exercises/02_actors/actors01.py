@@ -17,8 +17,6 @@ Instructions:
 3. Invoke `increment.remote(5)` and `get_count.remote()`, then verify with `ray.get()`.
 """
 
-# I AM NOT DONE
-
 import ray
 
 

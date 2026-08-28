@@ -14,8 +14,6 @@ Instructions:
 2. Verify task distribution across the simulated nodes.
 """
 
-# I AM NOT DONE
-
 import ray
 from ray.cluster_utils import Cluster
 

@@ -143,7 +143,7 @@ Choose your preferred learning interface:
 
 ### Step 4: Solve Your First Exercise
 
-Open `exercises/01_basics/basics01.py` in your editor, follow the `# TODO:` and `# WHY:` instructions, remove `# I AM NOT DONE`, and save!
+Open `exercises/01_basics/basics01.py` in your editor, follow the `# TODO:` and `# WHY:` instructions, and save!
 
 ---
 

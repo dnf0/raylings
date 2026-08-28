@@ -7,10 +7,9 @@ Transform standard synchronous Python functions into asynchronous, distributed R
 
 ### 📋 Instructions
 1. Open [`exercises/01_basics/basics01.py`](command:raylings.openExercise?%22exercises/01_basics/basics01.py%22).
-2. Look for the `# I AM NOT DONE` marker near the top of the file.
+2. Read the instructions and `# TODO:` guidance in the file.
 3. Decorate the target function with `@ray.remote`.
 4. Call the function using `.remote()` and retrieve results with `ray.get()`.
-5. Remove the `# I AM NOT DONE` marker once you are ready.
-6. Save the file to trigger automatic evaluation!
+5. Run the exercise using the play button or `raylings run basics01` to verify your solution!
 
 [Open First Exercise](command:raylings.openExercise?%22exercises/01_basics/basics01.py%22)

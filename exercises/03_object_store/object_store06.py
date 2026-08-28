@@ -14,8 +14,6 @@ Instructions:
 2. Pass instances through Ray tasks and verify exact reconstruction.
 """
 
-# I AM NOT DONE
-
 import math
 
 import ray

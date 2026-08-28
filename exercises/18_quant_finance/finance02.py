@@ -12,8 +12,6 @@ Instructions:
 2. Compute empirical 95% and 99% VaR and CVaR metrics.
 """
 
-# I AM NOT DONE
-
 import math
 import os
 import random

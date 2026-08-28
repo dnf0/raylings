@@ -134,7 +134,7 @@
           {
             "id": "raylings.welcome.firstExercise",
             "title": "Your First Exercise",
-            "description": "Open `exercises/01_basics/basics01.py`, remove the `# I AM NOT DONE` marker, and execute it.\n[Open First Exercise](command:raylings.openExercise?%22exercises/01_basics/basics01.py%22)",
+            "description": "Open `exercises/01_basics/basics01.py`, complete the tasks, and execute it.\n[Open First Exercise](command:raylings.openExercise?%22exercises/01_basics/basics01.py%22)",
             "media": {
               "markdown": "walkthroughs/first-exercise.md"
             },

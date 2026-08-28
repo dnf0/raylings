@@ -184,7 +184,7 @@ export function registerCommands(
           out.appendLine(`✅ Exercise passed cleanly!`);
           vscode.window.showInformationMessage(`✅ ${targetName} passed! Ready for next exercise.`);
         } else {
-          out.appendLine(`❌ Exercise failed or contains '# I AM NOT DONE' / blank placeholders:`);
+          out.appendLine(`❌ Exercise failed or contains incomplete placeholders:`);
           if (result.output) {
             out.appendLine(result.output);
           }

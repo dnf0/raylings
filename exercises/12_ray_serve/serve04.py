@@ -12,8 +12,6 @@ Instructions:
 2. Verify dynamic replica scaling under simulated request load.
 """
 
-# I AM NOT DONE
-
 import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"

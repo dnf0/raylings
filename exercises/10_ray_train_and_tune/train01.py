@@ -12,8 +12,6 @@ Instructions:
 2. Instantiate `TorchTrainer` with `ScalingConfig(num_workers=2)` and execute `trainer.fit()`.
 """
 
-# I AM NOT DONE
-
 import os
 
 os.environ["RAY_ENABLE_UV_RUN_RUNTIME_ENV"] = "0"

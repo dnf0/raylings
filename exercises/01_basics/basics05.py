@@ -18,8 +18,6 @@ Instructions:
 3. Return task IDs in the order they finished.
 """
 
-# I AM NOT DONE
-
 import time
 
 import ray
