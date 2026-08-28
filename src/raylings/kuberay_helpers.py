@@ -215,7 +215,6 @@ def run_torch_train_multinode() -> dict[str, Any]:
         remove_placement_group(pg)
 
 
-@ray.remote(num_cpus=0)
 def run_ray_data_multinode_pipeline() -> dict[str, Any]:
     """Execute streaming Ray Data pipeline within the cluster context."""
     import ray.data
@@ -231,7 +230,6 @@ def run_ray_data_multinode_pipeline() -> dict[str, Any]:
             "square": [int(x) ** 2 for x in batch["id"]],
         },
         batch_size=10,
-        num_cpus=0,
     )
     results = transformed_ds.take_all()
     return {
