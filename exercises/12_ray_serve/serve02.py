@@ -28,6 +28,7 @@ class BatchedPredictor:
 
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
+    serve.start(http_options={"location": "NoServer"})
 
     # TODO: Deploy BatchedPredictor and test concurrent batched queries
     handle = None

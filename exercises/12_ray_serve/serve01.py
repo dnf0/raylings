@@ -27,6 +27,7 @@ class TextGenerator:
 
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
+    serve.start(http_options={"location": "NoServer"})
 
     # TODO: Deploy TextGenerator via serve.run and query handle
     handle = None

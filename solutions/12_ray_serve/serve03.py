@@ -36,6 +36,7 @@ class Pipeline:
 
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
+    serve.start(http_options={"location": "NoServer"})
 
     app = Pipeline.bind(Tokenizer.bind(), Classifier.bind())
     handle = serve.run(app)

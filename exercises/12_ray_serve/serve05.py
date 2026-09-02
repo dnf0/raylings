@@ -27,6 +27,7 @@ class AutoscaledWorker:
 
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
+    serve.start(http_options={"location": "NoServer"})
 
     # TODO: Deploy AutoscaledWorker and query handle
     handle = None
