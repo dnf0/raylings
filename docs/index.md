@@ -8,7 +8,7 @@
 
 **Raylings** is an interactive, hands-on CLI learning environment for [Python Ray](https://www.ray.io/), inspired by [Rustlings](https://github.com/rust-lang/rustlings) and [Ziglings](https://codeberg.org/ziglings/exercises). It guides you through the distributed systems landscape—from foundational `@ray.remote` tasks and stateful actors to high-throughput Ray Data streaming, distributed PyTorch training with Ray Train, scalable model serving with Ray Serve, production Kubernetes orchestration with KubeRay, vLLM tensor parallelism, and pluggable financial modeling packs.
 
-> ⚡ **Try it now in your browser!** No installation required: [**Interactive WebAssembly Playground**](playground.md) ([⚡ Try in Browser](https://dnf0.github.io/raylings/playground/)).
+> ⚡ **Try it now in your browser!** No installation required: [**Interactive WebAssembly Playground**](playground/index.html) ([⚡ Try in Browser](https://dnf0.github.io/raylings/playground/)).
 
 <p align="center">
   <img src="assets/demo.svg" alt="Raylings Terminal Demo" width="840">
@@ -49,7 +49,7 @@ Raylings takes a **guided, test-driven micro-learning** approach:
 
     Run Python 3.12, Monaco Editor, and in-memory Ray simulation 100% client-side inside your web browser via Pyodide WebAssembly.
 
-    [:octicons-arrow-right-24: Launch Playground](playground.md)
+    [:octicons-arrow-right-24: Launch Playground](playground/index.html)
 
 -   :material-eye-refresh:{ .lg .middle } **Zero-Friction Live Watcher**
 
@@ -199,7 +199,7 @@ flowchart TD
 ## ⚡ Quick Navigation
 
 - [**Getting Started**](getting-started.md) — Prerequisites, installation (`uv` / `pip`), and your first 5 minutes.
-- [**Interactive Playground**](playground.md) — WebAssembly-powered Monaco editor learning in the browser.
+- [**Interactive Playground**](playground/index.html) — WebAssembly-powered Monaco editor learning in the browser.
 - [**Onboarding Guide**](onboarding-guide.md) — Guided tour, doctor diagnostics, and VS Code integration.
 - [**Curriculum Syllabus**](syllabus.md) — Detailed breakdown of all 18 chapters and 81 exercises.
 - [**Plugin Architecture**](plugins.md) — Extensible domain packs and custom curriculum authoring.

@@ -82,24 +82,9 @@ def test_bundle_structure_and_exercise_details():
 
 
 def test_wasm_simulation_engine():
-    """Verify the pure-Python Ray simulation engine executes tasks, actors, and objects correctly."""
-    html_file = Path("docs/assets/playground.html")
-    assert html_file.exists()
-    content = html_file.read_text(encoding="utf-8")
+    """Verify the pure-Python Ray simulation engine executes tasks, actors, datasets, and telemetry correctly."""
+    from raylings.wasm_compat import ray
 
-    start_tag = "const WASM_COMPAT_SOURCE = `"
-    assert start_tag in content
-    start_idx = content.find(start_tag) + len(start_tag)
-    end_idx = content.find("`;", start_idx)
-    assert end_idx != -1
-
-    wasm_source = content[start_idx:end_idx]
-
-    # Execute the simulation in an isolated environment
-    env: dict = {}
-    exec(wasm_source, env)
-
-    ray = env["ray"]
     assert ray.is_initialized() is False
     ray.init()
     assert ray.is_initialized() is True
@@ -150,6 +135,22 @@ def test_wasm_simulation_engine():
 
     ray.shutdown()
     assert ray.is_initialized() is False
+
+
+def test_mkdocs_build_and_standalone_shell_artifact():
+    """Verify that mkdocs build --strict generates site/playground/index.html with the standalone shell intact."""
+    import subprocess
+
+    build_res = subprocess.run(["uv", "run", "mkdocs", "build", "--strict"], capture_output=True, text=True)
+    assert build_res.returncode == 0, f"mkdocs build failed: {build_res.stderr}"
+
+    site_shell = Path("site/playground/index.html")
+    assert site_shell.exists(), "site/playground/index.html must exist after mkdocs build"
+    content = site_shell.read_text(encoding="utf-8")
+    assert "standalone-playground-root" in content, "Built site/playground/index.html must contain standalone shell"
+    assert "playground.css" in content
+    assert "playground.js" in content
+
 
 
 def test_bundle_drift_and_synchronization():
