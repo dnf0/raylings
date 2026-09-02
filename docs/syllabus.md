@@ -4,7 +4,53 @@ The Raylings curriculum consists of **18 comprehensive chapters** containing **8
 
 ---
 
-## 🗺️ Curriculum Overview
+## 🗺️ Curriculum Overview & Learning Roadmap
+
+```mermaid
+flowchart TD
+    subgraph Part1["Part I: Ray Core & Distributed Memory Foundations"]
+        C01["01. Remote Tasks & Futures"]
+        C02["02. Stateful Actors & Concurrency"]
+        C03["03. Plasma Object Store (Zero-Copy)"]
+        C04["04. Resource Scheduling & Placement"]
+        C05["05. Fault Tolerance & Lineage"]
+        C06["06. Cluster Topology & GCS"]
+        C07["07. Design Patterns & Anti-Patterns"]
+
+        C01 --> C02 --> C03 --> C04 --> C05 --> C06 --> C07
+    end
+
+    subgraph Part2["Part II: Distributed Data & Scalable ML Frameworks"]
+        C08["08. Streaming Ray Data"]
+        C09["09. Distributed ML from Scratch"]
+        C10["10. PyTorch Distributed (Ray Train)"]
+        C11["11. Hyperparameter Search (Ray Tune)"]
+        C12["12. Production Serving (Ray Serve)"]
+
+        C08 --> C09 --> C10 --> C11 --> C12
+    end
+
+    subgraph Part3["Part III: Cloud-Native Ops & High-Performance Scale"]
+        C13["13. Observability & Tracing"]
+        C14["14. Kubernetes AI with KubeRay"]
+        C15["15. High-Throughput vLLM Serving"]
+        C16["16. Multi-Node LLM Training (FSDP)"]
+        C17["17. Multimodal Embeddings & RAG"]
+        C18["18. Quantitative Finance Risk Engines"]
+
+        C13 --> C14 --> C15 --> C16 --> C17 --> C18
+    end
+
+    C07 ==>|"Foundational Mastery"| C08
+    C12 ==>|"Framework Specialization"| C13
+
+    style Part1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Part2 fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Part3 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style C01 fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
+    style C08 fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style C13 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+```
 
 | # | Chapter Identifier | Chapter Title | Exercises | Focus Area | Difficulty |
 | :-: | :--- | :--- | :-: | :--- | :--- |

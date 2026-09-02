@@ -74,19 +74,54 @@ Explore in-depth architectural guides and launch linked practice exercises direc
 
 The Raylings web playground runs entirely on client-side WebAssembly technology:
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                          Web Browser Tab                               │
-│  ┌───────────────────────┐             ┌─────────────────────────────┐ │
-│  │     Monaco Editor     │ Python Code │  Web Worker (Pyodide Wasm)  │ │
-│  │  (VS Code in Browser) ├────────────►│  • Python 3.12 Runtime      │ │
-│  └───────────────────────┘             │  • Pure-Python Ray Engine   │ │
-│                                        │  • Progressive Hint Engine  │ │
-│  ┌───────────────────────┐             └──────────────┬──────────────┘ │
-│  │   Interactive xterm   │◄───────────────────────────┘                │
-│  │    Terminal Output    │         Instant Test & Execution Output     │
-│  └───────────────────────┘         (< 5ms in WebAssembly)              │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph BrowserClient["Client Browser Environment (100% Offline / Zero-Backend)"]
+        subgraph UI["Interactive User Interface"]
+            Monaco["Monaco Editor<br/>(Full VS Code Intellisense & Syntax)"]
+            Toolbar["Action Toolbar & Chapter Guide Links"]
+            Term["Interactive xterm.js Terminal Output"]
+        end
+
+        subgraph WorkerContext["Dedicated Web Worker Execution Thread"]
+            subgraph PyodideRuntime["Pyodide WebAssembly (Python 3.12 Engine)"]
+                WasmCompat["raylings.wasm_compat<br/>• Pure-Python Task / Actor Engine<br/>• Simulated Plasma Memory Store<br/>• Concurrency & Placement Groups"]
+                TestRunner["Automated Test & Assertion Harness"]
+                HintEngine["Progressive Diagnostic Hint Engine"]
+            end
+        end
+
+        Monaco -->|"1. Dispatch Code Payload"| WorkerContext
+        Toolbar -->|"Run / Reset / Hint Actions"| WorkerContext
+        WasmCompat --> TestRunner
+        TestRunner --> HintEngine
+        WorkerContext ==>|"2. Stream stdout / stderr & Results (<5ms)"| Term
+    end
+
+    style BrowserClient fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style UI fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style WorkerContext fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style PyodideRuntime fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
+    style Monaco fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
+    style Term fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as Monaco Editor / UI
+    participant W as Web Worker (Pyodide Wasm)
+    participant R as Ray Engine (wasm_compat)
+    participant T as Test Runner & Validator
+    participant Term as xterm.js Terminal
+
+    UI->>W: postMessage({type: 'run', code, exercise})
+    W->>R: Execute Exercise Script via eval_code_async
+    R->>R: Instantiate Simulated Ray Tasks / Stateful Actors
+    R-->>T: Yield Task Execution Results & ObjectRefs
+    T->>T: Evaluate Verification Assertions
+    T-->>W: Test Passed / Diagnostic Failure Details
+    W-->>Term: Stream Formatted ANSI Color Output (<5ms)
 ```
 
 1. **Instant Execution**: Python code compiles and evaluates inside a background Web Worker running Pyodide v0.26 WebAssembly.
