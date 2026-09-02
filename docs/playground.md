@@ -9,7 +9,7 @@ Welcome to the **Raylings Interactive Playground**! You can solve, execute, and 
 
 <div style="position: relative; width: 100%; height: 820px; border-radius: 8px; overflow: hidden; border: 1px solid var(--md-default-fg-color--lightest); margin: 1.5rem 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
   <iframe 
-    src="../assets/playground.html" 
+    src="../playground/index.html" 
     style="width: 100%; height: 100%; border: none;"
     title="Raylings WASM Interactive Playground"
     allow="clipboard-read; clipboard-write">

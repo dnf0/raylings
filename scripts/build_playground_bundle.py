@@ -12,7 +12,11 @@ from pathlib import Path
 # Ensure repository src is prioritized for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from raylings.playground_assets import BUNDLE_PATH, export_playground_bundle, generate_playground_bundle
+from raylings.playground_assets import (
+    BUNDLE_PATH,
+    export_playground_bundle,
+    generate_playground_bundle,
+)
 
 
 def main() -> None:
