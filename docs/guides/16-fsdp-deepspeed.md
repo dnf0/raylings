@@ -14,23 +14,85 @@
 
 Training billion-parameter foundation models exceeds the VRAM capacity of any single GPU. **Fully Sharded Data Parallel (FSDP)** and **DeepSpeed ZeRO-3** eliminate memory redundancy by sharding optimizer states, gradients, and model parameters across all distributed ranks.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        FSDP ZeRO-3 Parameter Sharding                  │
-│                                                                        │
-│   Layer Parameters (W), Gradients (G), Optimizer States (O)            │
-│                                                                        │
-│   ┌───────────────────────────┐         ┌───────────────────────────┐  │
-│   │ Rank 0 (Worker 0)         │         │ Rank 1 (Worker 1)         │  │
-│   │ • Shard 0: W[0], G[0], O[0│         │ • Shard 1: W[1], G[1], O[1│  │
-│   └─────────────┬─────────────┘         └─────────────┬─────────────┘  │
-│                 │                                     │                │
-│                 └───────────► All-Gather ◄────────────┘                │
-│                        (On-Demand Forward Layer)                       │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph ModelDecomp["Foundation Model Decomposition (100B+ Parameters)"]
+        FullModel["Full Model Architecture: Parameters (W), Gradients (G), AdamW States (O)"]
+    end
+
+    subgraph ShardedGPUCluster["ZeRO-3 / FSDP Uniform Memory Sharding"]
+        subgraph Rank0["GPU Rank 0 (Worker 0)"]
+            S0_W["Shard 0: Weights W[0] (25%)"]
+            S0_G["Shard 0: Grads G[0] (25%)"]
+            S0_O["Shard 0: Optimizer O[0] (25%)"]
+        end
+
+        subgraph Rank1["GPU Rank 1 (Worker 1)"]
+            S1_W["Shard 1: Weights W[1] (25%)"]
+            S1_G["Shard 1: Grads G[1] (25%)"]
+            S1_O["Shard 1: Optimizer O[1] (25%)"]
+        end
+
+        subgraph Rank2["GPU Rank 2 (Worker 2)"]
+            S2_W["Shard 2: Weights W[2] (25%)"]
+            S2_G["Shard 2: Grads G[2] (25%)"]
+            S2_O["Shard 2: Optimizer O[2] (25%)"]
+        end
+
+        subgraph Rank3["GPU Rank 3 (Worker 3)"]
+            S3_W["Shard 3: Weights W[3] (25%)"]
+            S3_G["Shard 3: Grads G[3] (25%)"]
+            S3_O["Shard 3: Optimizer O[3] (25%)"]
+        end
+    end
+
+    subgraph DynamicInterconnect["Just-In-Time Hardware Collectives (NVLink / InfiniBand)"]
+        AllGather["Forward Pass: Layer-by-Layer All-Gather (W Full Reconstructed -> Compute -> Discarded)"]
+        ReduceScatter["Backward Pass: Reduce-Scatter (Gradients Sharded Across Ranks)"]
+    end
+
+    FullModel --> ShardedGPUCluster
+    Rank0 <==> DynamicInterconnect
+    Rank1 <==> DynamicInterconnect
+    Rank2 <==> DynamicInterconnect
+    Rank3 <==> DynamicInterconnect
+
+    style ModelDecomp fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style ShardedGPUCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style DynamicInterconnect fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Rank0 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Rank1 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Rank2 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Rank3 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
 ```
 
-During forward and backward passes, each layer's weights are gathered just-in-time via high-speed All-Gather operations and immediately released after computation, slashing per-GPU memory consumption by up to 8x.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant R0 as GPU Rank 0 (Holds W0)
+    participant R1 as GPU Rank 1 (Holds W1)
+    participant NV as NVLink Collective Fabric
+
+    Note over R0,R1: Forward Pass (Layer L): Just-In-Time All-Gather
+    R0->>NV: Broadcast Local Shard W0
+    R1->>NV: Broadcast Local Shard W1
+    NV-->>R0: Full Layer Weights [W0 + W1]
+    NV-->>R1: Full Layer Weights [W0 + W1]
+    R0->>R0: Forward Activation Compute(Layer L)
+    R1->>R1: Forward Activation Compute(Layer L)
+    Note over R0,R1: Immediate Memory Release (Free non-sharded weights)
+
+    Note over R0,R1: Backward Pass (Layer L): Reduce-Scatter Gradients
+    R0->>R0: Backward Gradient Compute -> Full Grad G_L
+    R1->>R1: Backward Gradient Compute -> Full Grad G_L
+    R0->>NV: ReduceScatter(G_L)
+    R1->>NV: ReduceScatter(G_L)
+    NV-->>R0: Sharded Gradient G0
+    NV-->>R1: Sharded Gradient G1
+    Note over R0,R1: Optimizer Step: Each rank updates only its local optimizer state & shard
+```
+
+During forward and backward passes, each layer's weights are gathered just-in-time via high-speed All-Gather operations and immediately released after computation, slashing per-GPU memory consumption by up to $8\times$ while scaling across hundreds of nodes.
 
 ---
 

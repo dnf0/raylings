@@ -14,27 +14,67 @@
 
 Serving Large Language Models (LLMs) requires extreme GPU memory bandwidth and efficient Key-Value (KV) cache management. **vLLM** introduces **PagedAttention**, which manages KV cache memory like virtual memory pages in operating systems, eliminating internal memory fragmentation.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        vLLM High-Throughput Engine                     │
-│                                                                        │
-│   Streaming Prompts ──► [ Continuous Scheduler / Token Loop ]          │
-│                                      │                                 │
-│                                      ▼                                 │
-│                  ┌───────────────────────────────────────┐             │
-│                  │ PagedAttention KV Cache Manager       │             │
-│                  │ • Non-contiguous physical GPU blocks  │             │
-│                  │ • Zero memory fragmentation (>95% SHM)│             │
-│                  └───────────────────┬───────────────────┘             │
-│                                      │                                 │
-│                  ┌───────────────────┴───────────────────┐             │
-│                  │ Tensor Parallel Workers (Ray Actors)  │             │
-│                  │ • Worker 0 (GPU 0) • Worker 1 (GPU 1) │             │
-│                  └───────────────────────────────────────┘             │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph ClientRequests["Streaming Token Ingestion"]
+        ReqA["User Prompt A (Length: 512)"] --> Scheduler["Continuous Iteration-Level Scheduler"]
+        ReqB["User Prompt B (Length: 128)"] --> Scheduler
+        ReqC["User Prompt C (Length: 1024)"] --> Scheduler
+    end
+
+    subgraph MemoryManagement["PagedAttention Memory Subsystem"]
+        Scheduler <--> BlockTable["Logical Block Table (Virtual KV Cache Pages)"]
+        BlockTable <--> PhysMem["Non-Contiguous GPU HBM Memory Blocks (Zero Waste)"]
+    end
+
+    subgraph TensorParallelism["Ray Tensor Parallel (TP) GPU Actor Pool"]
+        subgraph GPU0["Ray Actor Rank 0 (NVIDIA H100)"]
+            ShardedLayer0["Sharded Attention Head Q/K/V 0..N/2"]
+        end
+
+        subgraph GPU1["Ray Actor Rank 1 (NVIDIA H100)"]
+            ShardedLayer1["Sharded Attention Head Q/K/V N/2..N"]
+        end
+
+        GPU0 <==|"High-Speed NVLink AllGather / ReduceScatter"| GPU1
+    end
+
+    PhysMem --> GPU0
+    PhysMem --> GPU1
+    GPU0 --> StreamEngine["Token Stream Output (SSE / WebSocket)"]
+
+    style ClientRequests fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style MemoryManagement fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style TensorParallelism fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style GPU0 fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
+    style GPU1 fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
+    style StreamEngine fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
 ```
 
-Integrated with Ray, vLLM scales across multiple GPUs using Ray actors as Tensor Parallel workers, dynamically batching arriving requests at the token level (continuous batching).
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as HTTP Client (SSE Stream)
+    participant S as Continuous Scheduler
+    participant PA as PagedAttention Block Manager
+    participant TP as Ray GPU Tensor Parallel Workers
+
+    Note over C,TP: Iteration-Level Continuous Batching Protocol
+    C->>S: POST /v1/chat/completions (stream=true)
+    S->>PA: AllocateLogicalBlocks(prompt_tokens)
+    PA-->>S: Physical Block Pointers Granted
+    loop Token Generation Loop (Per-Step Decoding)
+        S->>TP: StepInferenceBatch([ReqA, ReqB, ReqC])
+        TP->>TP: Tensor Parallel Forward Pass (NVLink AllReduce)
+        TP-->>S: Next Token Sampled for each Request
+        S-->>C: Stream Token Chunk ("data: ...\n\n")
+        alt Request Finished
+            S->>PA: FreeBlocks(Req)
+        end
+    end
+```
+
+Integrated with Ray, vLLM scales across multiple GPUs using Ray actors as Tensor Parallel workers, dynamically batching arriving requests at the token level (continuous batching) and eliminating KV cache memory fragmentation via PagedAttention.
 
 ---
 

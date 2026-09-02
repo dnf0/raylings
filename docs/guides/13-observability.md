@@ -14,19 +14,66 @@
 
 Operating Ray in production requires unified visibility into CPU/GPU utilization, object store memory allocation, task execution timelines, and distributed traces.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                     Distributed Observability Architecture             │
-│                                                                        │
-│   Worker Nodes (Prometheus Exporter) ──► [ Prometheus Server ]         │
-│   Ray Core Events (OpenTelemetry)    ──► [ OTel Collector / Jaeger ]  │
-│   Plasma Store Memory Spilling       ──► [ Ray Dashboard UI ]          │
-│                                                                        │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ Ray Dashboard (Port 8265)                                      │   │
-│   │ • Cluster Node Topology • Memory Breakdown • Task Flame Graphs │   │
-│   └────────────────────────────────────────────────────────────────┘   │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph TelemetrySources["Distributed Telemetry Sources"]
+        HeadDaemon["Head Node (GCS & Autoscaler Telemetry)"]
+        Worker1["Worker Node 01 (Raylet & Core Workers)"]
+        Worker2["Worker Node 02 (GPU Plasma & CUDA Tasks)"]
+    end
+
+    subgraph CollectionPlane["Metrics & Trace Collection Pipeline"]
+        Prom["Prometheus Metrics Exporter (Port 44217)"]
+        OTel["OpenTelemetry Collector Daemon (gRPC 4317)"]
+        LogAgg["FluentBit / Vector Log Shipper"]
+    end
+
+    subgraph ObservabilityUI["Observability & Analytics UI"]
+        Dashboard["Ray Dashboard UI (Port 8265)<br/>• Node Resource Topology<br/>• Memory Flame Graphs<br/>• Actor & Task State Tables"]
+        Grafana["Grafana Cluster Dashboards"]
+        Jaeger["Jaeger / Zipkin Distributed Tracing UI"]
+    end
+
+    HeadDaemon --> Prom
+    Worker1 --> Prom
+    Worker2 --> Prom
+    Worker1 --> OTel
+    Worker2 --> OTel
+    Worker1 --> LogAgg
+    Worker2 --> LogAgg
+
+    Prom --> Dashboard
+    Prom --> Grafana
+    OTel --> Jaeger
+    LogAgg --> Dashboard
+
+    style TelemetrySources fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style CollectionPlane fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style ObservabilityUI fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Dashboard fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Grafana fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Jaeger fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Driver Process
+    participant W as Core Worker Task
+    participant A as Stateful Actor
+    participant OTel as OpenTelemetry Collector
+    participant J as Jaeger Trace UI
+
+    Note over D,A: Distributed Context & Span Propagation
+    D->>D: Start Root Span: "pipeline_run_01" (TraceID: 0x4f8a)
+    D->>W: task.remote() [Injects Trace Context in gRPC Metadata]
+    W->>W: Start Child Span: "process_batch" (ParentID: 0x4f8a)
+    W->>A: actor.record_event.remote() [Propagate Trace Context]
+    A->>A: Start Child Span: "mutate_state"
+    A-->>OTel: Export Span: "mutate_state"
+    W-->>OTel: Export Span: "process_batch"
+    D-->>OTel: Export Span: "pipeline_run_01"
+    OTel->>J: Stitch Distributed Flame Graph
 ```
 
 Ray exports native Prometheus metrics (queue depth, memory spilling, active actors) and integrates with OpenTelemetry for end-to-end distributed span tracing.
