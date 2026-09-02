@@ -88,8 +88,8 @@ print(f"Total active objects in memory: {object_summary.get('total_objects', 0)}
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `perf01` | Profile distributed task execution timelines and identify bottlenecks | [**Open Exercise perf01 →**](../playground/index.html?exercise=perf01) |
-| `perf02` | Instrument remote functions with OpenTelemetry distributed spans | [**Open Exercise perf02 →**](../playground/index.html?exercise=perf02) |
-| `perf03` | Query cluster metrics and object store memory telemetry via Ray APIs | [**Open Exercise perf03 →**](../playground/index.html?exercise=perf03) |
+| `perf01` | Ray Execution Profiling & Chrome Timelines | [**Open Exercise perf01 →**](../playground/index.html?exercise=perf01) |
+| `perf02` | Diagnosing Memory Leaks with ray memory | [**Open Exercise perf02 →**](../playground/index.html?exercise=perf02) |
+| `perf03` | Ray Metrics & Prometheus Exports | [**Open Exercise perf03 →**](../playground/index.html?exercise=perf03) |

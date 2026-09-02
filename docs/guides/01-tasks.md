@@ -98,11 +98,11 @@ results = ray.get(ready_refs)
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `basics01` | Define and invoke your first `@ray.remote` task | [**Open Exercise basics01 →**](../playground/index.html?exercise=basics01) |
-| `basics02` | Resolve multiple asynchronous ObjectRefs with `ray.get()` | [**Open Exercise basics02 →**](../playground/index.html?exercise=basics02) |
-| `basics03` | Chain remote tasks by passing ObjectRefs directly | [**Open Exercise basics03 →**](../playground/index.html?exercise=basics03) |
-| `basics04` | Implement non-blocking processing loops using `ray.wait()` | [**Open Exercise basics04 →**](../playground/index.html?exercise=basics04) |
-| `basics05` | Configure fractional and multi-CPU scheduling constraints | [**Open Exercise basics05 →**](../playground/index.html?exercise=basics05) |
-| `basics06` | Handle task exceptions and timeout recovery patterns | [**Open Exercise basics06 →**](../playground/index.html?exercise=basics06) |
+| `basics01` | Ray Init & First Remote Task | [**Open Exercise basics01 →**](../playground/index.html?exercise=basics01) |
+| `basics02` | ObjectRefs and ray.get() | [**Open Exercise basics02 →**](../playground/index.html?exercise=basics02) |
+| `basics03` | Parallel Pipeline Execution | [**Open Exercise basics03 →**](../playground/index.html?exercise=basics03) |
+| `basics04` | Passing ObjectRefs to Tasks | [**Open Exercise basics04 →**](../playground/index.html?exercise=basics04) |
+| `basics05` | Dynamic Completion with ray.wait() | [**Open Exercise basics05 →**](../playground/index.html?exercise=basics05) |
+| `basics06` | Multiple Returns in Remote Tasks | [**Open Exercise basics06 →**](../playground/index.html?exercise=basics06) |

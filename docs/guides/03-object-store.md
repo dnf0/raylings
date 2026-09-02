@@ -91,11 +91,11 @@ partial_sums = ray.get(futures)
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `object_store01` | Insert datasets into Plasma using `ray.put()` | [**Open Exercise object_store01 →**](../playground/index.html?exercise=object_store01) |
-| `object_store02` | Verify zero-copy read performance on NumPy arrays | [**Open Exercise object_store02 →**](../playground/index.html?exercise=object_store02) |
-| `object_store03` | Pass shared `ObjectRef`s to multiple parallel tasks | [**Open Exercise object_store03 →**](../playground/index.html?exercise=object_store03) |
-| `object_store04` | Safely handle read-only array buffers and mutation copies | [**Open Exercise object_store04 →**](../playground/index.html?exercise=object_store04) |
-| `object_store05` | Observe automatic reference counting and garbage collection | [**Open Exercise object_store05 →**](../playground/index.html?exercise=object_store05) |
-| `object_store06` | Configure object store memory thresholds and disk spilling | [**Open Exercise object_store06 →**](../playground/index.html?exercise=object_store06) |
+| `object_store01` | Zero-Copy Plasma Reads | [**Open Exercise object_store01 →**](../playground/index.html?exercise=object_store01) |
+| `object_store02` | ray.put() vs Implicit Serialization | [**Open Exercise object_store02 →**](../playground/index.html?exercise=object_store02) |
+| `object_store03` | Object Immutability & Read-Only Semantics | [**Open Exercise object_store03 →**](../playground/index.html?exercise=object_store03) |
+| `object_store04` | Object Spilling & Memory Limits | [**Open Exercise object_store04 →**](../playground/index.html?exercise=object_store04) |
+| `object_store05` | Handling & Resolving Nested ObjectRefs | [**Open Exercise object_store05 →**](../playground/index.html?exercise=object_store05) |
+| `object_store06` | Custom Serializers with ray.util | [**Open Exercise object_store06 →**](../playground/index.html?exercise=object_store06) |

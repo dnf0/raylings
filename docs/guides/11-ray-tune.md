@@ -105,8 +105,8 @@ print(f"Best config: {best_result.config} | Loss: {best_result.metrics['val_loss
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `tune01` | Define multidimensional search spaces using `tune.uniform` and `loguniform` | [**Open Exercise tune01 →**](../playground/index.html?exercise=tune01) |
-| `tune02` | Configure ASHAScheduler for aggressive early trial stopping | [**Open Exercise tune02 →**](../playground/index.html?exercise=tune02) |
-| `tune03` | Execute full distributed tuning runs and extract best results | [**Open Exercise tune03 →**](../playground/index.html?exercise=tune03) |
+| `tune01` | Tune Search Spaces & Distributed Trials | [**Open Exercise tune01 →**](../playground/index.html?exercise=tune01) |
+| `tune02` | ASHA / HyperBand Schedulers | [**Open Exercise tune02 →**](../playground/index.html?exercise=tune02) |
+| `tune03` | Population-Based Training (PBT) | [**Open Exercise tune03 →**](../playground/index.html?exercise=tune03) |

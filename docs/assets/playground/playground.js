@@ -294,14 +294,41 @@
       }
 
       RaylingsStorage.init(this.bundle);
-      if (RaylingsStorage.state.lastActiveExerciseId && this.bundle.exercises[RaylingsStorage.state.lastActiveExerciseId]) {
+
+      // Deep link routing via URL query parameters (?exercise=<id> or ?chapter=<n>)
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramExercise = urlParams.get("exercise");
+      const paramChapter = urlParams.get("chapter");
+
+      if (paramExercise && this.bundle.exercises && this.bundle.exercises[paramExercise]) {
+        this.currentExerciseId = paramExercise;
+        const curEx = this.bundle.exercises[this.currentExerciseId];
+        if (curEx && curEx.chapter_number) {
+          this.expandedChapters.add(curEx.chapter_number);
+        }
+      } else if (paramChapter) {
+        const chapterNum = parseInt(paramChapter, 10);
+        if (!isNaN(chapterNum)) {
+          this.expandedChapters.add(chapterNum);
+          const firstExInChapter = Object.values(this.bundle.exercises || {}).find(
+            (ex) => ex.chapter_number === chapterNum
+          );
+          if (firstExInChapter) {
+            this.currentExerciseId = firstExInChapter.id;
+          }
+        }
+      } else if (
+        RaylingsStorage.state.lastActiveExerciseId &&
+        this.bundle.exercises &&
+        this.bundle.exercises[RaylingsStorage.state.lastActiveExerciseId]
+      ) {
         this.currentExerciseId = RaylingsStorage.state.lastActiveExerciseId;
         const curEx = this.bundle.exercises[this.currentExerciseId];
         if (curEx && curEx.chapter_number) {
           this.expandedChapters.add(curEx.chapter_number);
         }
       } else {
-        this.currentExerciseId = Object.keys(this.bundle.exercises)[0] || "basics01";
+        this.currentExerciseId = Object.keys(this.bundle.exercises || {})[0] || "basics01";
       }
 
       this.initWorker();

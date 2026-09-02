@@ -68,7 +68,7 @@ for batch in transformed_ds.iter_batches(batch_size=32):
 
 1. **Use `map_batches` Over `map`**: `map_batches` operates on vectorized NumPy/PyArrow chunks, achieving 10–50x higher throughput than row-by-row `map`.
 2. **Tune Block Sizes**: Target block sizes between 50MB and 200MB to balance parallelism and metadata overhead.
-3. **Use Actor Pools for Stateful Models in `map_batches`**: Pass `compute=ray.data.ActorPoolStrategy(min=2, max=8)` when applying embedding or inference models.
+3. **Use Actor Pools for Stateful Models in `map_batches`**: Pass `compute=ray.data.ActorPoolStrategy(min_size=2, max_size=8)` when applying embedding or inference models.
 4. **Window Pipelines with `window(blocks_per_window=N)`**: For datasets larger than cluster memory, use streaming windows to bound memory consumption.
 5. **Set Explicit Prefetch Batches**: Use `ds.iter_batches(prefetch_batches=2)` to overlap GPU execution with CPU preprocessing.
 
@@ -90,10 +90,10 @@ for batch in transformed_ds.iter_batches(batch_size=32):
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `data01` | Create and transform basic streaming Ray Datasets | [**Open Exercise data01 →**](../playground/index.html?exercise=data01) |
-| `data02` | Apply high-throughput vectorized `map_batches` transformations | [**Open Exercise data02 →**](../playground/index.html?exercise=data02) |
-| `data03` | Partition and balance distributed blocks with `repartition()` | [**Open Exercise data03 →**](../playground/index.html?exercise=data03) |
-| `data04` | Stream batches into simulated PyTorch ML training loops | [**Open Exercise data04 →**](../playground/index.html?exercise=data04) |
-| `data05` | Build a multi-stage streaming pipeline with actor compute pools | [**Open Exercise data05 →**](../playground/index.html?exercise=data05) |
+| `data01` | Datasets & Block Partitioning | [**Open Exercise data01 →**](../playground/index.html?exercise=data01) |
+| `data02` | map vs map_batches (PyArrow Vectorization) | [**Open Exercise data02 →**](../playground/index.html?exercise=data02) |
+| `data03` | Stateful Transforms with ActorPoolStrategy | [**Open Exercise data03 →**](../playground/index.html?exercise=data03) |
+| `data04` | Streaming Pipelines & Backpressure | [**Open Exercise data04 →**](../playground/index.html?exercise=data04) |
+| `data05` | PyTorch DataLoader Interop (iter_torch_batches) | [**Open Exercise data05 →**](../playground/index.html?exercise=data05) |

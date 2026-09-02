@@ -107,9 +107,9 @@ print(f"Final training loss: {results.metrics['loss']}")
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `train01` | Write a PyTorch distributed `train_loop_per_worker` function | [**Open Exercise train01 →**](../playground/index.html?exercise=train01) |
-| `train02` | Configure multi-worker `ScalingConfig` and `TorchTrainer` | [**Open Exercise train02 →**](../playground/index.html?exercise=train02) |
-| `train03` | Prepare models and datasets with `train.torch.prepare_*` | [**Open Exercise train03 →**](../playground/index.html?exercise=train03) |
-| `train04` | Report metrics and save fault-tolerant training checkpoints | [**Open Exercise train04 →**](../playground/index.html?exercise=train04) |
+| `train01` | PyTorch TorchTrainer & ScalingConfig | [**Open Exercise train01 →**](../playground/index.html?exercise=train01) |
+| `train02` | Distributed DataLoader via DataConfig | [**Open Exercise train02 →**](../playground/index.html?exercise=train02) |
+| `train03` | Multi-Worker Gradient Sync & Metrics | [**Open Exercise train03 →**](../playground/index.html?exercise=train03) |
+| `train04` | Distributed Checkpointing & Fault Recovery | [**Open Exercise train04 →**](../playground/index.html?exercise=train04) |

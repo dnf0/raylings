@@ -104,11 +104,11 @@ workers = [
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `scheduling01` | Allocate fractional CPU and GPU resources to tasks | [**Open Exercise scheduling01 →**](../playground/index.html?exercise=scheduling01) |
-| `scheduling02` | Configure custom resource tags and node affinity routing | [**Open Exercise scheduling02 →**](../playground/index.html?exercise=scheduling02) |
-| `scheduling03` | Create and await a multi-bundle Placement Group | [**Open Exercise scheduling03 →**](../playground/index.html?exercise=scheduling03) |
-| `scheduling04` | Apply `STRICT_PACK` and `STRICT_SPREAD` strategies | [**Open Exercise scheduling04 →**](../playground/index.html?exercise=scheduling04) |
-| `scheduling05` | Bind actors to specific bundle indices | [**Open Exercise scheduling05 →**](../playground/index.html?exercise=scheduling05) |
-| `scheduling06` | Clean up placement groups and handle dynamic scaling | [**Open Exercise scheduling06 →**](../playground/index.html?exercise=scheduling06) |
+| `scheduling01` | Fractional & Custom Resources | [**Open Exercise scheduling01 →**](../playground/index.html?exercise=scheduling01) |
+| `scheduling02` | Node Affinity Scheduling | [**Open Exercise scheduling02 →**](../playground/index.html?exercise=scheduling02) |
+| `scheduling03` | Placement Groups: SPREAD Strategy | [**Open Exercise scheduling03 →**](../playground/index.html?exercise=scheduling03) |
+| `scheduling04` | Placement Groups: PACK Strategy | [**Open Exercise scheduling04 →**](../playground/index.html?exercise=scheduling04) |
+| `scheduling05` | Gang Scheduling Multi-Bundle | [**Open Exercise scheduling05 →**](../playground/index.html?exercise=scheduling05) |
+| `scheduling06` | Dynamic Runtime Environments | [**Open Exercise scheduling06 →**](../playground/index.html?exercise=scheduling06) |

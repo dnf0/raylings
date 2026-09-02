@@ -90,9 +90,9 @@ engine = LLMInferenceEngine.remote("meta-llama/Llama-3-8B-Instruct")
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `vllm01` | Initialize a simulated vLLM engine with PagedAttention KV cache | [**Open Exercise vllm01 →**](../playground/index.html?exercise=vllm01) |
-| `vllm02` | Configure continuous iteration-level request batching | [**Open Exercise vllm02 →**](../playground/index.html?exercise=vllm02) |
-| `vllm03` | Implement multi-GPU Tensor Parallel actor workers | [**Open Exercise vllm03 →**](../playground/index.html?exercise=vllm03) |
-| `vllm04` | Build an asynchronous streaming token generator endpoint | [**Open Exercise vllm04 →**](../playground/index.html?exercise=vllm04) |
+| `vllm01` | Tensor Parallelism & Worker Actor Groups | [**Open Exercise vllm01 →**](../playground/index.html?exercise=vllm01) |
+| `vllm02` | PagedAttention & KV-Cache Block Management | [**Open Exercise vllm02 →**](../playground/index.html?exercise=vllm02) |
+| `vllm03` | Dynamic Multi-LoRA Adapter Serving | [**Open Exercise vllm03 →**](../playground/index.html?exercise=vllm03) |
+| `vllm04` | Speculative Decoding with Draft & Target Workers | [**Open Exercise vllm04 →**](../playground/index.html?exercise=vllm04) |

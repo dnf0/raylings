@@ -111,10 +111,10 @@ spec:
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `kuberay01` | Construct and validate a complete `RayCluster` Kubernetes manifest | [**Open Exercise kuberay01 →**](../playground/index.html?exercise=kuberay01) |
-| `kuberay02` | Configure heterogeneous CPU and GPU worker group specifications | [**Open Exercise kuberay02 →**](../playground/index.html?exercise=kuberay02) |
-| `kuberay03` | Define automated batch workflows using the `RayJob` CRD | [**Open Exercise kuberay03 →**](../playground/index.html?exercise=kuberay03) |
-| `kuberay04` | Deploy high-availability serving models via `RayService` CRD | [**Open Exercise kuberay04 →**](../playground/index.html?exercise=kuberay04) |
-| `kuberay05` | Configure `/dev/shm` shared memory volumes and autoscaler rules | [**Open Exercise kuberay05 →**](../playground/index.html?exercise=kuberay05) |
+| `kuberay01` | RayCluster Custom Resource (CRD) | [**Open Exercise kuberay01 →**](../playground/index.html?exercise=kuberay01) |
+| `kuberay02` | RayJob CRD & Batch Job Lifecycle | [**Open Exercise kuberay02 →**](../playground/index.html?exercise=kuberay02) |
+| `kuberay03` | RayService CRD & Zero-Downtime Serving | [**Open Exercise kuberay03 →**](../playground/index.html?exercise=kuberay03) |
+| `kuberay04` | Autoscaling with KEDA & Ray Autoscaler | [**Open Exercise kuberay04 →**](../playground/index.html?exercise=kuberay04) |
+| `kuberay05` | Kubernetes Fault Tolerance & Pod Evictions | [**Open Exercise kuberay05 →**](../playground/index.html?exercise=kuberay05) |

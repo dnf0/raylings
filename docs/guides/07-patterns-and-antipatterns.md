@@ -26,7 +26,7 @@ Writing efficient distributed systems in Ray requires recognizing distributed an
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-The **Tree Aggregation Pattern** reduces communication complexity from $O(N)$ on the driver node to $O(\log N)$ across parallel workers, preventing driver network and memory bottlenecks.
+The **Tree Aggregation Pattern** reduces communication complexity from O(N) on the driver node to O(log N) across parallel workers, preventing driver network and memory bottlenecks.
 
 ---
 
@@ -87,9 +87,9 @@ def tree_reduce(refs: List[ray.ObjectRef]) -> ray.ObjectRef:
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `antipattern01` | Refactor a synchronous loop anti-pattern into parallel tasks | [**Open Exercise antipattern01 →**](../playground/index.html?exercise=antipattern01) |
-| `antipattern02` | Eliminate nested `ray.get()` calls inside remote workers | [**Open Exercise antipattern02 →**](../playground/index.html?exercise=antipattern02) |
-| `antipattern03` | Implement high-throughput Tree Aggregation for distributed reduction | [**Open Exercise antipattern03 →**](../playground/index.html?exercise=antipattern03) |
-| `antipattern04` | Build an Actor Pipeline with asynchronous producer-consumer buffers | [**Open Exercise antipattern04 →**](../playground/index.html?exercise=antipattern04) |
+| `antipattern01` | Fixing ray.get() Inside Tasks | [**Open Exercise antipattern01 →**](../playground/index.html?exercise=antipattern01) |
+| `antipattern02` | Fixing Fine-Grained Task Overhead | [**Open Exercise antipattern02 →**](../playground/index.html?exercise=antipattern02) |
+| `antipattern03` | Fixing Actor Bottlenecks | [**Open Exercise antipattern03 →**](../playground/index.html?exercise=antipattern03) |
+| `antipattern04` | Nested Remote Calls & Tree-Reduce | [**Open Exercise antipattern04 →**](../playground/index.html?exercise=antipattern04) |

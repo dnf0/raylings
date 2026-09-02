@@ -93,9 +93,9 @@ actor = ResilientWorker.remote(1)
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `fault01` | Configure automatic task retries on application exceptions | [**Open Exercise fault01 →**](../playground/index.html?exercise=fault01) |
-| `fault02` | Configure stateful actor process restarts with `max_restarts` | [**Open Exercise fault02 →**](../playground/index.html?exercise=fault02) |
-| `fault03` | Recover from node loss via automatic lineage reconstruction | [**Open Exercise fault03 →**](../playground/index.html?exercise=fault03) |
-| `fault04` | Implement checkpoint reload patterns for resilient actors | [**Open Exercise fault04 →**](../playground/index.html?exercise=fault04) |
+| `fault01` | Automatic Task Retries | [**Open Exercise fault01 →**](../playground/index.html?exercise=fault01) |
+| `fault02` | Actor Failure & Restart Recovery | [**Open Exercise fault02 →**](../playground/index.html?exercise=fault02) |
+| `fault03` | Lineage Reconstruction | [**Open Exercise fault03 →**](../playground/index.html?exercise=fault03) |
+| `fault04` | Spot Instance & Preemption Handling | [**Open Exercise fault04 →**](../playground/index.html?exercise=fault04) |

@@ -92,10 +92,10 @@ entrypoint = ClassifierDeployment.bind()
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `serve01` | Define and launch a basic `@serve.deployment` with HTTP ingress | [**Open Exercise serve01 →**](../playground/index.html?exercise=serve01) |
-| `serve02` | Configure dynamic micro-batching with `@serve.batch` | [**Open Exercise serve02 →**](../playground/index.html?exercise=serve02) |
-| `serve03` | Build multi-deployment inference pipeline DAGs | [**Open Exercise serve03 →**](../playground/index.html?exercise=serve03) |
-| `serve04` | Configure replica autoscaling policies based on queue depth | [**Open Exercise serve04 →**](../playground/index.html?exercise=serve04) |
-| `serve05` | Deploy FastAPI applications with Ray Serve handles | [**Open Exercise serve05 →**](../playground/index.html?exercise=serve05) |
+| `serve01` | Ray Serve Deployments & HTTP Ingress | [**Open Exercise serve01 →**](../playground/index.html?exercise=serve01) |
+| `serve02` | Dynamic Request Batching (@serve.batch) | [**Open Exercise serve02 →**](../playground/index.html?exercise=serve02) |
+| `serve03` | Multi-Model Composable Pipelines (DAGs) | [**Open Exercise serve03 →**](../playground/index.html?exercise=serve03) |
+| `serve04` | Streaming Responses with FastApi & Generators | [**Open Exercise serve04 →**](../playground/index.html?exercise=serve04) |
+| `serve05` | Serve Autoscaling Policies | [**Open Exercise serve05 →**](../playground/index.html?exercise=serve05) |

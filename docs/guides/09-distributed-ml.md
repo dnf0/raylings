@@ -97,9 +97,9 @@ class DataParallelWorker:
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `ml_scratch01` | Implement a centralized Parameter Server actor | [**Open Exercise ml_scratch01 →**](../playground/index.html?exercise=ml_scratch01) |
-| `ml_scratch02` | Build distributed Data Parallel workers computing local gradients | [**Open Exercise ml_scratch02 →**](../playground/index.html?exercise=ml_scratch02) |
-| `ml_scratch03` | Implement a synchronized multi-worker SGD training loop | [**Open Exercise ml_scratch03 →**](../playground/index.html?exercise=ml_scratch03) |
-| `ml_scratch04` | Construct an all-to-all Ring All-Reduce collective step | [**Open Exercise ml_scratch04 →**](../playground/index.html?exercise=ml_scratch04) |
+| `ml_scratch01` | Distributed Parameter Server | [**Open Exercise ml_scratch01 →**](../playground/index.html?exercise=ml_scratch01) |
+| `ml_scratch02` | Async vs Sync Gradient Averaging | [**Open Exercise ml_scratch02 →**](../playground/index.html?exercise=ml_scratch02) |
+| `ml_scratch03` | Ring All-Reduce Implementation | [**Open Exercise ml_scratch03 →**](../playground/index.html?exercise=ml_scratch03) |
+| `ml_scratch04` | Distributed Data-Parallel Trainer | [**Open Exercise ml_scratch04 →**](../playground/index.html?exercise=ml_scratch04) |

@@ -1,8 +1,10 @@
 """Unit tests for the WASM Playground asset generator and web interfaces."""
 
 import json
+import re
 from pathlib import Path
 
+from raylings.manifest import build_manifest
 from raylings.playground_assets import (
     export_playground_bundle,
     generate_playground_catalog,
@@ -224,6 +226,9 @@ def test_standardized_playground_architecture():
     assert "RaylingsStorage" in js_content
     assert "raylings_learning_state_v1" in js_content
     assert "raylings_playground_v1" in js_content  # Migration support
+    assert "URLSearchParams" in js_content
+    assert "paramExercise" in js_content
+    assert "paramChapter" in js_content
     assert "loadMonaco" in js_content
     assert "btn-run-exercise" in js_content
     assert "btn-stop-exercise" in js_content
@@ -241,7 +246,11 @@ def test_standardized_playground_architecture():
 
 
 def test_all_18_chapter_guides_and_links():
-    """Verify all 18 architectural chapter guides exist, follow schema, and have valid exercise deep links."""
+    """Verify all 18 architectural chapter guides exist, follow schema, and have valid exercise deep links matching manifest."""
+    manifest = build_manifest()
+    all_exercise_names = {ex.name for ex in manifest.all_exercises}
+    assert len(all_exercise_names) == 81, "Manifest must contain 81 exercises"
+
     guides_dir = Path("docs/guides")
     assert guides_dir.is_dir(), "docs/guides directory must exist"
 
@@ -266,3 +275,11 @@ def test_all_18_chapter_guides_and_links():
         assert "## 5. Hands-on Practice Exercises" in content, (
             f"Guide {guide_file.name} missing Section 5"
         )
+
+        # Extract all ?exercise=<id> links and assert they exist in manifest
+        deep_links = re.findall(r"\.\./playground/index\.html\?exercise=([a-zA-Z0-9_]+)", content)
+        assert len(deep_links) > 0, f"Guide {guide_file.name} has no exercise deep links"
+        for ex_id in deep_links:
+            assert ex_id in all_exercise_names, (
+                f"Guide {guide_file.name} links to invalid exercise {ex_id}"
+            )

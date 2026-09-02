@@ -93,9 +93,9 @@ print(f"Pending tasks: {task_summary.get('PENDING', 0)}")
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `cluster01` | Query cluster nodes and total resource capacity via Ray APIs | [**Open Exercise cluster01 →**](../playground/index.html?exercise=cluster01) |
-| `cluster02` | Programmatically inspect GCS actor registrations and health | [**Open Exercise cluster02 →**](../playground/index.html?exercise=cluster02) |
-| `cluster03` | Monitor live resource allocation changes during parallel workloads | [**Open Exercise cluster03 →**](../playground/index.html?exercise=cluster03) |
-| `cluster04` | Diagnose node disconnections and handle worker node drain | [**Open Exercise cluster04 →**](../playground/index.html?exercise=cluster04) |
+| `cluster01` | Head Node, Workers & GCS | [**Open Exercise cluster01 →**](../playground/index.html?exercise=cluster01) |
+| `cluster02` | Programmatic Cluster Simulation | [**Open Exercise cluster02 →**](../playground/index.html?exercise=cluster02) |
+| `cluster03` | Simulating Node Death & Rescheduling | [**Open Exercise cluster03 →**](../playground/index.html?exercise=cluster03) |
+| `cluster04` | Ray Job Submission API | [**Open Exercise cluster04 →**](../playground/index.html?exercise=cluster04) |

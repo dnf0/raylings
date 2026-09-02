@@ -98,12 +98,12 @@ print(ray.get(tracker.get_summary.remote()))
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `actors01` | Define and instantiate a stateful `@ray.remote` Counter actor | [**Open Exercise actors01 →**](../playground/index.html?exercise=actors01) |
-| `actors02` | Implement multi-worker state updates against a shared actor | [**Open Exercise actors02 →**](../playground/index.html?exercise=actors02) |
-| `actors03` | Configure `max_concurrency` for async non-blocking method execution | [**Open Exercise actors03 →**](../playground/index.html?exercise=actors03) |
-| `actors04` | Partition actor methods into isolated Concurrency Groups | [**Open Exercise actors04 →**](../playground/index.html?exercise=actors04) |
-| `actors05` | Manage named actors with `ray.get_actor()` and detached lifecycles | [**Open Exercise actors05 →**](../playground/index.html?exercise=actors05) |
-| `actors06` | Safely terminate actors and handle `ActorDiedError` | [**Open Exercise actors06 →**](../playground/index.html?exercise=actors06) |
-| `actors07` | Build a round-robin Actor Pool for load balancing | [**Open Exercise actors07 →**](../playground/index.html?exercise=actors07) |
+| `actors01` | Stateful Actor Lifecycle | [**Open Exercise actors01 →**](../playground/index.html?exercise=actors01) |
+| `actors02` | Actor Method Calls & State Mutation | [**Open Exercise actors02 →**](../playground/index.html?exercise=actors02) |
+| `actors03` | Passing Actor Handles | [**Open Exercise actors03 →**](../playground/index.html?exercise=actors03) |
+| `actors04` | Async Actors & Concurrency | [**Open Exercise actors04 →**](../playground/index.html?exercise=actors04) |
+| `actors05` | Threaded Actors for Blocking I/O | [**Open Exercise actors05 →**](../playground/index.html?exercise=actors05) |
+| `actors06` | Detached Named Actors | [**Open Exercise actors06 →**](../playground/index.html?exercise=actors06) |
+| `actors07` | ActorPool Dynamic Load Balancing | [**Open Exercise actors07 →**](../playground/index.html?exercise=actors07) |

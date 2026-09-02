@@ -102,8 +102,8 @@ print(f"Distributed 10M Path Call Price: {average_price:.4f}")
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `finance01` | Build a distributed Monte Carlo Black-Scholes option pricing engine | [**Open Exercise finance01 →**](../playground/index.html?exercise=finance01) |
-| `finance02` | Compute portfolio Value at Risk (VaR) and Expected Shortfall in parallel | [**Open Exercise finance02 →**](../playground/index.html?exercise=finance02) |
-| `finance03` | Construct a high-throughput multi-asset risk engine with Tree Aggregation | [**Open Exercise finance03 →**](../playground/index.html?exercise=finance03) |
+| `finance01` | Distributed Monte Carlo Option Pricing | [**Open Exercise finance01 →**](../playground/index.html?exercise=finance01) |
+| `finance02` | Portfolio VaR & CVaR Risk Simulation | [**Open Exercise finance02 →**](../playground/index.html?exercise=finance02) |
+| `finance03` | Streaming Market Tick Analytics & Rolling VWAP | [**Open Exercise finance03 →**](../playground/index.html?exercise=finance03) |

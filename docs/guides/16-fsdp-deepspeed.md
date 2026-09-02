@@ -30,7 +30,7 @@ Training billion-parameter foundation models exceeds the VRAM capacity of any si
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-During forward and backward passes, each layer's weights are gathered just-in-time via high-speed All-Gather operations and immediately released after computation, slashing per-GPU memory consumption by up to $8\times$.
+During forward and backward passes, each layer's weights are gathered just-in-time via high-speed All-Gather operations and immediately released after computation, slashing per-GPU memory consumption by up to 8x.
 
 ---
 
@@ -99,9 +99,9 @@ trainer = TorchTrainer(
 
 ## 5. Hands-on Practice Exercises
 
-| Exercise ID | Goal | Playground Link |
+| Exercise ID | Goal / Topic | Playground Link |
 | :--- | :--- | :--- |
-| `fsdp01` | Configure PyTorch FSDP auto-wrapping policies for transformer layers | [**Open Exercise fsdp01 →**](../playground/index.html?exercise=fsdp01) |
-| `fsdp02` | Apply activation checkpointing and bfloat16 mixed-precision training | [**Open Exercise fsdp02 →**](../playground/index.html?exercise=fsdp02) |
-| `fsdp03` | Configure DeepSpeed ZeRO-3 optimizer state and parameter sharding | [**Open Exercise fsdp03 →**](../playground/index.html?exercise=fsdp03) |
-| `fsdp04` | Save and restore distributed sharded checkpoints across multi-node clusters | [**Open Exercise fsdp04 →**](../playground/index.html?exercise=fsdp04) |
+| `fsdp01` | PyTorch FSDP with Ray Train ScalingConfig | [**Open Exercise fsdp01 →**](../playground/index.html?exercise=fsdp01) |
+| `fsdp02` | DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 Memory Partitioning | [**Open Exercise fsdp02 →**](../playground/index.html?exercise=fsdp02) |
+| `fsdp03` | Mixed Precision & Activation Checkpointing | [**Open Exercise fsdp03 →**](../playground/index.html?exercise=fsdp03) |
+| `fsdp04` | Elastic Fault-Tolerant Distributed Checkpoints | [**Open Exercise fsdp04 →**](../playground/index.html?exercise=fsdp04) |
