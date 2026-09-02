@@ -238,47 +238,59 @@ class WasmActorMethod:
     def remote(self, *args, **kwargs):
         m = getattr(self._handle._instance, self._name)
         res = m(*args, **kwargs)
-        self._handle._task_count += 1
+        self._handle._ray_mod._tasks_count += 1
         return self._handle._store.put(res)
 
 class WasmActorHandle:
-    def __init__(self, inst, store, aid):
+    def __init__(self, inst, store, aid, ray_mod):
         self._instance = inst
         self._store = store
         self._actor_id = aid
-        self._task_count = 0
+        self._ray_mod = ray_mod
     def __getattr__(self, name):
         if hasattr(self._instance, name) and callable(getattr(self._instance, name)):
             return WasmActorMethod(self, name)
         raise AttributeError(name)
 
 class WasmRemoteFunction:
-    def __init__(self, fn, store, opts=None):
+    def __init__(self, fn, store, ray_mod, opts=None):
         self._fn = fn
         self._store = store
+        self._ray_mod = ray_mod
         self._opts = opts or {}
         functools.update_wrapper(self, fn)
     def remote(self, *args, **kwargs):
         r_args = [self._store.get(a) if isinstance(a, WasmObjectRef) else a for a in args]
         r_kwargs = {k: (self._store.get(v) if isinstance(v, WasmObjectRef) else v) for k, v in kwargs.items()}
-        return self._store.put(self._fn(*r_args, **r_kwargs))
+        res = self._fn(*r_args, **r_kwargs)
+        self._ray_mod._tasks_count += 1
+        num_returns = self._opts.get("num_returns", 1)
+        if num_returns > 1:
+            return [self._store.put(x) for x in res]
+        return self._store.put(res)
     def options(self, **kwargs):
-        return WasmRemoteFunction(self._fn, self._store, {**self._opts, **kwargs})
+        return WasmRemoteFunction(self._fn, self._store, self._ray_mod, {**self._opts, **kwargs})
 
 class WasmRemoteClass:
-    def __init__(self, cls, store, opts=None):
+    def __init__(self, cls, store, ray_mod, opts=None):
         self._cls = cls
         self._store = store
+        self._ray_mod = ray_mod
         self._opts = opts or {}
         functools.update_wrapper(self, cls)
     def remote(self, *args, **kwargs):
         r_args = [self._store.get(a) if isinstance(a, WasmObjectRef) else a for a in args]
         r_kwargs = {k: (self._store.get(v) if isinstance(v, WasmObjectRef) else v) for k, v in kwargs.items()}
         inst = self._cls(*r_args, **r_kwargs)
-        aid = hashlib.sha256(f"{self._cls.__name__}_{time.time()}".encode()).hexdigest()[:16]
-        return WasmActorHandle(inst, self._store, aid)
+        aid = hashlib.sha256(f"{self._cls.__name__}_{time.time()}_{len(self._ray_mod._actors)}".encode()).hexdigest()[:16]
+        handle = WasmActorHandle(inst, self._store, aid, self._ray_mod)
+        self._ray_mod._actors[aid] = handle
+        name = self._opts.get("name")
+        if name:
+            self._ray_mod._named_actors[name] = handle
+        return handle
     def options(self, **kwargs):
-        return WasmRemoteClass(self._cls, self._store, {**self._opts, **kwargs})
+        return WasmRemoteClass(self._cls, self._store, self._ray_mod, {**self._opts, **kwargs})
 
 class ActorPool:
     def __init__(self, actors):
@@ -326,11 +338,18 @@ class WasmDataModule:
     @staticmethod
     def from_items(items): return WasmDataset(items)
 
+class WasmUtilModule:
+    ActorPool = ActorPool
+
 class WasmRayModule:
     def __init__(self):
         self._store = WasmPlasmaStore()
         self._init = False
+        self._tasks_count = 0
+        self._actors = {}
+        self._named_actors = {}
         self.data = WasmDataModule()
+        self.util = WasmUtilModule()
     def is_initialized(self): return self._init
     def init(self, *args, **kwargs):
         self._init = True
@@ -338,10 +357,13 @@ class WasmRayModule:
     def shutdown(self):
         self._init = False
         self._store.clear()
+        self._actors.clear()
+        self._named_actors.clear()
+        self._tasks_count = 0
     def remote(self, target=None, **kwargs):
         def dec(obj):
-            if inspect.isclass(obj): return WasmRemoteClass(obj, self._store, kwargs)
-            return WasmRemoteFunction(obj, self._store, kwargs)
+            if inspect.isclass(obj): return WasmRemoteClass(obj, self._store, self, kwargs)
+            return WasmRemoteFunction(obj, self._store, self, kwargs)
         return dec(target) if target else dec
     def put(self, val): return self._store.put(val)
     def get(self, refs):
@@ -351,6 +373,28 @@ class WasmRayModule:
         return refs
     def wait(self, refs, num_returns=1, timeout=None):
         return refs[:num_returns], refs[num_returns:]
+    def get_actor(self, name: str):
+        if name in self._named_actors:
+            return self._named_actors[name]
+        raise ValueError(f"Actor with name '{name}' does not exist.")
+    def cluster_resources(self):
+        return {"CPU": 4.0 if self._init else 0.0, "memory": float(self._store.max_bytes), "node:127.0.0.1": 1.0}
+    def available_resources(self):
+        used = sum(self._store._sizes.values())
+        return {"CPU": 4.0 if self._init else 0.0, "memory": float(max(0, self._store.max_bytes - used)), "node:127.0.0.1": 1.0}
+    def nodes(self):
+        return [{"NodeID": "wasm-node-1", "Alive": self._init, "NodeManagerAddress": "127.0.0.1", "Resources": {"CPU": 4}}]
+    def _get_cluster_stats(self):
+        used_bytes = sum(self._store._sizes.values())
+        return {
+            "nodes": 1 if self._init else 0,
+            "cpus": 4 if self._init else 0,
+            "used_bytes": used_bytes,
+            "max_bytes": self._store.max_bytes,
+            "objects_count": len(self._store._store),
+            "active_actors": len(self._actors) if self._init else 0,
+            "completed_tasks": self._tasks_count,
+        }
 
 ray = WasmRayModule()
 `;

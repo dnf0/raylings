@@ -55,6 +55,71 @@ def test_export_playground_bundle(tmp_path: Path):
     assert data[0]["chapter_title"]
 
 
+def test_wasm_simulation_engine():
+    """Verify the pure-Python Ray simulation engine executes tasks, actors, and objects correctly."""
+    html_file = Path("docs/assets/playground.html")
+    assert html_file.exists()
+    content = html_file.read_text(encoding="utf-8")
+    
+    start_tag = "const WASM_COMPAT_SOURCE = `"
+    assert start_tag in content
+    start_idx = content.find(start_tag) + len(start_tag)
+    end_idx = content.find("`;", start_idx)
+    assert end_idx != -1
+    
+    wasm_source = content[start_idx:end_idx]
+    
+    # Execute the simulation in an isolated environment
+    env: dict = {}
+    exec(wasm_source, env)
+    
+    ray = env["ray"]
+    assert ray.is_initialized() is False
+    ray.init()
+    assert ray.is_initialized() is True
+    
+    # Test remote task
+    @ray.remote
+    def square(x: int) -> int:
+        return x * x
+        
+    ref = square.remote(4)
+    result = ray.get(ref)
+    assert result == 16
+    
+    # Test remote actor
+    @ray.remote
+    class Counter:
+        def __init__(self, init_val: int = 0):
+            self.val = init_val
+        def inc(self, step: int = 1) -> int:
+            self.val += step
+            return self.val
+        def get_val(self) -> int:
+            return self.val
+            
+    counter = Counter.remote(10)
+    inc_ref = counter.inc.remote(5)
+    assert ray.get(inc_ref) == 15
+    get_ref = counter.get_val.remote()
+    assert ray.get(get_ref) == 15
+    
+    # Test ray.data
+    ds = ray.data.range(5)
+    ds2 = ds.map(lambda row: {"id": row["id"] * 2})
+    records = ds2.take_all()
+    assert records == [{"id": 0}, {"id": 2}, {"id": 4}, {"id": 6}, {"id": 8}]
+    
+    # Test cluster stats
+    stats = ray._get_cluster_stats()
+    assert stats["nodes"] >= 1
+    assert stats["cpus"] == 4
+    assert stats["objects_count"] >= 1
+    
+    ray.shutdown()
+    assert ray.is_initialized() is False
+
+
 def test_playground_docs_and_assets_exist():
     """Verify docs/playground.md and docs/assets/playground.html exist and contain valid markup."""
     docs_md = Path("docs/playground.md")
