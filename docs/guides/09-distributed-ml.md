@@ -14,21 +14,60 @@
 
 Building distributed ML frameworks requires coordinating workers across data parallelism architectures: **Parameter Server (PS)** models for centralized gradient aggregation, and **Ring All-Reduce** for decentralized peer-to-peer weight synchronization.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Parameter Server Architecture                   │
-│                                                                        │
-│                      ┌───────────────────────┐                         │
-│                      │   Parameter Server    │                         │
-│                      │  (Holds Master Weights│                         │
-│                      └───────▲───────┬───────┘                         │
-│              Push Gradients  │       │ Pull Updated Weights            │
-│                 ┌────────────┴───────┼────────────┐                    │
-│                 │                    │            │                    │
-│          ┌──────┴─────┐        ┌─────▼──────┐ ┌───▼────────┐           │
-│          │ Worker 0   │        │  Worker 1  │ │  Worker 2  │           │
-│          └────────────┘        └────────────┘ └────────────┘           │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph ParameterServerArch["Topology A: Centralized Parameter Server (Actor Model)"]
+        PS["Parameter Server Actor<br/>(Global Master Weights & Optimizer State)"]
+        
+        W0["Worker Actor 0<br/>(Data Shard 0)"]
+        W1["Worker Actor 1<br/>(Data Shard 1)"]
+        W2["Worker Actor 2<br/>(Data Shard 2)"]
+        
+        W0 ==>|"Push Gradients (gRPC)"| PS
+        W1 ==>|"Push Gradients (gRPC)"| PS
+        W2 ==>|"Push Gradients (gRPC)"| PS
+        
+        PS -.->|"Broadcast Updated Weights"| W0
+        PS -.->|"Broadcast Updated Weights"| W1
+        PS -.->|"Broadcast Updated Weights"| W2
+    end
+
+    subgraph RingAllReduceArch["Topology B: Decentralized Ring All-Reduce (NCCL / Ray Collective)"]
+        R0["Rank 0 Worker"] <==|"Ring Chunk Transfer"| R1["Rank 1 Worker"]
+        R1 <==|"Ring Chunk Transfer"| R2["Rank 2 Worker"]
+        R2 <==|"Ring Chunk Transfer"| R0
+    end
+
+    style ParameterServerArch fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style RingAllReduceArch fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style PS fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style W0 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style W1 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style W2 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant PS as Parameter Server Actor
+    participant W0 as Worker 0
+    participant W1 as Worker 1
+
+    Note over PS,W1: Distributed SGD Iteration Loop
+    W0->>PS: get_weights()
+    W1->>PS: get_weights()
+    PS-->>W0: Return Current Global Weights (W_t)
+    PS-->>W1: Return Current Global Weights (W_t)
+    
+    par Parallel Gradient Computation
+        W0->>W0: Forward/Backward Pass on Shard 0 -> Compute G_0
+        W1->>W1: Forward/Backward Pass on Shard 1 -> Compute G_1
+    end
+    
+    W0->>PS: apply_gradients(G_0)
+    PS->>PS: W_{t+1} = W_t - lr * G_0 (Atomic State Mutation)
+    W1->>PS: apply_gradients(G_1)
+    PS->>PS: W_{t+2} = W_{t+1} - lr * G_1
 ```
 
 Ray tasks and actors provide the foundational primitives to implement custom distributed optimization routines, asynchronous SGD, and collective communication loops without low-level C++ MPI dependencies.

@@ -14,23 +14,68 @@
 
 **Ray Tune** executes scalable, distributed hyperparameter search across hundreds of concurrent trials. It couples state-of-the-art search algorithms (Bayesian, Optuna, HyperOpt) with early-stopping trial schedulers like **ASHA (Asynchronous Successive Halving Algorithm)**.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Ray Tune Trial Coordinator                      │
-│                                                                        │
-│   Search Space: lr=tune.loguniform(1e-4, 1e-1), batch=tune.choice(...) │
-│                      │                                                 │
-│       ┌──────────────┴───────────────┬─────────────────┐               │
-│       ▼                              ▼                 ▼               │
-│   ┌──────────────────────────┐   ┌──────────┐   ┌──────────┐           │
-│   │ Trial 0 (lr=0.01)        │   │ Trial 1  │   │ Trial 2  │           │
-│   │ • Step 1: loss=0.8       │   │ (lr=0.1) │   │ (lr=0.001│           │
-│   │ • Step 2: loss=0.4 (PASS)│   │ (KILLED) │   │ (PASS)   │           │
-│   └──────────────────────────┘   └──────────┘   └──────────┘           │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph TunerDriver["Ray Tune Orchestration Plane"]
+        TunerObj["Tuner.fit()"] --> TrialRunner["TrialRunner Coordinator Actor"]
+        SearchAlg["Search Algorithm<br/>(Bayesian / Optuna / HyperOpt)"] -->|"Generate Configs"| TrialRunner
+        ASHASched["ASHA Scheduler Engine<br/>(Asynchronous Successive Halving)"] <-->|"Pruning & Promotion Decisions"| TrialRunner
+    end
+
+    subgraph Rungs["ASHA Successive Halving Rungs"]
+        subgraph Rung0["Rung 0 (1 Epoch Evaluation)"]
+            T0["Trial 0 (lr=0.01)"]
+            T1["Trial 1 (lr=0.5) ❌ (KILLED)"]
+            T2["Trial 2 (lr=0.001)"]
+            T3["Trial 3 (lr=0.05) ❌ (KILLED)"]
+        end
+
+        subgraph Rung1["Rung 1 (4 Epochs Evaluation - Top 50%)"]
+            T0_p["Trial 0 (Promoted)"]
+            T2_p["Trial 2 (Promoted)"]
+        end
+
+        subgraph Rung2["Rung 2 (Final High Resource Evaluation)"]
+            T0_win["Trial 0 (Optimal Result 🎉)"]
+        end
+
+        T0 --> T0_p
+        T2 --> T2_p
+        T0_p --> T0_win
+    end
+
+    TrialRunner --> Rung0
+
+    style TunerDriver fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Rungs fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style ASHASched fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Rung0 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Rung1 fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
+    style Rung2 fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
 ```
 
-ASHA dynamically prunes underperforming configurations early in their training trajectory, allocating compute budget only to high-potential hyperparameter configurations.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Tuner Driver
+    participant TR as TrialRunner Coordinator
+    participant ASHA as ASHA Scheduler
+    participant T0 as Trial Worker 0 (lr=0.01)
+    participant T1 as Trial Worker 1 (lr=0.5)
+
+    Note over D,T1: Trial Execution & Early Stopping Protocol
+    TR->>T0: Spawn Trial(lr=0.01, Epoch=1)
+    TR->>T1: Spawn Trial(lr=0.5, Epoch=1)
+    T0->>TR: tune.report(val_loss=0.35, epoch=1)
+    T1->>TR: tune.report(val_loss=1.85, epoch=1)
+    TR->>ASHA: EvaluateTrialMetrics(T0, T1)
+    ASHA-->>TR: T0 in Top 50% -> Action: CONTINUE / PROMOTE
+    ASHA-->>TR: T1 in Bottom 50% -> Action: STOP (Kill Trial)
+    TR->>T1: Terminate Worker Process & Reclaim GPU Resources
+    TR->>T0: Continue Training to Rung 1 (Epoch=4)
+```
+
+ASHA dynamically prunes underperforming configurations early in their training trajectory, freeing node CPU/GPU slots to evaluate new configurations asynchronously.
 
 ---
 

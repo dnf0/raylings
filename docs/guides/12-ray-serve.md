@@ -14,23 +14,65 @@
 
 **Ray Serve** is a scalable model serving framework designed for complex inference pipelines (combining LLMs, embedding models, and business logic). Serve manages HTTP ingress routers, dynamic request batching, model multiplexing, and replica autoscaling.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Ray Serve Control Plane                         │
-│                                                                        │
-│   HTTP Ingress (FastAPI) ────────► [ Serve Router / Proxy ]            │
-│                                           │                            │
-│                       ┌───────────────────┴─────────────────┐          │
-│                       ▼                                     ▼          │
-│            ┌─────────────────────┐               ┌───────────────────┐ │
-│            │ Deployment: TextGen │               │ Deployment: Embed │ │
-│            │ • Dynamic Batching  │               │ • Multi-Replica   │ │
-│            │ • GPU Worker Pool   │               │ • Autoscaling     │ │
-│            └─────────────────────┘               └───────────────────┘ │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph IngressPlane["HTTP Traffic Ingress & Routing"]
+        Client1["HTTP Client 1 (POST /predict)"] --> Proxy["Ray Serve Ingress HTTP Proxy (FastAPI)"]
+        Client2["HTTP Client 2 (POST /predict)"] --> Proxy
+        Proxy --> Router["Serve Router & Load Balancer"]
+    end
+
+    subgraph ControlPlane["Serve Controller & Autoscaler"]
+        Controller["Serve Controller Actor"] <-->|"Metrics & Scale Policies"| Router
+    end
+
+    subgraph DeploymentReplicas["Deployment Worker Replicas (Actor Pool)"]
+        subgraph Replica1["Replica Actor 01 (GPU: 1)"]
+            BatchQ1["Dynamic Batch Queue<br/>(max_batch_size=8, wait=50ms)"]
+            Model1["TensorRT / PyTorch Model Instance"]
+            BatchQ1 --> Model1
+        end
+
+        subgraph Replica2["Replica Actor 02 (GPU: 1)"]
+            BatchQ2["Dynamic Batch Queue<br/>(max_batch_size=8, wait=50ms)"]
+            Model2["TensorRT / PyTorch Model Instance"]
+            BatchQ2 --> Model2
+        end
+
+        Router -->|"Direct gRPC Stream"| BatchQ1
+        Router -->|"Direct gRPC Stream"| BatchQ2
+    end
+
+    style IngressPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style ControlPlane fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style DeploymentReplicas fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Replica1 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Replica2 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
 ```
 
-Serve decouples HTTP routing from model execution, automatically queuing and packing concurrent requests into optimal GPU micro-batches.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C1 as Client 1 (HTTP)
+    participant C2 as Client 2 (HTTP)
+    participant P as Serve Ingress Proxy
+    participant R as Replica Actor (@serve.batch)
+    participant M as GPU Model Forward Pass
+
+    Note over C1,C2: Concurrent HTTP Invocations
+    C1->>P: POST /predict {"text": "Alpha"}
+    C2->>P: POST /predict {"text": "Beta"}
+    P->>R: Enqueue Request 1
+    P->>R: Enqueue Request 2
+    Note over R: Dynamic Batch Buffer accumulates requests (timeout=50ms / max=8)
+    R->>M: ForwardPass(["Alpha", "Beta"]) (Vectorized GPU Matrix Op)
+    M-->>R: Returns Batch Predictions [0.95, 0.88]
+    R-->>P: Demux Response 1 & 2
+    P-->>C1: 200 OK {"category": "Alpha", "score": 0.95}
+    P-->>C2: 200 OK {"category": "Beta", "score": 0.88}
+```
+
+Serve decouples HTTP routing from model execution, automatically queuing and packing concurrent requests into optimal GPU micro-batches. The Serve Controller monitors request latency and queue backlogs to scale replica actor pools horizontally.
 
 ---
 

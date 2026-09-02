@@ -14,24 +14,88 @@
 
 **Ray Train** coordinates multi-node distributed training for PyTorch, TensorFlow, and XGBoost. It abstracts away environment variable setup (`MASTER_ADDR`, `MASTER_PORT`, `RANK`, `WORLD_SIZE`) and manages worker lifecycle and fault-tolerant checkpointing.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                              TorchTrainer                              │
-│                                                                        │
-│   ScalingConfig(num_workers=4, use_gpu=True)                           │
-│                      │                                                 │
-│       ┌──────────────┴───────────────┬─────────────────┐               │
-│       ▼                              ▼                 ▼               │
-│   ┌──────────────────────────┐   ┌──────────┐   ┌──────────┐           │
-│   │ Rank 0 (Worker)          │   │ Rank 1   │   │ Rank 2   │ ...       │
-│   │ • ray.train.torch.prepare│   │          │   │          │           │
-│   │ • NCCL All-Reduce DDP    │◄──┴──────────┴───┴──────────┘           │
-│   │ • Checkpoint to Storage  │                                         │
-│   └──────────────────────────┘                                         │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph ControlPlane["Ray Train Coordinator"]
+        TT["TorchTrainer(train_loop_per_worker)"] -->|"Apply ScalingConfig"| WG["Worker Group Placement Manager"]
+        WG -->|"Synchronize Metrics & Checkpoints"| Storage["Durable Storage / Cloud S3"]
+    end
+
+    subgraph GPUWorkerCluster["GPU Worker Group Actors (Data Parallelism)"]
+        subgraph Rank0["Worker Rank 0 (Master Node)"]
+            M0["PyTorch DDP Engine"]
+            D0["DataLoader (Shard 0)"]
+            GPU_0[("NVIDIA CUDA GPU 0")]
+        end
+
+        subgraph Rank1["Worker Rank 1"]
+            M1["PyTorch DDP Engine"]
+            D1["DataLoader (Shard 1)"]
+            GPU_1[("NVIDIA CUDA GPU 1")]
+        end
+
+        subgraph Rank2["Worker Rank 2"]
+            M2["PyTorch DDP Engine"]
+            D2["DataLoader (Shard 2)"]
+            GPU_2[("NVIDIA CUDA GPU 2")]
+        end
+
+        subgraph Rank3["Worker Rank 3"]
+            M3["PyTorch DDP Engine"]
+            D3["DataLoader (Shard 3)"]
+            GPU_3[("NVIDIA CUDA GPU 3")]
+        end
+
+        WG --> Rank0
+        WG --> Rank1
+        WG --> Rank2
+        WG --> Rank3
+
+        GPU_0 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_1
+        GPU_1 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_2
+        GPU_2 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_3
+        GPU_3 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_0
+    end
+
+    style ControlPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style GPUWorkerCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Rank0 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Rank1 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Rank2 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Rank3 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
 ```
 
-`ray.train.torch.prepare_model()` automatically wraps your PyTorch `nn.Module` in `DistributedDataParallel` (DDP) and moves tensors to the appropriate rank-specific GPU device.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant TT as TorchTrainer Driver
+    participant R0 as Worker Rank 0 (CUDA)
+    participant R1 as Worker Rank 1 (CUDA)
+    participant NCCL as NCCL Hardware Interconnect
+    participant S3 as Checkpoint Storage
+
+    Note over TT,R1: Training Step & Gradient Synchronization
+    par Forward Pass on Micro-Batches
+        R0->>R0: Loss = Criterion(Model(Batch_0), Labels_0)
+        R1->>R1: Loss = Criterion(Model(Batch_1), Labels_1)
+    end
+    par Backward Pass (Local Gradients)
+        R0->>R0: Loss.backward() -> Compute Local dW_0
+        R1->>R1: Loss.backward() -> Compute Local dW_1
+    end
+    Note over R0,NCCL: Inter-GPU Gradient AllReduce
+    R0->>NCCL: AllReduce(dW_0)
+    R1->>NCCL: AllReduce(dW_1)
+    NCCL-->>R0: Synchronized Global Gradients
+    NCCL-->>R1: Synchronized Global Gradients
+    par Optimizer Step
+        R0->>R0: optimizer.step() (Weights Updated)
+        R1->>R1: optimizer.step() (Weights Updated)
+    end
+    R0->>S3: train.report(metrics, checkpoint=Checkpoint)
+```
+
+`ray.train.torch.prepare_model()` automatically wraps your PyTorch `nn.Module` in `DistributedDataParallel` (DDP) and moves tensors to the appropriate rank-specific GPU device. Inter-worker communication is delegated directly to hardware-accelerated NCCL rings over NVLink or RoCE network interfaces.
 
 ---
 
