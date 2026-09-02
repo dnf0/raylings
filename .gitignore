@@ -60,3 +60,4 @@ htmlcov/
 .cursor/
 graphify-out/
 .smellcheck-cache/
+.worktrees/
