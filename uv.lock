@@ -2954,7 +2954,7 @@ default = [
 
 [[package]]
 name = "raylings"
-version = "0.8.2"
+version = "0.9.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },

@@ -24,6 +24,7 @@ class AutoscaledWorker:
 
 def verify() -> None:
     ray.init(ignore_reinit_error=True)
+    serve.start(http_options={"location": "NoServer"})
 
     handle = serve.run(AutoscaledWorker.bind())
     assert handle is not None, "Handle must not be None"

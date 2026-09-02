@@ -425,10 +425,14 @@ def test_cli_doctor_json():
 def test_cli_tour_interactive_quit(monkeypatch: pytest.MonkeyPatch):
     """Verify interactive tour exits cleanly when user inputs 'q'."""
     import click.testing
+    import typer.testing
 
     from raylings.cli import app
 
-    monkeypatch.setattr(click.testing._NamedTextIOWrapper, "isatty", lambda self: True)
+    if hasattr(typer.testing, "_NamedTextIOWrapper"):
+        monkeypatch.setattr(typer.testing._NamedTextIOWrapper, "isatty", lambda self: True)
+    if hasattr(click.testing, "_NamedTextIOWrapper"):
+        monkeypatch.setattr(click.testing._NamedTextIOWrapper, "isatty", lambda self: True)
     res = runner.invoke(app, ["tour"], input="q\n")
     assert res.exit_code == 0
     assert "Step 1/5" in res.stdout or "1/5" in res.stdout
@@ -438,10 +442,14 @@ def test_cli_tour_interactive_quit(monkeypatch: pytest.MonkeyPatch):
 def test_cli_tour_interactive_complete(monkeypatch: pytest.MonkeyPatch):
     """Verify interactive tour steps through all steps on Enter."""
     import click.testing
+    import typer.testing
 
     from raylings.cli import app
 
-    monkeypatch.setattr(click.testing._NamedTextIOWrapper, "isatty", lambda self: True)
+    if hasattr(typer.testing, "_NamedTextIOWrapper"):
+        monkeypatch.setattr(typer.testing._NamedTextIOWrapper, "isatty", lambda self: True)
+    if hasattr(click.testing, "_NamedTextIOWrapper"):
+        monkeypatch.setattr(click.testing._NamedTextIOWrapper, "isatty", lambda self: True)
     res = runner.invoke(app, ["tour"], input="\n\n\n\n\n")
     assert res.exit_code == 0
     assert "Step 1/5" in res.stdout or "1/5" in res.stdout
