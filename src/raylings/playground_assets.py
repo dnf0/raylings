@@ -149,4 +149,3 @@ def export_playground_bundle(output_path: Path | str | None = None) -> Path:
     legacy_path.parent.mkdir(parents=True, exist_ok=True)
     legacy_path.write_text(json.dumps(bundle["catalog"], indent=2), encoding="utf-8")
     return path
-

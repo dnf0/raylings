@@ -54,16 +54,41 @@ if "/lib" not in sys.path:
 import raylings.wasm_compat as wasm_compat
 from raylings.wasm_compat import ray, ActorPool, WasmObjectRef
 
-# Inject ray and submodules into sys.modules so 'import ray' works seamlessly
+# Inject ray and submodules into sys.modules so 'import ray', 'import ray.data', etc. work seamlessly
 sys.modules["ray"] = ray
-actor_pool_mod = types.ModuleType("ray.util.actor_pool")
-actor_pool_mod.ActorPool = ActorPool
-sys.modules["ray.util.actor_pool"] = actor_pool_mod
+
+# ray.data
 data_mod = types.ModuleType("ray.data")
 data_mod.Dataset = wasm_compat.WasmDataset
-data_mod.from_items = wasm_compat.from_items
-data_mod.range = wasm_compat.range_dataset
+data_mod.ActorPoolStrategy = getattr(wasm_compat, "ActorPoolStrategy", None)
+data_mod.from_items = getattr(wasm_compat, "from_items", wasm_compat.WasmDataModule.from_items)
+data_mod.range = getattr(wasm_compat, "range_dataset", wasm_compat.WasmDataModule.range)
+data_mod.read_parquet = wasm_compat.WasmDataModule.read_parquet
 sys.modules["ray.data"] = data_mod
+setattr(ray, "data", data_mod)
+
+# ray.util & ray.util.actor_pool
+util_mod = types.ModuleType("ray.util")
+actor_pool_mod = types.ModuleType("ray.util.actor_pool")
+actor_pool_mod.ActorPool = ActorPool
+util_mod.ActorPool = ActorPool
+util_mod.actor_pool = actor_pool_mod
+sys.modules["ray.util"] = util_mod
+sys.modules["ray.util.actor_pool"] = actor_pool_mod
+setattr(ray, "util", util_mod)
+
+# ray.train, ray.tune, ray.serve
+train_mod = types.ModuleType("ray.train")
+sys.modules["ray.train"] = train_mod
+setattr(ray, "train", train_mod)
+
+tune_mod = types.ModuleType("ray.tune")
+sys.modules["ray.tune"] = tune_mod
+setattr(ray, "tune", tune_mod)
+
+serve_mod = types.ModuleType("ray.serve")
+sys.modules["ray.serve"] = serve_mod
+setattr(ray, "serve", serve_mod)
 
 INCOMPLETE_MARKERS = (
     "???",

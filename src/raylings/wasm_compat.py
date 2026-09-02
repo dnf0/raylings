@@ -1,9 +1,10 @@
 """Pure-Python in-memory Ray simulation engine for WebAssembly / Pyodide environments.
 
 This module provides a lightweight, zero-dependency emulation of core Ray APIs
-(`ray.init`, `@ray.remote`, `ray.put`, `ray.get`, `ray.wait`, `ActorPool`, `ray.data`)
-designed to execute interactively inside browser Pyodide/WebAssembly or in sandboxed
-environments where C++ Ray binaries and multi-process sockets are unavailable.
+(`ray.init`, `@ray.remote`, `ray.put`, `ray.get`, `ray.wait`, `ActorPool`, `ray.data`,
+`ray.train`, `ray.tune`, `ray.serve`, `ray.util`) designed to execute interactively
+inside browser Pyodide/WebAssembly or in sandboxed environments where C++ Ray binaries
+and multi-process sockets are unavailable.
 """
 
 from __future__ import annotations
@@ -219,15 +220,36 @@ class ActorPool:
         fn(actor, value)
 
 
+class ActorPoolStrategy:
+    """Actor pool compute strategy for Ray Data transformations."""
+
+    def __init__(self, min_size: int = 1, max_size: int = 4, **kwargs: Any) -> None:
+        self.min_size = min_size
+        self.max_size = max_size
+
+
 class WasmDataset:
     """Pure-Python simulated Ray Data Dataset for WASM pipelines."""
 
-    def __init__(self, items: list[Any]) -> None:
+    def __init__(self, items: list[Any], num_blocks: int = 1) -> None:
         self._items = list(items)
+        self._num_blocks = num_blocks
 
     def count(self) -> int:
         """Return total row count in dataset."""
         return len(self._items)
+
+    def repartition(self, num_blocks: int = 1) -> WasmDataset:
+        """Simulate repartitioning dataset into N blocks."""
+        return WasmDataset(self._items, num_blocks=num_blocks)
+
+    def materialize(self) -> WasmDataset:
+        """Simulate eagerly materializing dataset blocks into memory."""
+        return self
+
+    def num_blocks(self) -> int:
+        """Return number of partitions / blocks."""
+        return self._num_blocks
 
     def take(self, limit: int = 20) -> list[Any]:
         """Take the first N rows from dataset."""
@@ -241,56 +263,132 @@ class WasmDataset:
 
     def map(self, fn: Callable[[Any], Any]) -> WasmDataset:
         """Transform each row in dataset."""
-        return WasmDataset([fn(item) for item in self._items])
+        return WasmDataset([fn(item) for item in self._items], num_blocks=self._num_blocks)
 
     def filter(self, fn: Callable[[Any], bool]) -> WasmDataset:
         """Filter dataset rows by predicate."""
-        return WasmDataset([item for item in self._items if fn(item)])
+        return WasmDataset([item for item in self._items if fn(item)], num_blocks=self._num_blocks)
+
+    def select_columns(self, cols: list[str]) -> WasmDataset:
+        """Project dataset down to specific columns."""
+        projected = [
+            {k: v for k, v in item.items() if k in cols} if isinstance(item, dict) else item
+            for item in self._items
+        ]
+        return WasmDataset(projected, num_blocks=self._num_blocks)
+
+    def sum(self, on: str) -> float:
+        """Compute sum of a specific numerical column."""
+        return sum(float(item.get(on, 0)) for item in self._items if isinstance(item, dict))
+
+    def iter_torch_batches(self, batch_size: int = 4, **kwargs: Any) -> Iterator[dict[str, Any]]:
+        """Stream mini-batches formatted as PyTorch Tensors."""
+        try:
+            import torch  # type: ignore
+
+            has_torch = True
+        except ImportError:
+            has_torch = False
+
+        for i in range(0, len(self._items), batch_size):
+            chunk = self._items[i : i + batch_size]
+            if chunk and isinstance(chunk[0], dict):
+                batch: dict[str, Any] = {}
+                for k in chunk[0].keys():
+                    vals = [row[k] for row in chunk]
+                    if has_torch:
+                        batch[k] = torch.tensor(vals)
+                    else:
+                        batch[k] = vals
+                yield batch
+            else:
+                yield {"data": chunk}
 
     def map_batches(
         self,
-        fn: Callable[[dict[str, list[Any]] | list[Any]], Any],
+        fn: Any,
         batch_size: int = 4096,
+        compute: Any = None,
+        batch_format: str = "default",
         **kwargs: Any,
     ) -> WasmDataset:
-        """Transform rows in batches."""
+        """Transform rows in batches, supporting function or class-based callable transformations."""
+        callable_obj: Any = fn() if inspect.isclass(fn) else fn
         transformed: list[Any] = []
+
         for i in range(0, len(self._items), batch_size):
             chunk = self._items[i : i + batch_size]
-            # Convert list of dicts to columnar dict if possible
             if chunk and isinstance(chunk[0], dict):
                 columnar = {k: [row[k] for row in chunk] for k in chunk[0]}
-                batch_res = fn(columnar)
+                # Pass dict with numpy arrays if numpy is available and batch_format is numpy
+                if batch_format == "numpy":
+                    try:
+                        import numpy as np  # type: ignore
+
+                        np_columnar = {k: np.array(v) for k, v in columnar.items()}
+                        batch_res = callable_obj(np_columnar)
+                    except ImportError:
+                        batch_res = callable_obj(columnar)
+                else:
+                    batch_res = callable_obj(columnar)
+
                 if isinstance(batch_res, dict):
                     num_rows = len(next(iter(batch_res.values())))
                     keys = list(batch_res.keys())
-                    rows = [{k: batch_res[k][idx] for k in keys} for idx in range(num_rows)]
+                    rows = []
+                    for idx in range(num_rows):
+                        row_dict = {}
+                        for k in keys:
+                            val = batch_res[k][idx]
+                            # Unwrap numpy types to python scalars if needed
+                            if hasattr(val, "item"):
+                                val = val.item()
+                            row_dict[k] = val
+                        rows.append(row_dict)
                     transformed.extend(rows)
                 elif isinstance(batch_res, list):
                     transformed.extend(batch_res)
                 else:
                     transformed.append(batch_res)
             else:
-                batch_res = fn(chunk)
+                batch_res = callable_obj(chunk)
                 if isinstance(batch_res, list):
                     transformed.extend(batch_res)
                 else:
                     transformed.append(batch_res)
-        return WasmDataset(transformed)
+        return WasmDataset(transformed, num_blocks=self._num_blocks)
 
 
 class WasmDataModule:
     """Namespace for simulated Ray Data dataset constructors."""
 
+    Dataset = WasmDataset
+    ActorPoolStrategy = ActorPoolStrategy
+
     @staticmethod
-    def range(n: int) -> WasmDataset:
+    def range(n: int, **kwargs: Any) -> WasmDataset:
         """Create a dataset with rows {'id': 0, 'id': 1, ...}."""
         return WasmDataset([{"id": i} for i in range(n)])
 
     @staticmethod
-    def from_items(items: list[Any]) -> WasmDataset:
+    def from_items(items: list[Any], **kwargs: Any) -> WasmDataset:
         """Create a dataset from an in-memory list."""
         return WasmDataset(items)
+
+    @staticmethod
+    def read_parquet(path: str, **kwargs: Any) -> WasmDataset:
+        """Create a simulated dataset from parquet."""
+        return WasmDataset([])
+
+
+def from_items(items: list[Any], **kwargs: Any) -> WasmDataset:
+    """Module-level alias for ray.data.from_items."""
+    return WasmDataModule.from_items(items, **kwargs)
+
+
+def range_dataset(n: int, **kwargs: Any) -> WasmDataset:
+    """Module-level alias for ray.data.range."""
+    return WasmDataModule.range(n, **kwargs)
 
 
 class WasmRayModule:
@@ -409,7 +507,5 @@ class WasmRayModule:
         }
 
 
-
 # Global drop-in singleton mimicking `import ray`
 ray = WasmRayModule()
-
