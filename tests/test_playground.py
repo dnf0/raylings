@@ -283,3 +283,26 @@ def test_all_18_chapter_guides_and_links():
             assert ex_id in all_exercise_names, (
                 f"Guide {guide_file.name} links to invalid exercise {ex_id}"
             )
+
+
+def test_playground_chapter_guide_deep_links():
+    """Verify playground JavaScript and CSS inject chapter guide links properly."""
+    js_file = Path("docs/assets/playground/playground.js")
+    assert js_file.exists()
+    content = js_file.read_text(encoding="utf-8")
+    assert "CHAPTER_GUIDE_MAP" in content
+    assert "getChapterGuideUrl" in content
+    assert "btn-chapter-guide" in content
+    assert "meta-chapter-badge" in content
+    assert "sidebar-guide-icon-btn" in content
+
+    # Check that all 18 chapters are mapped to corresponding guide files
+    for ch_num in range(1, 19):
+        assert f'{ch_num}: "../guides/' in content
+
+    css_file = Path("docs/assets/playground/playground.css")
+    assert css_file.exists()
+    css_content = css_file.read_text(encoding="utf-8")
+    assert ".chapter-badge-link" in css_content
+    assert ".nav-btn-guide" in css_content
+    assert ".sidebar-guide-icon-btn" in css_content
