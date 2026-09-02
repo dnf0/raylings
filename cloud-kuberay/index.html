@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="An interactive, hands-on CLI learning environment for Python Ray.">
+        <meta name="description" content="An interactive, client-side WebAssembly learning platform and comprehensive reference manual for Python Ray.">
       
       
         <meta name="author" content="Raylings Contributors">
@@ -15,10 +15,6 @@
         <link rel="canonical" href="https://dnf0.github.io/raylings/cloud-kuberay/">
       
       
-        <link rel="prev" href="../troubleshooting/">
-      
-      
-        <link rel="next" href="../contributing/">
       
       
         
@@ -29,7 +25,7 @@
     
     
       
-        <title>Cloud & KubeRay - Raylings</title>
+        <title>Cloud & Multi-Node KubeRay Deployment ☸️ - Raylings</title>
       
     
     
@@ -116,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Cloud & KubeRay
+              Cloud &amp; Multi-Node KubeRay Deployment ☸️
             
           </span>
         </div>
@@ -318,60 +314,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Getting Started
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../onboarding-guide/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Onboarding Guide
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../syllabus/" class="md-nav__link">
         
   
@@ -379,7 +321,7 @@
   <span class="md-ellipsis">
     
   
-    Curriculum Syllabus
+    Syllabus & Curriculum
   
 
     
@@ -398,105 +340,31 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../plugins/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
     
-  
-    Curriculum Plugins
-  
-
     
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
     
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cli-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
     
-  
-    CLI Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Troubleshooting
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
       
         
+        
       
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
           
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
     
   
-    Cloud & KubeRay
+    Ray Core & Architecture
   
 
     
@@ -504,17 +372,35 @@
   
   
 
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ray Core & Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/01-tasks/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Cloud & KubeRay
+    01. Remote Tasks & Futures
   
 
     
@@ -523,409 +409,666 @@
   
 
       </a>
-      
-        
+    </li>
+  
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/02-actors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02. Stateful Actors & Concurrency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/03-object-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. Plasma Object Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/04-resources-scheduling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04. Scheduling & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/05-fault-tolerance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05. Lineage & Fault Tolerance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/06-cluster-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06. Cluster Architecture & GCS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/07-patterns-and-antipatterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07. Patterns & Anti-Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
   
   
   
     
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    
+    
+    
       
-        <li class="md-nav__item">
-  <a href="#architecture-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🏗️ Architecture Overview
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🏗️ Architecture Overview">
-      <ul class="md-nav__list">
         
-          <li class="md-nav__item">
-  <a href="#core-components" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Core Components
-      
-    </span>
-  </a>
-  
-</li>
         
-      </ul>
-    </nav>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-        📋 Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#local-cluster-lifecycle-management" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🚀 Local Cluster Lifecycle Management
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🚀 Local Cluster Lifecycle Management">
-      <ul class="md-nav__list">
         
-          <li class="md-nav__item">
-  <a href="#1-provision-cluster-up" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Provision Cluster (up)
-      
-    </span>
-  </a>
-  
-</li>
         
-          <li class="md-nav__item">
-  <a href="#2-port-forwarding-services-forward" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Port-Forwarding Services (forward)
-      
-    </span>
-  </a>
-  
-</li>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
-          <li class="md-nav__item">
-  <a href="#3-inspect-cluster-health-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Inspect Cluster Health (status)
-      
-    </span>
-  </a>
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed Data & Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
         
-          <li class="md-nav__item">
-  <a href="#4-teardown-cluster-down" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Teardown Cluster (down)
-      
-    </span>
-  </a>
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
   
-</li>
+    Distributed Data & Machine Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/08-ray-data/" class="md-nav__link">
         
-      </ul>
-    </nav>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connecting-to-the-remote-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🔌 Connecting to the Remote Cluster
-      
-    </span>
-  </a>
   
-    <nav class="md-nav" aria-label="🔌 Connecting to the Remote Cluster">
-      <ul class="md-nav__list">
+  <span class="md-ellipsis">
+    
+  
+    08. Streaming Ray Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/09-distributed-ml/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#running-raylings-exercises-remotely" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Running Raylings Exercises Remotely
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    09. Distributed ML from Scratch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/10-ray-train/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#programmatic-connection-in-python" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Programmatic Connection in Python
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Distributed PyTorch (Ray Train)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/11-ray-tune/" class="md-nav__link">
         
-      </ul>
-    </nav>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#multi-node-end-to-end-test-suite" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🧪 Multi-Node End-to-End Test Suite
-      
-    </span>
-  </a>
   
-    <nav class="md-nav" aria-label="🧪 Multi-Node End-to-End Test Suite">
-      <ul class="md-nav__list">
+  <span class="md-ellipsis">
+    
+  
+    11. Hyperparameter Search (Ray Tune)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/12-ray-serve/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#running-the-test-suite" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Running the Test Suite
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    12. Model Serving (Ray Serve)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
         
-          <li class="md-nav__item">
-  <a href="#test-scenarios-covered" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Test Scenarios Covered
-      
-    </span>
-  </a>
-  
-</li>
         
-      </ul>
-    </nav>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#github-actions-ci-pipeline-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-        🔄 GitHub Actions CI Pipeline Architecture
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🔄 GitHub Actions CI Pipeline Architecture">
-      <ul class="md-nav__list">
         
-          <li class="md-nav__item">
-  <a href="#diagnostic-artifact-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Diagnostic Artifact Collection
-      
-    </span>
-  </a>
-  
-</li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting-common-kuberay-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🛠️ Troubleshooting Common KubeRay Issues
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🛠️ Troubleshooting Common KubeRay Issues">
-      <ul class="md-nav__list">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
-          <li class="md-nav__item">
-  <a href="#1-pods-stuck-in-pending-state" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Pods Stuck in Pending State
-      
-    </span>
-  </a>
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
   
-    <nav class="md-nav" aria-label="1. Pods Stuck in Pending State">
-      <ul class="md-nav__list">
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability & Cloud Orchestration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
         
-          <li class="md-nav__item">
-  <a href="#symptom" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Symptom
-      
-    </span>
-  </a>
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
   
-</li>
+    Observability & Cloud Orchestration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/13-observability/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#cause" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cause
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    13. Observability, Tracing & Profiling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/14-kuberay/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#solution" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solution
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    14. Kubernetes AI with KubeRay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
         
-      </ul>
-    </nav>
-  
-</li>
         
-          <li class="md-nav__item">
-  <a href="#2-ray-client-port-connection-refused-raylocalhost10001" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        2. Ray Client Port Connection Refused (ray://localhost:10001)
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. Ray Client Port Connection Refused (ray://localhost:10001)">
-      <ul class="md-nav__list">
         
-          <li class="md-nav__item">
-  <a href="#symptom_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Symptom
-      
-    </span>
-  </a>
-  
-</li>
         
-          <li class="md-nav__item">
-  <a href="#cause_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cause
-      
-    </span>
-  </a>
-  
-</li>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
-          <li class="md-nav__item">
-  <a href="#solution_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solution
-      
-    </span>
-  </a>
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    Generative AI, LLMs & High Performance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
         
-      </ul>
-    </nav>
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
   
-</li>
+    Generative AI, LLMs & High Performance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/15-vllm-and-llms/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#3-cross-node-plasma-object-store-memory-exhaustion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Cross-Node Plasma Object Store Memory Exhaustion
-      
-    </span>
-  </a>
   
-    <nav class="md-nav" aria-label="3. Cross-Node Plasma Object Store Memory Exhaustion">
-      <ul class="md-nav__list">
+  
+  <span class="md-ellipsis">
+    
+  
+    15. High-Throughput vLLM Serving
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/16-fsdp-deepspeed/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#symptom_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Symptom
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    16. Multi-Node LLM Training (FSDP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/17-multimodal-vectors/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#cause_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cause
-      
-    </span>
-  </a>
   
-</li>
+  
+  <span class="md-ellipsis">
+    
+  
+    17. Multimodal Embeddings & Vector RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/18-quant-finance/" class="md-nav__link">
         
-          <li class="md-nav__item">
-  <a href="#solution_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solution
-      
-    </span>
-  </a>
   
-</li>
-        
-      </ul>
-    </nav>
   
-</li>
-        
-      </ul>
-    </nav>
+  <span class="md-ellipsis">
+    
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-resources" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📚 Related Resources
-      
-    </span>
-  </a>
+    18. Quantitative Finance Risk Engines
   
-</li>
-      
-    </ul>
+
+    
+  </span>
   
-</nav>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -946,33 +1089,6 @@
     
   
     Contributing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ROADMAP/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap & Backlog
   
 
     

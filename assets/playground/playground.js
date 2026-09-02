@@ -252,6 +252,31 @@
     document.head.appendChild(loaderScript);
   }
 
+  const CHAPTER_GUIDE_MAP = {
+    1: "../guides/01-tasks/",
+    2: "../guides/02-actors/",
+    3: "../guides/03-object-store/",
+    4: "../guides/04-resources-scheduling/",
+    5: "../guides/05-fault-tolerance/",
+    6: "../guides/06-cluster-architecture/",
+    7: "../guides/07-patterns-and-antipatterns/",
+    8: "../guides/08-ray-data/",
+    9: "../guides/09-distributed-ml/",
+    10: "../guides/10-ray-train/",
+    11: "../guides/11-ray-tune/",
+    12: "../guides/12-ray-serve/",
+    13: "../guides/13-observability/",
+    14: "../guides/14-kuberay/",
+    15: "../guides/15-vllm-and-llms/",
+    16: "../guides/16-fsdp-deepspeed/",
+    17: "../guides/17-multimodal-vectors/",
+    18: "../guides/18-quant-finance/",
+  };
+
+  function getChapterGuideUrl(chapterNum) {
+    return CHAPTER_GUIDE_MAP[chapterNum] || "../guides/01-tasks/";
+  }
+
   /**
    * ==========================================================================
    * Main Playground Application Controller
@@ -294,14 +319,41 @@
       }
 
       RaylingsStorage.init(this.bundle);
-      if (RaylingsStorage.state.lastActiveExerciseId && this.bundle.exercises[RaylingsStorage.state.lastActiveExerciseId]) {
+
+      // Deep link routing via URL query parameters (?exercise=<id> or ?chapter=<n>)
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramExercise = urlParams.get("exercise");
+      const paramChapter = urlParams.get("chapter");
+
+      if (paramExercise && this.bundle.exercises && this.bundle.exercises[paramExercise]) {
+        this.currentExerciseId = paramExercise;
+        const curEx = this.bundle.exercises[this.currentExerciseId];
+        if (curEx && curEx.chapter_number) {
+          this.expandedChapters.add(curEx.chapter_number);
+        }
+      } else if (paramChapter) {
+        const chapterNum = parseInt(paramChapter, 10);
+        if (!isNaN(chapterNum)) {
+          this.expandedChapters.add(chapterNum);
+          const firstExInChapter = Object.values(this.bundle.exercises || {}).find(
+            (ex) => ex.chapter_number === chapterNum
+          );
+          if (firstExInChapter) {
+            this.currentExerciseId = firstExInChapter.id;
+          }
+        }
+      } else if (
+        RaylingsStorage.state.lastActiveExerciseId &&
+        this.bundle.exercises &&
+        this.bundle.exercises[RaylingsStorage.state.lastActiveExerciseId]
+      ) {
         this.currentExerciseId = RaylingsStorage.state.lastActiveExerciseId;
         const curEx = this.bundle.exercises[this.currentExerciseId];
         if (curEx && curEx.chapter_number) {
           this.expandedChapters.add(curEx.chapter_number);
         }
       } else {
-        this.currentExerciseId = Object.keys(this.bundle.exercises)[0] || "basics01";
+        this.currentExerciseId = Object.keys(this.bundle.exercises || {})[0] || "basics01";
       }
 
       this.initWorker();
@@ -412,10 +464,11 @@
           <main class="playground-main-workspace">
             <div class="workspace-top-bar">
               <div class="workspace-meta-left">
-                <span id="meta-chapter-badge" class="chapter-badge">Chapter 01</span>
+                <a id="meta-chapter-badge" class="chapter-badge chapter-badge-link" href="../guides/01-tasks/" target="_blank" rel="noopener noreferrer" title="Open Chapter Architecture & Reference Guide in new tab">Chapter 01 ↗</a>
                 <h2 id="meta-exercise-title" class="exercise-title">basics01.py</h2>
               </div>
               <div class="workspace-meta-right">
+                <a id="btn-chapter-guide" class="nav-btn nav-btn-guide" href="../guides/01-tasks/" target="_blank" rel="noopener noreferrer" title="Open Chapter Architecture & Reference Manual in new tab">📖 Chapter Guide ↗</a>
                 <div class="nav-stepper">
                   <button id="btn-prev-ex" class="nav-btn" title="Previous Exercise (Alt+Left)">◀ Prev</button>
                   <button id="btn-next-ex" class="nav-btn" title="Next Exercise (Alt+Right)">Next ▶</button>
@@ -433,6 +486,9 @@
                 <span>▶ Run Exercise</span>
                 <span class="playground-btn-kbd">Ctrl+↵</span>
               </button>
+              <a id="btn-toolbar-guide" class="playground-btn playground-btn-guide-tb" href="../guides/01-tasks/" target="_blank" rel="noopener noreferrer" title="Open Chapter Architecture Guide">
+                <span>📖 Guide ↗</span>
+              </a>
               <button id="btn-stop-exercise" class="playground-btn" style="display: none; color: var(--pg-error-text);">
                 <span>⏹ Stop</span>
               </button>
@@ -534,11 +590,27 @@
         this.expandedChapters.add(ex.chapter_number);
       }
 
-      // Update Topbar Meta
+      // Update Topbar Meta and Guide Links
+      const guideUrl = getChapterGuideUrl(ex.chapter_number);
       const metaChapter = this.rootEl.querySelector("#meta-chapter-badge");
       const metaTitle = this.rootEl.querySelector("#meta-exercise-title");
-      if (metaChapter) metaChapter.textContent = `Ch ${String(ex.chapter_number).padStart(2, "0")}: ${ex.chapter_title}`;
+      const guideBtn = this.rootEl.querySelector("#btn-chapter-guide");
+      const toolbarGuideBtn = this.rootEl.querySelector("#btn-toolbar-guide");
+
+      if (metaChapter) {
+        metaChapter.textContent = `Ch ${String(ex.chapter_number).padStart(2, "0")}: ${ex.chapter_title} ↗`;
+        metaChapter.href = guideUrl;
+        metaChapter.title = `Open Chapter ${String(ex.chapter_number).padStart(2, "0")} Guide (${ex.chapter_title}) in new tab`;
+      }
       if (metaTitle) metaTitle.textContent = `${ex.id}.py — ${ex.title}`;
+      if (guideBtn) {
+        guideBtn.href = guideUrl;
+        guideBtn.title = `Open Chapter ${String(ex.chapter_number).padStart(2, "0")} Guide (${ex.chapter_title}) in new tab`;
+      }
+      if (toolbarGuideBtn) {
+        toolbarGuideBtn.href = guideUrl;
+        toolbarGuideBtn.title = `Open Chapter ${String(ex.chapter_number).padStart(2, "0")} Architecture Guide in new tab`;
+      }
 
       // Update Editor Code without triggering in_progress dirty state
       if (monacoEditor) {
@@ -562,7 +634,7 @@
       // Clear terminal output or show welcome
       const term = this.rootEl.querySelector("#playground-output");
       if (term) {
-        term.innerHTML = `<span class="term-dim">⚡ Loaded exercise ${this.escapeHtml(ex.id)}.py (${this.escapeHtml(ex.title)}). Press Ctrl+Enter or click 'Run Exercise' to evaluate.</span>\n\n<span class="term-info">Docstring Objective:</span>\n${this.escapeHtml(ex.prompt || "Complete the implementation.")}`;
+        term.innerHTML = `<span class="term-dim">⚡ Loaded exercise ${this.escapeHtml(ex.id)}.py (${this.escapeHtml(ex.title)}). Press Ctrl+Enter or click 'Run Exercise' to evaluate.</span>\n\n<span class="term-dim">📖 <a href="${guideUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--pg-accent); text-decoration: underline; font-weight: 600;">Read Chapter ${String(ex.chapter_number).padStart(2, "0")} Architecture & Reference Guide ↗</a></span>\n\n<span class="term-info">Docstring Objective:</span>\n${this.escapeHtml(ex.prompt || "Complete the implementation.")}`;
       }
     }
 
@@ -983,7 +1055,10 @@
                 <span class="chapter-num">${String(chapter.number).padStart(2, "0")}.</span>
                 <span class="chapter-name" title="${this.escapeHtml(chapter.title)}">${this.escapeHtml(chapter.title)}</span>
               </div>
-              <span class="${countBadgeClass}">${completedInCh}/${chapter.exercise_ids.length}</span>
+              <div class="chapter-header-actions" style="display: flex; align-items: center; gap: 6px;">
+                <a class="sidebar-guide-icon-btn" href="${getChapterGuideUrl(chapter.number)}" target="_blank" rel="noopener noreferrer" title="Open Chapter ${String(chapter.number).padStart(2, "0")} Guide in new tab" onclick="event.stopPropagation();">📖</a>
+                <span class="${countBadgeClass}">${completedInCh}/${chapter.exercise_ids.length}</span>
+              </div>
             </div>
             <div class="chapter-exercise-list">
         `;

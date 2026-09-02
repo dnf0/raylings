@@ -12,27 +12,31 @@
         <meta name="author" content="Raylings Contributors">
       
       
-        <link rel="canonical" href="https://dnf0.github.io/raylings/ROADMAP/">
+        <link rel="canonical" href="https://dnf0.github.io/raylings/guides/17-multimodal-vectors/">
       
       
+        <link rel="prev" href="../16-fsdp-deepspeed/">
+      
+      
+        <link rel="next" href="../18-quant-finance/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Raylings Backlog & Future Roadmap - Raylings</title>
+        <title>17. Multimodal Embeddings & Vector RAG - Raylings</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#raylings-backlog-future-roadmap" class="md-skip">
+        <a href="#chapter-17-multimodal-embeddings-distributed-vector-rag" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
+    <a href="../.." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Raylings Backlog &amp; Future Roadmap
+              17. Multimodal Embeddings & Vector RAG
             
           </span>
         </div>
@@ -230,7 +234,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
+    <a href="../.." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -260,7 +264,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -287,7 +291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../playground/" class="md-nav__link">
+      <a href="../../playground/" class="md-nav__link">
         
   
   
@@ -314,7 +318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../syllabus/" class="md-nav__link">
+      <a href="../../syllabus/" class="md-nav__link">
         
   
   
@@ -393,7 +397,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/01-tasks/" class="md-nav__link">
+      <a href="../01-tasks/" class="md-nav__link">
         
   
   
@@ -421,7 +425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/02-actors/" class="md-nav__link">
+      <a href="../02-actors/" class="md-nav__link">
         
   
   
@@ -449,7 +453,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/03-object-store/" class="md-nav__link">
+      <a href="../03-object-store/" class="md-nav__link">
         
   
   
@@ -477,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/04-resources-scheduling/" class="md-nav__link">
+      <a href="../04-resources-scheduling/" class="md-nav__link">
         
   
   
@@ -505,7 +509,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/05-fault-tolerance/" class="md-nav__link">
+      <a href="../05-fault-tolerance/" class="md-nav__link">
         
   
   
@@ -533,7 +537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/06-cluster-architecture/" class="md-nav__link">
+      <a href="../06-cluster-architecture/" class="md-nav__link">
         
   
   
@@ -561,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/07-patterns-and-antipatterns/" class="md-nav__link">
+      <a href="../07-patterns-and-antipatterns/" class="md-nav__link">
         
   
   
@@ -648,7 +652,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/08-ray-data/" class="md-nav__link">
+      <a href="../08-ray-data/" class="md-nav__link">
         
   
   
@@ -676,7 +680,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/09-distributed-ml/" class="md-nav__link">
+      <a href="../09-distributed-ml/" class="md-nav__link">
         
   
   
@@ -704,7 +708,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/10-ray-train/" class="md-nav__link">
+      <a href="../10-ray-train/" class="md-nav__link">
         
   
   
@@ -732,7 +736,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/11-ray-tune/" class="md-nav__link">
+      <a href="../11-ray-tune/" class="md-nav__link">
         
   
   
@@ -760,7 +764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/12-ray-serve/" class="md-nav__link">
+      <a href="../12-ray-serve/" class="md-nav__link">
         
   
   
@@ -847,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/13-observability/" class="md-nav__link">
+      <a href="../13-observability/" class="md-nav__link">
         
   
   
@@ -875,7 +879,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/14-kuberay/" class="md-nav__link">
+      <a href="../14-kuberay/" class="md-nav__link">
         
   
   
@@ -907,8 +911,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -919,11 +925,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
@@ -944,7 +950,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -962,7 +968,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/15-vllm-and-llms/" class="md-nav__link">
+      <a href="../15-vllm-and-llms/" class="md-nav__link">
         
   
   
@@ -990,7 +996,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/16-fsdp-deepspeed/" class="md-nav__link">
+      <a href="../16-fsdp-deepspeed/" class="md-nav__link">
         
   
   
@@ -1015,10 +1021,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../guides/17-multimodal-vectors/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    17. Multimodal Embeddings & Vector RAG
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1034,6 +1067,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-architectural-overview-control-plane-mechanics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architectural Overview &amp; Control Plane Mechanics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-annotated-python-code-anatomy-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Annotated Python Code Anatomy &amp; API Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-production-best-practices-hardening-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Production Best Practices &amp; Hardening Guidelines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting-diagnostic-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting &amp; Diagnostic Workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-hands-on-practice-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Hands-on Practice Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1046,7 +1154,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/18-quant-finance/" class="md-nav__link">
+      <a href="../18-quant-finance/" class="md-nav__link">
         
   
   
@@ -1081,7 +1189,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../contributing/" class="md-nav__link">
         
   
   
@@ -1128,10 +1236,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#roadmap-tracks-overview" class="md-nav__link">
+  <a href="#1-architectural-overview-control-plane-mechanics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🗺️ Roadmap Tracks Overview
+        1. Architectural Overview &amp; Control Plane Mechanics
       
     </span>
   </a>
@@ -1139,60 +1247,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-1-next-gen-distributed-ai-curriculum-completed" class="md-nav__link">
+  <a href="#2-annotated-python-code-anatomy-api-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chapter-15-distributed-llm-serving-with-vllm-ray" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chapter 15: Distributed LLM Serving with vLLM &amp; Ray
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#chapter-16-deepspeed-pytorch-fsdp-fully-sharded-data-parallel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chapter 16: DeepSpeed &amp; PyTorch FSDP (Fully Sharded Data Parallel)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#chapter-17-multimodal-vector-ray-data-pipelines" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chapter 17: Multimodal &amp; Vector Ray Data Pipelines
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#track-2-developer-tooling-cli-experience-completed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)
+        2. Annotated Python Code Anatomy &amp; API Reference
       
     </span>
   </a>
@@ -1200,10 +1258,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-3-cloud-enterprise-infrastructure-testing-completed" class="md-nav__link">
+  <a href="#3-production-best-practices-hardening-guidelines" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)
+        3. Production Best Practices &amp; Hardening Guidelines
       
     </span>
   </a>
@@ -1211,10 +1269,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#track-4-ecosystem-community-completed" class="md-nav__link">
+  <a href="#4-troubleshooting-diagnostic-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Track 4: Ecosystem &amp; Community (Completed ✅)
+        4. Troubleshooting &amp; Diagnostic Workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-hands-on-practice-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Hands-on Practice Exercises
       
     </span>
   </a>
@@ -1241,92 +1310,156 @@
   
 
 
-<h1 id="raylings-backlog-future-roadmap">Raylings Backlog &amp; Future Roadmap</h1>
-<p>This document outlines the strategic backlog, upcoming features, and long-term roadmap for <strong>Raylings</strong>.</p>
-<hr />
-<h2 id="roadmap-tracks-overview">🗺️ Roadmap Tracks Overview</h2>
-<pre class="mermaid"><code>mindmap
-  root((Raylings Roadmap))
-    Track 1: Distributed AI Curriculum [Done]
-      Chapter 15: vLLM &amp; LLM Serving
-      Chapter 16: DeepSpeed &amp; PyTorch FSDP
-      Chapter 17: Multimodal &amp; Vector Ray Data
-    Track 2: Developer Tooling [Done]
-      Full-screen TUI raylings tui
-      Exercise Scaffolder CLI raylings new
-      Cluster Telemetry raylings top
-    Track 3: Cloud &amp; Infrastructure [Done]
-      Automated Kind / KubeRay CI Testing
-      Multi-Node E2E Pytest Suite
-      Remote Head Node Client Execution
-    Track 4: Ecosystem &amp; WASM [Done]
-      Interactive Pyodide / WASM Sandbox
-      Pluggable Curriculum Plugin Registry
-      Quantitative Finance Pack Ch 18</code></pre>
-<hr />
-<h2 id="track-1-next-gen-distributed-ai-curriculum-completed">Track 1: Next-Gen Distributed AI Curriculum (Completed ✅)</h2>
-<p>Expanding the core curriculum from 14 chapters (66 exercises) with 3 advanced distributed AI and Generative AI chapters (78 total exercises):</p>
-<h3 id="chapter-15-distributed-llm-serving-with-vllm-ray">Chapter 15: Distributed LLM Serving with vLLM &amp; Ray</h3>
+<h1 id="chapter-17-multimodal-embeddings-distributed-vector-rag">Chapter 17: Multimodal Embeddings &amp; Distributed Vector RAG</h1>
+<div class="grid cards">
 <ul>
-<li><strong><code>vllm01.py</code></strong>: Multi-Worker Tensor Parallelism &amp; Model Partitioning across Ray Actors.</li>
-<li><strong><code>vllm02.py</code></strong>: PagedAttention &amp; Continuous Batching KV-cache memory dynamics.</li>
-<li><strong><code>vllm03.py</code></strong>: Dynamic Multi-LoRA Adapter Serving with Actor Pools.</li>
-<li><strong><code>vllm04.py</code></strong>: Speculative Decoding &amp; Draft Model Worker Coordination.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> <strong>Topic Focus</strong> &bull; Ray Data for GenAI, Distributed Embedding Generation, Vector Search, and Multimodal RAG</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 16.5v-9l6 4.5M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> <strong>Interactive Challenges</strong> &bull; 4 Hands-on Exercises</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39S16.66.269 11 5.93c-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.55.56 1.37.74 2.12.46A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61m-7.07 7.07c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg></span> <a class="md-button md-button--primary" href="../../playground/?chapter=17"><strong>Launch Playground in Wasm →</strong></a></li>
 </ul>
-<h3 id="chapter-16-deepspeed-pytorch-fsdp-fully-sharded-data-parallel">Chapter 16: DeepSpeed &amp; PyTorch FSDP (Fully Sharded Data Parallel)</h3>
-<ul>
-<li><strong><code>fsdp01.py</code></strong>: PyTorch FSDP with Ray Train <code>ScalingConfig</code> &amp; multi-worker gradient sync.</li>
-<li><strong><code>fsdp02.py</code></strong>: DeepSpeed ZeRO-1 / ZeRO-2 / ZeRO-3 memory sharding across Ray workers.</li>
-<li><strong><code>fsdp03.py</code></strong>: Mixed Precision (BF16/FP8) &amp; Activation Checkpointing optimization.</li>
-<li><strong><code>fsdp04.py</code></strong>: Elastic fault-tolerant checkpoint save/resume to object storage.</li>
-</ul>
-<h3 id="chapter-17-multimodal-vector-ray-data-pipelines">Chapter 17: Multimodal &amp; Vector Ray Data Pipelines</h3>
-<ul>
-<li><strong><code>data_genai01.py</code></strong>: High-throughput streaming image and audio preprocessing with backpressure.</li>
-<li><strong><code>data_genai02.py</code></strong>: GPU-accelerated batch embedding extraction using <code>ActorPoolStrategy</code>.</li>
-<li><strong><code>data_genai03.py</code></strong>: Dynamic sequence length bucketing and padding minimization.</li>
-<li><strong><code>data_genai04.py</code></strong>: Parallel streaming dataset ingestion into vector databases (LanceDB / Milvus).</li>
-</ul>
+</div>
 <hr />
-<h2 id="track-2-developer-tooling-cli-experience-completed">Track 2: Developer Tooling &amp; CLI Experience (Completed ✅)</h2>
+<h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
+<p>Scaling Retrieval-Augmented Generation (RAG) to billions of documents requires distributed embedding extraction and parallel vector index partitioning. Using <strong>Ray Data</strong>, documents and multimodal media (images, audio, text) are processed in parallel across actor pools.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph DataIngestion["Multimodal Data Ingestion"]
+        RawCorpus["Raw Media Ingestion&lt;br/&gt;• Unstructured Text Docs&lt;br/&gt;• High-Res Image Frames&lt;br/&gt;• Audio Spectrograms"] --&gt; StreamingDS["Ray Data Streaming Dataset"]
+    end
+
+    subgraph EmbeddingCluster["GPU Embedding ActorPool (map_batches)"]
+        subgraph WorkerPool["Actor Pool (Stateful Vision/Language Encoders)"]
+            A0["Embedding Worker 0 (NVIDIA L4)"]
+            A1["Embedding Worker 1 (NVIDIA L4)"]
+            A2["Embedding Worker 2 (NVIDIA L4)"]
+        end
+        StreamingDS --&gt; WorkerPool
+    end
+
+    subgraph VectorIndex["Distributed Sharded Vector Store (FAISS / HNSW)"]
+        A0 --&gt; Shard0["Vector Shard 0 (Partitions 0..1M)"]
+        A1 --&gt; Shard1["Vector Shard 1 (Partitions 1M..2M)"]
+        A2 --&gt; Shard2["Vector Shard 2 (Partitions 2M..3M)"]
+    end
+
+    subgraph QueryEngine["Distributed RAG Query Engine"]
+        UserQuery["User Query / Image Prompt"] --&gt; QueryEncoder["Query Encoder Actor"]
+        QueryEncoder --&gt;|"Broadcast Vector"| Shard0
+        QueryEncoder --&gt;|"Broadcast Vector"| Shard1
+        QueryEncoder --&gt;|"Broadcast Vector"| Shard2
+
+        Shard0 --&gt; TopK["Scatter-Gather Top-K Reducer"]
+        Shard1 --&gt; TopK
+        Shard2 --&gt; TopK
+    end
+
+    style DataIngestion fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style EmbeddingCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style VectorIndex fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style QueryEngine fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style WorkerPool fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant U as User / Application
+    participant QE as Query Encoder Actor
+    participant S0 as Vector Shard 0 (Worker 0)
+    participant S1 as Vector Shard 1 (Worker 1)
+    participant R as Top-K Scatter-Gather Reducer
+    participant LLM as LLM Generation Actor
+
+    Note over U,LLM: Distributed RAG Retrieval &amp; Context Generation
+    U-&gt;&gt;QE: Query: "Explain Ray Data zero-copy shared memory"
+    QE-&gt;&gt;QE: Generate 384-dim Query Vector Q
+    par Broadcast Vector Search across Shards
+        QE-&gt;&gt;S0: SearchTopK(Q, k=5)
+        QE-&gt;&gt;S1: SearchTopK(Q, k=5)
+    end
+    S0--&gt;&gt;R: Local Candidates [Doc 14, Doc 89] (cosine distances)
+    S1--&gt;&gt;R: Local Candidates [Doc 301, Doc 412] (cosine distances)
+    R-&gt;&gt;R: Heap Merge &amp; Rerank -&gt; Global Top-3 Documents
+    R-&gt;&gt;LLM: Pass Context + User Query Prompt
+    LLM--&gt;&gt;U: Synthesized Answer with Source Citations</code></pre>
+<p>The transformed vector embeddings are indexed across partitioned memory nodes, enabling sub-10ms top-K nearest neighbor retrieval at enterprise scale.</p>
+<hr />
+<h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># 1. Define stateful embedding model actor</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">EmbeddingWorker</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="c1"># In real systems: from sentence_transformers import SentenceTransformer</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">384</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="n">texts</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="c1"># Generate normalized dense embeddings</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        <span class="n">embeddings</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="n">texts</span><span class="p">,</span> <span class="s2">"embeddings"</span><span class="p">:</span> <span class="n">embeddings</span><span class="p">}</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># 2. Stream dataset through embedding actor pool</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">from_items</span><span class="p">([{</span><span class="s2">"text"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Document chunk </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="n">embedded_ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">EmbeddingWorker</span><span class="p">,</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="n">compute</span><span class="o">=</span><span class="n">ray</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ActorPoolStrategy</span><span class="p">(</span><span class="n">min_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="3-production-best-practices-hardening-guidelines">3. Production Best Practices &amp; Hardening Guidelines</h2>
 <ol>
-<li><strong>Interactive Full-Screen TUI (<code>raylings tui</code>)</strong>:</li>
-<li>Built with Rich <code>Layout</code>, <code>Live</code>, and interactive non-blocking keystroke listener.</li>
-<li>Split-pane layout: live curriculum chapter outline with status badges on the left; syntax-highlighted code preview, real-time evaluation logs, progressive hint drawer, and cluster telemetry overlays on the right.</li>
-<li>Full keyboard navigation (<code>[r]</code> Run, <code>[h]</code> Hint, <code>[j/↓]</code> Down, <code>[k/↑]</code> Up, <code>[n]</code> Next, <code>[p]</code> Prev, <code>[t]</code> Telemetry, <code>[d]</code> Doctor, <code>[q]</code> Quit).</li>
-<li><strong>Exercise Scaffolding Tool (<code>raylings new</code> / <code>raylings new-exercise &lt;chapter&gt; &lt;name&gt;</code>)</strong>:</li>
-<li>Single command to generate skeleton exercise, canonical solution, verify harness, and manifest entry snippet.</li>
-<li>Options for <code>--title</code>, <code>--description</code>, <code>--dry-run</code>, and <code>--json</code>.</li>
-<li><strong>Cluster Health &amp; Telemetry Inspector (<code>raylings top</code> / <code>raylings metrics</code>)</strong>:</li>
-<li>Live terminal view of Plasma object store memory utilization, spill rate, worker CPU/GPU saturation, and GCS actor tables.</li>
-<li>Options for <code>--interval</code>, <code>--once</code>, and <code>--json</code>.</li>
+<li><strong>Use <code>ActorPoolStrategy</code> in <code>map_batches</code></strong>: Avoid reloading heavy embedding model weights per batch by maintaining persistent worker actors.</li>
+<li><strong>Normalize Vector Embeddings</strong>: Normalize embeddings (<code>L2</code> norm = 1.0) so cosine similarity can be computed via high-speed dot products.</li>
+<li><strong>Partition Vector Indices by Shard</strong>: Shard large vector databases across nodes to parallelize top-K search queries.</li>
+<li><strong>Tune Batch Sizes for Tensor Cores</strong>: Align embedding batch sizes to multiples of 8 or 16 (e.g. 32, 64, 128) to maximize GPU Tensor Core utilization.</li>
+<li><strong>Stream Direct to Storage / Vector DBs</strong>: Write embedded chunks directly to cloud object stores or vector databases without staging on the driver.</li>
 </ol>
 <hr />
-<h2 id="track-3-cloud-enterprise-infrastructure-testing-completed">Track 3: Cloud &amp; Enterprise Infrastructure Testing (Completed ✅)</h2>
+<h2 id="4-troubleshooting-diagnostic-workflows">4. Troubleshooting &amp; Diagnostic Workflows</h2>
 <ol>
-<li><strong>Automated Ephemeral Multi-Node KinD &amp; KubeRay CI</strong>:</li>
-<li>Automated cluster lifecycle management script (<code>scripts/kuberay/setup-kuberay.sh</code>) supporting <code>up</code>, <code>down</code>, <code>wait</code>, <code>forward</code>, and <code>status</code>.</li>
-<li>3-node KinD topology (<code>scripts/kuberay/kind-config.yaml</code>) with port mappings for Ray client (10001), dashboard (8265), and GCS (6379).</li>
-<li>Production-ready <code>RayCluster</code> CRD spec (<code>scripts/kuberay/ray-cluster.yaml</code>) with 1 head pod and 2 worker pods.</li>
-<li>Dedicated GitHub Actions workflow (<code>.github/workflows/kuberay-e2e.yml</code>) orchestrating ephemeral KinD clusters with automated diagnostic artifact collection on failure.</li>
-<li><strong>Multi-Node End-to-End Test Suite (<code>tests/test_kuberay_e2e.py</code>)</strong>:</li>
-<li>Comprehensive multi-node pytest suite testing node discovery, actor spread across distinct node IPs, <code>STRICT_SPREAD</code> placement groups, cross-node Plasma zero-copy transfers, and multi-node PyTorch <code>TorchTrainer</code> DDP gradient sync.</li>
-<li>Built-in graceful fallback to in-process multi-node simulation (<code>ray.cluster_utils.Cluster</code>).</li>
-<li><strong>Comprehensive Cloud &amp; KubeRay Deployment Guide (<code>docs/cloud-kuberay.md</code>)</strong>:</li>
-<li>Complete architecture diagrams, local provisioning instructions, remote Ray client execution commands, and troubleshooting recipes.</li>
+<li><strong>Embedding Pipeline Memory Leaks</strong>:</li>
+<li><em>Symptom</em>: Actor workers crash with OOM after processing thousands of batches.</li>
+<li><em>Fix</em>: Call <code>torch.cuda.empty_cache()</code> periodically inside the embedding actor's <code>__call__</code> method.</li>
+<li><strong>Slow Embedding Throughput</strong>:</li>
+<li><em>Symptom</em>: Low GPU utilization during embedding generation.</li>
+<li><em>Fix</em>: Increase <code>batch_size</code> in <code>map_batches</code> and prefetch input data chunks.</li>
+<li><strong>Uneven Index Shards</strong>:</li>
+<li><em>Symptom</em>: One vector search worker takes 10x longer than peers during query execution.</li>
+<li><em>Fix</em>: Repartition datasets uniformly before embedding generation with <code>ds.repartition()</code>.</li>
 </ol>
 <hr />
-<h2 id="track-4-ecosystem-community-completed">Track 4: Ecosystem &amp; Community (Completed ✅)</h2>
-<ol>
-<li><strong>Browser-Based Interactive WASM Playground</strong>:</li>
-<li>Pure-Python in-memory Ray simulation engine (<code>src/raylings/wasm_compat.py</code>) supporting <code>ray.init</code>, <code>ray.shutdown</code>, <code>ray.remote</code> tasks and actors, <code>ray.put</code>, <code>ray.get</code>, <code>ActorPool</code>, and <code>ray.data</code> Dataset operations inside Pyodide / WebAssembly runtimes.</li>
-<li>Monaco Editor + TailwindCSS interactive web playground (<code>docs/assets/playground.html</code> &amp; <code>docs/playground.md</code>) with catalog JSON bundling (<code>docs/assets/playground_catalog.json</code>), real-time execution, hint reveals, solution diffs, and live simulated cluster telemetry.</li>
-<li><strong>Pluggable Curriculum Architecture &amp; Domain Plugin Registry</strong>:</li>
-<li>Extensible <code>RaylingsPlugin</code> protocol (<code>src/raylings/plugins/base.py</code>) with automatic discovery via Python entry points (<code>raylings.plugins</code>).</li>
-<li>CLI management suite (<code>raylings plugins list</code>, <code>raylings plugins info &lt;name&gt;</code>, <code>raylings plugins validate &lt;path&gt;</code>).</li>
-<li>Reference Quantitative Finance curriculum pack (<code>exercises/18_quant_finance/</code> and <code>src/raylings/plugins/finance.py</code>) featuring Monte Carlo option pricing, distributed portfolio VaR/CVaR, and streaming market tick analytics.</li>
-<li>Comprehensive Plugin Authoring &amp; Distribution Guide (<code>docs/plugins.md</code>).</li>
-</ol>
+<h2 id="5-hands-on-practice-exercises">5. Hands-on Practice Exercises</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise ID</th>
+<th style="text-align: left;">Goal / Topic</th>
+<th style="text-align: left;">Playground Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>data_genai01</code></td>
+<td style="text-align: left;">Streaming Multimodal Image &amp; Audio ETL</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=data_genai01"><strong>Open Exercise data_genai01 →</strong></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data_genai02</code></td>
+<td style="text-align: left;">Accelerated Batch Embeddings with ActorPoolStrategy</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=data_genai02"><strong>Open Exercise data_genai02 →</strong></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data_genai03</code></td>
+<td style="text-align: left;">Dynamic Token Length Bucketing &amp; Padding Optimization</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=data_genai03"><strong>Open Exercise data_genai03 →</strong></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>data_genai04</code></td>
+<td style="text-align: left;">Streaming Parallel Ingestion into Vector Databases</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=data_genai04"><strong>Open Exercise data_genai04 →</strong></a></td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1382,10 +1515,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -12,27 +12,31 @@
         <meta name="author" content="Raylings Contributors">
       
       
-        <link rel="canonical" href="https://dnf0.github.io/raylings/plugins/">
+        <link rel="canonical" href="https://dnf0.github.io/raylings/guides/09-distributed-ml/">
       
       
+        <link rel="prev" href="../08-ray-data/">
+      
+      
+        <link rel="next" href="../10-ray-train/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Curriculum Plugin & Extension Pack Architecture - Raylings</title>
+        <title>09. Distributed ML from Scratch - Raylings</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#curriculum-plugin-extension-pack-architecture" class="md-skip">
+        <a href="#chapter-09-distributed-machine-learning-from-scratch" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
+    <a href="../.." title="Raylings" class="md-header__button md-logo" aria-label="Raylings" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Curriculum Plugin &amp; Extension Pack Architecture
+              09. Distributed ML from Scratch
             
           </span>
         </div>
@@ -230,7 +234,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
+    <a href="../.." title="Raylings" class="md-nav__button md-logo" aria-label="Raylings" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -260,7 +264,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -287,7 +291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../playground/" class="md-nav__link">
+      <a href="../../playground/" class="md-nav__link">
         
   
   
@@ -314,7 +318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../syllabus/" class="md-nav__link">
+      <a href="../../syllabus/" class="md-nav__link">
         
   
   
@@ -393,7 +397,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/01-tasks/" class="md-nav__link">
+      <a href="../01-tasks/" class="md-nav__link">
         
   
   
@@ -421,7 +425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/02-actors/" class="md-nav__link">
+      <a href="../02-actors/" class="md-nav__link">
         
   
   
@@ -449,7 +453,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/03-object-store/" class="md-nav__link">
+      <a href="../03-object-store/" class="md-nav__link">
         
   
   
@@ -477,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/04-resources-scheduling/" class="md-nav__link">
+      <a href="../04-resources-scheduling/" class="md-nav__link">
         
   
   
@@ -505,7 +509,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/05-fault-tolerance/" class="md-nav__link">
+      <a href="../05-fault-tolerance/" class="md-nav__link">
         
   
   
@@ -533,7 +537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/06-cluster-architecture/" class="md-nav__link">
+      <a href="../06-cluster-architecture/" class="md-nav__link">
         
   
   
@@ -561,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/07-patterns-and-antipatterns/" class="md-nav__link">
+      <a href="../07-patterns-and-antipatterns/" class="md-nav__link">
         
   
   
@@ -593,8 +597,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -605,11 +611,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -630,7 +636,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -648,7 +654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/08-ray-data/" class="md-nav__link">
+      <a href="../08-ray-data/" class="md-nav__link">
         
   
   
@@ -673,10 +679,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../guides/09-distributed-ml/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    09. Distributed ML from Scratch
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -692,6 +725,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-architectural-overview-control-plane-mechanics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architectural Overview &amp; Control Plane Mechanics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-annotated-python-code-anatomy-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Annotated Python Code Anatomy &amp; API Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-production-best-practices-hardening-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Production Best Practices &amp; Hardening Guidelines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting-diagnostic-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting &amp; Diagnostic Workflows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-hands-on-practice-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Hands-on Practice Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -704,7 +812,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/10-ray-train/" class="md-nav__link">
+      <a href="../10-ray-train/" class="md-nav__link">
         
   
   
@@ -732,7 +840,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/11-ray-tune/" class="md-nav__link">
+      <a href="../11-ray-tune/" class="md-nav__link">
         
   
   
@@ -760,7 +868,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/12-ray-serve/" class="md-nav__link">
+      <a href="../12-ray-serve/" class="md-nav__link">
         
   
   
@@ -847,7 +955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/13-observability/" class="md-nav__link">
+      <a href="../13-observability/" class="md-nav__link">
         
   
   
@@ -875,7 +983,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/14-kuberay/" class="md-nav__link">
+      <a href="../14-kuberay/" class="md-nav__link">
         
   
   
@@ -962,7 +1070,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/15-vllm-and-llms/" class="md-nav__link">
+      <a href="../15-vllm-and-llms/" class="md-nav__link">
         
   
   
@@ -990,7 +1098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/16-fsdp-deepspeed/" class="md-nav__link">
+      <a href="../16-fsdp-deepspeed/" class="md-nav__link">
         
   
   
@@ -1018,7 +1126,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/17-multimodal-vectors/" class="md-nav__link">
+      <a href="../17-multimodal-vectors/" class="md-nav__link">
         
   
   
@@ -1046,7 +1154,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/18-quant-finance/" class="md-nav__link">
+      <a href="../18-quant-finance/" class="md-nav__link">
         
   
   
@@ -1081,7 +1189,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../contributing/" class="md-nav__link">
         
   
   
@@ -1128,10 +1236,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#1-architectural-overview-control-plane-mechanics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        1. Architectural Overview &amp; Control Plane Mechanics
       
     </span>
   </a>
@@ -1139,10 +1247,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#plugin-contract-raylingsplugin" class="md-nav__link">
+  <a href="#2-annotated-python-code-anatomy-api-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Plugin Contract: RaylingsPlugin
+        2. Annotated Python Code Anatomy &amp; API Reference
       
     </span>
   </a>
@@ -1150,10 +1258,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#packaging-entry-points" class="md-nav__link">
+  <a href="#3-production-best-practices-hardening-guidelines" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Packaging &amp; Entry Points
+        3. Production Best Practices &amp; Hardening Guidelines
       
     </span>
   </a>
@@ -1161,60 +1269,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cli-management-inspection" class="md-nav__link">
+  <a href="#4-troubleshooting-diagnostic-workflows" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CLI Management &amp; Inspection
+        4. Troubleshooting &amp; Diagnostic Workflows
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="CLI Management &amp; Inspection">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-list-installed-plugins" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. List Installed Plugins
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-inspect-plugin-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Inspect Plugin Details
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-validate-plugin-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Validate Plugin Contract
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference-plugin-chapter-18-distributed-quantitative-finance" class="md-nav__link">
+  <a href="#5-hands-on-practice-exercises" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Reference Plugin: Chapter 18 (Distributed Quantitative Finance)
+        5. Hands-on Practice Exercises
       
     </span>
   </a>
@@ -1241,88 +1310,155 @@
   
 
 
-<h1 id="curriculum-plugin-extension-pack-architecture">Curriculum Plugin &amp; Extension Pack Architecture</h1>
-<p>Raylings features an open, pluggable curriculum architecture enabling domain specialists, research groups, and organizations to author, distribute, and register custom chapters and exercises using standard Python packaging mechanisms.</p>
-<hr />
-<h2 id="overview">Overview</h2>
-<p>Raylings plugins allow you to:
-- Package custom domain curricula (e.g. Quantitative Finance, Bio-Informatics, Robotics, Geospatial Analytics).
-- Distribute extension packs via PyPI or internal Git repositories.
-- Automatically discover installed plugins via Python Entry Points (<code>raylings.plugins</code>).
-- Seamlessly integrate custom exercises into the CLI (<code>raylings list</code>, <code>raylings run</code>, <code>raylings verify</code>, <code>raylings watch</code>, <code>raylings tui</code>).</p>
-<hr />
-<h2 id="plugin-contract-raylingsplugin">Plugin Contract: <code>RaylingsPlugin</code></h2>
-<p>All plugins inherit from <a href="file:///Users/danielfisher/repos/raylings/src/raylings/plugins/base.py"><code>RaylingsPlugin</code></a>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">raylings.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chapter</span><span class="p">,</span> <span class="n">Exercise</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">raylings.plugins.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">RaylingsPlugin</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomPackPlugin</span><span class="p">(</span><span class="n">RaylingsPlugin</span><span class="p">):</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"robotics"</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Distributed Robotics &amp; Sim-to-Real RL"</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"0.1.0"</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Distributed physics simulation and multi-agent robotics with Ray."</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Robotics Special Interest Group"</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_chapters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Chapter</span><span class="p">]:</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            <span class="n">Chapter</span><span class="p">(</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                <span class="n">number</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                <span class="n">name</span><span class="o">=</span><span class="s2">"19_robotics"</span><span class="p">,</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                <span class="n">title</span><span class="o">=</span><span class="s2">"Distributed Robotics Simulation"</span><span class="p">,</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                <span class="n">description</span><span class="o">=</span><span class="s2">"Simulate parallel physics environments using Ray actors."</span><span class="p">,</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                <span class="n">exercises</span><span class="o">=</span><span class="p">[</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>                    <span class="n">Exercise</span><span class="p">(</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>                        <span class="n">name</span><span class="o">=</span><span class="s2">"robotics01"</span><span class="p">,</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>                        <span class="n">title</span><span class="o">=</span><span class="s2">"Parallel Isaac Sim Actor Environment"</span><span class="p">,</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>                        <span class="n">path</span><span class="o">=</span><span class="s2">"exercises/19_robotics/robotics01.py"</span><span class="p">,</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>                        <span class="n">chapter_name</span><span class="o">=</span><span class="s2">"19_robotics"</span><span class="p">,</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>                        <span class="n">hints</span><span class="o">=</span><span class="p">[</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>                            <span class="s2">"Instantiate headless simulation worker actors."</span><span class="p">,</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>                            <span class="s2">"Batch observations using ray.get()."</span><span class="p">,</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>                        <span class="p">],</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>                    <span class="p">),</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                <span class="p">],</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>            <span class="p">)</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="p">]</span>
-</span></code></pre></div>
-<hr />
-<h2 id="packaging-entry-points">Packaging &amp; Entry Points</h2>
-<p>To make your plugin discoverable by Raylings, register an entry point under the <code>raylings.plugins</code> group in your package's <code>pyproject.toml</code>:</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[project]</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"raylings-robotics"</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="s2">"raylings&gt;=0.5.0"</span><span class="p">,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">]</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">[project.entry-points.</span><span class="s2">"raylings.plugins"</span><span class="k">]</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">robotics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"raylings_robotics.plugin:CustomPackPlugin"</span>
-</span></code></pre></div>
-<p>Once installed into your virtual environment (<code>pip install raylings-robotics</code> or <code>uv add raylings-robotics</code>), Raylings automatically discovers and loads the plugin.</p>
-<hr />
-<h2 id="cli-management-inspection">CLI Management &amp; Inspection</h2>
-<p>Raylings provides a dedicated <code>plugins</code> CLI group:</p>
-<h3 id="1-list-installed-plugins">1. List Installed Plugins</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>raylings<span class="w"> </span>plugins<span class="w"> </span>list
-</span></code></pre></div>
-<p>Displays an overview table of all installed plugins, version numbers, authors, and chapter counts.</p>
-<h3 id="2-inspect-plugin-details">2. Inspect Plugin Details</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>raylings<span class="w"> </span>plugins<span class="w"> </span>info<span class="w"> </span>finance
-</span></code></pre></div>
-<p>Displays metadata and lists all chapters and exercises provided by the plugin.</p>
-<h3 id="3-validate-plugin-contract">3. Validate Plugin Contract</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>raylings<span class="w"> </span>plugins<span class="w"> </span>validate<span class="w"> </span>raylings.plugins.finance:FinancePlugin
-</span></code></pre></div>
-<p>Validates that your plugin satisfies the <code>RaylingsPlugin</code> protocol, checks chapter numbering, verifies exercise file paths, and ensures no duplicate exercise identifiers exist.</p>
-<hr />
-<h2 id="reference-plugin-chapter-18-distributed-quantitative-finance">Reference Plugin: Chapter 18 (Distributed Quantitative Finance)</h2>
-<p>Raylings includes a built-in reference plugin <a href="file:///Users/danielfisher/repos/raylings/src/raylings/plugins/finance.py"><code>raylings.plugins.finance.FinancePlugin</code></a>:</p>
+<h1 id="chapter-09-distributed-machine-learning-from-scratch">Chapter 09: Distributed Machine Learning from Scratch</h1>
+<div class="grid cards">
 <ul>
-<li><strong>Exercise 1 (<code>finance01</code>)</strong>: Distributed Monte Carlo European Option Pricing with Actor Pool.</li>
-<li><strong>Exercise 2 (<code>finance02</code>)</strong>: Distributed Multi-Asset Portfolio Value-at-Risk (VaR) &amp; CVaR.</li>
-<li><strong>Exercise 3 (<code>finance03</code>)</strong>: Streaming High-Frequency Market Tick Analytics &amp; VWAP with Ray Data.</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> <strong>Topic Focus</strong> &bull; Distributed Gradient Descent, Parameter Servers, Ring All-Reduce, and Worker Sharding</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 16.5v-9l6 4.5M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> <strong>Interactive Challenges</strong> &bull; 4 Hands-on Exercises</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39S16.66.269 11 5.93c-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.55.56 1.37.74 2.12.46A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61m-7.07 7.07c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg></span> <a class="md-button md-button--primary" href="../../playground/?chapter=9"><strong>Launch Playground in Wasm →</strong></a></li>
 </ul>
+</div>
+<hr />
+<h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
+<p>Building distributed ML frameworks requires coordinating workers across data parallelism architectures: <strong>Parameter Server (PS)</strong> models for centralized gradient aggregation, and <strong>Ring All-Reduce</strong> for decentralized peer-to-peer weight synchronization.</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph ParameterServerArch["Topology A: Centralized Parameter Server (Actor Model)"]
+        PS["Parameter Server Actor&lt;br/&gt;(Global Master Weights &amp; Optimizer State)"]
+
+        W0["Worker Actor 0&lt;br/&gt;(Data Shard 0)"]
+        W1["Worker Actor 1&lt;br/&gt;(Data Shard 1)"]
+        W2["Worker Actor 2&lt;br/&gt;(Data Shard 2)"]
+
+        W0 ==&gt;|"Push Gradients (gRPC)"| PS
+        W1 ==&gt;|"Push Gradients (gRPC)"| PS
+        W2 ==&gt;|"Push Gradients (gRPC)"| PS
+
+        PS -.-&gt;|"Broadcast Updated Weights"| W0
+        PS -.-&gt;|"Broadcast Updated Weights"| W1
+        PS -.-&gt;|"Broadcast Updated Weights"| W2
+    end
+
+    subgraph RingAllReduceArch["Topology B: Decentralized Ring All-Reduce (NCCL / Ray Collective)"]
+        R0["Rank 0 Worker"] &lt;--&gt;|"Ring Chunk Transfer"| R1["Rank 1 Worker"]
+        R1 &lt;--&gt;|"Ring Chunk Transfer"| R2["Rank 2 Worker"]
+        R2 &lt;--&gt;|"Ring Chunk Transfer"| R0
+    end
+
+    style ParameterServerArch fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style RingAllReduceArch fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style PS fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style W0 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style W1 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style W2 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant PS as Parameter Server Actor
+    participant W0 as Worker 0
+    participant W1 as Worker 1
+
+    Note over PS,W1: Distributed SGD Iteration Loop
+    W0-&gt;&gt;PS: get_weights()
+    W1-&gt;&gt;PS: get_weights()
+    PS--&gt;&gt;W0: Return Current Global Weights (W_t)
+    PS--&gt;&gt;W1: Return Current Global Weights (W_t)
+
+    par Parallel Gradient Computation
+        W0-&gt;&gt;W0: Forward/Backward Pass on Shard 0 -&gt; Compute G_0
+        W1-&gt;&gt;W1: Forward/Backward Pass on Shard 1 -&gt; Compute G_1
+    end
+
+    W0-&gt;&gt;PS: apply_gradients(G_0)
+    PS-&gt;&gt;PS: W_{t+1} = W_t - lr * G_0 (Atomic State Mutation)
+    W1-&gt;&gt;PS: apply_gradients(G_1)
+    PS-&gt;&gt;PS: W_{t+2} = W_{t+1} - lr * G_1</code></pre>
+<p>Ray tasks and actors provide the foundational primitives to implement custom distributed optimization routines, asynchronous SGD, and collective communication loops without low-level C++ MPI dependencies.</p>
+<hr />
+<h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># 1. Parameter Server Actor managing global model weights</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nd">@ray</span><span class="o">.</span><span class="n">remote</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">ParameterServer</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">):</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">apply_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grads</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">*</span> <span class="n">grads</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># 2. Worker Actors computing local gradients on data shards</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nd">@ray</span><span class="o">.</span><span class="n">remote</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="k">class</span><span class="w"> </span><span class="nc">DataParallelWorker</span><span class="p">:</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">shard</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">worker_id</span> <span class="o">=</span> <span class="n">worker_id</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">shard</span> <span class="o">=</span> <span class="n">shard</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">compute_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        <span class="c1"># Simulated gradient step: X.T @ (X @ w - y)</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shard</span> <span class="o">@</span> <span class="n">current_weights</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        <span class="n">grads</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shard</span> <span class="o">*</span> <span class="n">predictions</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="k">return</span> <span class="n">grads</span>
+</span></code></pre></div>
+<hr />
+<h2 id="3-production-best-practices-hardening-guidelines">3. Production Best Practices &amp; Hardening Guidelines</h2>
+<ol>
+<li><strong>Use Asynchronous SGD for Heterogeneous Clusters</strong>: If some worker nodes are slower than others, use asynchronous gradient updates to prevent stragglers from stalling the step.</li>
+<li><strong>Compress Gradient Transfers</strong>: Quantize float32 gradients to float16 or int8 before transmission to reduce network communication bottlenecks.</li>
+<li><strong>Double Buffer Data Loading</strong>: Overlap gradient computation with batch pre-fetching from local shared memory.</li>
+<li><strong>Partition Parameter Servers</strong>: For models with billions of parameters, shard the parameter server across multiple actor instances.</li>
+<li><strong>Decentralize with All-Reduce for Large Models</strong>: For dense transformer architectures, use collective Ring All-Reduce communication over Parameter Servers.</li>
+</ol>
+<hr />
+<h2 id="4-troubleshooting-diagnostic-workflows">4. Troubleshooting &amp; Diagnostic Workflows</h2>
+<ol>
+<li><strong>Gradient Staleness in Async SGD</strong>:</li>
+<li><em>Symptom</em>: Model training diverges or loss oscillates wildly.</li>
+<li><em>Fix</em>: Apply gradient clipping and decay learning rates for stale updates computed on older weight versions.</li>
+<li><strong>Worker Straggler Stalls</strong>:</li>
+<li><em>Symptom</em>: High step latency in synchronous SGD.</li>
+<li><em>Fix</em>: Implement backup workers (drop the slowest 5% of gradient contributions in each step).</li>
+<li><strong>Weight Drift across Replicas</strong>:</li>
+<li><em>Symptom</em>: Discrepancies between worker loss values.</li>
+<li><em>Fix</em>: Ensure random seeds are synchronized and weights are periodically re-broadcast from the root server.</li>
+</ol>
+<hr />
+<h2 id="5-hands-on-practice-exercises">5. Hands-on Practice Exercises</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Exercise ID</th>
+<th style="text-align: left;">Goal / Topic</th>
+<th style="text-align: left;">Playground Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>ml_scratch01</code></td>
+<td style="text-align: left;">Distributed Parameter Server</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=ml_scratch01"><strong>Open Exercise ml_scratch01 →</strong></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ml_scratch02</code></td>
+<td style="text-align: left;">Async vs Sync Gradient Averaging</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=ml_scratch02"><strong>Open Exercise ml_scratch02 →</strong></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ml_scratch03</code></td>
+<td style="text-align: left;">Ring All-Reduce Implementation</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=ml_scratch03"><strong>Open Exercise ml_scratch03 →</strong></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ml_scratch04</code></td>
+<td style="text-align: left;">Distributed Data-Parallel Trainer</td>
+<td style="text-align: left;"><a href="../../playground/?exercise=ml_scratch04"><strong>Open Exercise ml_scratch04 →</strong></a></td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1378,10 +1514,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
