@@ -14,14 +14,15 @@ def test_all_18_guides_contain_rich_mermaid_diagrams():
         content = guide.read_text(encoding="utf-8")
         assert "```mermaid" in content, f"Guide {guide.name} must contain at least one mermaid diagram"
         assert "┌──" not in content, f"Guide {guide.name} still contains legacy ASCII box drawings"
+        assert "│" not in content.split("```text")[1] if "```text" in content else True
 
-        # Check for mermaid block completeness
+        # Check for mermaid block completeness and dual-diagram architecture
         mermaid_blocks = re.findall(r"```mermaid\n(.*?)```", content, re.DOTALL)
-        assert len(mermaid_blocks) >= 1, f"Guide {guide.name} has empty mermaid block"
-        for block in mermaid_blocks:
-            assert ("flowchart" in block or "graph" in block or "sequenceDiagram" in block), (
-                f"Guide {guide.name} mermaid block missing valid diagram header"
-            )
+        assert len(mermaid_blocks) >= 2, f"Guide {guide.name} must have at least 2 Mermaid diagrams (Flowchart + Sequence)"
+        has_flowchart = any("flowchart" in b or "graph" in b for b in mermaid_blocks)
+        has_sequence = any("sequenceDiagram" in b for b in mermaid_blocks)
+        assert has_flowchart, f"Guide {guide.name} missing flowchart diagram"
+        assert has_sequence, f"Guide {guide.name} missing sequenceDiagram"
 
 
 def test_overview_and_syllabus_contain_mermaid_diagrams():
