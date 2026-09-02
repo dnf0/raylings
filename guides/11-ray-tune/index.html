@@ -1321,62 +1321,23 @@
 <hr />
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p><strong>Ray Tune</strong> executes scalable, distributed hyperparameter search across hundreds of concurrent trials. It couples state-of-the-art search algorithms (Bayesian, Optuna, HyperOpt) with early-stopping trial schedulers like <strong>ASHA (Asynchronous Successive Halving Algorithm)</strong>.</p>
-<pre class="mermaid"><code>flowchart TD
-    subgraph TunerDriver["Ray Tune Orchestration Plane"]
-        TunerObj["Tuner.fit()"] --&gt; TrialRunner["TrialRunner Coordinator Actor"]
-        SearchAlg["Search Algorithm&lt;br/&gt;(Bayesian / Optuna / HyperOpt)"] --&gt;|"Generate Configs"| TrialRunner
-        ASHASched["ASHA Scheduler Engine&lt;br/&gt;(Asynchronous Successive Halving)"] &lt;--&gt;|"Pruning &amp; Promotion Decisions"| TrialRunner
-    end
+<pre class="mermaid"><code>flowchart LR
+    Tuner["Tuner Coordinator&lt;br/&gt;(TrialRunner + SearchAlg)"] --&gt;|"1. Dispatch Trial Configs"| Rung0["Rung 0: All Trials&lt;br/&gt;(1 Epoch)"]
+    Rung0 --&gt;|"2. Bottom 50% Pruned"| Killed["Terminated Early ❌&lt;br/&gt;(Reclaim GPUs)"]
+    Rung0 --&gt;|"3. Top 50% Promoted"| Rung1["Rung 1: Promoted&lt;br/&gt;(4 Epochs)"]
+    Rung1 --&gt;|"4. Optimal Result"| Winner["Best Trial Winner 🎉&lt;br/&gt;(Full Epochs)"]
 
-    subgraph Rungs["ASHA Successive Halving Rungs"]
-        subgraph Rung0["Rung 0 (1 Epoch Evaluation)"]
-            T0["Trial 0 (lr=0.01)"]
-            T1["Trial 1 (lr=0.5) ❌ (KILLED)"]
-            T2["Trial 2 (lr=0.001)"]
-            T3["Trial 3 (lr=0.05) ❌ (KILLED)"]
-        end
-
-        subgraph Rung1["Rung 1 (4 Epochs Evaluation - Top 50%)"]
-            T0_p["Trial 0 (Promoted)"]
-            T2_p["Trial 2 (Promoted)"]
-        end
-
-        subgraph Rung2["Rung 2 (Final High Resource Evaluation)"]
-            T0_win["Trial 0 (Optimal Result 🎉)"]
-        end
-
-        T0 --&gt; T0_p
-        T2 --&gt; T2_p
-        T0_p --&gt; T0_win
-    end
-
-    TrialRunner --&gt; Rung0
-
-    style TunerDriver fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style Rungs fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style ASHASched fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style Rung0 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
-    style Rung1 fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style Rung2 fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant D as Tuner Driver
-    participant TR as TrialRunner Coordinator
-    participant ASHA as ASHA Scheduler
-    participant T0 as Trial Worker 0 (lr=0.01)
-    participant T1 as Trial Worker 1 (lr=0.5)
-
-    Note over D,T1: Trial Execution &amp; Early Stopping Protocol
-    TR-&gt;&gt;T0: Spawn Trial(lr=0.01, Epoch=1)
-    TR-&gt;&gt;T1: Spawn Trial(lr=0.5, Epoch=1)
-    T0-&gt;&gt;TR: tune.report(val_loss=0.35, epoch=1)
-    T1-&gt;&gt;TR: tune.report(val_loss=1.85, epoch=1)
-    TR-&gt;&gt;ASHA: EvaluateTrialMetrics(T0, T1)
-    ASHA--&gt;&gt;TR: T0 in Top 50% -&gt; Action: CONTINUE / PROMOTE
-    ASHA--&gt;&gt;TR: T1 in Bottom 50% -&gt; Action: STOP (Kill Trial)
-    TR-&gt;&gt;T1: Terminate Worker Process &amp; Reclaim GPU Resources
-    TR-&gt;&gt;T0: Continue Training to Rung 1 (Epoch=4)</code></pre>
-<p>ASHA dynamically prunes underperforming configurations early in their training trajectory, freeing node CPU/GPU slots to evaluate new configurations asynchronously.</p>
+    style Tuner fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Rung0 fill:#0f172a,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style Killed fill:#1e1e2e,stroke:#ef4444,stroke-width:1px,stroke-dasharray: 5 5,color:#f8fafc
+    style Rung1 fill:#1e1e38,stroke:#f59e0b,stroke-width:1px,color:#f8fafc
+    style Winner fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Search Algorithm Generation</strong>: Algorithms like Optuna, HyperOpt, or Bayesian search suggest candidate hyperparameter configurations to the <code>TrialRunner</code>.
+- <strong>ASHA Successive Halving</strong>: Trials are evaluated on low resource budgets (Rung 0). Poorly performing configurations are aggressively pruned early in training.
+- <strong>Dynamic Resource Reallocation</strong>: Terminating low-performing trials frees up cluster GPUs and CPUs immediately to explore new candidate configurations, drastically reducing total compute budget.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

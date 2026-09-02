@@ -1322,81 +1322,22 @@
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p><strong>Ray Train</strong> coordinates multi-node distributed training for PyTorch, TensorFlow, and XGBoost. It abstracts away environment variable setup (<code>MASTER_ADDR</code>, <code>MASTER_PORT</code>, <code>RANK</code>, <code>WORLD_SIZE</code>) and manages worker lifecycle and fault-tolerant checkpointing.</p>
 <pre class="mermaid"><code>flowchart TD
-    subgraph ControlPlane["Ray Train Coordinator"]
-        TT["TorchTrainer(train_loop_per_worker)"] --&gt;|"Apply ScalingConfig"| WG["Worker Group Placement Manager"]
-        WG --&gt;|"Synchronize Metrics &amp; Checkpoints"| Storage["Durable Storage / Cloud S3"]
-    end
+    TT["TorchTrainer Coordinator&lt;br/&gt;&lt;code&gt;ScalingConfig(num_workers=4, use_gpu=True)&lt;/code&gt;"] --&gt;|"1. Spawns Worker Group"| WG["Worker Actors (Ranks 0..3)"]
+    WG --&gt;|"2. Sharded Data Ingestion"| Data["Ray Data / PyTorch DataLoader"]
+    WG &lt;--&gt;|"3. AllReduce Gradients (NCCL)"| Ring["Ring All-Reduce Bus&lt;br/&gt;(NVLink / InfiniBand)"]
+    WG --&gt;|"4. train.report()"| Storage[("Checkpoints &amp; Metrics&lt;br/&gt;(S3 / Shared Disk)")]
 
-    subgraph GPUWorkerCluster["GPU Worker Group Actors (Data Parallelism)"]
-        subgraph Rank0["Worker Rank 0 (Master Node)"]
-            M0["PyTorch DDP Engine"]
-            D0["DataLoader (Shard 0)"]
-            GPU_0[("NVIDIA CUDA GPU 0")]
-        end
-
-        subgraph Rank1["Worker Rank 1"]
-            M1["PyTorch DDP Engine"]
-            D1["DataLoader (Shard 1)"]
-            GPU_1[("NVIDIA CUDA GPU 1")]
-        end
-
-        subgraph Rank2["Worker Rank 2"]
-            M2["PyTorch DDP Engine"]
-            D2["DataLoader (Shard 2)"]
-            GPU_2[("NVIDIA CUDA GPU 2")]
-        end
-
-        subgraph Rank3["Worker Rank 3"]
-            M3["PyTorch DDP Engine"]
-            D3["DataLoader (Shard 3)"]
-            GPU_3[("NVIDIA CUDA GPU 3")]
-        end
-
-        WG --&gt; Rank0
-        WG --&gt; Rank1
-        WG --&gt; Rank2
-        WG --&gt; Rank3
-
-        GPU_0 &lt;--&gt;|"High-Speed NCCL AllReduce Gradient Ring"| GPU_1
-        GPU_1 &lt;--&gt;|"High-Speed NCCL AllReduce Gradient Ring"| GPU_2
-        GPU_2 &lt;--&gt;|"High-Speed NCCL AllReduce Gradient Ring"| GPU_3
-        GPU_3 &lt;--&gt;|"High-Speed NCCL AllReduce Gradient Ring"| GPU_0
-    end
-
-    style ControlPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style GPUWorkerCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style Rank0 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style Rank1 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style Rank2 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style Rank3 fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant TT as TorchTrainer Driver
-    participant R0 as Worker Rank 0 (CUDA)
-    participant R1 as Worker Rank 1 (CUDA)
-    participant NCCL as NCCL Hardware Interconnect
-    participant S3 as Checkpoint Storage
-
-    Note over TT,R1: Training Step &amp; Gradient Synchronization
-    par Forward Pass on Micro-Batches
-        R0-&gt;&gt;R0: Loss = Criterion(Model(Batch_0), Labels_0)
-        R1-&gt;&gt;R1: Loss = Criterion(Model(Batch_1), Labels_1)
-    end
-    par Backward Pass (Local Gradients)
-        R0-&gt;&gt;R0: Loss.backward() -&gt; Compute Local dW_0
-        R1-&gt;&gt;R1: Loss.backward() -&gt; Compute Local dW_1
-    end
-    Note over R0,NCCL: Inter-GPU Gradient AllReduce
-    R0-&gt;&gt;NCCL: AllReduce(dW_0)
-    R1-&gt;&gt;NCCL: AllReduce(dW_1)
-    NCCL--&gt;&gt;R0: Synchronized Global Gradients
-    NCCL--&gt;&gt;R1: Synchronized Global Gradients
-    par Optimizer Step
-        R0-&gt;&gt;R0: optimizer.step() (Weights Updated)
-        R1-&gt;&gt;R1: optimizer.step() (Weights Updated)
-    end
-    R0-&gt;&gt;S3: train.report(metrics, checkpoint=Checkpoint)</code></pre>
-<p><code>ray.train.torch.prepare_model()</code> automatically wraps your PyTorch <code>nn.Module</code> in <code>DistributedDataParallel</code> (DDP) and moves tensors to the appropriate rank-specific GPU device. Inter-worker communication is delegated directly to hardware-accelerated NCCL rings over NVLink or RoCE network interfaces.</p>
+    style TT fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style WG fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Data fill:#1e1e38,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style Ring fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Storage fill:#1e1e38,stroke:#c084fc,stroke-width:1px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Orchestrated Worker Groups</strong>: <code>TorchTrainer</code> creates and manages a synchronized gang of training actors across cluster GPU nodes according to <code>ScalingConfig</code>.
+- <strong>Automated Rendezvous &amp; NCCL Rings</strong>: Ray initializes the distributed PyTorch backend (master address, rank, world size) and coordinates high-speed peer-to-peer gradient synchronization via NCCL.
+- <strong>Fault-Tolerant Checkpoint Reporting</strong>: Workers report training metrics and save model checkpoints to cloud/local storage using <code>ray.train.report()</code>, enabling automatic failure recovery.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

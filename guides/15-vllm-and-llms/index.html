@@ -1321,61 +1321,23 @@
 <hr />
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Serving Large Language Models (LLMs) requires extreme GPU memory bandwidth and efficient Key-Value (KV) cache management. <strong>vLLM</strong> introduces <strong>PagedAttention</strong>, which manages KV cache memory like virtual memory pages in operating systems, eliminating internal memory fragmentation.</p>
-<pre class="mermaid"><code>flowchart TD
-    subgraph ClientRequests["Streaming Token Ingestion"]
-        ReqA["User Prompt A (Length: 512)"] --&gt; Scheduler["Continuous Iteration-Level Scheduler"]
-        ReqB["User Prompt B (Length: 128)"] --&gt; Scheduler
-        ReqC["User Prompt C (Length: 1024)"] --&gt; Scheduler
-    end
+<pre class="mermaid"><code>flowchart LR
+    Prompts["Streaming Prompts&lt;br/&gt;&lt;code&gt;/v1/chat/completions&lt;/code&gt;"] --&gt;|"1. Continuous Batching"| Sched["Iteration-Level Scheduler"]
+    Sched &lt;--&gt;|"2. Virtual Pages"| Paged["PagedAttention KV Cache&lt;br/&gt;(Zero Fragmentation)"]
+    Sched --&gt;|"3. Tensor Parallel Forward"| Workers["Ray GPU Actor Workers&lt;br/&gt;(NVLink AllReduce)"]
+    Workers -.-&gt;|"4. SSE Stream"| Tokens["Next Generated Tokens"]
 
-    subgraph MemoryManagement["PagedAttention Memory Subsystem"]
-        Scheduler &lt;--&gt; BlockTable["Logical Block Table (Virtual KV Cache Pages)"]
-        BlockTable &lt;--&gt; PhysMem["Non-Contiguous GPU HBM Memory Blocks (Zero Waste)"]
-    end
-
-    subgraph TensorParallelism["Ray Tensor Parallel (TP) GPU Actor Pool"]
-        subgraph GPU0["Ray Actor Rank 0 (NVIDIA H100)"]
-            ShardedLayer0["Sharded Attention Head Q/K/V 0..N/2"]
-        end
-
-        subgraph GPU1["Ray Actor Rank 1 (NVIDIA H100)"]
-            ShardedLayer1["Sharded Attention Head Q/K/V N/2..N"]
-        end
-
-        GPU0 &lt;--&gt;|"High-Speed NVLink AllGather / ReduceScatter"| GPU1
-    end
-
-    PhysMem --&gt; GPU0
-    PhysMem --&gt; GPU1
-    GPU0 --&gt; StreamEngine["Token Stream Output (SSE / WebSocket)"]
-
-    style ClientRequests fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style MemoryManagement fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style TensorParallelism fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style GPU0 fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style GPU1 fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style StreamEngine fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant C as HTTP Client (SSE Stream)
-    participant S as Continuous Scheduler
-    participant PA as PagedAttention Block Manager
-    participant TP as Ray GPU Tensor Parallel Workers
-
-    Note over C,TP: Iteration-Level Continuous Batching Protocol
-    C-&gt;&gt;S: POST /v1/chat/completions (stream=true)
-    S-&gt;&gt;PA: AllocateLogicalBlocks(prompt_tokens)
-    PA--&gt;&gt;S: Physical Block Pointers Granted
-    loop Token Generation Loop (Per-Step Decoding)
-        S-&gt;&gt;TP: StepInferenceBatch([ReqA, ReqB, ReqC])
-        TP-&gt;&gt;TP: Tensor Parallel Forward Pass (NVLink AllReduce)
-        TP--&gt;&gt;S: Next Token Sampled for each Request
-        S--&gt;&gt;C: Stream Token Chunk ("data: ...\n\n")
-        alt Request Finished
-            S-&gt;&gt;PA: FreeBlocks(Req)
-        end
-    end</code></pre>
-<p>Integrated with Ray, vLLM scales across multiple GPUs using Ray actors as Tensor Parallel workers, dynamically batching arriving requests at the token level (continuous batching) and eliminating KV cache memory fragmentation via PagedAttention.</p>
+    style Prompts fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Sched fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Paged fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Workers fill:#1e1e38,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Tokens fill:#0f172a,stroke:#c084fc,stroke-width:1px,stroke-dasharray: 5 5,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Continuous Iteration-Level Batching</strong>: New prompts enter the generation batch immediately at each token decoding step without waiting for existing generation sequences to finish.
+- <strong>PagedAttention KV Memory Management</strong>: Key-Value cache memory is mapped into non-contiguous physical GPU pages like OS virtual memory, eliminating internal memory fragmentation.
+- <strong>Ray Tensor Parallel Coordination</strong>: Ray actors manage sharded model layers across multi-GPU nodes with high-speed NVLink AllReduce synchronization for ultra-low token latency.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

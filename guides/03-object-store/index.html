@@ -1355,64 +1355,23 @@
 <hr />
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Ray utilizes an in-memory shared object store (<strong>Plasma</strong>) on each cluster node. Objects stored in Plasma are immutable and managed via Apache Arrow shared memory segments (<code>/dev/shm</code>).</p>
-<pre class="mermaid"><code>flowchart TD
-    subgraph NodeHost["Physical Node Architecture (Local Host)"]
-        subgraph Workers["Worker Processes (Core Workers)"]
-            W1["Worker A (Python 3.12)"]
-            W2["Worker B (Python 3.12)"]
-            W3["Worker C (Python 3.12)"]
-        end
+<pre class="mermaid"><code>flowchart LR
+    Worker1["Worker 1&lt;br/&gt;&lt;code&gt;ray.put(numpy_array)&lt;/code&gt;"] --&gt;|"1. Allocate &amp; Seal"| Plasma[("Plasma Shared Memory&lt;br/&gt;(/dev/shm)")]
+    Plasma -.-&gt;|"2. Zero-Copy mmap Read"| Worker2["Worker 2 (Same Node)&lt;br/&gt;&lt;code&gt;ray.get(ref)&lt;/code&gt;"]
+    Plasma -.-&gt;|"2. Zero-Copy mmap Read"| Worker3["Worker 3 (Same Node)&lt;br/&gt;&lt;code&gt;ray.get(ref)&lt;/code&gt;"]
+    Plasma --&gt;|"3. Auto-Spill on Pressure"| Disk[("Local NVMe / S3 Spill")]
 
-        subgraph PlasmaMemory["POSIX Shared Memory Subsystem (/dev/shm)"]
-            PS_Daemon["Plasma Store Daemon (Object Store Engine)"]
-            subgraph ShmBuffers["Immutable Shared Memory Segments"]
-                Buf1["NumPy Tensor Buffer / PyArrow Table (ReadOnly)"]
-            end
-        end
-
-        W1 --&gt;|"1. ray.put() / Object Creation"| PS_Daemon
-        PS_Daemon --&gt;|"Allocate Buffer"| Buf1
-        W1 -.-&gt;|"Zero-Copy mmap Pointer"| Buf1
-        W2 -.-&gt;|"Zero-Copy mmap Pointer"| Buf1
-        W3 -.-&gt;|"Zero-Copy mmap Pointer"| Buf1
-    end
-
-    subgraph Spilling["Object Spilling Subsystem (Under High Memory Pressure)"]
-        PS_Daemon --&gt;|"LRU Eviction Spill"| LocalSSD["Local NVMe Scratch Disk"]
-        PS_Daemon --&gt;|"Distributed Spill"| CloudS3["Cloud Storage (S3 / GCS / Azure Blob)"]
-    end
-
-    subgraph RemoteCluster["Remote Worker Node"]
-        RemoteRaylet["Remote Raylet Node Manager"]
-        RemoteRaylet &lt;--&gt;|"Cross-Node Object Pull (gRPC/TCP)"| PS_Daemon
-    end
-
-    style NodeHost fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style PlasmaMemory fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
-    style Spilling fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style RemoteCluster fill:#1e293b,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style Buf1 fill:#0f172a,stroke:#c084fc,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant W1 as Worker Process 1
-    participant P as Plasma Store (/dev/shm)
-    participant W2 as Worker Process 2 (Same Node)
-    participant R_Node as Remote Worker Node
-
-    Note over W1,P: Step 1: Local Ingestion (ray.put)
-    W1-&gt;&gt;P: Allocate(ObjectID, size=200MB)
-    P--&gt;&gt;W1: Return MMap Memory Buffer Pointer
-    W1-&gt;&gt;P: SealObject(ObjectID) [Object becomes Immutable]
-
-    Note over W2,P: Step 2: Zero-Copy Local Read
-    W2-&gt;&gt;P: Get(ObjectID)
-    P--&gt;&gt;W2: Return Read-Only Shared Pointer
-    Note over W2: Deserialization Cost = 0 ms (Zero-Copy)
-
-    Note over R_Node,P: Step 3: Remote Object Resolution
-    R_Node-&gt;&gt;P: PullObjectRequest(ObjectID)
-    P--&gt;&gt;R_Node: Stream Object Bytes over TCP</code></pre>
-<p>When multiple worker processes on the same physical host read a NumPy array or PyArrow table stored in Plasma, they read directly from the shared memory pointer with <strong>zero deserialization copy overhead</strong>. Under memory pressure, Plasma automatically spills least-recently-used objects to local NVMe or cloud storage.</p>
+    style Worker1 fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Plasma fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style Worker2 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Worker3 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Disk fill:#1e293b,stroke:#f59e0b,stroke-width:1px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Single Ingestion Point</strong>: <code>ray.put()</code> allocates and seals an immutable buffer directly in POSIX shared memory (<code>/dev/shm</code>).
+- <strong>Zero-Copy Shared Memory Access</strong>: Multiple workers on the same physical host map the buffer into their address space, reading Apache Arrow tables or NumPy arrays with 0 MB/s memory duplication overhead.
+- <strong>Automatic Object Spilling</strong>: When memory utilization exceeds configured thresholds, Ray automatically evicts and spills least-recently-used buffers to NVMe scratch disks or object storage without crashing workers.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

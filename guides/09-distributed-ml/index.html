@@ -1322,56 +1322,29 @@
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Building distributed ML frameworks requires coordinating workers across data parallelism architectures: <strong>Parameter Server (PS)</strong> models for centralized gradient aggregation, and <strong>Ring All-Reduce</strong> for decentralized peer-to-peer weight synchronization.</p>
 <pre class="mermaid"><code>flowchart TD
-    subgraph ParameterServerArch["Topology A: Centralized Parameter Server (Actor Model)"]
-        PS["Parameter Server Actor&lt;br/&gt;(Global Master Weights &amp; Optimizer State)"]
+    PS["Parameter Server Actor&lt;br/&gt;&lt;code&gt;self.weights = W_0&lt;/code&gt;"]
+    W0["Worker Actor 0&lt;br/&gt;(Compute Gradient G_0)"]
+    W1["Worker Actor 1&lt;br/&gt;(Compute Gradient G_1)"]
+    W2["Worker Actor 2&lt;br/&gt;(Compute Gradient G_2)"]
 
-        W0["Worker Actor 0&lt;br/&gt;(Data Shard 0)"]
-        W1["Worker Actor 1&lt;br/&gt;(Data Shard 1)"]
-        W2["Worker Actor 2&lt;br/&gt;(Data Shard 2)"]
+    W0 ==&gt;|"1. Push Gradients"| PS
+    W1 ==&gt;|"1. Push Gradients"| PS
+    W2 ==&gt;|"1. Push Gradients"| PS
 
-        W0 ==&gt;|"Push Gradients (gRPC)"| PS
-        W1 ==&gt;|"Push Gradients (gRPC)"| PS
-        W2 ==&gt;|"Push Gradients (gRPC)"| PS
+    PS -.-&gt;|"2. Broadcast Updated Weights"| W0
+    PS -.-&gt;|"2. Broadcast Updated Weights"| W1
+    PS -.-&gt;|"2. Broadcast Updated Weights"| W2
 
-        PS -.-&gt;|"Broadcast Updated Weights"| W0
-        PS -.-&gt;|"Broadcast Updated Weights"| W1
-        PS -.-&gt;|"Broadcast Updated Weights"| W2
-    end
-
-    subgraph RingAllReduceArch["Topology B: Decentralized Ring All-Reduce (NCCL / Ray Collective)"]
-        R0["Rank 0 Worker"] &lt;--&gt;|"Ring Chunk Transfer"| R1["Rank 1 Worker"]
-        R1 &lt;--&gt;|"Ring Chunk Transfer"| R2["Rank 2 Worker"]
-        R2 &lt;--&gt;|"Ring Chunk Transfer"| R0
-    end
-
-    style ParameterServerArch fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style RingAllReduceArch fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
     style PS fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
     style W0 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
     style W1 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
     style W2 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant PS as Parameter Server Actor
-    participant W0 as Worker 0
-    participant W1 as Worker 1
-
-    Note over PS,W1: Distributed SGD Iteration Loop
-    W0-&gt;&gt;PS: get_weights()
-    W1-&gt;&gt;PS: get_weights()
-    PS--&gt;&gt;W0: Return Current Global Weights (W_t)
-    PS--&gt;&gt;W1: Return Current Global Weights (W_t)
-
-    par Parallel Gradient Computation
-        W0-&gt;&gt;W0: Forward/Backward Pass on Shard 0 -&gt; Compute G_0
-        W1-&gt;&gt;W1: Forward/Backward Pass on Shard 1 -&gt; Compute G_1
-    end
-
-    W0-&gt;&gt;PS: apply_gradients(G_0)
-    PS-&gt;&gt;PS: W_{t+1} = W_t - lr * G_0 (Atomic State Mutation)
-    W1-&gt;&gt;PS: apply_gradients(G_1)
-    PS-&gt;&gt;PS: W_{t+2} = W_{t+1} - lr * G_1</code></pre>
-<p>Ray tasks and actors provide the foundational primitives to implement custom distributed optimization routines, asynchronous SGD, and collective communication loops without low-level C++ MPI dependencies.</p>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Centralized Gradient Aggregation</strong>: In a Parameter Server architecture, stateful actor instances maintain the canonical model weights and optimizer states in memory.
+- <strong>Parallel Worker Gradient Computation</strong>: Worker actors compute loss gradients on distinct dataset partitions independently and in parallel.
+- <strong>Atomic Weight Mutation &amp; Broadcasting</strong>: Gradients are sent to the Parameter Server, which applies optimizer updates atomically and broadcasts synchronized model weights to workers for the next training iteration.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

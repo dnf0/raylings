@@ -1322,78 +1322,30 @@
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Training billion-parameter foundation models exceeds the VRAM capacity of any single GPU. <strong>Fully Sharded Data Parallel (FSDP)</strong> and <strong>DeepSpeed ZeRO-3</strong> eliminate memory redundancy by sharding optimizer states, gradients, and model parameters across all distributed ranks.</p>
 <pre class="mermaid"><code>flowchart TD
-    subgraph ModelDecomp["Foundation Model Decomposition (100B+ Parameters)"]
-        FullModel["Full Model Architecture: Parameters (W), Gradients (G), AdamW States (O)"]
+    FullModel["100B+ Model (Weights, Gradients, Optimizer States)"] --&gt;|"1. Shard Memory (ZeRO-3 / FSDP)"| Ranks
+
+    subgraph Ranks["Distributed GPU Ranks (Sharded 25% each)"]
+        R0["Rank 0 (W0, G0, O0)"]
+        R1["Rank 1 (W1, G1, O1)"]
+        R2["Rank 2 (W2, G2, O2)"]
+        R3["Rank 3 (W3, G3, O3)"]
     end
 
-    subgraph ShardedGPUCluster["ZeRO-3 / FSDP Uniform Memory Sharding"]
-        subgraph Rank0["GPU Rank 0 (Worker 0)"]
-            S0_W["Shard 0: Weights W[0] (25%)"]
-            S0_G["Shard 0: Grads G[0] (25%)"]
-            S0_O["Shard 0: Optimizer O[0] (25%)"]
-        end
+    Ranks &lt;--&gt;|"2. Just-In-Time AllGather &amp; ReduceScatter"| Interconnect["High-Speed Interconnect&lt;br/&gt;(NVLink / InfiniBand NCCL)"]
 
-        subgraph Rank1["GPU Rank 1 (Worker 1)"]
-            S1_W["Shard 1: Weights W[1] (25%)"]
-            S1_G["Shard 1: Grads G[1] (25%)"]
-            S1_O["Shard 1: Optimizer O[1] (25%)"]
-        end
-
-        subgraph Rank2["GPU Rank 2 (Worker 2)"]
-            S2_W["Shard 2: Weights W[2] (25%)"]
-            S2_G["Shard 2: Grads G[2] (25%)"]
-            S2_O["Shard 2: Optimizer O[2] (25%)"]
-        end
-
-        subgraph Rank3["GPU Rank 3 (Worker 3)"]
-            S3_W["Shard 3: Weights W[3] (25%)"]
-            S3_G["Shard 3: Grads G[3] (25%)"]
-            S3_O["Shard 3: Optimizer O[3] (25%)"]
-        end
-    end
-
-    subgraph DynamicInterconnect["Just-In-Time Hardware Collectives (NVLink / InfiniBand)"]
-        AllGather["Forward Pass: Layer-by-Layer All-Gather (W Full Reconstructed -&gt; Compute -&gt; Discarded)"]
-        ReduceScatter["Backward Pass: Reduce-Scatter (Gradients Sharded Across Ranks)"]
-    end
-
-    FullModel --&gt; ShardedGPUCluster
-    Rank0 &lt;==&gt; DynamicInterconnect
-    Rank1 &lt;==&gt; DynamicInterconnect
-    Rank2 &lt;==&gt; DynamicInterconnect
-    Rank3 &lt;==&gt; DynamicInterconnect
-
-    style ModelDecomp fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style ShardedGPUCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style DynamicInterconnect fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style Rank0 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
-    style Rank1 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
-    style Rank2 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
-    style Rank3 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant R0 as GPU Rank 0 (Holds W0)
-    participant R1 as GPU Rank 1 (Holds W1)
-    participant NV as NVLink Collective Fabric
-
-    Note over R0,R1: Forward Pass (Layer L): Just-In-Time All-Gather
-    R0-&gt;&gt;NV: Broadcast Local Shard W0
-    R1-&gt;&gt;NV: Broadcast Local Shard W1
-    NV--&gt;&gt;R0: Full Layer Weights [W0 + W1]
-    NV--&gt;&gt;R1: Full Layer Weights [W0 + W1]
-    R0-&gt;&gt;R0: Forward Activation Compute(Layer L)
-    R1-&gt;&gt;R1: Forward Activation Compute(Layer L)
-    Note over R0,R1: Immediate Memory Release (Free non-sharded weights)
-
-    Note over R0,R1: Backward Pass (Layer L): Reduce-Scatter Gradients
-    R0-&gt;&gt;R0: Backward Gradient Compute -&gt; Full Grad G_L
-    R1-&gt;&gt;R1: Backward Gradient Compute -&gt; Full Grad G_L
-    R0-&gt;&gt;NV: ReduceScatter(G_L)
-    R1-&gt;&gt;NV: ReduceScatter(G_L)
-    NV--&gt;&gt;R0: Sharded Gradient G0
-    NV--&gt;&gt;R1: Sharded Gradient G1
-    Note over R0,R1: Optimizer Step: Each rank updates only its local optimizer state &amp; shard</code></pre>
-<p>During forward and backward passes, each layer's weights are gathered just-in-time via high-speed All-Gather operations and immediately released after computation, slashing per-GPU memory consumption by up to $8\times$ while scaling across hundreds of nodes.</p>
+    style FullModel fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Ranks fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style R0 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style R1 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style R2 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style R3 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Interconnect fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Zero Redundancy Memory Sharding</strong>: FSDP and DeepSpeed ZeRO-3 partition model weights, gradients, and optimizer states evenly across all available GPU ranks instead of replicating them.
+- <strong>Just-In-Time Layer All-Gather</strong>: During forward computation, full layer weights are reconstructed dynamically on-the-fly via NCCL All-Gather and discarded immediately after activation calculation.
+- <strong>Reduce-Scatter Gradient Aggregation</strong>: In the backward pass, gradients are computed locally and synchronized using Reduce-Scatter, ensuring each GPU rank only holds and updates its assigned shard of the optimizer state.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

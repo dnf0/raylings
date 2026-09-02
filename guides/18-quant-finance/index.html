@@ -1322,69 +1322,31 @@
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Quantitative finance models—such as multi-asset Monte Carlo path simulations, Value at Risk (VaR) estimations, and high-frequency risk analytics—are embarrassingly parallel and computationally intensive.</p>
 <pre class="mermaid"><code>flowchart TD
-    subgraph MarketDataLayer["Market Ingestion &amp; Portfolio Definition"]
-        Portfolio["Master Portfolio Config&lt;br/&gt;(10,000 Option Positions)"]
-        LiveFeed["Real-Time Market Tick Feed (gRPC)"]
-        RiskMaster["Portfolio Risk Coordinator Actor"]
+    Market["Live Market Feed &amp; Portfolio&lt;br/&gt;(10,000 Options Positions)"] --&gt;|"1. Scatter Tasks"| Manager["Portfolio Risk Manager"]
+    Manager --&gt;|"2. 25M Paths Each"| W0["Worker 0 (25M Paths)"]
+    Manager --&gt;|"2. 25M Paths Each"| W1["Worker 1 (25M Paths)"]
+    Manager --&gt;|"2. 25M Paths Each"| W2["Worker 2 (25M Paths)"]
+    Manager --&gt;|"2. 25M Paths Each"| W3["Worker 3 (25M Paths)"]
+    W0 --&gt;|"3. Binary Reduction"| Reducer["Tree Reducer Reducer"]
+    W1 --&gt;|"3. Binary Reduction"| Reducer
+    W2 --&gt;|"3. Binary Reduction"| Reducer
+    W3 --&gt;|"3. Binary Reduction"| Reducer
+    Reducer --&gt;|"4. Sub-100ms Analytics"| Output["Global Risk &amp; 99% VaR Dashboard"]
 
-        Portfolio --&gt; RiskMaster
-        LiveFeed --&gt; RiskMaster
-    end
-
-    subgraph SimulationCluster["Distributed Monte Carlo Simulation Workers"]
-        subgraph WorkerPool["Parallel Worker Nodes (100,000,000 Price Paths)"]
-            W0["Simulation Worker 0&lt;br/&gt;• 25M Geometric Brownian Paths&lt;br/&gt;• Black-Scholes / Jump Diffusion"]
-            W1["Simulation Worker 1&lt;br/&gt;• 25M Geometric Brownian Paths&lt;br/&gt;• Black-Scholes / Jump Diffusion"]
-            W2["Simulation Worker 2&lt;br/&gt;• 25M Geometric Brownian Paths&lt;br/&gt;• Black-Scholes / Jump Diffusion"]
-            W3["Simulation Worker 3&lt;br/&gt;• 25M Geometric Brownian Paths&lt;br/&gt;• Black-Scholes / Jump Diffusion"]
-        end
-        RiskMaster --&gt;|"Scatter Simulation Tasks"| WorkerPool
-    end
-
-    subgraph ReductionTree["Zero-Copy Tree Aggregation &amp; Analytics"]
-        R01["Tree Reducer 01 (Partial VaR &amp; Greeks)"]
-        R23["Tree Reducer 23 (Partial VaR &amp; Greeks)"]
-        MasterRed["Global Risk Engine&lt;br/&gt;• 95% &amp; 99% Historical VaR&lt;br/&gt;• Expected Shortfall (CVaR)&lt;br/&gt;• Delta / Gamma / Vega Greeks"]
-
-        W0 --&gt; R01
-        W1 --&gt; R01
-        W2 --&gt; R23
-        W3 --&gt; R23
-        R01 --&gt; MasterRed
-        R23 --&gt; MasterRed
-    end
-
-    MasterRed --&gt; RiskDashboard["Executive Risk Dashboard &amp; Trade Alerts"]
-
-    style MarketDataLayer fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style SimulationCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style ReductionTree fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style WorkerPool fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style MasterRed fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style RiskDashboard fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant M as Risk Manager Actor
-    participant W0 as Worker 0 (25M Paths)
-    participant W1 as Worker 1 (25M Paths)
-    participant Red as Tree Reducer Actor
-    participant UI as Risk Analytics UI
-
-    Note over M,UI: Real-Time Market Shock &amp; VaR Computation Protocol
-    M-&gt;&gt;M: Detect Volatility Spike (Sigma = 0.35)
-    par Scatter Simulation Tasks across Ray Cluster
-        M-&gt;&gt;W0: simulate_paths.remote(S0, K, r, sigma, 25M)
-        M-&gt;&gt;W1: simulate_paths.remote(S0, K, r, sigma, 25M)
-    end
-    par Vectorized Path Generation (NumPy / CUDA)
-        W0-&gt;&gt;W0: Vectorized Payoff &amp; Loss Distribution
-        W1-&gt;&gt;W1: Vectorized Payoff &amp; Loss Distribution
-    end
-    W0--&gt;&gt;Red: Return Partial Loss Histogram (ref_w0)
-    W1--&gt;&gt;Red: Return Partial Loss Histogram (ref_w1)
-    Red-&gt;&gt;Red: Compute Percentile(99% VaR, Expected Shortfall)
-    Red--&gt;&gt;UI: Real-Time VaR: $4.2M (Confidence 99%, Elapsed: 84ms)</code></pre>
-<p>Using Ray, millions of asset price paths can be simulated concurrently across cluster CPU and GPU cores, with results aggregated via zero-copy reduction trees in sub-100ms response cycles.</p>
+    style Market fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Manager fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style W0 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style W1 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style W2 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style W3 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Reducer fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Output fill:#0f172a,stroke:#c084fc,stroke-width:2px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Embarrassingly Parallel Monte Carlo</strong>: Simulation tasks evaluate hundreds of millions of asset pricing paths simultaneously across CPU/GPU cluster nodes.
+- <strong>Hierarchical Tree Aggregation</strong>: Individual worker distributions and Greeks are merged through multi-level binary reduction stages in Plasma shared memory, avoiding driver bottlenecking.
+- <strong>Sub-100ms Real-Time VaR</strong>: High-throughput vectorized matrix execution enables near-instantaneous recalculation of Value at Risk (VaR) and Expected Shortfall during live market shocks.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

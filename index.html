@@ -1438,50 +1438,23 @@
 <hr />
 <h2 id="how-the-playground-works">💡 How the Playground Works</h2>
 <p>The Raylings web playground runs entirely on client-side WebAssembly technology:</p>
-<pre class="mermaid"><code>flowchart TD
-    subgraph BrowserClient["Client Browser Environment (100% Offline / Zero-Backend)"]
-        subgraph UI["Interactive User Interface"]
-            Monaco["Monaco Editor&lt;br/&gt;(Full VS Code Intellisense &amp; Syntax)"]
-            Toolbar["Action Toolbar &amp; Chapter Guide Links"]
-            Term["Interactive xterm.js Terminal Output"]
-        end
+<pre class="mermaid"><code>flowchart LR
+    Monaco["Monaco Editor&lt;br/&gt;(User Code)"] --&gt;|"1. postMessage"| Worker["Web Worker&lt;br/&gt;(Pyodide Wasm)"]
+    Worker --&gt;|"2. Simulated Ray Cluster"| Engine["Wasm Ray Engine&lt;br/&gt;(Tasks, Actors, Plasma)"]
+    Engine --&gt;|"3. Verification"| Tester["Harness Validator &amp; Hints"]
+    Tester --&gt;|"4. Stream Output (&lt;5ms)"| Term["xterm.js Terminal Output"]
 
-        subgraph WorkerContext["Dedicated Web Worker Execution Thread"]
-            subgraph PyodideRuntime["Pyodide WebAssembly (Python 3.12 Engine)"]
-                WasmCompat["raylings.wasm_compat&lt;br/&gt;• Pure-Python Task / Actor Engine&lt;br/&gt;• Simulated Plasma Memory Store&lt;br/&gt;• Concurrency &amp; Placement Groups"]
-                TestRunner["Automated Test &amp; Assertion Harness"]
-                HintEngine["Progressive Diagnostic Hint Engine"]
-            end
-        end
-
-        Monaco --&gt;|"1. Dispatch Code Payload"| WorkerContext
-        Toolbar --&gt;|"Run / Reset / Hint Actions"| WorkerContext
-        WasmCompat --&gt; TestRunner
-        TestRunner --&gt; HintEngine
-        WorkerContext ==&gt;|"2. Stream stdout / stderr &amp; Results (&lt;5ms)"| Term
-    end
-
-    style BrowserClient fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style UI fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
-    style WorkerContext fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style PyodideRuntime fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style Monaco fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
-    style Term fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant UI as Monaco Editor / UI
-    participant W as Web Worker (Pyodide Wasm)
-    participant R as Ray Engine (wasm_compat)
-    participant T as Test Runner &amp; Validator
-    participant Term as xterm.js Terminal
-
-    UI-&gt;&gt;W: postMessage({type: 'run', code, exercise})
-    W-&gt;&gt;R: Execute Exercise Script via eval_code_async
-    R-&gt;&gt;R: Instantiate Simulated Ray Tasks / Stateful Actors
-    R--&gt;&gt;T: Yield Task Execution Results &amp; ObjectRefs
-    T-&gt;&gt;T: Evaluate Verification Assertions
-    T--&gt;&gt;W: Test Passed / Diagnostic Failure Details
-    W--&gt;&gt;Term: Stream Formatted ANSI Color Output (&lt;5ms)</code></pre>
+    style Monaco fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Worker fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Engine fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Tester fill:#1e293b,stroke:#f59e0b,stroke-width:1px,color:#f8fafc
+    style Term fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>100% Client-Side WebAssembly</strong>: Python code executes in a dedicated browser Web Worker powered by Pyodide, requiring zero external server backends or API keys.
+- <strong>In-Browser Ray Simulation</strong>: The <code>raylings.wasm_compat</code> runtime accurately emulates <code>@ray.remote</code> tasks, stateful actor mailboxes, and Plasma shared memory locally in your browser.
+- <strong>Sub-5ms Terminal Feedback</strong>: Code execution, assertion evaluations, and contextual diagnostic hints stream directly to the xterm.js terminal with instant interactive feedback.</p>
+</blockquote>
 <ol>
 <li><strong>Instant Execution</strong>: Python code compiles and evaluates inside a background Web Worker running Pyodide v0.26 WebAssembly.</li>
 <li><strong>Local Cluster Simulation</strong>: The pure-Python Ray compatibility engine simulates <code>@ray.remote</code> tasks, stateful actors, Plasma shared memory, and cluster stats directly in your browser.</li>

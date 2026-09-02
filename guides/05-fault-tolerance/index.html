@@ -1355,44 +1355,23 @@
 <hr />
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Ray provides distributed fault tolerance by recording the <strong>lineage graph</strong> (the sequence of function calls and arguments) used to generate every <code>ObjectRef</code>.</p>
-<pre class="mermaid"><code>flowchart TD
-    subgraph LineageDAG["Deterministic Task Lineage DAG"]
-        Raw["raw_data (ObjectRef)"] --&gt; TaskA["task_a.remote(raw_data)"]
-        TaskA --&gt; RefA["ref_a (ObjectID 0x01)"]
-        RefA --&gt; TaskB["task_b.remote(ref_a)"]
-        TaskB --&gt; RefB["ref_b (ObjectID 0x02)"]
-    end
+<pre class="mermaid"><code>flowchart LR
+    TaskA["Upstream Task A&lt;br/&gt;&lt;code&gt;compute.remote()&lt;/code&gt;"] --&gt;|"1. Produces Ref A"| LostRef["Lost ObjectRef A&lt;br/&gt;(Node 1 Crash)"]
+    LostRef --&gt;|"2. Detects Missing Object"| GCS["GCS Lineage Tracker"]
+    GCS --&gt;|"3. Re-execute Lineage"| TaskAReplay["Replayed Task A&lt;br/&gt;(Healthy Node 2)"]
+    TaskAReplay --&gt;|"4. Restored Ref A"| TaskB["Downstream Task B&lt;br/&gt;&lt;code&gt;process.remote(ref_a)&lt;/code&gt;"]
 
-    subgraph FailureDomain["Fault &amp; Failure Domain Detection"]
-        NodeCrash["💥 Worker Node 01 Crashes&lt;br/&gt;(Lost Memory &amp; ref_a)"] -.-&gt; GCS_Detector["GCS Heartbeat Monitor&lt;br/&gt;• Detects Missing Heartbeat&lt;br/&gt;• Triggers Lineage Replay"]
-        GCS_Detector ==&gt;|"Re-schedule Upstream Task"| Replay["task_a Re-executed on Node 02"]
-        Replay ==&gt;|"Re-generates ref_a"| TaskB
-    end
-
-    style LineageDAG fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style FailureDomain fill:#0f172a,stroke:#ef4444,stroke-width:2px,color:#f8fafc
-    style GCS_Detector fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style Replay fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant D as Driver Process
-    participant G as GCS Heartbeat Monitor
-    participant A1 as Actor Worker 1 (Crashing)
-    participant A2 as Actor Worker 2 (Reconstructed)
-
-    Note over D,A1: Normal Execution (max_restarts=3)
-    D-&gt;&gt;A1: Direct gRPC: process(10)
-    A1--&gt;&gt;D: Return Result (10)
-    Note over A1: 💥 Process Crashes (OOM / SIGSEGV)
-    G-&gt;&gt;G: Heartbeat Timeout Detected
-    G-&gt;&gt;D: Notify Actor Unhealthy
-    Note over G,A2: Autonomous Actor Recovery
-    G-&gt;&gt;A2: Spawn Fresh Worker Process (max_restarts remaining: 2)
-    A2-&gt;&gt;A2: Re-execute __init__()
-    A2--&gt;&gt;G: Register New gRPC Endpoint
-    D-&gt;&gt;A2: Replay In-Flight Method Invocations
-    A2--&gt;&gt;D: Return Corrected State Output</code></pre>
-<p>If a worker node crashes and an in-memory object is lost, Ray automatically inspects the lineage graph and re-executes upstream tasks on healthy nodes. For stateful actors configured with <code>max_restarts</code>, GCS spawns a replacement worker process and reroutes subsequent invocations seamlessly.</p>
+    style TaskA fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style LostRef fill:#1e1e38,stroke:#ef4444,stroke-width:2px,color:#f8fafc
+    style GCS fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style TaskAReplay fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style TaskB fill:#1e293b,stroke:#818cf8,stroke-width:2px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Lineage Tracking</strong>: Ray automatically records the deterministic DAG of function calls and object dependencies that generated each <code>ObjectRef</code>.
+- <strong>Autonomous Fault Detection</strong>: If a worker node crashes or an object is lost from Plasma memory, the GCS detects the missing dependency via heartbeats.
+- <strong>Lineage Reconstruction</strong>: Upstream tasks are re-executed on healthy worker nodes without requiring application restarts, seamlessly unblocking downstream consumer tasks.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

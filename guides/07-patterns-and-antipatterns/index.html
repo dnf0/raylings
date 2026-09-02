@@ -1322,54 +1322,36 @@
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>Writing efficient distributed systems in Ray requires recognizing distributed anti-patterns (such as fine-grained task thrashing, nested synchronous calls, and accidental object duplication) and applying proven design patterns (actor pipelines, tree aggregations, and streaming workers).</p>
 <pre class="mermaid"><code>flowchart TD
-    subgraph AntiPattern["❌ Anti-Pattern: Nested Synchronous Blocking &amp; Serialization"]
-        DriverBad["Driver: for x in items:"] --&gt;|"ray.get() in loop"| BadTask["Sequential Task Execution&lt;br/&gt;(Forces 1 CPU utilization, idle cluster)"]
-        WorkerBad["Worker Inside Task:"] --&gt;|"ray.get(subtask.remote())"| Stall["Worker Thread Stalls &amp; Holds Worker Lease Slot (Deadlock Risk)"]
+    subgraph Leaves["Layer 0: Parallel Leaf Workers"]
+        T0["Task 0"]
+        T1["Task 1"]
+        T2["Task 2"]
+        T3["Task 3"]
     end
 
-    subgraph ProductionPattern["✅ Production Pattern: Tree Aggregation &amp; Asynchronous DAG"]
-        subgraph Leaves["Layer 0: Parallel Leaf Workers"]
-            L0["Task 0"]
-            L1["Task 1"]
-            L2["Task 2"]
-            L3["Task 3"]
-        end
-        subgraph Level1["Layer 1: Binary Reducers (Parallel)"]
-            R01["aggregate_pair(Task 0, Task 1)"]
-            R23["aggregate_pair(Task 2, Task 3)"]
-        end
-        subgraph Root["Layer 2: Master Reducer"]
-            RootNode["aggregate_pair(R01, R23)"]
-        end
-
-        L0 --&gt; R01
-        L1 --&gt; R01
-        L2 --&gt; R23
-        L3 --&gt; R23
-        R01 --&gt; RootNode
-        R23 --&gt; RootNode
+    subgraph Intermediate["Layer 1: Binary Reducers"]
+        R01["aggregate_pair(T0, T1)"]
+        R23["aggregate_pair(T2, T3)"]
     end
 
-    style AntiPattern fill:#1e1e2e,stroke:#ef4444,stroke-width:2px,color:#f8fafc
-    style ProductionPattern fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style Leaves fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
-    style Level1 fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
-    style Root fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant D as Driver Process
-    participant W_Leaves as Parallel Leaf Workers (0..3)
-    participant W_L1 as Reducer Layer 1
-    participant W_Root as Master Reducer
+    Final["Master Root Reducer&lt;br/&gt;&lt;code&gt;aggregate_pair(R01, R23)&lt;/code&gt;"]
 
-    Note over D,W_Root: Tree Aggregation Protocol (O(log N) Latency)
-    D-&gt;&gt;W_Leaves: Dispatch Parallel Tasks: [t0, t1, t2, t3]
-    Note over D: Driver passes ObjectRefs directly without calling ray.get()
-    D-&gt;&gt;W_L1: aggregate_pair.remote(ref_t0, ref_t1)
-    D-&gt;&gt;W_L1: aggregate_pair.remote(ref_t2, ref_t3)
-    D-&gt;&gt;W_Root: aggregate_pair.remote(ref_L1_a, ref_L1_b)
-    W_Root--&gt;&gt;D: Final Summary ObjectRef (Single ray.get at termination)</code></pre>
-<p>The <strong>Tree Aggregation Pattern</strong> reduces communication complexity from $O(N)$ on the driver node to $O(\log N)$ across parallel workers, preventing driver network serialization and worker lease starvation bottlenecks. Passing <code>ObjectRef</code> references directly between downstream tasks ensures Ray's engine resolves arguments at worker locality without shipping intermediate tensors back through the driver.</p>
+    T0 --&gt; R01
+    T1 --&gt; R01
+    T2 --&gt; R23
+    T3 --&gt; R23
+    R01 --&gt; Final
+    R23 --&gt; Final
+
+    style Leaves fill:#0f172a,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
+    style Intermediate fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style Final fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Logarithmic Complexity $O(\log N)$</strong>: Tree aggregation organizes reduction operations into hierarchical binary pairs, reducing overall aggregation time from linear $O(N)$ to logarithmic $O(\log N)$.
+- <strong>Driver Bottleneck Prevention</strong>: Intermediate results are aggregated directly between worker nodes in Plasma shared memory rather than streaming all intermediate payloads back to the single driver process.
+- <strong>Direct ObjectRef Composition</strong>: Upstream <code>ObjectRef</code> handles are passed as arguments directly to downstream remote functions without invoking blocking <code>ray.get()</code> calls.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>

@@ -1356,71 +1356,23 @@
 <h2 id="1-architectural-overview-control-plane-mechanics">1. Architectural Overview &amp; Control Plane Mechanics</h2>
 <p>A Ray cluster consists of a single <strong>Head Node</strong> and zero or more <strong>Worker Nodes</strong>. Every node runs a local <code>raylet</code> daemon composed of a local scheduler and a Plasma object store.</p>
 <pre class="mermaid"><code>flowchart TD
-    subgraph HeadNode["Ray Head Node (Control Plane)"]
-        GCS["Global Control Store (GCS Server)&lt;br/&gt;• Node Membership Table&lt;br/&gt;• Actor Registration Table&lt;br/&gt;• Placement Group Registry&lt;br/&gt;• Object Location Directory"]
-        Dashboard["Ray Dashboard &amp; Observability Server (Port 8265)"]
-        Autoscaler["Cluster Autoscaler Daemon"]
-        HeadRaylet["Head Node Raylet &amp; Plasma Store"]
+    Head["Head Node&lt;br/&gt;(GCS + Dashboard + Autoscaler)"] &lt;--&gt;|"gRPC Heartbeats &amp; Metadata"| Raylet1["Worker Node 1 Raylet&lt;br/&gt;(Local Scheduler + Plasma)"]
+    Head &lt;--&gt;|"gRPC Heartbeats &amp; Metadata"| Raylet2["Worker Node 2 Raylet&lt;br/&gt;(Local Scheduler + Plasma)"]
+    Raylet1 --&gt;|"Assigns Task"| Workers1["Python Worker Processes"]
+    Raylet2 --&gt;|"Assigns Task"| Workers2["GPU Worker Processes"]
+    Raylet1 &lt;--&gt;|"Inter-Node Object Transfer (TCP)"| Raylet2
 
-        GCS &lt;--&gt; Dashboard
-        GCS &lt;--&gt; Autoscaler
-    end
-
-    subgraph WorkerNode1["Worker Node 01 (Compute)"]
-        subgraph RL1["Raylet Daemon 01"]
-            Sched1["Local Scheduler"]
-            NM1["Node Manager"]
-        end
-        PS1["Plasma Object Store (/dev/shm)"]
-        WPool1["Core Worker Pool (Python 3.12 Processes)"]
-
-        RL1 &lt;--&gt; PS1
-        RL1 --&gt; WPool1
-    end
-
-    subgraph WorkerNode2["Worker Node 02 (GPU / Accelerators)"]
-        subgraph RL2["Raylet Daemon 02"]
-            Sched2["Local Scheduler"]
-            NM2["Node Manager"]
-        end
-        PS2["Plasma Object Store (/dev/shm)"]
-        WPool2["GPU Worker Pool (PyTorch CUDA Processes)"]
-
-        RL2 &lt;--&gt; PS2
-        RL2 --&gt; WPool2
-    end
-
-    GCS &lt;--&gt;|"gRPC Heartbeats &amp; Membership"| RL1
-    GCS &lt;--&gt;|"gRPC Heartbeats &amp; Membership"| RL2
-    PS1 &lt;--&gt;|"Zero-Copy Inter-Node Object Transfer (TCP)"| PS2
-
-    style HeadNode fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style WorkerNode1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style WorkerNode2 fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style GCS fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style PS1 fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
-    style PS2 fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc</code></pre>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    participant WN as New Worker Node (Raylet)
-    participant GCS as Global Control Store (Head Node)
-    participant D as Driver Process
-    participant DB as Ray Dashboard
-
-    Note over WN,GCS: Node Join Protocol
-    WN-&gt;&gt;GCS: RegisterNode(NodeIP, TotalCPUs, TotalGPUs, MemoryBytes)
-    GCS-&gt;&gt;GCS: Append to Cluster Membership Table
-    GCS--&gt;&gt;WN: RegistrationAck(ClusterID, GCSHeartbeatInterval)
-
-    loop Periodic Node Health &amp; Resource Broadcast
-        WN-&gt;&gt;GCS: Heartbeat(AvailableCPUs, PlasmaMemoryUsage, AliveWorkers)
-        GCS-&gt;&gt;DB: Stream Real-Time Cluster Telemetry
-    end
-
-    Note over D,GCS: State Inspection (ray.util.state)
-    D-&gt;&gt;GCS: list_nodes() / list_actors()
-    GCS--&gt;&gt;D: Return Cluster Topology Snapshot</code></pre>
-<p>The <strong>Global Control Store (GCS)</strong> manages cluster-wide metadata (actor registration, node membership, placement group tables, and object locations), ensuring decentralized task dispatch while maintaining centralized consensus.</p>
+    style Head fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Raylet1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Raylet2 fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Workers1 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Workers2 fill:#1e1e38,stroke:#c084fc,stroke-width:1px,color:#f8fafc</code></pre>
+<blockquote>
+<p><strong>Diagram Walkthrough &amp; Core Concepts:</strong>
+- <strong>Decoupled Control Plane</strong>: The Head Node hosts the Global Control Store (GCS) and cluster services, maintaining the actor registry, placement groups, and node membership without acting as a bottleneck for task execution.
+- <strong>Autonomous Local Schedulers</strong>: Each Worker Node runs a local <code>Raylet</code> daemon that schedules tasks directly onto local Python worker processes whenever resources are available.
+- <strong>Direct Peer-to-Peer Data Transfer</strong>: When a worker needs an object created on another node, the local Raylets stream the bytes directly over high-speed TCP/IP without routing through the Head Node.</p>
+</blockquote>
 <hr />
 <h2 id="2-annotated-python-code-anatomy-api-reference">2. Annotated Python Code Anatomy &amp; API Reference</h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ray</span>
