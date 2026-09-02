@@ -51,10 +51,10 @@ flowchart TD
         WG --> Rank2
         WG --> Rank3
 
-        GPU_0 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_1
-        GPU_1 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_2
-        GPU_2 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_3
-        GPU_3 <==|"High-Speed NCCL AllReduce Gradient Ring"| GPU_0
+        GPU_0 <-->|"High-Speed NCCL AllReduce Gradient Ring"| GPU_1
+        GPU_1 <-->|"High-Speed NCCL AllReduce Gradient Ring"| GPU_2
+        GPU_2 <-->|"High-Speed NCCL AllReduce Gradient Ring"| GPU_3
+        GPU_3 <-->|"High-Speed NCCL AllReduce Gradient Ring"| GPU_0
     end
 
     style ControlPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc

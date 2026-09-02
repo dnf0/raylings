@@ -42,7 +42,7 @@ flowchart TD
     Operator --> CustomResources
     CR_Cluster --> HeadPod
     CR_Cluster --> WorkerGroups
-    HeadPod <==|"Cluster Autoscaler Scale Requests"| Operator
+    HeadPod <-->|"Cluster Autoscaler Scale Requests"| Operator
 
     style K8sControlPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
     style CustomResources fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc

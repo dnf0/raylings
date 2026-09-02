@@ -36,7 +36,7 @@ flowchart TD
             ShardedLayer1["Sharded Attention Head Q/K/V N/2..N"]
         end
 
-        GPU0 <==|"High-Speed NVLink AllGather / ReduceScatter"| GPU1
+        GPU0 <-->|"High-Speed NVLink AllGather / ReduceScatter"| GPU1
     end
 
     PhysMem --> GPU0

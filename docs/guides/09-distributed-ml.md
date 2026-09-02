@@ -33,9 +33,9 @@ flowchart TD
     end
 
     subgraph RingAllReduceArch["Topology B: Decentralized Ring All-Reduce (NCCL / Ray Collective)"]
-        R0["Rank 0 Worker"] <==|"Ring Chunk Transfer"| R1["Rank 1 Worker"]
-        R1 <==|"Ring Chunk Transfer"| R2["Rank 2 Worker"]
-        R2 <==|"Ring Chunk Transfer"| R0
+        R0["Rank 0 Worker"] <-->|"Ring Chunk Transfer"| R1["Rank 1 Worker"]
+        R1 <-->|"Ring Chunk Transfer"| R2["Rank 2 Worker"]
+        R2 <-->|"Ring Chunk Transfer"| R0
     end
 
     style ParameterServerArch fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc

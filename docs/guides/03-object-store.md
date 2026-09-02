@@ -44,7 +44,7 @@ flowchart TD
 
     subgraph RemoteCluster["Remote Worker Node"]
         RemoteRaylet["Remote Raylet Node Manager"]
-        RemoteRaylet <==|"Cross-Node Object Pull (gRPC/TCP)"| PS_Daemon
+        RemoteRaylet <-->|"Cross-Node Object Pull (gRPC/TCP)"| PS_Daemon
     end
 
     style NodeHost fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc

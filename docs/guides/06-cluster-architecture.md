@@ -50,9 +50,9 @@ flowchart TD
         RL2 --> WPool2
     end
 
-    GCS <==|"gRPC Heartbeats & Membership"| RL1
-    GCS <==|"gRPC Heartbeats & Membership"| RL2
-    PS1 <==|"Zero-Copy Inter-Node Object Transfer (TCP)"| PS2
+    GCS <-->|"gRPC Heartbeats & Membership"| RL1
+    GCS <-->|"gRPC Heartbeats & Membership"| RL2
+    PS1 <-->|"Zero-Copy Inter-Node Object Transfer (TCP)"| PS2
 
     style HeadNode fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
     style WorkerNode1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
