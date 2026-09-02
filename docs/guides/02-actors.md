@@ -14,19 +14,59 @@
 
 Unlike stateless remote tasks, **Actors** are stateful worker processes instantiated via `@ray.remote` class declarations. Each actor runs in a dedicated worker process, maintaining its internal state between method invocations.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                              Caller / Driver                           │
-│                                                                        │
-│   actor = Counter.remote() ──────────► [ Dedicated Actor Worker ]      │
-│   actor.increment.remote(1)                 │                          │
-│   actor.get_val.remote()    ───────────────►│  • Maintains self.value  │
-│                                             │  • FIFO Message Queue    │
-│                                             │  • Concurrency Groups    │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph CallerProcess["Caller / Driver Process"]
+        A_Inst["actor = Counter.remote()"] -->|"1. Request Actor Creation"| GCS["GCS / Raylet Scheduler"]
+        A_Call1["actor.increment.remote(1)"] -->|"3. Direct gRPC Call"| A_Mailbox["Inbound FIFO Task Mailbox"]
+        A_Call2["actor.get_val.remote()"] -->|"3. Direct gRPC Call"| A_Mailbox
+    end
+
+    subgraph DedicatedActor["Dedicated Actor Process (Worker)"]
+        A_Mailbox --> A_Loop["Execution Engine<br/>(Sync FIFO or AsyncIO Event Loop)"]
+        A_Loop <-->|"Read / Mutate"| A_State[("Actor In-Memory State<br/>• self.counters<br/>• self.model_weights<br/>• Concurrency Groups")]
+        A_Loop -->|"Write ObjectRef"| A_Plasma["Local Plasma Object Store"]
+    end
+
+    subgraph GlobalPlane["Global Control Store (GCS)"]
+        GCS -->|"2. Spawn & Register Actor Table"| DedicatedActor
+    end
+
+    style CallerProcess fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style DedicatedActor fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style GlobalPlane fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style A_State fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style A_Plasma fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
 ```
 
-Method calls to an actor are serialized in a FIFO mailbox by default, guaranteeing race-free updates to the actor's internal variables without explicit thread locking.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Driver Process
+    participant G as GCS / Raylet
+    participant A as Actor Worker Process
+    participant P as Plasma Store
+
+    Note over D,A: Phase 1: Actor Instantiation
+    D->>G: CreateActor(Counter, num_cpus=1)
+    G->>A: Fork & Spawn Dedicated Worker Process
+    A->>A: Execute __init__() & Initialize In-Memory State
+    A-->>G: Register Actor Ready (gRPC Endpoint)
+    G-->>D: Return ActorHandle (Direct Endpoint)
+
+    Note over D,A: Phase 2: Direct Method Invocations
+    D->>A: Direct gRPC: increment.remote(1)
+    Note over A: Enqueued in FIFO Mailbox
+    D->>A: Direct gRPC: get_val.remote()
+    Note over A: Enqueued in FIFO Mailbox
+    A->>A: Execute increment(1) -> Mutate state
+    A->>P: PutObject(ref1, 1)
+    A->>A: Execute get_val() -> Read state
+    A->>P: PutObject(ref2, 1)
+    P-->>D: Resolve ObjectRef via Zero-Copy / IPC
+```
+
+Method calls to an actor bypass the centralized scheduler and are dispatched directly to the actor's worker process over gRPC. Invocations are serialized in a FIFO mailbox by default, guaranteeing race-free updates to the actor's internal variables without explicit thread locking. For high concurrency, actors can configure `max_concurrency` or separate `concurrency_groups`.
 
 ---
 

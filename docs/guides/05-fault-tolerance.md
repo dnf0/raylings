@@ -14,18 +14,50 @@
 
 Ray provides distributed fault tolerance by recording the **lineage graph** (the sequence of function calls and arguments) used to generate every `ObjectRef`.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Lineage Recovery Graph                          │
-│                                                                        │
-│   [ raw_data ] ──► task_a() ──► [ ref_a ] ──► task_b() ──► [ ref_b ]  │
-│                                                   ▲                    │
-│                                                   │ Node A Dies        │
-│                                    (Auto-Recomputed from Lineage)      │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph LineageDAG["Deterministic Task Lineage DAG"]
+        Raw["raw_data (ObjectRef)"] --> TaskA["task_a.remote(raw_data)"]
+        TaskA --> RefA["ref_a (ObjectID 0x01)"]
+        RefA --> TaskB["task_b.remote(ref_a)"]
+        TaskB --> RefB["ref_b (ObjectID 0x02)"]
+    end
+
+    subgraph FailureDomain["Fault & Failure Domain Detection"]
+        NodeCrash["💥 Worker Node 01 Crashes<br/>(Lost Memory & ref_a)"] -.-> GCS_Detector["GCS Heartbeat Monitor<br/>• Detects Missing Heartbeat<br/>• Triggers Lineage Replay"]
+        GCS_Detector ==>|"Re-schedule Upstream Task"| Replay["task_a Re-executed on Node 02"]
+        Replay ==>|"Re-generates ref_a"| TaskB
+    end
+
+    style LineageDAG fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style FailureDomain fill:#0f172a,stroke:#ef4444,stroke-width:2px,color:#f8fafc
+    style GCS_Detector fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Replay fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
 ```
 
-If a worker node crashes and an in-memory object is lost, Ray automatically re-executes upstream tasks to reconstruct the lost data without requiring driver intervention.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Driver Process
+    participant G as GCS Heartbeat Monitor
+    participant A1 as Actor Worker 1 (Crashing)
+    participant A2 as Actor Worker 2 (Reconstructed)
+
+    Note over D,A1: Normal Execution (max_restarts=3)
+    D->>A1: Direct gRPC: process(10)
+    A1-->>D: Return Result (10)
+    Note over A1: 💥 Process Crashes (OOM / SIGSEGV)
+    G->>G: Heartbeat Timeout Detected
+    G->>D: Notify Actor Unhealthy
+    Note over G,A2: Autonomous Actor Recovery
+    G->>A2: Spawn Fresh Worker Process (max_restarts remaining: 2)
+    A2->>A2: Re-execute __init__()
+    A2-->>G: Register New gRPC Endpoint
+    D->>A2: Replay In-Flight Method Invocations
+    A2-->>D: Return Corrected State Output
+```
+
+If a worker node crashes and an in-memory object is lost, Ray automatically inspects the lineage graph and re-executes upstream tasks on healthy nodes. For stateful actors configured with `max_restarts`, GCS spawns a replacement worker process and reroutes subsequent invocations seamlessly.
 
 ---
 

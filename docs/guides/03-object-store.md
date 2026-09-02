@@ -14,24 +14,70 @@
 
 Ray utilizes an in-memory shared object store (**Plasma**) on each cluster node. Objects stored in Plasma are immutable and managed via Apache Arrow shared memory segments (`/dev/shm`).
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                              Node Host Memory                          │
-│                                                                        │
-│   Worker Process A                      Worker Process B               │
-│   ┌────────────────────┐                ┌────────────────────┐         │
-│   │  Read-Only Pointer │                │  Read-Only Pointer │         │
-│   └─────────┬──────────┘                └─────────┬──────────┘         │
-│             │ Zero-Copy Shared Memory Pointer     │                    │
-│             ▼                                     ▼                    │
-│   ┌──────────────────────────────────────────────────────────┐         │
-│   │            Plasma Shared Memory Store (/dev/shm)         │         │
-│   │            [ Immutable NumPy / PyArrow Tensor Buffer ]   │         │
-│   └──────────────────────────────────────────────────────────┘         │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph NodeHost["Physical Node Architecture (Local Host)"]
+        subgraph Workers["Worker Processes (Core Workers)"]
+            W1["Worker A (Python 3.12)"]
+            W2["Worker B (Python 3.12)"]
+            W3["Worker C (Python 3.12)"]
+        end
+
+        subgraph PlasmaMemory["POSIX Shared Memory Subsystem (/dev/shm)"]
+            PS_Daemon["Plasma Store Daemon (Object Store Engine)"]
+            subgraph ShmBuffers["Immutable Shared Memory Segments"]
+                Buf1["NumPy Tensor Buffer / PyArrow Table (ReadOnly)"]
+            end
+        end
+
+        W1 -->|"1. ray.put() / Object Creation"| PS_Daemon
+        PS_Daemon -->|"Allocate Buffer"| Buf1
+        W1 -.->|"Zero-Copy mmap Pointer"| Buf1
+        W2 -.->|"Zero-Copy mmap Pointer"| Buf1
+        W3 -.->|"Zero-Copy mmap Pointer"| Buf1
+    end
+
+    subgraph Spilling["Object Spilling Subsystem (Under High Memory Pressure)"]
+        PS_Daemon -->|"LRU Eviction Spill"| LocalSSD["Local NVMe Scratch Disk"]
+        PS_Daemon -->|"Distributed Spill"| CloudS3["Cloud Storage (S3 / GCS / Azure Blob)"]
+    end
+
+    subgraph RemoteCluster["Remote Worker Node"]
+        RemoteRaylet["Remote Raylet Node Manager"]
+        RemoteRaylet <==|"Cross-Node Object Pull (gRPC/TCP)"| PS_Daemon
+    end
+
+    style NodeHost fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style PlasmaMemory fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style Spilling fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style RemoteCluster fill:#1e293b,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Buf1 fill:#0f172a,stroke:#c084fc,stroke-width:2px,color:#f8fafc
 ```
 
-When multiple worker processes on the same physical host read a NumPy array or PyArrow table stored in Plasma, they read directly from the shared memory pointer with **zero deserialization copy overhead**.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant W1 as Worker Process 1
+    participant P as Plasma Store (/dev/shm)
+    participant W2 as Worker Process 2 (Same Node)
+    participant R_Node as Remote Worker Node
+
+    Note over W1,P: Step 1: Local Ingestion (ray.put)
+    W1->>P: Allocate(ObjectID, size=200MB)
+    P-->>W1: Return MMap Memory Buffer Pointer
+    W1->>P: SealObject(ObjectID) [Object becomes Immutable]
+
+    Note over W2,P: Step 2: Zero-Copy Local Read
+    W2->>P: Get(ObjectID)
+    P-->>W2: Return Read-Only Shared Pointer
+    Note over W2: Deserialization Cost = 0 ms (Zero-Copy)
+
+    Note over R_Node,P: Step 3: Remote Object Resolution
+    R_Node->>P: PullObjectRequest(ObjectID)
+    P-->>R_Node: Stream Object Bytes over TCP
+```
+
+When multiple worker processes on the same physical host read a NumPy array or PyArrow table stored in Plasma, they read directly from the shared memory pointer with **zero deserialization copy overhead**. Under memory pressure, Plasma automatically spills least-recently-used objects to local NVMe or cloud storage.
 
 ---
 

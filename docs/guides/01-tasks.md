@@ -14,23 +14,55 @@
 
 In Ray, **Tasks** represent stateless, asynchronous functions executed across worker processes. When a task is invoked using `.remote()`, Ray immediately returns an `ObjectRef` (a future) without blocking the calling thread.
 
-```text
-┌─────────────────────────────────────────────────────────────────────────┐
-│                              Driver Process                             │
-│                                                                         │
-│   ref = compute.remote(42)  ─────────► [ Returns ObjectRef immediately ] │
-│            │                                       │                    │
-└────────────┼───────────────────────────────────────┼────────────────────┘
-             │ Task Specification                    │ ray.get(ref)
-             ▼                                       ▼
-┌───────────────────────────┐             ┌───────────────────────────────┐
-│     Ray Core Scheduler    │             │   Local Worker / Plasma Store │
-│  • Assigns task to worker ├────────────►│  • Executes compute(42)       │
-│  • Manages resource grants│             │  • Writes result to ObjectRef │
-└───────────────────────────┘             └───────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph DriverProcess["Driver Process (Main Program)"]
+        D1["compute.remote(42)"] -->|"1. Request Worker Lease"| RL["Local Raylet (Node Manager)"]
+        D1 -.->|"Immediate Future Return"| ORef["ObjectRef [Future]"]
+        D2["ray.get(ObjectRef)"] -->|"5. Resolve Object Value"| PS["Plasma Object Store (/dev/shm)"]
+    end
+
+    subgraph NodeArchitecture["Worker Node Architecture"]
+        RL -->|"2. Grant Leased Worker Address"| DriverProcess
+        DriverProcess ==>|"3. Direct gRPC: ExecuteTask(args)"| CW["Core Worker Process (Python 3.12)"]
+        CW -->|"4. Zero-Copy Store: PutObject(result)"| PS
+    end
+
+    subgraph GlobalControl["Global Control Store (GCS)"]
+        RL -.->|"Heartbeat & Resource Grant"| GCS["GCS Metadata & Node Registry"]
+    end
+
+    style DriverProcess fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style NodeArchitecture fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style GlobalControl fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style PS fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style CW fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
 ```
 
-The Ray core scheduler receives the task specification from the driver, determines worker availability based on CPU/resource requests, dispatches the function arguments, and places the computed return value into the distributed object store.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Driver Process
+    participant R as Raylet (Scheduler)
+    participant W as Core Worker
+    participant P as Plasma Shared Memory
+
+    Note over D,P: Task Invocation Lifecycle (ray.remote)
+    D->>R: RequestWorkerLease(TaskSpec, num_cpus=1)
+    R->>R: Verify Resource Availability
+    R-->>D: GrantWorkerLease(WorkerID, gRPC Port)
+    D->>W: Direct gRPC: ExecuteTask(compute, 42)
+    Note over D: Driver continues execution immediately (ObjectRef returned)
+    W->>W: Execute Python Function: compute(42)
+    W->>P: PutObject(ObjectID, Result Bytes)
+    W-->>D: TaskComplete(ObjectID)
+    opt When ray.get() is called
+        D->>P: Zero-Copy Shared Memory Map (ObjectID)
+        P-->>D: Deserialized Object (Zero-Copy Pointer)
+    end
+```
+
+The Ray core scheduler decouples task submission from execution: the driver acquires a worker lease from the local Raylet, initiates execution via direct worker-to-worker gRPC, and resolves return values asynchronously through the local Plasma zero-copy shared memory store.
 
 ---
 

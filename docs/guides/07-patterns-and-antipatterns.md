@@ -14,19 +14,61 @@
 
 Writing efficient distributed systems in Ray requires recognizing distributed anti-patterns (such as fine-grained task thrashing, nested synchronous calls, and accidental object duplication) and applying proven design patterns (actor pipelines, tree aggregations, and streaming workers).
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Tree Aggregation Pattern                        │
-│                                                                        │
-│   Leaves:  [Task 0] [Task 1] [Task 2] [Task 3] [Task 4] [Task 5] ...   │
-│                \      /          \      /          \      /            │
-│   Layer 1:     [Reduce 0]        [Reduce 1]        [Reduce 2]          │
-│                     \                /                 /               │
-│   Final:                    [ Master Reduce ]                          │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph AntiPattern["❌ Anti-Pattern: Nested Synchronous Blocking & Serialization"]
+        DriverBad["Driver: for x in items:"] -->|"ray.get() in loop"| BadTask["Sequential Task Execution<br/>(Forces 1 CPU utilization, idle cluster)"]
+        WorkerBad["Worker Inside Task:"] -->|"ray.get(subtask.remote())"| Stall["Worker Thread Stalls & Holds Worker Lease Slot (Deadlock Risk)"]
+    end
+
+    subgraph ProductionPattern["✅ Production Pattern: Tree Aggregation & Asynchronous DAG"]
+        subgraph Leaves["Layer 0: Parallel Leaf Workers"]
+            L0["Task 0"]
+            L1["Task 1"]
+            L2["Task 2"]
+            L3["Task 3"]
+        end
+        subgraph Level1["Layer 1: Binary Reducers (Parallel)"]
+            R01["aggregate_pair(Task 0, Task 1)"]
+            R23["aggregate_pair(Task 2, Task 3)"]
+        end
+        subgraph Root["Layer 2: Master Reducer"]
+            RootNode["aggregate_pair(R01, R23)"]
+        end
+
+        L0 --> R01
+        L1 --> R01
+        L2 --> R23
+        L3 --> R23
+        R01 --> RootNode
+        R23 --> RootNode
+    end
+
+    style AntiPattern fill:#1e1e2e,stroke:#ef4444,stroke-width:2px,color:#f8fafc
+    style ProductionPattern fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Leaves fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
+    style Level1 fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style Root fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
 ```
 
-The **Tree Aggregation Pattern** reduces communication complexity from O(N) on the driver node to O(log N) across parallel workers, preventing driver network and memory bottlenecks.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Driver Process
+    participant W_Leaves as Parallel Leaf Workers (0..3)
+    participant W_L1 as Reducer Layer 1
+    participant W_Root as Master Reducer
+
+    Note over D,W_Root: Tree Aggregation Protocol (O(log N) Latency)
+    D->>W_Leaves: Dispatch Parallel Tasks: [t0, t1, t2, t3]
+    Note over D: Driver passes ObjectRefs directly without calling ray.get()
+    D->>W_L1: aggregate_pair.remote(ref_t0, ref_t1)
+    D->>W_L1: aggregate_pair.remote(ref_t2, ref_t3)
+    D->>W_Root: aggregate_pair.remote(ref_L1_a, ref_L1_b)
+    W_Root-->>D: Final Summary ObjectRef (Single ray.get at termination)
+```
+
+The **Tree Aggregation Pattern** reduces communication complexity from $O(N)$ on the driver node to $O(\log N)$ across parallel workers, preventing driver network serialization and worker lease starvation bottlenecks. Passing `ObjectRef` references directly between downstream tasks ensures Ray's engine resolves arguments at worker locality without shipping intermediate tensors back through the driver.
 
 ---
 

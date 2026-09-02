@@ -14,22 +14,60 @@
 
 Ray's distributed scheduler uses logical resource requirements (`num_cpus`, `num_gpus`, `resources={"custom_accelerator": 1}`) to match tasks and actors to available node capacity across the cluster.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                          Placement Group Engine                        │
-│                                                                        │
-│   Bundles: [{"CPU": 2, "GPU": 1}, {"CPU": 2, "GPU": 1}]               │
-│   Strategy: STRICT_SPREAD / STRICT_PACK / PACK / SPREAD                │
-│                                                                        │
-│   ┌───────────────────────────┐         ┌───────────────────────────┐  │
-│   │        Node A (GPU)       │         │        Node B (GPU)       │  │
-│   │  [ Bundle 0 Allocated ]   │         │  [ Bundle 1 Allocated ]   │  │
-│   │  • Actor Worker 0         │         │  • Actor Worker 1         │  │
-│   └───────────────────────────┘         └───────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph ClientReq["Driver / Scheduling Request"]
+        PG_Req["placement_group(bundles, strategy='STRICT_SPREAD')"] -->|"1. Submit Reservation"| GCS_Scheduler["GCS Centralized Resource Manager"]
+        Task_Req["task.options(num_cpus=2, num_gpus=1).remote()"] -->|"Direct Task Request"| LocalRaylet["Local Raylet Scheduler"]
+    end
+
+    subgraph TwoTierScheduling["Two-Tier Scheduling Plane"]
+        LocalRaylet -->|"Local Resources Available"| LocalWorker["Local Worker Execution"]
+        LocalRaylet -->|"Resource Spillover / Global Scheduling"| GCS_Scheduler
+    end
+
+    subgraph ClusterTopology["Cluster Nodes & Placement Strategies"]
+        subgraph NodeA["Host Node 01 (GPU Cluster)"]
+            B0["Bundle 0: {CPU: 2, GPU: 1}<br/>• Worker Actor Rank 0"]
+        end
+
+        subgraph NodeB["Host Node 02 (GPU Cluster)"]
+            B1["Bundle 1: {CPU: 2, GPU: 1}<br/>• Worker Actor Rank 1"]
+        end
+
+        GCS_Scheduler -->|"Atomic Gang Reservation"| NodeA
+        GCS_Scheduler -->|"Atomic Gang Reservation"| NodeB
+    end
+
+    style ClientReq fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style TwoTierScheduling fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style ClusterTopology fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style NodeA fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style NodeB fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
 ```
 
-**Placement Groups** provide atomic, gang-scheduled resource reservations across nodes, enabling co-location (STRICT_PACK) for low-latency communication or anti-affinity distribution (STRICT_SPREAD) for high availability.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Driver Process
+    participant GCS as GCS Resource Manager
+    participant N1 as Node 1 Raylet
+    participant N2 as Node 2 Raylet
+
+    Note over D,GCS: Phase 1: Gang Reservation
+    D->>GCS: CreatePlacementGroup(bundles=[B0, B1], strategy="STRICT_SPREAD")
+    GCS->>N1: LockResources(B0: 2 CPU, 1 GPU)
+    GCS->>N2: LockResources(B1: 2 CPU, 1 GPU)
+    N1-->>GCS: ResourceLockGranted
+    N2-->>GCS: ResourceLockGranted
+    GCS-->>D: PlacementGroupReady (Ready Future Resolved)
+
+    Note over D,N2: Phase 2: Targeted Bundle Scheduling
+    D->>N1: SpawnActor(Worker0, Bundle=0)
+    D->>N2: SpawnActor(Worker1, Bundle=1)
+```
+
+**Placement Groups** provide atomic, gang-scheduled resource reservations across nodes, enabling co-location (`STRICT_PACK`) for low-latency NVLink communication or anti-affinity distribution (`STRICT_SPREAD`) for high availability and fault isolation. Ray's two-tier scheduling dispatches tasks locally when resources allow, escalating to GCS only when cross-node resolution or placement group constraints are required.
 
 ---
 

@@ -14,24 +14,75 @@
 
 A Ray cluster consists of a single **Head Node** and zero or more **Worker Nodes**. Every node runs a local `raylet` daemon composed of a local scheduler and a Plasma object store.
 
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                               Head Node                                │
-│  ┌───────────────────────────┐         ┌─────────────────────────────┐ │
-│  │  Global Control Store GCS │         │  Autoscaler & Dashboard     │ │
-│  │  • Actor & Task Metadata  │         │  • Dynamic Node Scaling     │ │
-│  │  • Object Directory       │         │  • Cluster Telemetry        │ │
-│  └─────────────┬─────────────┘         └─────────────────────────────┘ │
-└────────────────┼───────────────────────────────────────────────────────┘
-                 │ Heartbeats & Distributed State
-                 ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                              Worker Nodes                              │
-│  ┌───────────────────────────────┐     ┌─────────────────────────────┐ │
-│  │    raylet (Local Scheduler)   │     │  Plasma Object Store (SHM)  │ │
-│  │    • Dispatches worker procs  │     │  • Shared Arrow Buffers     │ │
-│  └───────────────────────────────┘     └─────────────────────────────┘ │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph HeadNode["Ray Head Node (Control Plane)"]
+        GCS["Global Control Store (GCS Server)<br/>• Node Membership Table<br/>• Actor Registration Table<br/>• Placement Group Registry<br/>• Object Location Directory"]
+        Dashboard["Ray Dashboard & Observability Server (Port 8265)"]
+        Autoscaler["Cluster Autoscaler Daemon"]
+        HeadRaylet["Head Node Raylet & Plasma Store"]
+        
+        GCS <--> Dashboard
+        GCS <--> Autoscaler
+    end
+
+    subgraph WorkerNode1["Worker Node 01 (Compute)"]
+        subgraph RL1["Raylet Daemon 01"]
+            Sched1["Local Scheduler"]
+            NM1["Node Manager"]
+        end
+        PS1["Plasma Object Store (/dev/shm)"]
+        WPool1["Core Worker Pool (Python 3.12 Processes)"]
+        
+        RL1 <--> PS1
+        RL1 --> WPool1
+    end
+
+    subgraph WorkerNode2["Worker Node 02 (GPU / Accelerators)"]
+        subgraph RL2["Raylet Daemon 02"]
+            Sched2["Local Scheduler"]
+            NM2["Node Manager"]
+        end
+        PS2["Plasma Object Store (/dev/shm)"]
+        WPool2["GPU Worker Pool (PyTorch CUDA Processes)"]
+        
+        RL2 <--> PS2
+        RL2 --> WPool2
+    end
+
+    GCS <==|"gRPC Heartbeats & Membership"| RL1
+    GCS <==|"gRPC Heartbeats & Membership"| RL2
+    PS1 <==|"Zero-Copy Inter-Node Object Transfer (TCP)"| PS2
+
+    style HeadNode fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style WorkerNode1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style WorkerNode2 fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style GCS fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style PS1 fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style PS2 fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant WN as New Worker Node (Raylet)
+    participant GCS as Global Control Store (Head Node)
+    participant D as Driver Process
+    participant DB as Ray Dashboard
+
+    Note over WN,GCS: Node Join Protocol
+    WN->>GCS: RegisterNode(NodeIP, TotalCPUs, TotalGPUs, MemoryBytes)
+    GCS->>GCS: Append to Cluster Membership Table
+    GCS-->>WN: RegistrationAck(ClusterID, GCSHeartbeatInterval)
+    
+    loop Periodic Node Health & Resource Broadcast
+        WN->>GCS: Heartbeat(AvailableCPUs, PlasmaMemoryUsage, AliveWorkers)
+        GCS->>DB: Stream Real-Time Cluster Telemetry
+    end
+
+    Note over D,GCS: State Inspection (ray.util.state)
+    D->>GCS: list_nodes() / list_actors()
+    GCS-->>D: Return Cluster Topology Snapshot
 ```
 
 The **Global Control Store (GCS)** manages cluster-wide metadata (actor registration, node membership, placement group tables, and object locations), ensuring decentralized task dispatch while maintaining centralized consensus.
