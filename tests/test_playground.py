@@ -132,3 +132,18 @@ def test_playground_docs_and_assets_exist():
     content_html = html_file.read_text(encoding="utf-8")
     assert "pyodide" in content_html.lower()
     assert "monaco" in content_html.lower()
+
+    # Verify zero-backend persistence engine (RaylingsStorage)
+    assert "class RaylingsStorage" in content_html
+    assert "raylings_playground_v1" in content_html
+    assert "exportBackup" in content_html
+    assert "importBackup" in content_html
+    assert "resetExercise" in content_html
+    assert "resetAll" in content_html
+
+    # Verify Split-Pane UI and Cluster Inspector elements
+    assert "course-progress-bar" in content_html
+    assert "exercise-tree" in content_html
+    assert "tab-cluster" in content_html
+    assert "stat-objects" in content_html
+    assert "btn-fullscreen" in content_html

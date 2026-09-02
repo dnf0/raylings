@@ -31,12 +31,13 @@
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     #editor-container { width: 100%; height: 100%; min-height: 400px; }
-    .terminal-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-    .terminal-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-    .terminal-scroll::-webkit-scrollbar-track { background: #0f172a; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #0f172a; }
+    .fullscreen-mode { position: fixed !important; top: 0; left: 0; width: 100vw !important; height: 100vh !important; z-index: 99999; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden select-none">
+<body id="app-body" class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden select-none">
 
   <!-- Top Header Navigation -->
   <header class="h-14 border-b border-slate-800 bg-slate-900/90 backdrop-blur px-4 flex items-center justify-between shrink-0">
@@ -52,69 +53,135 @@
       </div>
     </div>
 
-    <!-- Active Exercise Info -->
+    <!-- Active Exercise Breadcrumbs & Status -->
     <div class="flex items-center space-x-3">
-      <div class="text-xs text-slate-400">Current:</div>
+      <div class="text-xs text-slate-400 hidden sm:inline">Active:</div>
       <div id="header-exercise-title" class="font-mono text-xs font-semibold text-cyan-300 bg-slate-800 px-2.5 py-1 rounded border border-slate-700">
         basics01
       </div>
-      <div id="status-badge" class="text-xs px-2.5 py-1 rounded font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
-        ● Incomplete
+      <div id="status-badge" class="text-xs px-2.5 py-1 rounded font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center space-x-1">
+        <span>● Not Started</span>
       </div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- Action Toolbar -->
     <div class="flex items-center space-x-2">
-      <button id="btn-hint" class="px-3 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5">
+      <button id="btn-prev" title="Previous Exercise (Alt+Left)" class="px-2.5 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1 disabled:opacity-40 disabled:pointer-events-none">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <button id="btn-next" title="Next Exercise (Alt+Right)" class="px-2.5 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1 disabled:opacity-40 disabled:pointer-events-none">
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+      <div class="h-4 w-px bg-slate-800 mx-1"></div>
+      <button id="btn-hint" title="Toggle Hint (H)" class="px-3 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5">
         <i class="fa-regular fa-lightbulb text-amber-400"></i>
         <span>Hint</span>
       </button>
-      <button id="btn-solution" class="px-3 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5">
+      <button id="btn-solution" title="Show Canonical Solution" class="px-3 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5">
         <i class="fa-solid fa-code-compare text-blue-400"></i>
         <span>Solution</span>
       </button>
-      <button id="btn-reset" class="px-3 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5">
+      <button id="btn-reset" title="Reset Current Code" class="px-3 py-1.5 text-xs font-medium rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5">
         <i class="fa-solid fa-rotate-left text-slate-400"></i>
         <span>Reset</span>
       </button>
-      <button id="btn-run" class="px-4 py-1.5 text-xs font-semibold rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/20 transition flex items-center space-x-1.5">
+      <button id="btn-run" title="Run and Verify Code (Ctrl+Enter)" class="px-4 py-1.5 text-xs font-semibold rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/20 transition flex items-center space-x-1.5">
         <i class="fa-solid fa-play"></i>
-        <span>Run Code (Ctrl+Enter)</span>
+        <span>Run (Ctrl+Enter)</span>
       </button>
-      <button id="btn-next" class="px-3 py-1.5 text-xs font-medium rounded bg-emerald-600 hover:bg-emerald-500 text-white shadow transition flex items-center space-x-1.5 disabled:opacity-40 disabled:pointer-events-none" disabled>
-        <span>Next</span>
-        <i class="fa-solid fa-arrow-right"></i>
+      <div class="h-4 w-px bg-slate-800 mx-1"></div>
+      <button id="btn-fullscreen" title="Toggle Fullscreen (F11)" class="p-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+        <i class="fa-solid fa-expand"></i>
       </button>
     </div>
   </header>
 
-  <!-- Main Three-Pane Layout -->
+  <!-- Main Three-Pane Split Layout -->
   <div class="flex flex-1 overflow-hidden">
     
-    <!-- Left Sidebar: Chapters & Exercises -->
-    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0">
-      <div class="p-3 border-b border-slate-800">
-        <input id="exercise-search" type="text" placeholder="Filter exercises..." class="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+    <!-- Left Sidebar: Syllabus & Progress -->
+    <aside class="w-80 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0">
+      <!-- Course Progress Card -->
+      <div class="p-3 border-b border-slate-800 bg-slate-950/40 space-y-2">
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-slate-400 font-medium">Curriculum Progress</span>
+          <span id="progress-percentage" class="text-cyan-400 font-bold font-mono">0%</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div id="course-progress-bar" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+        <div class="flex justify-between items-center text-[11px] text-slate-400">
+          <span><strong id="progress-text" class="text-slate-200">0</strong> of <span id="total-exercises-text">81</span> completed</span>
+          <div class="flex items-center space-x-1">
+            <button id="btn-export-progress" title="Export Progress (JSON Backup)" class="p-1 hover:text-cyan-400 transition text-slate-400">
+              <i class="fa-solid fa-download"></i>
+            </button>
+            <button id="btn-import-progress" title="Import Progress (JSON Restore)" class="p-1 hover:text-cyan-400 transition text-slate-400">
+              <i class="fa-solid fa-upload"></i>
+            </button>
+            <button id="btn-reset-all" title="Reset All Progress" class="p-1 hover:text-red-400 transition text-slate-400">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+            <input type="file" id="import-file-input" accept=".json" class="hidden" />
+          </div>
+        </div>
       </div>
-      <div id="exercise-tree" class="flex-1 overflow-y-auto terminal-scroll p-2 space-y-3">
+
+      <!-- Search & Status Filter -->
+      <div class="p-2 border-b border-slate-800 space-y-1.5 bg-slate-900">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-xs text-slate-500"></i>
+          <input id="exercise-search" type="text" placeholder="Search exercises, topics..." class="w-full bg-slate-950 border border-slate-700 rounded pl-7 pr-3 py-1 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+        </div>
+        <div class="flex items-center space-x-1 text-[11px]">
+          <button id="filter-all" class="flex-1 py-1 rounded bg-cyan-500/20 text-cyan-300 font-medium border border-cyan-500/30">All</button>
+          <button id="filter-todo" class="flex-1 py-1 rounded bg-slate-800 text-slate-400 hover:text-slate-200">To Do</button>
+          <button id="filter-done" class="flex-1 py-1 rounded bg-slate-800 text-slate-400 hover:text-slate-200">Done</button>
+        </div>
+      </div>
+
+      <!-- Syllabus Tree (18 Collapsible Chapters) -->
+      <div id="exercise-tree" class="flex-1 overflow-y-auto custom-scroll p-2 space-y-1">
         <!-- Dynamically Populated -->
       </div>
-      <div class="p-3 border-t border-slate-800 bg-slate-950/50 text-[11px] text-slate-400 flex justify-between items-center">
-        <span>Progress: <strong id="progress-text" class="text-cyan-400">0 / 78</strong></span>
-        <span id="runtime-status" class="text-amber-400">⏳ Booting WASM...</span>
+
+      <!-- Footer Runtime Status -->
+      <div class="p-2.5 border-t border-slate-800 bg-slate-950/60 text-[11px] text-slate-400 flex justify-between items-center">
+        <span class="flex items-center space-x-1.5">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span>WASM Engine</span>
+        </span>
+        <span id="runtime-status" class="text-amber-400 font-mono">⏳ Initializing...</span>
       </div>
     </aside>
 
-    <!-- Center Pane: Monaco Editor -->
+    <!-- Center Pane: Monaco Editor & Breadcrumbs -->
     <main class="flex-1 flex flex-col min-w-0 bg-slate-950 relative">
-      <div class="h-8 bg-slate-900/60 border-b border-slate-800 px-4 flex items-center justify-between text-xs text-slate-400">
+      <div class="h-8 bg-slate-900/60 border-b border-slate-800 px-4 flex items-center justify-between text-xs text-slate-400 shrink-0">
         <div class="flex items-center space-x-2">
           <i class="fa-brands fa-python text-yellow-400"></i>
           <span id="editor-file-path" class="font-mono text-slate-300">exercises/01_basics/basics01.py</span>
         </div>
-        <span class="text-[11px] text-slate-500">Pure-Python In-Browser Ray Simulation</span>
+        <div class="flex items-center space-x-2">
+          <span id="save-indicator" class="text-[11px] text-slate-500 font-mono">Saved</span>
+          <span class="text-[11px] text-slate-500">| Pure-Python In-Browser Ray Simulation</span>
+        </div>
       </div>
+
+      <!-- Monaco Container -->
       <div id="editor-container" class="flex-1"></div>
+
+      <!-- Hint Panel Drawer -->
+      <div id="hint-panel" class="absolute bottom-0 left-0 right-0 max-h-48 overflow-y-auto custom-scroll p-4 bg-amber-950/95 backdrop-blur border-t border-amber-500/40 text-xs text-amber-200 hidden z-20 shadow-2xl transition-all">
+        <div class="font-semibold text-amber-300 mb-2 flex items-center justify-between">
+          <span class="flex items-center space-x-2">
+            <i class="fa-solid fa-lightbulb text-amber-400"></i>
+            <span>Exercise Hint & Concept Guide</span>
+          </span>
+          <button id="close-hint" class="text-amber-400 hover:text-white text-base px-1">&times;</button>
+        </div>
+        <div id="hint-text" class="text-amber-100/90 whitespace-pre-line leading-relaxed"></div>
+      </div>
     </main>
 
     <!-- Right Pane: Terminal Output & Cluster Inspector -->
@@ -131,21 +198,27 @@
       </div>
 
       <!-- Tab 1: Terminal Output -->
-      <div id="tab-terminal" class="flex-1 p-3 overflow-y-auto terminal-scroll bg-slate-950 font-mono text-xs flex flex-col justify-between">
+      <div id="tab-terminal" class="flex-1 p-3 overflow-y-auto custom-scroll bg-slate-950 font-mono text-xs flex flex-col justify-between">
         <div id="terminal-content" class="space-y-1 text-slate-300 whitespace-pre-wrap leading-relaxed">
-          <div class="text-slate-500">Initializing Pyodide WebAssembly engine...</div>
+          <div class="text-slate-500">Initializing Pyodide WebAssembly environment...</div>
+        </div>
+        <div class="pt-2 flex justify-end">
+          <button id="btn-clear-term" class="text-[11px] text-slate-500 hover:text-slate-300 transition">Clear Terminal</button>
         </div>
       </div>
 
       <!-- Tab 2: Cluster Visualizer -->
-      <div id="tab-cluster" class="flex-1 p-4 overflow-y-auto terminal-scroll bg-slate-950 hidden space-y-4">
-        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Simulated Ray Cluster</div>
+      <div id="tab-cluster" class="flex-1 p-4 overflow-y-auto custom-scroll bg-slate-950 hidden space-y-4">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+          <span>Simulated Ray Cluster</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">In-Memory</span>
+        </div>
         
         <!-- Nodes & CPUs -->
         <div class="bg-slate-900 p-3 rounded border border-slate-800 space-y-2">
           <div class="flex justify-between text-xs">
-            <span class="text-slate-400">Virtual Worker Node</span>
-            <span class="text-emerald-400 font-mono">● ALIVE (127.0.0.1)</span>
+            <span class="text-slate-400">Virtual Head Node</span>
+            <span id="stat-node-status" class="text-emerald-400 font-mono">● ALIVE (127.0.0.1)</span>
           </div>
           <div class="flex justify-between text-xs">
             <span class="text-slate-400">Allocated Virtual CPUs</span>
@@ -179,15 +252,10 @@
             <span id="stat-tasks" class="text-emerald-400 font-mono">0</span>
           </div>
         </div>
-      </div>
 
-      <!-- Hint Modal / Drawer (Collapsible) -->
-      <div id="hint-panel" class="p-3 bg-amber-950/30 border-t border-amber-500/30 text-xs text-amber-200 hidden">
-        <div class="font-semibold text-amber-400 mb-1 flex items-center justify-between">
-          <span>💡 Exercise Hint:</span>
-          <button id="close-hint" class="text-amber-400 hover:text-white">&times;</button>
+        <div class="text-[11px] text-slate-500 bg-slate-900/60 p-2.5 rounded border border-slate-800 leading-relaxed">
+          💡 The cluster inspector simulates node allocation, object store memory, and actor handles in pure Python WebAssembly.
         </div>
-        <div id="hint-text" class="text-amber-100/90 leading-normal"></div>
       </div>
     </aside>
   </div>
@@ -399,17 +467,139 @@ class WasmRayModule:
 ray = WasmRayModule()
 `;
 
+    // Client-Side Zero-Backend State Manager
+    class RaylingsStorage {
+      constructor(storageKey = 'raylings_playground_v1') {
+        this.storageKey = storageKey;
+        this.state = this.loadState();
+      }
+
+      loadState() {
+        try {
+          const raw = localStorage.getItem(this.storageKey);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed.exercises === 'object') {
+              return parsed;
+            }
+          }
+        } catch (e) {
+          console.warn("Failed to parse localStorage state:", e);
+        }
+        return {
+          version: 1,
+          lastActiveExerciseIndex: 0,
+          exercises: {},
+        };
+      }
+
+      saveState() {
+        try {
+          localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+        } catch (e) {
+          console.warn("Failed to persist state to localStorage:", e);
+        }
+      }
+
+      getExercise(name) {
+        return this.state.exercises[name] || null;
+      }
+
+      saveCode(name, code) {
+        if (!this.state.exercises[name]) {
+          this.state.exercises[name] = {
+            status: 'in_progress',
+            userCode: code,
+            hintVisible: false
+          };
+        } else {
+          this.state.exercises[name].userCode = code;
+          if (this.state.exercises[name].status === 'not_started') {
+            this.state.exercises[name].status = 'in_progress';
+          }
+        }
+        this.state.exercises[name].lastModifiedAt = new Date().toISOString();
+        this.saveState();
+      }
+
+      markCompleted(name) {
+        if (!this.state.exercises[name]) {
+          this.state.exercises[name] = {
+            status: 'completed',
+            userCode: '',
+            hintVisible: false
+          };
+        }
+        this.state.exercises[name].status = 'completed';
+        this.state.exercises[name].passedAt = new Date().toISOString();
+        this.saveState();
+      }
+
+      exportBackup() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.state, null, 2));
+        const downloadAnchor = document.createElement('a');
+        const date = new Date().toISOString().slice(0, 10);
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `raylings-progress-${date}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      }
+
+      importBackup(jsonString) {
+        try {
+          const parsed = JSON.parse(jsonString);
+          if (parsed && parsed.exercises) {
+            this.state = parsed;
+            this.saveState();
+            return true;
+          }
+        } catch (e) {
+          console.error("Invalid JSON progress backup:", e);
+        }
+        return false;
+      }
+
+      resetExercise(name) {
+        if (this.state.exercises[name]) {
+          delete this.state.exercises[name];
+          this.saveState();
+        }
+      }
+
+      resetAll() {
+        this.state = { version: 1, lastActiveExerciseIndex: 0, exercises: {} };
+        this.saveState();
+      }
+
+      getStats(totalCatalogCount) {
+        let completed = 0;
+        let inProgress = 0;
+        Object.values(this.state.exercises).forEach(ex => {
+          if (ex.status === 'completed') completed++;
+          else if (ex.status === 'in_progress') inProgress++;
+        });
+        const total = totalCatalogCount || 81;
+        const pct = Math.round((completed / total) * 100);
+        return { completed, inProgress, total, percentage: pct };
+      }
+    }
+
+    const storage = new RaylingsStorage();
     let pyodideInstance = null;
     let monacoEditor = null;
     let catalog = [];
     let currentExerciseIndex = 0;
-    const completedSet = new Set();
+    let activeFilter = 'all'; // 'all' | 'todo' | 'done'
+    let searchQuery = '';
+    let saveTimeout = null;
+    let collapsedChapters = new Set();
 
     // Initialize Monaco Editor
     require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
     require(['vs/editor/editor.main'], function () {
       monacoEditor = monaco.editor.create(document.getElementById('editor-container'), {
-        value: '# Loading exercise...',
+        value: '# Loading exercise catalog...',
         language: 'python',
         theme: 'vs-dark',
         automaticLayout: true,
@@ -420,6 +610,25 @@ ray = WasmRayModule()
         padding: { top: 12 }
       });
 
+      // Keystroke Debounced Auto-Save (300ms)
+      monacoEditor.onDidChangeModelContent(() => {
+        const curEx = catalog[currentExerciseIndex];
+        if (!curEx) return;
+        const indicator = document.getElementById("save-indicator");
+        indicator.textContent = "Saving...";
+        indicator.className = "text-[11px] text-amber-400 font-mono";
+
+        if (saveTimeout) clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+          const code = monacoEditor.getValue();
+          storage.saveCode(curEx.name, code);
+          indicator.textContent = "Saved";
+          indicator.className = "text-[11px] text-slate-500 font-mono";
+          updateStatusBadge(isExerciseCompleted(curEx.name));
+          renderExerciseTree();
+        }, 300);
+      });
+
       // Shortcut: Ctrl/Cmd + Enter to Run
       monacoEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function () {
         runCode();
@@ -428,15 +637,25 @@ ray = WasmRayModule()
       initPlayground();
     });
 
+    function isExerciseCompleted(name) {
+      const saved = storage.getExercise(name);
+      return saved && saved.status === 'completed';
+    }
+
+    function isExerciseInProgress(name) {
+      const saved = storage.getExercise(name);
+      return saved && saved.status === 'in_progress';
+    }
+
     async function initPlayground() {
-      appendLog("⚡ Loading Raylings WASM simulation environment...", "text-cyan-400");
+      appendLog("⚡ Loading Raylings WASM simulation runtime...", "text-cyan-400");
       try {
         pyodideInstance = await loadPyodide({
           stdout: (text) => appendLog(text, "text-slate-200"),
           stderr: (text) => appendLog(text, "text-red-400")
         });
 
-        // Inject WASM compat module into pyodide as `ray`
+        // Inject pure-Python WASM compat module into Pyodide as `ray`
         pyodideInstance.runPython(`
 import sys, types
 module = types.ModuleType("ray")
@@ -445,8 +664,8 @@ sys.modules["ray"] = module.ray
 `);
 
         document.getElementById("runtime-status").innerHTML = "🟢 WASM Ready";
-        document.getElementById("runtime-status").className = "text-emerald-400";
-        appendLog("✓ Pyodide 0.26.4 initialized. Ray in-memory simulation active.", "text-emerald-400");
+        document.getElementById("runtime-status").className = "text-emerald-400 font-mono";
+        appendLog("✓ Pyodide 0.26.4 initialized. Ray in-memory simulation engine active.", "text-emerald-400");
 
         // Load Exercise Catalog
         try {
@@ -462,11 +681,23 @@ sys.modules["ray"] = module.ray
           catalog = getFallbackCatalog();
         }
 
+        document.getElementById("total-exercises-text").textContent = catalog.length;
+        
+        // Restore last active index or default 0
+        const startIdx = Math.min(storage.state.lastActiveExerciseIndex || 0, catalog.length - 1);
+        updateProgressDisplay();
         renderExerciseTree();
-        loadExercise(0);
+        loadExercise(startIdx);
       } catch (err) {
         appendLog("✗ Failed to initialize Pyodide WASM: " + err.message, "text-red-400");
       }
+    }
+
+    function updateProgressDisplay() {
+      const stats = storage.getStats(catalog.length);
+      document.getElementById("progress-text").textContent = stats.completed;
+      document.getElementById("progress-percentage").textContent = `${stats.percentage}%`;
+      document.getElementById("course-progress-bar").style.width = `${stats.percentage}%`;
     }
 
     function renderExerciseTree() {
@@ -476,81 +707,167 @@ sys.modules["ray"] = module.ray
       const chapters = {};
       catalog.forEach((ex, idx) => {
         if (!chapters[ex.chapter]) {
-          chapters[ex.chapter] = { title: ex.chapter_name, items: [] };
+          chapters[ex.chapter] = {
+            num: ex.chapter,
+            name: ex.chapter_name,
+            title: ex.chapter_title || ex.chapter_name,
+            items: []
+          };
         }
         chapters[ex.chapter].items.push({ ...ex, globalIndex: idx });
       });
 
-      Object.keys(chapters).forEach((chNum) => {
+      Object.keys(chapters).sort((a, b) => Number(a) - Number(b)).forEach((chNum) => {
         const ch = chapters[chNum];
-        const group = document.createElement("div");
-        group.className = "space-y-1";
+        
+        // Filter items
+        const filteredItems = ch.items.filter(item => {
+          const matchesSearch = !searchQuery || 
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (item.prompt && item.prompt.toLowerCase().includes(searchQuery.toLowerCase()));
+          
+          if (!matchesSearch) return false;
 
-        const chHeader = document.createElement("div");
-        chHeader.className = "text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-2 py-1";
-        chHeader.textContent = `Ch ${chNum}: ${ch.title}`;
+          const isDone = isExerciseCompleted(item.name);
+          if (activeFilter === 'done') return isDone;
+          if (activeFilter === 'todo') return !isDone;
+          return true;
+        });
+
+        if (filteredItems.length === 0 && (searchQuery || activeFilter !== 'all')) {
+          return;
+        }
+
+        const group = document.createElement("div");
+        group.className = "rounded border border-slate-800/80 bg-slate-900/60 overflow-hidden";
+
+        // Count chapter completion
+        const completedInChapter = ch.items.filter(item => isExerciseCompleted(item.name)).length;
+        const isChapterComplete = completedInChapter === ch.items.length;
+        const isCollapsed = collapsedChapters.has(Number(chNum));
+
+        // Chapter Accordion Header
+        const chHeader = document.createElement("button");
+        chHeader.className = "w-full px-2.5 py-2 text-left flex items-center justify-between text-xs font-semibold text-slate-300 hover:bg-slate-800/80 transition";
+        chHeader.innerHTML = `
+          <div class="flex items-center space-x-2 truncate">
+            <i class="fa-solid fa-chevron-${isCollapsed ? 'right' : 'down'} text-[10px] text-slate-500 w-3"></i>
+            <span class="truncate">${String(chNum).padStart(2, '0')}. ${ch.title}</span>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded font-mono ${
+            isChapterComplete ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400'
+          }">
+            ${completedInChapter}/${ch.items.length} ${isChapterComplete ? '✓' : ''}
+          </span>
+        `;
+        chHeader.onclick = () => {
+          if (collapsedChapters.has(Number(chNum))) {
+            collapsedChapters.delete(Number(chNum));
+          } else {
+            collapsedChapters.add(Number(chNum));
+          }
+          renderExerciseTree();
+        };
         group.appendChild(chHeader);
 
-        ch.items.forEach((item) => {
-          const btn = document.createElement("button");
-          btn.id = `ex-btn-${item.globalIndex}`;
-          btn.className = `w-full text-left px-2.5 py-1.5 rounded text-xs flex items-center justify-between font-mono transition ${
-            item.globalIndex === currentExerciseIndex ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-300 hover:bg-slate-800'
-          }`;
-          
-          const isDone = completedSet.has(item.name);
-          btn.innerHTML = `
-            <span class="truncate">${item.name}</span>
-            <span class="text-xs ${isDone ? 'text-emerald-400' : 'text-slate-600'}">${isDone ? '✓' : '○'}</span>
-          `;
+        if (!isCollapsed) {
+          const itemsContainer = document.createElement("div");
+          itemsContainer.className = "p-1 space-y-0.5 border-t border-slate-800/60 bg-slate-950/40";
 
-          btn.onclick = () => loadExercise(item.globalIndex);
-          group.appendChild(btn);
-        });
+          filteredItems.forEach((item) => {
+            const btn = document.createElement("button");
+            btn.id = `ex-btn-${item.globalIndex}`;
+            const isActive = item.globalIndex === currentExerciseIndex;
+            const isDone = isExerciseCompleted(item.name);
+            const isInProg = !isDone && isExerciseInProgress(item.name);
+
+            btn.className = `w-full text-left px-2 py-1.5 rounded text-xs flex items-center justify-between font-mono transition ${
+              isActive ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold shadow-sm' : 'text-slate-300 hover:bg-slate-800/70'
+            }`;
+
+            let statusIcon = '<span class="text-slate-600 text-[11px]">○</span>';
+            if (isDone) {
+              statusIcon = '<span class="text-emerald-400 font-bold text-[11px]">✓</span>';
+            } else if (isInProg) {
+              statusIcon = '<span class="text-amber-400 text-[11px]">⏳</span>';
+            }
+
+            btn.innerHTML = `
+              <div class="flex items-center space-x-2 truncate">
+                <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-cyan-400' : 'bg-transparent'}"></span>
+                <span class="truncate">${item.name}</span>
+              </div>
+              <div>${statusIcon}</div>
+            `;
+
+            btn.onclick = () => loadExercise(item.globalIndex);
+            itemsContainer.appendChild(btn);
+          });
+
+          group.appendChild(itemsContainer);
+        }
 
         tree.appendChild(group);
       });
     }
 
     function loadExercise(index) {
+      if (index < 0 || index >= catalog.length) return;
       currentExerciseIndex = index;
+      storage.state.lastActiveExerciseIndex = index;
+      storage.saveState();
+
       const ex = catalog[index];
       if (!ex) return;
 
       document.getElementById("header-exercise-title").textContent = ex.name;
       document.getElementById("editor-file-path").textContent = ex.path || `exercises/${ex.name}.py`;
-      document.getElementById("hint-text").textContent = ex.hint || "Review the exercise description and key concepts.";
+      document.getElementById("hint-text").textContent = ex.hint || "Review the exercise prompt and key distributed primitives.";
       document.getElementById("hint-panel").classList.add("hidden");
 
-      const isDone = completedSet.has(ex.name);
-      updateStatusBadge(isDone);
-
+      // Load user saved code or starter code
+      const saved = storage.getExercise(ex.name);
+      const codeToLoad = (saved && saved.userCode !== undefined) ? saved.userCode : (ex.code || "# Starter code");
+      
       if (monacoEditor) {
-        monacoEditor.setValue(ex.code || "# Starter code");
+        monacoEditor.setValue(codeToLoad);
       }
 
+      const isDone = isExerciseCompleted(ex.name);
+      updateStatusBadge(isDone);
+
+      // Nav buttons state
+      document.getElementById("btn-prev").disabled = (index === 0);
+      document.getElementById("btn-next").disabled = (index === catalog.length - 1);
+
       renderExerciseTree();
-      appendLog(`\n--- Loaded ${ex.name} ---`, "text-cyan-400");
+      updateProgressDisplay();
+      appendLog(`\n--- Loaded ${ex.name} (${ex.chapter_title || ex.chapter_name}) ---`, "text-cyan-400");
     }
 
     function updateStatusBadge(isPassed) {
       const badge = document.getElementById("status-badge");
-      const nextBtn = document.getElementById("btn-next");
+      const curEx = catalog[currentExerciseIndex];
+      const isInProg = curEx && isExerciseInProgress(curEx.name);
+
       if (isPassed) {
-        badge.textContent = "✓ Completed";
+        badge.innerHTML = "<span>✓ Completed</span>";
         badge.className = "text-xs px-2.5 py-1 rounded font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-        nextBtn.disabled = false;
+      } else if (isInProg) {
+        badge.innerHTML = "<span>⏳ In Progress</span>";
+        badge.className = "text-xs px-2.5 py-1 rounded font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20";
       } else {
-        badge.textContent = "● Incomplete";
-        badge.className = "text-xs px-2.5 py-1 rounded font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20";
-        nextBtn.disabled = true;
+        badge.innerHTML = "<span>● Not Started</span>";
+        badge.className = "text-xs px-2.5 py-1 rounded font-medium bg-slate-800 text-slate-400 border border-slate-700";
       }
     }
 
     async function runCode() {
       if (!pyodideInstance || !monacoEditor) return;
       const code = monacoEditor.getValue();
-      appendLog("\n⚡ Running verify()...", "text-cyan-400 font-semibold");
+      const curEx = catalog[currentExerciseIndex];
+      appendLog("\n⚡ Running code & verify()...", "text-cyan-400 font-semibold");
 
       try {
         // Reset Ray instance before each run
@@ -558,20 +875,45 @@ sys.modules["ray"] = module.ray
         const startTime = performance.now();
         await pyodideInstance.runPythonAsync(code);
         
-        // Execute verify() if present
+        // Execute verify() if present in globals
         await pyodideInstance.runPythonAsync("if 'verify' in globals(): verify()");
         const duration = ((performance.now() - startTime) / 1000).toFixed(2);
 
         appendLog(`\n🎉 ✓ VERIFICATION PASSED (${duration}s)`, "text-emerald-400 font-bold");
-        const currentEx = catalog[currentExerciseIndex];
-        if (currentEx) {
-          completedSet.add(currentEx.name);
+        
+        if (curEx) {
+          storage.markCompleted(curEx.name);
           updateStatusBadge(true);
-          document.getElementById("progress-text").textContent = `${completedSet.size} / ${catalog.length}`;
+          updateProgressDisplay();
           renderExerciseTree();
         }
+
+        // Update Cluster Inspector Telemetry
+        updateClusterInspector();
       } catch (err) {
         appendLog(`\n✗ VERIFICATION FAILED:\n${err.message}`, "text-red-400");
+        updateClusterInspector();
+      }
+    }
+
+    function updateClusterInspector() {
+      try {
+        const statsStr = pyodideInstance.runPython(`
+import json
+json.dumps(ray._get_cluster_stats())
+`);
+        const stats = JSON.parse(statsStr);
+        document.getElementById("stat-cpus").textContent = `${stats.cpus} Cores`;
+        document.getElementById("stat-objects").textContent = `${stats.objects_count} Objects`;
+        document.getElementById("stat-actors").textContent = `${stats.active_actors}`;
+        document.getElementById("stat-tasks").textContent = `${stats.completed_tasks}`;
+
+        const usedKb = (stats.used_bytes / 1024).toFixed(1);
+        document.getElementById("stat-bytes").textContent = `${usedKb} KB`;
+        const pct = Math.min(100, Math.round((stats.used_bytes / stats.max_bytes) * 100));
+        document.getElementById("plasma-bar").style.width = `${Math.max(pct, 2)}%`;
+      } catch (e) {
+        console.warn("Could not retrieve cluster stats:", e);
       }
     }
 
@@ -587,29 +929,144 @@ sys.modules["ray"] = module.ray
 
     // UI Event Handlers
     document.getElementById("btn-run").onclick = runCode;
+    
+    document.getElementById("btn-prev").onclick = () => {
+      if (currentExerciseIndex > 0) {
+        loadExercise(currentExerciseIndex - 1);
+      }
+    };
+
     document.getElementById("btn-next").onclick = () => {
       if (currentExerciseIndex < catalog.length - 1) {
         loadExercise(currentExerciseIndex + 1);
       }
     };
+
     document.getElementById("btn-reset").onclick = () => {
       const ex = catalog[currentExerciseIndex];
-      if (ex && monacoEditor) monacoEditor.setValue(ex.code);
-    };
-    document.getElementById("btn-solution").onclick = () => {
-      const ex = catalog[currentExerciseIndex];
-      if (ex && ex.solution && monacoEditor) {
-        if (confirm("Replace editor with canonical reference solution?")) {
-          monacoEditor.setValue(ex.solution);
+      if (ex && monacoEditor) {
+        if (confirm(`Reset code for ${ex.name} to starter template?`)) {
+          storage.resetExercise(ex.name);
+          monacoEditor.setValue(ex.code || "# Starter code");
+          updateStatusBadge(false);
+          renderExerciseTree();
+          updateProgressDisplay();
+          appendLog(`\n↺ Reset ${ex.name} to starter code.`, "text-amber-400");
         }
       }
     };
+
+    document.getElementById("btn-solution").onclick = () => {
+      const ex = catalog[currentExerciseIndex];
+      if (ex && ex.solution && monacoEditor) {
+        if (confirm(`Replace editor with canonical reference solution for ${ex.name}?`)) {
+          monacoEditor.setValue(ex.solution);
+          appendLog(`\n🔍 Loaded reference solution for ${ex.name}.`, "text-blue-400");
+        }
+      }
+    };
+
     document.getElementById("btn-hint").onclick = () => {
       document.getElementById("hint-panel").classList.toggle("hidden");
     };
+
     document.getElementById("close-hint").onclick = () => {
       document.getElementById("hint-panel").classList.add("hidden");
     };
+
+    document.getElementById("btn-clear-term").onclick = () => {
+      document.getElementById("terminal-content").innerHTML = "";
+    };
+
+    // Fullscreen Toggle
+    let isFullscreen = false;
+    document.getElementById("btn-fullscreen").onclick = toggleFullscreen;
+
+    function toggleFullscreen() {
+      isFullscreen = !isFullscreen;
+      const body = document.getElementById("app-body");
+      const icon = document.querySelector("#btn-fullscreen i");
+      if (isFullscreen) {
+        body.classList.add("fullscreen-mode");
+        icon.className = "fa-solid fa-compress";
+      } else {
+        body.classList.remove("fullscreen-mode");
+        icon.className = "fa-solid fa-expand";
+      }
+      if (monacoEditor) {
+        setTimeout(() => monacoEditor.layout(), 100);
+      }
+    }
+
+    // Export / Import JSON Backup
+    document.getElementById("btn-export-progress").onclick = () => {
+      storage.exportBackup();
+      appendLog("\n⬇ Exported progress backup JSON.", "text-cyan-400");
+    };
+
+    document.getElementById("btn-import-progress").onclick = () => {
+      document.getElementById("import-file-input").click();
+    };
+
+    document.getElementById("import-file-input").onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const success = storage.importBackup(event.target.result);
+        if (success) {
+          appendLog("\n⬆ Successfully restored progress backup JSON!", "text-emerald-400");
+          loadExercise(storage.state.lastActiveExerciseIndex || 0);
+          renderExerciseTree();
+          updateProgressDisplay();
+        } else {
+          appendLog("\n✗ Failed to import backup: invalid JSON format.", "text-red-400");
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    };
+
+    document.getElementById("btn-reset-all").onclick = () => {
+      if (confirm("⚠️ Are you sure you want to reset ALL exercise progress and code? This cannot be undone.")) {
+        storage.resetAll();
+        loadExercise(0);
+        renderExerciseTree();
+        updateProgressDisplay();
+        appendLog("\n🗑️ Reset all workspace progress.", "text-red-400");
+      }
+    };
+
+    // Search & Filter Handlers
+    document.getElementById("exercise-search").oninput = (e) => {
+      searchQuery = e.target.value;
+      renderExerciseTree();
+    };
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      const btnAll = document.getElementById("filter-all");
+      const btnTodo = document.getElementById("filter-todo");
+      const btnDone = document.getElementById("filter-done");
+
+      [btnAll, btnTodo, btnDone].forEach(b => {
+        b.className = "flex-1 py-1 rounded bg-slate-800 text-slate-400 hover:text-slate-200";
+      });
+
+      if (filter === 'all') {
+        btnAll.className = "flex-1 py-1 rounded bg-cyan-500/20 text-cyan-300 font-medium border border-cyan-500/30";
+      } else if (filter === 'todo') {
+        btnTodo.className = "flex-1 py-1 rounded bg-amber-500/20 text-amber-300 font-medium border border-amber-500/30";
+      } else if (filter === 'done') {
+        btnDone.className = "flex-1 py-1 rounded bg-emerald-500/20 text-emerald-300 font-medium border border-emerald-500/30";
+      }
+
+      renderExerciseTree();
+    }
+
+    document.getElementById("filter-all").onclick = () => setFilter('all');
+    document.getElementById("filter-todo").onclick = () => setFilter('todo');
+    document.getElementById("filter-done").onclick = () => setFilter('done');
 
     // Tab Navigation
     document.getElementById("tab-terminal-btn").onclick = () => {
@@ -623,15 +1080,34 @@ sys.modules["ray"] = module.ray
       document.getElementById("tab-cluster").classList.remove("hidden");
       document.getElementById("tab-cluster-btn").className = "flex-1 py-2 text-xs font-semibold text-cyan-400 border-b-2 border-cyan-400 flex items-center justify-center space-x-1.5";
       document.getElementById("tab-terminal-btn").className = "flex-1 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center justify-center space-x-1.5";
+      updateClusterInspector();
     };
+
+    // Global Hotkeys
+    window.addEventListener("keydown", (e) => {
+      if (e.altKey && e.key === "ArrowRight") {
+        e.preventDefault();
+        if (currentExerciseIndex < catalog.length - 1) loadExercise(currentExerciseIndex + 1);
+      } else if (e.altKey && e.key === "ArrowLeft") {
+        e.preventDefault();
+        if (currentExerciseIndex > 0) loadExercise(currentExerciseIndex - 1);
+      } else if (e.key === "F11") {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key === "Escape" && isFullscreen) {
+        toggleFullscreen();
+      }
+    });
 
     function getFallbackCatalog() {
       return [
         {
           chapter: 1,
-          chapter_name: "Ray Core Foundations",
+          chapter_name: "01_basics",
+          chapter_title: "Ray Core Foundations",
           name: "basics01",
           path: "exercises/01_basics/basics01.py",
+          prompt: "Initialize Ray and run your first remote task.",
           hint: "Decorate square with @ray.remote, then call square.remote(7) and ray.get().",
           code: `import ray\\n\\n# TODO: Decorate this function with @ray.remote\\ndef square(x: int) -> int:\\n    return x * x\\n\\ndef verify() -> None:\\n    # TODO: Initialize Ray\\n    # ray.init(ignore_reinit_error=True)\\n\\n    # TODO: Call remote task\\n    result = None\\n\\n    assert ray.is_initialized(), "Ray should be initialized"\\n    assert result == 49, f"Expected 49, but got {result}"\\n    print("✓ basics01 verified: Ray initialized and remote task executed successfully!")\\n\\nif __name__ == "__main__":\\n    verify()`,
           solution: `import ray\\n\\n@ray.remote\\ndef square(x: int) -> int:\\n    return x * x\\n\\ndef verify() -> None:\\n    ray.init(ignore_reinit_error=True)\\n    result_ref = square.remote(7)\\n    result = ray.get(result_ref)\\n    assert ray.is_initialized(), "Ray should be initialized"\\n    assert result == 49, f"Expected 49, but got {result}"\\n    print("✓ basics01 verified!")\\n\\nif __name__ == "__main__":\\n    verify()`
