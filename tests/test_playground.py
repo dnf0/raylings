@@ -45,14 +45,40 @@ def test_generate_playground_catalog():
 
 def test_export_playground_bundle(tmp_path: Path):
     """Verify bundle export writes all 81 exercises to valid JSON on disk."""
-    out_file = tmp_path / "playground_catalog.json"
+    out_file = tmp_path / "playground-bundle.json"
     result_path = export_playground_bundle(out_file)
 
     assert result_path.exists()
     data = json.loads(result_path.read_text(encoding="utf-8"))
-    assert isinstance(data, list)
-    assert len(data) == 81
-    assert data[0]["chapter_title"]
+    assert "version" in data
+    assert "chapters" in data
+    assert len(data["chapters"]) == 18
+    assert "exercises" in data
+    assert len(data["exercises"]) == 81
+    assert "wasm_compat_code" in data
+    assert "class WasmPlasmaStore" in data["wasm_compat_code"]
+    assert "class WasmRayModule" in data["wasm_compat_code"]
+
+
+def test_bundle_structure_and_exercise_details():
+    """Verify detailed structure of bundled exercises."""
+    from raylings.playground_assets import generate_playground_bundle
+
+    bundle = generate_playground_bundle()
+    assert bundle["total_chapters"] == 18
+    assert bundle["total_exercises"] == 81
+
+    # Check basics01
+    assert "basics01" in bundle["exercises"]
+    ex = bundle["exercises"]["basics01"]
+    assert ex["id"] == "basics01"
+    assert ex["chapter"] == "01_basics"
+    assert ex["chapter_number"] == 1
+    assert "ray.init" in ex["starter_code"] or "@ray.remote" in ex["starter_code"]
+    assert ex["solution_code"]
+    assert len(ex["hints"]) >= 1
+
+
 
 
 def test_wasm_simulation_engine():
