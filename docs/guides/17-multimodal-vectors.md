@@ -16,68 +16,24 @@ Scaling Retrieval-Augmented Generation (RAG) to billions of documents requires d
 
 ```mermaid
 flowchart TD
-    subgraph DataIngestion["Multimodal Data Ingestion"]
-        RawCorpus["Raw Media Ingestion<br/>• Unstructured Text Docs<br/>• High-Res Image Frames<br/>• Audio Spectrograms"] --> StreamingDS["Ray Data Streaming Dataset"]
-    end
+    Raw["Raw Multimodal Media<br/>(Text / Images / Audio)"] -->|"1. Streaming Dataset"| DS["Ray Data Pipeline"]
+    DS -->|"2. map_batches"| Pool["GPU Embedding Actor Pool<br/>(Vision / Text Encoders)"]
+    Pool -->|"3. Index Embeddings"| Shards["Sharded Vector Index<br/>(FAISS / HNSW Partitions)"]
+    Query["User Search Query"] -->|"4. Scatter-Gather Search"| Shards
+    Shards -->|"5. Heap Merge"| TopK["Global Top-K Context<br/>(To LLM Generator)"]
 
-    subgraph EmbeddingCluster["GPU Embedding ActorPool (map_batches)"]
-        subgraph WorkerPool["Actor Pool (Stateful Vision/Language Encoders)"]
-            A0["Embedding Worker 0 (NVIDIA L4)"]
-            A1["Embedding Worker 1 (NVIDIA L4)"]
-            A2["Embedding Worker 2 (NVIDIA L4)"]
-        end
-        StreamingDS --> WorkerPool
-    end
-
-    subgraph VectorIndex["Distributed Sharded Vector Store (FAISS / HNSW)"]
-        A0 --> Shard0["Vector Shard 0 (Partitions 0..1M)"]
-        A1 --> Shard1["Vector Shard 1 (Partitions 1M..2M)"]
-        A2 --> Shard2["Vector Shard 2 (Partitions 2M..3M)"]
-    end
-
-    subgraph QueryEngine["Distributed RAG Query Engine"]
-        UserQuery["User Query / Image Prompt"] --> QueryEncoder["Query Encoder Actor"]
-        QueryEncoder -->|"Broadcast Vector"| Shard0
-        QueryEncoder -->|"Broadcast Vector"| Shard1
-        QueryEncoder -->|"Broadcast Vector"| Shard2
-        
-        Shard0 --> TopK["Scatter-Gather Top-K Reducer"]
-        Shard1 --> TopK
-        Shard2 --> TopK
-    end
-
-    style DataIngestion fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style EmbeddingCluster fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style VectorIndex fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style QueryEngine fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style WorkerPool fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
+    style Raw fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style DS fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Pool fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Shards fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Query fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
+    style TopK fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant U as User / Application
-    participant QE as Query Encoder Actor
-    participant S0 as Vector Shard 0 (Worker 0)
-    participant S1 as Vector Shard 1 (Worker 1)
-    participant R as Top-K Scatter-Gather Reducer
-    participant LLM as LLM Generation Actor
-
-    Note over U,LLM: Distributed RAG Retrieval & Context Generation
-    U->>QE: Query: "Explain Ray Data zero-copy shared memory"
-    QE->>QE: Generate 384-dim Query Vector Q
-    par Broadcast Vector Search across Shards
-        QE->>S0: SearchTopK(Q, k=5)
-        QE->>S1: SearchTopK(Q, k=5)
-    end
-    S0-->>R: Local Candidates [Doc 14, Doc 89] (cosine distances)
-    S1-->>R: Local Candidates [Doc 301, Doc 412] (cosine distances)
-    R->>R: Heap Merge & Rerank -> Global Top-3 Documents
-    R->>LLM: Pass Context + User Query Prompt
-    LLM-->>U: Synthesized Answer with Source Citations
-```
-
-The transformed vector embeddings are indexed across partitioned memory nodes, enabling sub-10ms top-K nearest neighbor retrieval at enterprise scale.
+> **Diagram Walkthrough & Core Concepts:**
+> - **Streaming Vector Embedding**: Ray Data streams multimodal raw content directly through GPU worker actor pools, running vectorized embedding extractions with zero CPU stalls.
+> - **Distributed Vector Partitioning**: Embeddings are partitioned and stored in memory across distributed FAISS or HNSW index shards.
+> - **Scatter-Gather Parallel Retrieval**: Incoming user search queries are broadcast to all vector partitions in parallel, and local candidate results are aggregated through a heap merge reducer to produce the global top-K context.
 
 ---
 

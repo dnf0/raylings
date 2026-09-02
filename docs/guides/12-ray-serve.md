@@ -15,64 +15,24 @@
 **Ray Serve** is a scalable model serving framework designed for complex inference pipelines (combining LLMs, embedding models, and business logic). Serve manages HTTP ingress routers, dynamic request batching, model multiplexing, and replica autoscaling.
 
 ```mermaid
-flowchart TD
-    subgraph IngressPlane["HTTP Traffic Ingress & Routing"]
-        Client1["HTTP Client 1 (POST /predict)"] --> Proxy["Ray Serve Ingress HTTP Proxy (FastAPI)"]
-        Client2["HTTP Client 2 (POST /predict)"] --> Proxy
-        Proxy --> Router["Serve Router & Load Balancer"]
-    end
+flowchart LR
+    Clients["HTTP Clients<br/><code>POST /predict</code>"] -->|"1. Ingress Traffic"| Proxy["HTTP Ingress Proxy<br/>(FastAPI / Router)"]
+    Proxy -->|"2. Dynamic Batching"| Replica1["Replica Actor 1<br/><code>@serve.batch</code> (GPU)"]
+    Proxy -->|"2. Dynamic Batching"| Replica2["Replica Actor 2<br/><code>@serve.batch</code> (GPU)"]
+    Controller["Serve Controller<br/>(Autoscaler Daemon)"] -.->|"3. Scale Replicas"| Replica1
+    Controller -.->|"3. Scale Replicas"| Replica2
 
-    subgraph ControlPlane["Serve Controller & Autoscaler"]
-        Controller["Serve Controller Actor"] <-->|"Metrics & Scale Policies"| Router
-    end
-
-    subgraph DeploymentReplicas["Deployment Worker Replicas (Actor Pool)"]
-        subgraph Replica1["Replica Actor 01 (GPU: 1)"]
-            BatchQ1["Dynamic Batch Queue<br/>(max_batch_size=8, wait=50ms)"]
-            Model1["TensorRT / PyTorch Model Instance"]
-            BatchQ1 --> Model1
-        end
-
-        subgraph Replica2["Replica Actor 02 (GPU: 1)"]
-            BatchQ2["Dynamic Batch Queue<br/>(max_batch_size=8, wait=50ms)"]
-            Model2["TensorRT / PyTorch Model Instance"]
-            BatchQ2 --> Model2
-        end
-
-        Router -->|"Direct gRPC Stream"| BatchQ1
-        Router -->|"Direct gRPC Stream"| BatchQ2
-    end
-
-    style IngressPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style ControlPlane fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style DeploymentReplicas fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style Replica1 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
-    style Replica2 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Clients fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Proxy fill:#1e293b,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Replica1 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Replica2 fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Controller fill:#1e1e38,stroke:#f59e0b,stroke-width:1px,stroke-dasharray: 5 5,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant C1 as Client 1 (HTTP)
-    participant C2 as Client 2 (HTTP)
-    participant P as Serve Ingress Proxy
-    participant R as Replica Actor (@serve.batch)
-    participant M as GPU Model Forward Pass
-
-    Note over C1,C2: Concurrent HTTP Invocations
-    C1->>P: POST /predict {"text": "Alpha"}
-    C2->>P: POST /predict {"text": "Beta"}
-    P->>R: Enqueue Request 1
-    P->>R: Enqueue Request 2
-    Note over R: Dynamic Batch Buffer accumulates requests (timeout=50ms / max=8)
-    R->>M: ForwardPass(["Alpha", "Beta"]) (Vectorized GPU Matrix Op)
-    M-->>R: Returns Batch Predictions [0.95, 0.88]
-    R-->>P: Demux Response 1 & 2
-    P-->>C1: 200 OK {"category": "Alpha", "score": 0.95}
-    P-->>C2: 200 OK {"category": "Beta", "score": 0.88}
-```
-
-Serve decouples HTTP routing from model execution, automatically queuing and packing concurrent requests into optimal GPU micro-batches. The Serve Controller monitors request latency and queue backlogs to scale replica actor pools horizontally.
+> **Diagram Walkthrough & Core Concepts:**
+> - **Decoupled HTTP Routing**: The lightweight Ray Serve HTTP Proxy accepts incoming client traffic and routes requests directly to available worker replicas via gRPC.
+> - **Dynamic Micro-Batching**: `@serve.batch` aggregates individual incoming requests into vectorized batches up to `max_batch_size` before evaluating neural network forward passes on GPUs.
+> - **Autonomous Autoscaling**: The Serve Controller tracks queue depths and latency metrics, scaling replica actors up or down across nodes to handle bursty production traffic.
 
 ---
 

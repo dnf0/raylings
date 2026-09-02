@@ -52,6 +52,11 @@ flowchart TD
     style C13 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
 ```
 
+> **Diagram Walkthrough & Core Concepts:**
+> - **Part I: Ray Core & Distributed Memory Foundations (Ch 01–07)**: Learn remote tasks, stateful actors, Plasma shared memory, two-tier scheduling, fault tolerance, cluster topology, and production patterns.
+> - **Part II: Distributed Data & Scalable ML Frameworks (Ch 08–12)**: Scale to streaming data pipelines, distributed training with PyTorch DDP, hyperparameter tuning with ASHA, and dynamic serving replicas.
+> - **Part III: Cloud-Native Ops & High-Performance Scale (Ch 13–18)**: Master OpenTelemetry observability, KubeRay Kubernetes orchestration, high-throughput vLLM inference, FSDP foundation model training, vector RAG, and financial Monte Carlo engines.
+
 | # | Chapter Identifier | Chapter Title | Exercises | Focus Area | Difficulty |
 | :-: | :--- | :--- | :-: | :--- | :--- |
 | **01** | [`01_basics`](#chapter-1-01_basics-ray-core-foundations) | **Ray Core Foundations** | 6 | Tasks, ObjectRefs, Asynchronous Execution | Beginner |

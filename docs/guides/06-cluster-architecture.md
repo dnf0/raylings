@@ -16,76 +16,23 @@ A Ray cluster consists of a single **Head Node** and zero or more **Worker Nodes
 
 ```mermaid
 flowchart TD
-    subgraph HeadNode["Ray Head Node (Control Plane)"]
-        GCS["Global Control Store (GCS Server)<br/>• Node Membership Table<br/>• Actor Registration Table<br/>• Placement Group Registry<br/>• Object Location Directory"]
-        Dashboard["Ray Dashboard & Observability Server (Port 8265)"]
-        Autoscaler["Cluster Autoscaler Daemon"]
-        HeadRaylet["Head Node Raylet & Plasma Store"]
-        
-        GCS <--> Dashboard
-        GCS <--> Autoscaler
-    end
+    Head["Head Node<br/>(GCS + Dashboard + Autoscaler)"] <-->|"gRPC Heartbeats & Metadata"| Raylet1["Worker Node 1 Raylet<br/>(Local Scheduler + Plasma)"]
+    Head <-->|"gRPC Heartbeats & Metadata"| Raylet2["Worker Node 2 Raylet<br/>(Local Scheduler + Plasma)"]
+    Raylet1 -->|"Assigns Task"| Workers1["Python Worker Processes"]
+    Raylet2 -->|"Assigns Task"| Workers2["GPU Worker Processes"]
+    Raylet1 <-->|"Inter-Node Object Transfer (TCP)"| Raylet2
 
-    subgraph WorkerNode1["Worker Node 01 (Compute)"]
-        subgraph RL1["Raylet Daemon 01"]
-            Sched1["Local Scheduler"]
-            NM1["Node Manager"]
-        end
-        PS1["Plasma Object Store (/dev/shm)"]
-        WPool1["Core Worker Pool (Python 3.12 Processes)"]
-        
-        RL1 <--> PS1
-        RL1 --> WPool1
-    end
-
-    subgraph WorkerNode2["Worker Node 02 (GPU / Accelerators)"]
-        subgraph RL2["Raylet Daemon 02"]
-            Sched2["Local Scheduler"]
-            NM2["Node Manager"]
-        end
-        PS2["Plasma Object Store (/dev/shm)"]
-        WPool2["GPU Worker Pool (PyTorch CUDA Processes)"]
-        
-        RL2 <--> PS2
-        RL2 --> WPool2
-    end
-
-    GCS <-->|"gRPC Heartbeats & Membership"| RL1
-    GCS <-->|"gRPC Heartbeats & Membership"| RL2
-    PS1 <-->|"Zero-Copy Inter-Node Object Transfer (TCP)"| PS2
-
-    style HeadNode fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style WorkerNode1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style WorkerNode2 fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style GCS fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style PS1 fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
-    style PS2 fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style Head fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Raylet1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Raylet2 fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Workers1 fill:#1e1e38,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Workers2 fill:#1e1e38,stroke:#c084fc,stroke-width:1px,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant WN as New Worker Node (Raylet)
-    participant GCS as Global Control Store (Head Node)
-    participant D as Driver Process
-    participant DB as Ray Dashboard
-
-    Note over WN,GCS: Node Join Protocol
-    WN->>GCS: RegisterNode(NodeIP, TotalCPUs, TotalGPUs, MemoryBytes)
-    GCS->>GCS: Append to Cluster Membership Table
-    GCS-->>WN: RegistrationAck(ClusterID, GCSHeartbeatInterval)
-    
-    loop Periodic Node Health & Resource Broadcast
-        WN->>GCS: Heartbeat(AvailableCPUs, PlasmaMemoryUsage, AliveWorkers)
-        GCS->>DB: Stream Real-Time Cluster Telemetry
-    end
-
-    Note over D,GCS: State Inspection (ray.util.state)
-    D->>GCS: list_nodes() / list_actors()
-    GCS-->>D: Return Cluster Topology Snapshot
-```
-
-The **Global Control Store (GCS)** manages cluster-wide metadata (actor registration, node membership, placement group tables, and object locations), ensuring decentralized task dispatch while maintaining centralized consensus.
+> **Diagram Walkthrough & Core Concepts:**
+> - **Decoupled Control Plane**: The Head Node hosts the Global Control Store (GCS) and cluster services, maintaining the actor registry, placement groups, and node membership without acting as a bottleneck for task execution.
+> - **Autonomous Local Schedulers**: Each Worker Node runs a local `Raylet` daemon that schedules tasks directly onto local Python worker processes whenever resources are available.
+> - **Direct Peer-to-Peer Data Transfer**: When a worker needs an object created on another node, the local Raylets stream the bytes directly over high-speed TCP/IP without routing through the Head Node.
 
 ---
 
