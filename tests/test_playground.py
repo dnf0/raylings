@@ -10,19 +10,32 @@ from raylings.playground_assets import (
 
 
 def test_generate_playground_catalog():
-    """Verify playground catalog extracts exercises and solutions cleanly."""
+    """Verify playground catalog extracts all 81 exercises across 18 chapters."""
     catalog = generate_playground_catalog()
     assert isinstance(catalog, list)
-    assert len(catalog) > 0
+    assert len(catalog) == 81, f"Expected 81 exercises, got {len(catalog)}"
+
+    chapters = {ex["chapter"] for ex in catalog}
+    assert len(chapters) == 18, f"Expected 18 chapters, got {len(chapters)}"
 
     first_ex = catalog[0]
     assert "chapter" in first_ex
     assert "chapter_name" in first_ex
+    assert "chapter_title" in first_ex
     assert "name" in first_ex
     assert "prompt" in first_ex
     assert "code" in first_ex
     assert "solution" in first_ex
     assert "hint" in first_ex
+
+    for ex in catalog:
+        assert ex["name"], "Exercise name must not be empty"
+        assert ex["chapter_name"], "Chapter name must not be empty"
+        assert ex["chapter_title"], "Chapter title must not be empty"
+        assert ex["code"], f"Starter code missing for {ex['name']}"
+        assert ex["solution"], f"Solution code missing for {ex['name']}"
+        assert ex["prompt"], f"Prompt missing for {ex['name']}"
+        assert ex["hint"], f"Hint missing for {ex['name']}"
 
     # Ensure basics01 is present
     basics01 = next(ex for ex in catalog if ex["name"] == "basics01")
@@ -31,14 +44,15 @@ def test_generate_playground_catalog():
 
 
 def test_export_playground_bundle(tmp_path: Path):
-    """Verify bundle export writes valid JSON/JS to disk."""
+    """Verify bundle export writes all 81 exercises to valid JSON on disk."""
     out_file = tmp_path / "playground_catalog.json"
     result_path = export_playground_bundle(out_file)
 
     assert result_path.exists()
     data = json.loads(result_path.read_text(encoding="utf-8"))
     assert isinstance(data, list)
-    assert len(data) >= 20
+    assert len(data) == 81
+    assert data[0]["chapter_title"]
 
 
 def test_playground_docs_and_assets_exist():

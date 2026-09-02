@@ -36,7 +36,7 @@ def generate_playground_catalog() -> list[dict[str, Any]]:
                     prompt = code_str[3:end_idx].strip()
 
             hint_str = (
-                " ".join(ex.hints)
+                "\n".join(f"• {h}" for h in ex.hints)
                 if ex.hints
                 else "Read the docstrings carefully and implement the missing logic."
             )
@@ -44,7 +44,8 @@ def generate_playground_catalog() -> list[dict[str, Any]]:
             catalog.append(
                 {
                     "chapter": chapter.number,
-                    "chapter_name": chapter.title,
+                    "chapter_name": chapter.name,
+                    "chapter_title": chapter.title,
                     "name": ex.name,
                     "title": ex.title,
                     "path": ex.path,
