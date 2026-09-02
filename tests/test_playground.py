@@ -138,24 +138,58 @@ def test_wasm_simulation_engine():
     records = ds2.take_all()
     assert records == [{"id": 0}, {"id": 2}, {"id": 4}, {"id": 6}, {"id": 8}]
 
-    # Test cluster stats
+    # Test cluster stats contract
     stats = ray._get_cluster_stats()
-    assert stats["nodes"] >= 1
+    assert isinstance(stats, dict)
+    expected_keys = {"nodes", "cpus", "gpus", "objects_count", "objects_bytes", "actors_count", "tasks_count"}
+    assert expected_keys.issubset(set(stats.keys())), f"Missing keys in cluster stats: {expected_keys - set(stats.keys())}"
+    assert stats["nodes"] == 1
     assert stats["cpus"] == 4
     assert stats["objects_count"] >= 1
+    assert stats["objects_bytes"] >= 0
 
     ray.shutdown()
     assert ray.is_initialized() is False
 
 
+def test_bundle_drift_and_synchronization():
+    """Verify that the static playground bundle on disk matches generate_playground_bundle() without drift."""
+    from raylings.playground_assets import BUNDLE_PATH, generate_playground_bundle
+
+    assert BUNDLE_PATH.exists(), "playground-bundle.json must exist"
+    disk_bundle = json.loads(BUNDLE_PATH.read_text(encoding="utf-8"))
+    memory_bundle = generate_playground_bundle()
+
+    assert disk_bundle["total_chapters"] == memory_bundle["total_chapters"] == 18
+    assert disk_bundle["total_exercises"] == memory_bundle["total_exercises"] == 81
+    assert len(disk_bundle["chapters"]) == len(memory_bundle["chapters"]) == 18
+    assert set(disk_bundle["exercises"].keys()) == set(memory_bundle["exercises"].keys())
+
+
+def test_javascript_syntax_validity():
+    """Verify JavaScript files have valid syntax using Node if available."""
+    import shutil
+    import subprocess
+
+    node_bin = shutil.which("node")
+    if node_bin:
+        res = subprocess.run(
+            [node_bin, "--check", "docs/assets/playground/playground.js", "docs/assets/playground/playground-worker.js"],
+            capture_output=True,
+            text=True,
+        )
+        assert res.returncode == 0, f"Node syntax check failed: {res.stderr}"
+
+
 def test_standardized_playground_architecture():
-    """Verify all standardized standalone playground shell and asset files exist and are valid."""
+    """Verify all standardized standalone playground shell and asset files exist and adhere to contracts."""
     index_html = Path("docs/playground/index.html")
     assert index_html.exists(), "docs/playground/index.html must exist"
     index_content = index_html.read_text(encoding="utf-8")
     assert "raylings-playground" in index_content
     assert "standalone-header" in index_content
     assert "theme-toggle-btn" in index_content
+    assert "header-nav-btn" in index_content
     assert "playground.css" in index_content
     assert "playground.js" in index_content
 
@@ -172,8 +206,10 @@ def test_standardized_playground_architecture():
     js_content = js_file.read_text(encoding="utf-8")
     assert "RaylingsStorage" in js_content
     assert "raylings_learning_state_v1" in js_content
+    assert "raylings_playground_v1" in js_content  # Migration support
     assert "loadMonaco" in js_content
     assert "btn-run-exercise" in js_content
+    assert "btn-stop-exercise" in js_content
     assert "btn-toggle-hint" in js_content
     assert "btn-toggle-diff" in js_content
     assert "exportBackup" in js_content
@@ -186,9 +222,4 @@ def test_standardized_playground_architecture():
     assert "RUN_EXERCISE" in worker_content
     assert "raylings.wasm_compat" in worker_content
 
-    bundle_file = Path("docs/assets/playground/playground-bundle.json")
-    assert bundle_file.exists(), "docs/assets/playground/playground-bundle.json must exist"
-    bundle_data = json.loads(bundle_file.read_text(encoding="utf-8"))
-    assert len(bundle_data["chapters"]) == 18
-    assert len(bundle_data["exercises"]) == 81
 

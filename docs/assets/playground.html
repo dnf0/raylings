@@ -457,10 +457,14 @@ class WasmRayModule:
         return {
             "nodes": 1 if self._init else 0,
             "cpus": 4 if self._init else 0,
+            "gpus": 0,
             "used_bytes": used_bytes,
+            "objects_bytes": used_bytes,
             "max_bytes": self._store.max_bytes,
             "objects_count": len(self._store._store),
+            "actors_count": len(self._actors) if self._init else 0,
             "active_actors": len(self._actors) if self._init else 0,
+            "tasks_count": self._tasks_count,
             "completed_tasks": self._tasks_count,
         }
 

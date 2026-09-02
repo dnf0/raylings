@@ -2,8 +2,9 @@
  * Raylings WebAssembly Playground UI Controller & State Engine
  *
  * Full 81-exercise browser learning environment powered by Pyodide WebAssembly.
- * Features client-side localStorage persistence, interactive split-pane syllabus sidebar,
- * real-time search & filters, progressive hints, side-by-side solution diffs,
+ * Features client-side localStorage persistence with legacy migration,
+ * interactive split-pane syllabus sidebar, real-time search & filters,
+ * progressive hints, side-by-side solution diffs, execution timeout/cancellation,
  * Ray cluster diagnostics inspector, and progress backup / restore.
  */
 
@@ -11,6 +12,8 @@
   "use strict";
 
   const STORAGE_KEY = "raylings_learning_state_v1";
+  const LEGACY_STORAGE_KEY = "raylings_playground_v1";
+  const EXECUTION_TIMEOUT_MS = 10000;
 
   /**
    * ==========================================================================
@@ -27,6 +30,20 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           saved = JSON.parse(raw);
+        } else {
+          // Check and migrate legacy storage if present
+          const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+          if (legacyRaw) {
+            const legacy = JSON.parse(legacyRaw);
+            if (legacy && legacy.exercises) {
+              saved = {
+                version: 1,
+                lastActiveExerciseId: legacy.lastActiveExerciseId || "basics01",
+                exercises: legacy.exercises,
+                stats: { completedCount: 0, totalCount: bundle?.total_exercises || 81, completionPercentage: 0 },
+              };
+            }
+          }
         }
       } catch (e) {
         console.warn("Failed to read Raylings state from localStorage:", e);
@@ -47,19 +64,6 @@
         };
       }
 
-      // Ensure all bundle exercises are represented in storage
-      if (bundle && bundle.exercises) {
-        for (const [id, ex] of Object.entries(bundle.exercises)) {
-          if (!saved.exercises[id]) {
-            saved.exercises[id] = {
-              status: "not_started",
-              userCode: ex.starter_code || "",
-              hintsRevealed: 0,
-            };
-          }
-        }
-      }
-
       this.state = saved;
       this.recalculateStats(bundle);
       this.persist();
@@ -69,10 +73,10 @@
     recalculateStats(bundle) {
       if (!this.state || !this.state.exercises) return;
       let completed = 0;
-      const total = bundle && bundle.exercises ? Object.keys(bundle.exercises).length : Object.keys(this.state.exercises).length;
+      const total = bundle && bundle.exercises ? Object.keys(bundle.exercises).length : 81;
 
       for (const exState of Object.values(this.state.exercises)) {
-        if (exState.status === "completed") {
+        if (exState && exState.status === "completed") {
           completed++;
         }
       }
@@ -96,22 +100,38 @@
     getExerciseState(exerciseId, defaultStarterCode = "") {
       if (!this.state) return { status: "not_started", userCode: defaultStarterCode, hintsRevealed: 0 };
       if (!this.state.exercises[exerciseId]) {
-        this.state.exercises[exerciseId] = {
+        return {
           status: "not_started",
           userCode: defaultStarterCode,
           hintsRevealed: 0,
         };
-        this.persist();
       }
-      return this.state.exercises[exerciseId];
+      const existing = this.state.exercises[exerciseId];
+      return {
+        status: existing.status || "not_started",
+        userCode: existing.userCode !== undefined && existing.userCode !== null ? existing.userCode : defaultStarterCode,
+        hintsRevealed: existing.hintsRevealed || 0,
+      };
     },
 
-    saveExerciseCode(exerciseId, code) {
+    saveExerciseCode(exerciseId, code, starterCode) {
       if (!this.state) return;
-      const exState = this.getExerciseState(exerciseId, code);
+      if (!this.state.exercises[exerciseId]) {
+        this.state.exercises[exerciseId] = {
+          status: "not_started",
+          userCode: null,
+          hintsRevealed: 0,
+        };
+      }
+
+      const exState = this.state.exercises[exerciseId];
       exState.userCode = code;
-      if (exState.status === "not_started") {
-        exState.status = "in_progress";
+
+      // Only mark in_progress if the code differs from starter code and isn't completed
+      if (exState.status !== "completed") {
+        if (code && code !== starterCode) {
+          exState.status = "in_progress";
+        }
       }
       exState.lastEvaluatedAt = new Date().toISOString();
 
@@ -123,7 +143,14 @@
 
     markCompleted(exerciseId, bundle) {
       if (!this.state) return;
-      const exState = this.getExerciseState(exerciseId);
+      if (!this.state.exercises[exerciseId]) {
+        this.state.exercises[exerciseId] = {
+          status: "completed",
+          userCode: null,
+          hintsRevealed: 0,
+        };
+      }
+      const exState = this.state.exercises[exerciseId];
       exState.status = "completed";
       exState.passedAt = new Date().toISOString();
       this.recalculateStats(bundle);
@@ -132,18 +159,20 @@
 
     setHintsRevealed(exerciseId, count) {
       if (!this.state) return;
-      const exState = this.getExerciseState(exerciseId);
-      exState.hintsRevealed = count;
+      if (!this.state.exercises[exerciseId]) {
+        this.state.exercises[exerciseId] = {
+          status: "not_started",
+          userCode: null,
+          hintsRevealed: 0,
+        };
+      }
+      this.state.exercises[exerciseId].hintsRevealed = count;
       this.persist();
     },
 
-    resetExercise(exerciseId, starterCode) {
+    resetExercise(exerciseId) {
       if (!this.state) return;
-      this.state.exercises[exerciseId] = {
-        status: "not_started",
-        userCode: starterCode || "",
-        hintsRevealed: 0,
-      };
+      delete this.state.exercises[exerciseId];
       this.persist();
     },
 
@@ -158,15 +187,6 @@
           completionPercentage: 0,
         },
       };
-      if (bundle && bundle.exercises) {
-        for (const [id, ex] of Object.entries(bundle.exercises)) {
-          this.state.exercises[id] = {
-            status: "not_started",
-            userCode: ex.starter_code || "",
-            hintsRevealed: 0,
-          };
-        }
-      }
       this.persist();
     },
 
@@ -177,8 +197,13 @@
     importBackupJSON(jsonStr, bundle) {
       try {
         const parsed = JSON.parse(jsonStr);
-        if (parsed && parsed.exercises) {
-          this.state = parsed;
+        if (parsed && typeof parsed === "object") {
+          this.state = {
+            version: 1,
+            lastActiveExerciseId: parsed.lastActiveExerciseId || "basics01",
+            exercises: parsed.exercises || {},
+            stats: { completedCount: 0, totalCount: bundle?.total_exercises || 81, completionPercentage: 0 },
+          };
           this.recalculateStats(bundle);
           this.persist();
           return true;
@@ -200,7 +225,7 @@
   let diffOriginalModel = null;
   let diffModifiedModel = null;
 
-  function loadMonaco(callback) {
+  function loadMonaco(callback, onError) {
     if (window.monaco) {
       callback();
       return;
@@ -208,13 +233,21 @@
 
     const loaderScript = document.createElement("script");
     loaderScript.src = "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js";
+    loaderScript.crossOrigin = "anonymous";
+    loaderScript.onerror = () => {
+      if (onError) onError(new Error("Failed to load Monaco Editor loader script from CDN."));
+    };
     loaderScript.onload = () => {
-      window.require.config({
-        paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" },
-      });
-      window.require(["vs/editor/editor.main"], () => {
-        callback();
-      });
+      try {
+        window.require.config({
+          paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" },
+        });
+        window.require(["vs/editor/editor.main"], () => {
+          callback();
+        });
+      } catch (err) {
+        if (onError) onError(err);
+      }
     };
     document.head.appendChild(loaderScript);
   }
@@ -235,6 +268,10 @@
       this.isDiffOpen = false;
       this.activeTab = "terminal"; // 'terminal' | 'cluster'
       this.lastClusterState = null;
+      this.isLoadingExercise = false;
+      this.executionTimer = null;
+      this.isEvaluating = false;
+      this.expandedChapters = new Set([1]); // Default expand chapter 1
 
       this.init();
     }
@@ -251,7 +288,7 @@
           const fallbackResp = await fetch("docs/assets/playground/playground-bundle.json");
           this.bundle = await fallbackResp.json();
         } catch (e2) {
-          this.renderError("Failed to load Raylings playground catalog bundle: " + e2.message);
+          this.renderError("Failed to load Raylings playground catalog bundle: " + this.escapeHtml(e2.message));
           return;
         }
       }
@@ -259,20 +296,35 @@
       RaylingsStorage.init(this.bundle);
       if (RaylingsStorage.state.lastActiveExerciseId && this.bundle.exercises[RaylingsStorage.state.lastActiveExerciseId]) {
         this.currentExerciseId = RaylingsStorage.state.lastActiveExerciseId;
+        const curEx = this.bundle.exercises[this.currentExerciseId];
+        if (curEx && curEx.chapter_number) {
+          this.expandedChapters.add(curEx.chapter_number);
+        }
       } else {
         this.currentExerciseId = Object.keys(this.bundle.exercises)[0] || "basics01";
       }
 
       this.initWorker();
       this.renderLayout();
-      loadMonaco(() => {
-        this.initMonaco();
-        this.loadExercise(this.currentExerciseId);
-      });
+      loadMonaco(
+        () => {
+          this.initMonaco();
+          this.loadExercise(this.currentExerciseId);
+        },
+        (err) => {
+          this.renderError("Monaco Editor failed to load: " + this.escapeHtml(err.message));
+        }
+      );
       this.bindShortcuts();
     }
 
     initWorker() {
+      if (this.worker) {
+        try {
+          this.worker.terminate();
+        } catch (e) {}
+      }
+
       try {
         this.worker = new Worker("../assets/playground/playground-worker.js");
       } catch (e) {
@@ -315,12 +367,13 @@
       this.rootEl.innerHTML = `
         <div style="padding: 24px; color: var(--pg-error-text); background: var(--pg-error-bg); border: 1px solid var(--pg-error-border); border-radius: 8px; margin: 20px;">
           <h3 style="margin-top: 0;">Playground Error</h3>
-          <p>${msg}</p>
+          <p>${this.escapeHtml(msg)}</p>
         </div>
       `;
     }
 
     renderLayout() {
+      const totalCount = this.bundle?.total_exercises || 81;
       this.rootEl.innerHTML = `
         <div class="playground-split-layout">
           <!-- Sidebar: Syllabus & Tree -->
@@ -337,14 +390,14 @@
               <div class="sidebar-progress-container">
                 <div class="sidebar-progress-labels">
                   <span>Progress</span>
-                  <span id="sidebar-progress-text" class="sidebar-progress-pct">0% (0/81)</span>
+                  <span id="sidebar-progress-text" class="sidebar-progress-pct">0% (0/${totalCount})</span>
                 </div>
                 <div class="sidebar-progress-track">
                   <div id="sidebar-progress-fill" class="sidebar-progress-fill" style="width: 0%;"></div>
                 </div>
               </div>
               <div class="sidebar-search-row">
-                <input type="text" id="sidebar-search" class="sidebar-search-input" placeholder="🔍 Search 81 exercises or chapters..." />
+                <input type="text" id="sidebar-search" class="sidebar-search-input" placeholder="🔍 Search ${totalCount} exercises or chapters..." />
               </div>
               <div class="sidebar-filter-tabs">
                 <button class="filter-tab active" data-filter="all">All</button>
@@ -379,6 +432,9 @@
               <button id="btn-run-exercise" class="playground-btn playground-btn-primary" disabled>
                 <span>▶ Run Exercise</span>
                 <span class="playground-btn-kbd">Ctrl+↵</span>
+              </button>
+              <button id="btn-stop-exercise" class="playground-btn" style="display: none; color: var(--pg-error-text);">
+                <span>⏹ Stop</span>
               </button>
               <button id="btn-toggle-hint" class="playground-btn">
                 <span>💡 Hints</span>
@@ -447,8 +503,10 @@
       });
 
       monacoEditor.onDidChangeModelContent(() => {
+        if (this.isLoadingExercise) return;
         const val = monacoEditor.getValue();
-        RaylingsStorage.saveExerciseCode(this.currentExerciseId, val);
+        const ex = this.bundle?.exercises[this.currentExerciseId];
+        RaylingsStorage.saveExerciseCode(this.currentExerciseId, val, ex?.starter_code || "");
         this.updateSidebarItemStatus(this.currentExerciseId);
       });
 
@@ -471,15 +529,22 @@
       const ex = this.bundle.exercises[exerciseId];
       const exState = RaylingsStorage.getExerciseState(exerciseId, ex.starter_code);
 
+      // Expand active chapter
+      if (ex.chapter_number) {
+        this.expandedChapters.add(ex.chapter_number);
+      }
+
       // Update Topbar Meta
       const metaChapter = this.rootEl.querySelector("#meta-chapter-badge");
       const metaTitle = this.rootEl.querySelector("#meta-exercise-title");
       if (metaChapter) metaChapter.textContent = `Ch ${String(ex.chapter_number).padStart(2, "0")}: ${ex.chapter_title}`;
       if (metaTitle) metaTitle.textContent = `${ex.id}.py — ${ex.title}`;
 
-      // Update Editor Code
+      // Update Editor Code without triggering in_progress dirty state
       if (monacoEditor) {
+        this.isLoadingExercise = true;
         monacoEditor.setValue(exState.userCode || ex.starter_code || "");
+        this.isLoadingExercise = false;
       }
 
       // Close Diff if active
@@ -497,13 +562,16 @@
       // Clear terminal output or show welcome
       const term = this.rootEl.querySelector("#playground-output");
       if (term) {
-        term.innerHTML = `<span class="term-dim">⚡ Loaded exercise ${ex.id}.py (${ex.title}). Press Ctrl+Enter or click 'Run Exercise' to evaluate.</span>\n\n<span class="term-info">Docstring Objective:</span>\n${ex.prompt || "Complete the implementation."}`;
+        term.innerHTML = `<span class="term-dim">⚡ Loaded exercise ${this.escapeHtml(ex.id)}.py (${this.escapeHtml(ex.title)}). Press Ctrl+Enter or click 'Run Exercise' to evaluate.</span>\n\n<span class="term-info">Docstring Objective:</span>\n${this.escapeHtml(ex.prompt || "Complete the implementation.")}`;
       }
     }
 
     bindEvents() {
       // Run Button
       this.rootEl.querySelector("#btn-run-exercise").addEventListener("click", () => this.runExercise());
+
+      // Stop Button
+      this.rootEl.querySelector("#btn-stop-exercise").addEventListener("click", () => this.stopExercise());
 
       // Hints Button
       this.rootEl.querySelector("#btn-toggle-hint").addEventListener("click", () => this.revealNextHint());
@@ -586,13 +654,26 @@
     }
 
     runExercise() {
-      if (!this.worker || !monacoEditor) return;
+      if (!this.worker || !monacoEditor || this.isEvaluating) return;
       const code = monacoEditor.getValue();
       const ex = this.bundle.exercises[this.currentExerciseId];
 
+      this.isEvaluating = true;
       this.updateStatusPill("running", "Evaluating in Pyodide...");
+
+      const runBtn = this.rootEl.querySelector("#btn-run-exercise");
+      const stopBtn = this.rootEl.querySelector("#btn-stop-exercise");
+      if (runBtn) runBtn.style.display = "none";
+      if (stopBtn) stopBtn.style.display = "inline-flex";
+
       const term = this.rootEl.querySelector("#playground-output");
-      term.innerHTML = `<span class="term-info">⚡ Running ${ex.id}.py via Python 3.12 WebAssembly...</span>\n`;
+      term.innerHTML = `<span class="term-info">⚡ Running ${this.escapeHtml(ex.id)}.py via Python 3.12 WebAssembly...</span>\n`;
+
+      // Set execution timeout
+      clearTimeout(this.executionTimer);
+      this.executionTimer = setTimeout(() => {
+        this.stopExercise("Execution timed out (exceeded 10-second limit). Possible infinite loop or blocking ray.get.");
+      }, EXECUTION_TIMEOUT_MS);
 
       this.worker.postMessage({
         type: "RUN_EXERCISE",
@@ -602,7 +683,35 @@
       });
     }
 
+    stopExercise(reason = "Execution cancelled by user.") {
+      clearTimeout(this.executionTimer);
+      this.isEvaluating = false;
+
+      // Terminate and reboot worker
+      this.initWorker();
+
+      const runBtn = this.rootEl.querySelector("#btn-run-exercise");
+      const stopBtn = this.rootEl.querySelector("#btn-stop-exercise");
+      if (runBtn) runBtn.style.display = "inline-flex";
+      if (stopBtn) stopBtn.style.display = "none";
+
+      this.handleRunResult({
+        passed: false,
+        error: reason,
+        durationMs: 0,
+        output: "",
+      });
+    }
+
     handleRunResult(res) {
+      clearTimeout(this.executionTimer);
+      this.isEvaluating = false;
+
+      const runBtn = this.rootEl.querySelector("#btn-run-exercise");
+      const stopBtn = this.rootEl.querySelector("#btn-stop-exercise");
+      if (runBtn) runBtn.style.display = "inline-flex";
+      if (stopBtn) stopBtn.style.display = "none";
+
       this.updateStatusPill("ready", "Ready");
       this.lastClusterState = res.clusterState || null;
 
@@ -648,15 +757,18 @@
       const view = this.rootEl.querySelector("#playground-cluster-view");
       if (!view) return;
 
-      const stats = this.lastClusterState || {
-        nodes: 1,
-        cpus: 4,
-        gpus: 0,
-        objects_count: 0,
-        objects_bytes: 0,
-        actors_count: 0,
-        tasks_count: 0,
-      };
+      if (!this.lastClusterState) {
+        view.innerHTML = `
+          <div style="padding: 20px; color: var(--pg-term-dim); text-align: center;">
+            <div style="font-size: 24px; margin-bottom: 8px;">🌐</div>
+            <div style="font-weight: 600; color: var(--pg-text); margin-bottom: 4px;">No Cluster Telemetry Recorded Yet</div>
+            <div style="font-size: 11px;">Run an exercise to measure active nodes, CPU tasks, Plasma memory, and actor pool statistics.</div>
+          </div>
+        `;
+        return;
+      }
+
+      const stats = this.lastClusterState;
 
       view.innerHTML = `
         <div style="padding: 10px 0;">
@@ -675,15 +787,15 @@
               <span class="cluster-stat-lbl">Plasma Objects</span>
             </div>
             <div class="cluster-stat-card">
-              <span class="cluster-stat-val">${(stats.objects_bytes / 1024).toFixed(1)} KB</span>
+              <span class="cluster-stat-val">${((stats.objects_bytes || 0) / 1024).toFixed(1)} KB</span>
               <span class="cluster-stat-lbl">Memory Used</span>
             </div>
             <div class="cluster-stat-card">
-              <span class="cluster-stat-val">${stats.actors_count}</span>
+              <span class="cluster-stat-val">${stats.actors_count || 0}</span>
               <span class="cluster-stat-lbl">Active Actors</span>
             </div>
             <div class="cluster-stat-card">
-              <span class="cluster-stat-val">${stats.tasks_count}</span>
+              <span class="cluster-stat-val">${stats.tasks_count || 0}</span>
               <span class="cluster-stat-lbl">Tasks Dispatched</span>
             </div>
           </div>
@@ -763,8 +875,12 @@
       const ex = this.bundle.exercises[this.currentExerciseId];
       if (!ex) return;
       if (confirm(`Reset ${ex.id}.py back to the starter code template?`)) {
-        RaylingsStorage.resetExercise(this.currentExerciseId, ex.starter_code);
-        if (monacoEditor) monacoEditor.setValue(ex.starter_code || "");
+        RaylingsStorage.resetExercise(this.currentExerciseId);
+        if (monacoEditor) {
+          this.isLoadingExercise = true;
+          monacoEditor.setValue(ex.starter_code || "");
+          this.isLoadingExercise = false;
+        }
         this.renderHints(ex, 0);
         this.updateSidebarItemStatus(this.currentExerciseId);
       }
@@ -848,8 +964,8 @@
           continue;
         }
 
-        const isCurrentChapter = matchingExercises.some((e) => e.id === this.currentExerciseId);
-        const expandedClass = isCurrentChapter || this.searchQuery ? "expanded" : "";
+        const isExpanded = this.expandedChapters.has(chapter.number) || Boolean(this.searchQuery);
+        const expandedClass = isExpanded ? "expanded" : "";
 
         let completedInCh = 0;
         for (const exId of chapter.exercise_ids) {
@@ -865,7 +981,7 @@
               <div class="chapter-header-title">
                 <span class="chapter-chevron">▶</span>
                 <span class="chapter-num">${String(chapter.number).padStart(2, "0")}.</span>
-                <span class="chapter-name" title="${chapter.title}">${chapter.title}</span>
+                <span class="chapter-name" title="${this.escapeHtml(chapter.title)}">${this.escapeHtml(chapter.title)}</span>
               </div>
               <span class="${countBadgeClass}">${completedInCh}/${chapter.exercise_ids.length}</span>
             </div>
@@ -887,10 +1003,10 @@
           }
 
           html += `
-            <div class="exercise-item ${activeClass} ${statusClass}" data-exercise-id="${ex.id}">
+            <div class="exercise-item ${activeClass} ${statusClass}" data-exercise-id="${this.escapeHtml(ex.id)}">
               <span class="exercise-status-icon">${statusIcon}</span>
               <div class="exercise-item-content">
-                <div class="exercise-item-title">${ex.id}.py — ${ex.title}</div>
+                <div class="exercise-item-title">${this.escapeHtml(ex.id)}.py — ${this.escapeHtml(ex.title)}</div>
               </div>
             </div>
           `;
@@ -907,7 +1023,15 @@
       // Bind Chapter Accordions and Exercise Click
       container.querySelectorAll(".chapter-header").forEach((hdr) => {
         hdr.addEventListener("click", () => {
-          hdr.parentElement.classList.toggle("expanded");
+          const grp = hdr.parentElement;
+          const chNum = parseInt(grp.dataset.chapterNum, 10);
+          if (grp.classList.contains("expanded")) {
+            grp.classList.remove("expanded");
+            this.expandedChapters.delete(chNum);
+          } else {
+            grp.classList.add("expanded");
+            this.expandedChapters.add(chNum);
+          }
         });
       });
 
@@ -923,9 +1047,12 @@
       items.forEach((item) => {
         if (item.dataset.exerciseId === this.currentExerciseId) {
           item.classList.add("active");
-          // Ensure parent chapter is expanded
           const parentGroup = item.closest(".chapter-group");
-          if (parentGroup) parentGroup.classList.add("expanded");
+          if (parentGroup) {
+            parentGroup.classList.add("expanded");
+            const chNum = parseInt(parentGroup.dataset.chapterNum, 10);
+            if (!isNaN(chNum)) this.expandedChapters.add(chNum);
+          }
         } else {
           item.classList.remove("active");
         }
@@ -961,7 +1088,7 @@
       a.href = url;
       a.download = `raylings-progress-${dateStr}.json`;
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
     importBackup() {
@@ -988,7 +1115,8 @@
     }
 
     resetAllExercises() {
-      if (confirm("Are you sure you want to reset ALL 81 exercises and clear all stored progress? This cannot be undone.")) {
+      const totalCount = this.bundle?.total_exercises || 81;
+      if (confirm(`Are you sure you want to reset ALL ${totalCount} exercises and clear all stored progress? This cannot be undone.`)) {
         RaylingsStorage.resetAll(this.bundle);
         this.updateProgressUI();
         this.renderSidebarTree();
@@ -998,7 +1126,7 @@
 
     escapeHtml(str) {
       if (!str) return "";
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
   }
 

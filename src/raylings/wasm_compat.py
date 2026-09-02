@@ -392,6 +392,24 @@ class WasmRayModule:
             "object_store_used_bytes": self._store.total_used_bytes,
         }
 
+    def _get_cluster_stats(self) -> dict[str, Any]:
+        """Return comprehensive cluster telemetry statistics for WebAssembly UI."""
+        return {
+            "nodes": 1,
+            "cpus": self._init_context.get("num_cpus", 4),
+            "gpus": self._init_context.get("num_gpus", 0),
+            "objects_count": self._store.object_count,
+            "objects_bytes": self._store.total_used_bytes,
+            "used_bytes": self._store.total_used_bytes,
+            "max_bytes": 100_000_000,
+            "actors_count": len(getattr(self, "_active_actors", [])),
+            "active_actors": len(getattr(self, "_active_actors", [])),
+            "tasks_count": getattr(self, "_dispatched_tasks_count", 0),
+            "completed_tasks": getattr(self, "_dispatched_tasks_count", 0),
+        }
+
+
 
 # Global drop-in singleton mimicking `import ray`
 ray = WasmRayModule()
+
