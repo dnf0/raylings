@@ -15,55 +15,21 @@
 **Ray Data** provides scalable, streaming data processing designed specifically for distributed AI/ML training and inference workloads. Instead of loading whole datasets into memory, Ray Data streams discrete **Block Partitions** through pipelined execution stages.
 
 ```mermaid
-flowchart TD
-    subgraph StorageLayer["Data Storage & Ingestion"]
-        S3["Cloud Object Store (S3 / Parquet)"] -->|"Parallel Block Reads"| ReadStage["Read Stage Tasks"]
-    end
+flowchart LR
+    S3["Storage (S3/Parquet)"] -->|"1. Parallel Reads"| Blocks["Block Partitions<br/>(Plasma Store)"]
+    Blocks -->|"2. Streaming map_batches"| Workers["CPU/GPU Preprocessing<br/>(Actor Pool)"]
+    Workers -->|"3. Zero-Copy Transfer"| GPU["GPU PyTorch Trainers<br/><code>iter_torch_batches()</code>"]
 
-    subgraph PipelineExecutor["Ray Data Streaming Execution Pipeline"]
-        ReadStage -->|"BlockRef 0..N"| BlockQueue["Windowed Block Memory Buffer (Plasma)"]
-        
-        subgraph TransformationEngine["Vectorized Transformation (ActorPool / Task DAG)"]
-            BlockQueue --> Op1["map_batches(batch_size=100)"]
-            Op1 --> Op2["filter(row_predicate)"]
-            Op2 --> Op3["repartition(target_num_blocks)"]
-        end
-        
-        Op3 --> StreamQueue["Zero-Copy Streaming Batch Buffer"]
-    end
-
-    subgraph MLConsumers["Downstream ML Consumption"]
-        StreamQueue -->|"iter_torch_batches()"| GPU0["GPU Trainer Rank 0 (CUDA Shared Memory)"]
-        StreamQueue -->|"iter_torch_batches()"| GPU1["GPU Trainer Rank 1 (CUDA Shared Memory)"]
-    end
-
-    style StorageLayer fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style PipelineExecutor fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style TransformationEngine fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
-    style MLConsumers fill:#1e293b,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style S3 fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Blocks fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
+    style Workers fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style GPU fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant S as Storage (Parquet/S3)
-    participant E as Ray Data Streaming Executor
-    participant P as Plasma Shared Memory
-    participant T as GPU Training Worker
-
-    Note over S,T: Streaming Pipeline Execution (Zero Idle Overlap)
-    E->>S: Read Parquet Files (Partition 0..N)
-    S-->>P: Write Block 0 to Plasma Store
-    par Stage 1 & Stage 2 Overlap
-        E->>P: map_batches(Block 0) -> Preprocess on CPU Worker
-        E->>S: Stream Read Block 1 in Background
-    and Stage 3 GPU Consumes
-        P->>T: iter_torch_batches(Block 0') -> Zero-Copy GPU Transfer
-        T->>T: Forward/Backward Pass on GPU
-    end
-```
-
-This streaming architecture overlaps data reading, preprocessing, and GPU tensor loading, preventing training worker starvation and bounding total memory usage to the window buffer size.
+> **Diagram Walkthrough & Core Concepts:**
+> - **Windowed Streaming Execution**: Ray Data splits large datasets into discrete block partitions that stream continuously through the pipeline rather than materializing the full dataset in RAM.
+> - **Pipelined Stage Overlap**: Storage I/O, CPU data preprocessing (`map_batches`), and GPU tensor loading run concurrently across pipelined worker stages, eliminating GPU starvation.
+> - **Zero-Copy PyTorch Handoff**: `iter_torch_batches()` consumes Arrow blocks directly from Plasma memory into GPU CUDA tensors with minimal serialization overhead.
 
 ---
 

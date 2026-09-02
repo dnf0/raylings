@@ -15,67 +15,23 @@
 **Ray Tune** executes scalable, distributed hyperparameter search across hundreds of concurrent trials. It couples state-of-the-art search algorithms (Bayesian, Optuna, HyperOpt) with early-stopping trial schedulers like **ASHA (Asynchronous Successive Halving Algorithm)**.
 
 ```mermaid
-flowchart TD
-    subgraph TunerDriver["Ray Tune Orchestration Plane"]
-        TunerObj["Tuner.fit()"] --> TrialRunner["TrialRunner Coordinator Actor"]
-        SearchAlg["Search Algorithm<br/>(Bayesian / Optuna / HyperOpt)"] -->|"Generate Configs"| TrialRunner
-        ASHASched["ASHA Scheduler Engine<br/>(Asynchronous Successive Halving)"] <-->|"Pruning & Promotion Decisions"| TrialRunner
-    end
+flowchart LR
+    Tuner["Tuner Coordinator<br/>(TrialRunner + SearchAlg)"] -->|"1. Dispatch Trial Configs"| Rung0["Rung 0: All Trials<br/>(1 Epoch)"]
+    Rung0 -->|"2. Bottom 50% Pruned"| Killed["Terminated Early ❌<br/>(Reclaim GPUs)"]
+    Rung0 -->|"3. Top 50% Promoted"| Rung1["Rung 1: Promoted<br/>(4 Epochs)"]
+    Rung1 -->|"4. Optimal Result"| Winner["Best Trial Winner 🎉<br/>(Full Epochs)"]
 
-    subgraph Rungs["ASHA Successive Halving Rungs"]
-        subgraph Rung0["Rung 0 (1 Epoch Evaluation)"]
-            T0["Trial 0 (lr=0.01)"]
-            T1["Trial 1 (lr=0.5) ❌ (KILLED)"]
-            T2["Trial 2 (lr=0.001)"]
-            T3["Trial 3 (lr=0.05) ❌ (KILLED)"]
-        end
-
-        subgraph Rung1["Rung 1 (4 Epochs Evaluation - Top 50%)"]
-            T0_p["Trial 0 (Promoted)"]
-            T2_p["Trial 2 (Promoted)"]
-        end
-
-        subgraph Rung2["Rung 2 (Final High Resource Evaluation)"]
-            T0_win["Trial 0 (Optimal Result 🎉)"]
-        end
-
-        T0 --> T0_p
-        T2 --> T2_p
-        T0_p --> T0_win
-    end
-
-    TrialRunner --> Rung0
-
-    style TunerDriver fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style Rungs fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style ASHASched fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style Rung0 fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
-    style Rung1 fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style Rung2 fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
+    style Tuner fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Rung0 fill:#0f172a,stroke:#818cf8,stroke-width:1px,color:#f8fafc
+    style Killed fill:#1e1e2e,stroke:#ef4444,stroke-width:1px,stroke-dasharray: 5 5,color:#f8fafc
+    style Rung1 fill:#1e1e38,stroke:#f59e0b,stroke-width:1px,color:#f8fafc
+    style Winner fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant D as Tuner Driver
-    participant TR as TrialRunner Coordinator
-    participant ASHA as ASHA Scheduler
-    participant T0 as Trial Worker 0 (lr=0.01)
-    participant T1 as Trial Worker 1 (lr=0.5)
-
-    Note over D,T1: Trial Execution & Early Stopping Protocol
-    TR->>T0: Spawn Trial(lr=0.01, Epoch=1)
-    TR->>T1: Spawn Trial(lr=0.5, Epoch=1)
-    T0->>TR: tune.report(val_loss=0.35, epoch=1)
-    T1->>TR: tune.report(val_loss=1.85, epoch=1)
-    TR->>ASHA: EvaluateTrialMetrics(T0, T1)
-    ASHA-->>TR: T0 in Top 50% -> Action: CONTINUE / PROMOTE
-    ASHA-->>TR: T1 in Bottom 50% -> Action: STOP (Kill Trial)
-    TR->>T1: Terminate Worker Process & Reclaim GPU Resources
-    TR->>T0: Continue Training to Rung 1 (Epoch=4)
-```
-
-ASHA dynamically prunes underperforming configurations early in their training trajectory, freeing node CPU/GPU slots to evaluate new configurations asynchronously.
+> **Diagram Walkthrough & Core Concepts:**
+> - **Search Algorithm Generation**: Algorithms like Optuna, HyperOpt, or Bayesian search suggest candidate hyperparameter configurations to the `TrialRunner`.
+> - **ASHA Successive Halving**: Trials are evaluated on low resource budgets (Rung 0). Poorly performing configurations are aggressively pruned early in training.
+> - **Dynamic Resource Reallocation**: Terminating low-performing trials frees up cluster GPUs and CPUs immediately to explore new candidate configurations, drastically reducing total compute budget.
 
 ---
 

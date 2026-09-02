@@ -75,54 +75,23 @@ Explore in-depth architectural guides and launch linked practice exercises direc
 The Raylings web playground runs entirely on client-side WebAssembly technology:
 
 ```mermaid
-flowchart TD
-    subgraph BrowserClient["Client Browser Environment (100% Offline / Zero-Backend)"]
-        subgraph UI["Interactive User Interface"]
-            Monaco["Monaco Editor<br/>(Full VS Code Intellisense & Syntax)"]
-            Toolbar["Action Toolbar & Chapter Guide Links"]
-            Term["Interactive xterm.js Terminal Output"]
-        end
+flowchart LR
+    Monaco["Monaco Editor<br/>(User Code)"] -->|"1. postMessage"| Worker["Web Worker<br/>(Pyodide Wasm)"]
+    Worker -->|"2. Simulated Ray Cluster"| Engine["Wasm Ray Engine<br/>(Tasks, Actors, Plasma)"]
+    Engine -->|"3. Verification"| Tester["Harness Validator & Hints"]
+    Tester -->|"4. Stream Output (<5ms)"| Term["xterm.js Terminal Output"]
 
-        subgraph WorkerContext["Dedicated Web Worker Execution Thread"]
-            subgraph PyodideRuntime["Pyodide WebAssembly (Python 3.12 Engine)"]
-                WasmCompat["raylings.wasm_compat<br/>• Pure-Python Task / Actor Engine<br/>• Simulated Plasma Memory Store<br/>• Concurrency & Placement Groups"]
-                TestRunner["Automated Test & Assertion Harness"]
-                HintEngine["Progressive Diagnostic Hint Engine"]
-            end
-        end
-
-        Monaco -->|"1. Dispatch Code Payload"| WorkerContext
-        Toolbar -->|"Run / Reset / Hint Actions"| WorkerContext
-        WasmCompat --> TestRunner
-        TestRunner --> HintEngine
-        WorkerContext ==>|"2. Stream stdout / stderr & Results (<5ms)"| Term
-    end
-
-    style BrowserClient fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style UI fill:#1e293b,stroke:#818cf8,stroke-width:1px,color:#f8fafc
-    style WorkerContext fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style PyodideRuntime fill:#1e293b,stroke:#c084fc,stroke-width:1px,color:#f8fafc
-    style Monaco fill:#1e293b,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
-    style Term fill:#1e293b,stroke:#34d399,stroke-width:1px,color:#f8fafc
+    style Monaco fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Worker fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Engine fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
+    style Tester fill:#1e293b,stroke:#f59e0b,stroke-width:1px,color:#f8fafc
+    style Term fill:#1e1e38,stroke:#c084fc,stroke-width:2px,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant UI as Monaco Editor / UI
-    participant W as Web Worker (Pyodide Wasm)
-    participant R as Ray Engine (wasm_compat)
-    participant T as Test Runner & Validator
-    participant Term as xterm.js Terminal
-
-    UI->>W: postMessage({type: 'run', code, exercise})
-    W->>R: Execute Exercise Script via eval_code_async
-    R->>R: Instantiate Simulated Ray Tasks / Stateful Actors
-    R-->>T: Yield Task Execution Results & ObjectRefs
-    T->>T: Evaluate Verification Assertions
-    T-->>W: Test Passed / Diagnostic Failure Details
-    W-->>Term: Stream Formatted ANSI Color Output (<5ms)
-```
+> **Diagram Walkthrough & Core Concepts:**
+> - **100% Client-Side WebAssembly**: Python code executes in a dedicated browser Web Worker powered by Pyodide, requiring zero external server backends or API keys.
+> - **In-Browser Ray Simulation**: The `raylings.wasm_compat` runtime accurately emulates `@ray.remote` tasks, stateful actor mailboxes, and Plasma shared memory locally in your browser.
+> - **Sub-5ms Terminal Feedback**: Code execution, assertion evaluations, and contextual diagnostic hints stream directly to the xterm.js terminal with instant interactive feedback.
 
 1. **Instant Execution**: Python code compiles and evaluates inside a background Web Worker running Pyodide v0.26 WebAssembly.
 2. **Local Cluster Simulation**: The pure-Python Ray compatibility engine simulates `@ray.remote` tasks, stateful actors, Plasma shared memory, and cluster stats directly in your browser.

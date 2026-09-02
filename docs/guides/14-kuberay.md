@@ -16,67 +16,21 @@
 
 ```mermaid
 flowchart TD
-    subgraph K8sControlPlane["Kubernetes Control Plane"]
-        APIServer["Kubernetes API Server (etcd)"]
-        Operator["KubeRay Operator Controller Pod<br/>(Watches CRDs & Reconciles State)"]
-        APIServer <-->|"Watch / Reconcile Events"| Operator
-    end
+    K8s["Kubernetes API Server<br/>(RayCluster / RayJob CRDs)"] <-->|"1. Reconcile Events"| Operator["KubeRay Operator Controller"]
+    Operator -->|"2. Provision Head Pod"| Head["Ray Head Pod<br/>(GCS + Autoscaler)"]
+    Operator -->|"3. Provision Worker Pods"| Workers["Ray Worker Pods<br/>(CPU / GPU Groups)"]
+    Head <-->|"4. Scale Requests & Heartbeats"| Workers
 
-    subgraph CustomResources["KubeRay Custom Resource Definitions (CRDs)"]
-        CR_Cluster["RayCluster CR"]
-        CR_Job["RayJob CR (Ephemeral Workloads)"]
-        CR_Service["RayService CR (Zero-Downtime Serving)"]
-    end
-
-    subgraph PodTopology["Kubernetes Cluster Pod Topology"]
-        subgraph HeadGroup["Head Pod Group"]
-            HeadPod["Ray Head Pod<br/>• GCS Server<br/>• Ray Autoscaler<br/>• Ray Dashboard (Service: 8265)"]
-        end
-
-        subgraph WorkerGroups["Worker Pod Groups (Daemon / Deployment)"]
-            CPU_Pods["CPU Worker Pod Group<br/>• /dev/shm (emptyDir Memory)<br/>• Raylet Daemon"]
-            GPU_Pods["GPU Worker Pod Group (Spot / On-Demand)<br/>• NVIDIA GPU Device Plugin<br/>• Raylet Daemon"]
-        end
-    end
-
-    Operator --> CustomResources
-    CR_Cluster --> HeadPod
-    CR_Cluster --> WorkerGroups
-    HeadPod <-->|"Cluster Autoscaler Scale Requests"| Operator
-
-    style K8sControlPlane fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style CustomResources fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
-    style PodTopology fill:#1e1e38,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style HeadPod fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
-    style CPU_Pods fill:#0f172a,stroke:#38bdf8,stroke-width:1px,color:#f8fafc
-    style GPU_Pods fill:#0f172a,stroke:#c084fc,stroke-width:1px,color:#f8fafc
+    style K8s fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style Operator fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    style Head fill:#1e1e38,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style Workers fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#f8fafc
 ```
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant U as Platform Engineer (kubectl)
-    participant K8s as Kubernetes API Server
-    participant KRO as KubeRay Operator
-    participant Head as Ray Head Pod (GCS & Autoscaler)
-    participant Worker as Ray GPU Worker Pods
-
-    Note over U,K8s: Provisioning RayCluster CR
-    U->>K8s: kubectl apply -f raycluster-gpu.yaml
-    K8s->>KRO: Event: RayCluster Created
-    KRO->>K8s: Create Head Pod & Head Service
-    K8s->>Head: Launch Head Pod Container
-    Head-->>KRO: Head Pod Ready (GCS Online)
-    
-    Note over Head,Worker: Dynamic Workload Scaling
-    Head->>Head: Detects Pending GPU Tasks
-    Head->>KRO: Request Scaling (+2 GPU Workers)
-    KRO->>K8s: Create Worker Pods (GPU nodeSelector)
-    K8s->>Worker: Provision Containers & Mount /dev/shm
-    Worker->>Head: Raylet Join Cluster & Register Resources
-```
-
-KubeRay reconciles Kubernetes Pod lifecycle events with Ray GCS cluster status, managing GPU pod groups, spot instance tolerations, and shared memory volume mounts (`/dev/shm`).
+> **Diagram Walkthrough & Core Concepts:**
+> - **Kubernetes Custom Resource Definitions**: KubeRay introduces `RayCluster`, `RayJob`, and `RayService` CRDs to standardize Ray infrastructure provisioning in Kubernetes.
+> - **Operator Reconciliation Loop**: The KubeRay Operator watches CRD state changes, provisioning Head and Worker Pods and attaching emptyDir memory mounts for `/dev/shm`.
+> - **Autoscaler Integration**: The Ray Head Pod interacts with the KubeRay Operator to scale worker pod replicas dynamically based on pending CPU/GPU scheduling queues.
 
 ---
 
