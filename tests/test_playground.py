@@ -148,30 +148,47 @@ def test_wasm_simulation_engine():
     assert ray.is_initialized() is False
 
 
-def test_playground_docs_and_assets_exist():
-    """Verify docs/playground.md and docs/assets/playground.html exist and contain valid markup."""
-    docs_md = Path("docs/playground.md")
-    assert docs_md.exists(), "docs/playground.md must exist"
-    content_md = docs_md.read_text(encoding="utf-8")
-    assert "Playground" in content_md
+def test_standardized_playground_architecture():
+    """Verify all standardized standalone playground shell and asset files exist and are valid."""
+    index_html = Path("docs/playground/index.html")
+    assert index_html.exists(), "docs/playground/index.html must exist"
+    index_content = index_html.read_text(encoding="utf-8")
+    assert "raylings-playground" in index_content
+    assert "standalone-header" in index_content
+    assert "theme-toggle-btn" in index_content
+    assert "playground.css" in index_content
+    assert "playground.js" in index_content
 
-    html_file = Path("docs/assets/playground.html")
-    assert html_file.exists(), "docs/assets/playground.html must exist"
-    content_html = html_file.read_text(encoding="utf-8")
-    assert "pyodide" in content_html.lower()
-    assert "monaco" in content_html.lower()
+    css_file = Path("docs/assets/playground/playground.css")
+    assert css_file.exists(), "docs/assets/playground/playground.css must exist"
+    css_content = css_file.read_text(encoding="utf-8")
+    assert "--pg-bg" in css_content
+    assert ".raylings-playground" in css_content
+    assert ".playground-split-layout" in css_content
+    assert ".cluster-stat-grid" in css_content
 
-    # Verify zero-backend persistence engine (RaylingsStorage)
-    assert "class RaylingsStorage" in content_html
-    assert "raylings_playground_v1" in content_html
-    assert "exportBackup" in content_html
-    assert "importBackup" in content_html
-    assert "resetExercise" in content_html
-    assert "resetAll" in content_html
+    js_file = Path("docs/assets/playground/playground.js")
+    assert js_file.exists(), "docs/assets/playground/playground.js must exist"
+    js_content = js_file.read_text(encoding="utf-8")
+    assert "RaylingsStorage" in js_content
+    assert "raylings_learning_state_v1" in js_content
+    assert "loadMonaco" in js_content
+    assert "btn-run-exercise" in js_content
+    assert "btn-toggle-hint" in js_content
+    assert "btn-toggle-diff" in js_content
+    assert "exportBackup" in js_content
+    assert "importBackup" in js_content
 
-    # Verify Split-Pane UI and Cluster Inspector elements
-    assert "course-progress-bar" in content_html
-    assert "exercise-tree" in content_html
-    assert "tab-cluster" in content_html
-    assert "stat-objects" in content_html
-    assert "btn-fullscreen" in content_html
+    worker_file = Path("docs/assets/playground/playground-worker.js")
+    assert worker_file.exists(), "docs/assets/playground/playground-worker.js must exist"
+    worker_content = worker_file.read_text(encoding="utf-8")
+    assert "initPyodide" in worker_content
+    assert "RUN_EXERCISE" in worker_content
+    assert "raylings.wasm_compat" in worker_content
+
+    bundle_file = Path("docs/assets/playground/playground-bundle.json")
+    assert bundle_file.exists(), "docs/assets/playground/playground-bundle.json must exist"
+    bundle_data = json.loads(bundle_file.read_text(encoding="utf-8"))
+    assert len(bundle_data["chapters"]) == 18
+    assert len(bundle_data["exercises"]) == 81
+
