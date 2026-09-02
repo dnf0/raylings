@@ -1,209 +1,94 @@
 # Raylings ⚡
 
-[![Playground](https://img.shields.io/badge/Playground-⚡%20Try%20in%20Browser-blueviolet)](https://dnf0.github.io/raylings/playground/)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://dnf0.github.io/raylings/)
-[![CI](https://github.com/dnf0/raylings/actions/workflows/ci.yml/badge.svg)](https://github.com/dnf0/raylings/actions)
-[![KubeRay CI](https://github.com/dnf0/raylings/actions/workflows/kuberay-e2e.yml/badge.svg)](https://github.com/dnf0/raylings/actions)
+**An interactive, client-side WebAssembly learning platform and comprehensive reference manual for Python Ray.**
+
+[![Playground](https://img.shields.io/badge/Playground-⚡%20Launch%20Interactive%20IDE-blueviolet)](playground/index.html)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
-**Raylings** is an interactive, hands-on CLI learning environment for [Python Ray](https://www.ray.io/), inspired by [Rustlings](https://github.com/rust-lang/rustlings) and [Ziglings](https://codeberg.org/ziglings/exercises). It guides you through the distributed systems landscape—from foundational `@ray.remote` tasks and stateful actors to high-throughput Ray Data streaming, distributed PyTorch training with Ray Train, scalable model serving with Ray Serve, production Kubernetes orchestration with KubeRay, vLLM tensor parallelism, and pluggable financial modeling packs.
-
-> ⚡ **Try it now in your browser!** No installation required: [**Interactive WebAssembly Playground**](playground/index.html) ([⚡ Try in Browser](https://dnf0.github.io/raylings/playground/)).
-
-<p align="center">
-  <img src="assets/demo.svg" alt="Raylings Terminal Demo" width="840">
-</p>
+[![Curriculum](https://img.shields.io/badge/Curriculum-18%20Chapters%20%7C%2081%20Exercises-brightgreen)](syllabus.md)
 
 ---
 
-## 🎯 The Raylings Philosophy
+## ⚡ The Modern Way to Master Distributed Ray
 
-Distributed computing can feel daunting with abstract concepts like actor handles, Plasma object store zero-copy buffers, placement group gang-scheduling, and distributed all-reduce topologies.
-
-Raylings takes a **guided, test-driven micro-learning** approach:
-
-1. **Active Debugging & Iteration**: You are presented with small, focused Python exercises that contain intentional bugs, incomplete implementations, or anti-patterns, accompanied by `# TODO:` directives and `# WHY:` architectural explanations.
-2. **Instant Feedback Loop & Interactive Hotkeys**: The live watcher monitors your filesystem, automatically running tests whenever you save (< 50ms).
-3. **Dual-Mode Learning (Offline WASM & Live Cluster)**:
-   - **Offline WASM Mode**: Zero cluster setup required. The pure-Python WebAssembly simulator validates tasks, actors, object store references, and dataset transformations directly in-memory or in your browser.
-   - **Live Cluster Mode**: Seamlessly connect to a local Ray session, remote Ray cluster, or multi-node Kubernetes `KubeRay` cluster (`ray://localhost:10001`). Exercises provision real actors and verify distributed execution across nodes.
-4. **Progressive Hints**: When stuck, multi-tiered hints (`raylings hint <exercise>`) nudge you in the right direction without spoiling the answer.
-
----
-
-## 🚀 Key Features
+Raylings combines a **zero-install, 100% client-side WebAssembly interactive playground** with **18 comprehensive architectural reference guides** spanning distributed tasks, actors, plasma memory, Ray Data, PyTorch Train, Serve, vLLM, and KubeRay.
 
 <div class="grid cards" markdown>
 
--   :material-book-open-page-variant:{ .lg .middle } **18 Comprehensive Chapters**
-
+-   :material-play-circle-outline: **Zero-Install Web IDE**
     ---
+    Run Monaco Editor, Pyodide WebAssembly (Python 3.12), and real-time Ray cluster simulation 100% in your browser. No Python environment setup, no cluster configuration, and no cloud GPU costs required.
+    
+    [**Launch Playground →**](playground/index.html){ .md-button .md-button--primary }
 
-    81 progressive exercises covering Ray Core, Plasma Object Store, Resource Scheduling, Fault Tolerance, Ray Data, ML from Scratch, Ray Train, Ray Tune, Ray Serve, Observability, KubeRay, vLLM/LLMs, DeepSpeed/FSDP, Multimodal Vectors, and Quant Finance.
-
-    [:octicons-arrow-right-24: Explore Curriculum](syllabus.md)
-
--   :material-web:{ .lg .middle } **Zero-Install WASM Playground**
-
+-   :material-book-open-page-variant-outline: **18-Chapter Reference Manual**
     ---
+    Deep architectural documentation, annotated Python API anatomy, production best practices, and diagnostic troubleshooting workflows for modern distributed systems.
 
-    Run Python 3.12, Monaco Editor, and in-memory Ray simulation 100% client-side inside your web browser via Pyodide WebAssembly.
-
-    [:octicons-arrow-right-24: Launch Playground](playground/index.html)
-
--   :material-eye-refresh:{ .lg .middle } **Zero-Friction Live Watcher**
-
-    ---
-
-    Real-time file monitoring with interactive keyboard shortcuts (`[n]` next, `[p]` previous, `[r]` rerun, `[h]` hints, `[q]` quit). Never context-switch away from your terminal or editor.
-
-    [:octicons-arrow-right-24: Watcher Guide](onboarding-guide.md#step-4-interactive-watcher-keystroke-controls)
-
--   :material-lightning-bolt:{ .lg .middle } **Warm Daemon Engine**
-
-    ---
-
-    Background persistent Ray session eliminates startup and GCS initialization latency between exercise iterations, providing instant feedback in sub-second test cycles.
-
-    [:octicons-arrow-right-24: Daemon Details](cli-reference.md#raylings-daemon)
-
--   :material-compass:{ .lg .middle } **Interactive Guided Tour**
-
-    ---
-
-    A 5-step onboarding experience (`raylings tour`) that introduces distributed Ray concepts, verifies system health, and teaches essential keyboard controls.
-
-    [:octicons-arrow-right-24: Start Onboarding](onboarding-guide.md)
-
--   :material-monitor-dashboard:{ .lg .middle } **Interactive Split-Pane TUI**
-
-    ---
-
-    Full-screen terminal interface (`raylings tui`) featuring curriculum tree navigation, syntax-highlighted code preview, hotkey execution (`[r]`), hint revelation (`[h]`), and telemetry overlays (`[t]`).
-
-    [:octicons-arrow-right-24: TUI Reference](cli-reference.md#raylings-tui)
-
--   :material-chart-timeline-variant-shimmer:{ .lg .middle } **Real-Time Cluster Telemetry**
-
-    ---
-
-    Live cluster inspector (`raylings top` / `raylings metrics`) monitoring Plasma object store memory, spilling rates, node CPU/GPU saturation, and active actor tables with JSON export.
-
-    [:octicons-arrow-right-24: Telemetry Reference](cli-reference.md#raylings-top-raylings-metrics)
-
--   :material-puzzle:{ .lg .middle } **Pluggable Curriculum Registry**
-
-    ---
-
-    Extensible plugin architecture (`raylings plugins`) for authoring, distributing, and loading external domain packs (e.g., Chapter 18 Quantitative Finance).
-
-    [:octicons-arrow-right-24: Plugin Architecture](plugins.md)
-
--   :material-kubernetes:{ .lg .middle } **Cloud & KubeRay Multi-Node**
-
-    ---
-
-    Automated KinD 3-node cluster orchestration (`scripts/kuberay/`) and end-to-end integration test suite verifying remote Ray client execution and DDP across Kubernetes pods.
-
-    [:octicons-arrow-right-24: KubeRay Guide](cloud-kuberay.md)
-
--   :material-auto-fix:{ .lg .middle } **Exercise Scaffolding CLI**
-
-    ---
-
-    Standardized generator (`raylings new`) to instantly scaffold exercise skeletons, reference solutions, validation harnesses, and manifest registration snippets.
-
-    [:octicons-arrow-right-24: Scaffolder Reference](cli-reference.md#raylings-new-raylings-new-exercise)
-
--   :material-microsoft-visual-studio-code:{ .lg .middle } **Native VS Code & Cursor Extension**
-
-    ---
-
-    Integrated sidebar curriculum tree view, auto-run on save, status bar cluster health indicators, and command palette integration for VS Code and Cursor.
-
-    [:octicons-arrow-right-24: IDE Setup](onboarding-guide.md#vs-code-native-extension)
-
--   :material-stethoscope:{ .lg .middle } **Preflight System Doctor**
-
-    ---
-
-    5-point diagnostic suite (`raylings doctor`) verifying Python 3.10+, Ray runtime, cluster health, CPU/RAM resource limits, and exercise manifests.
-
-    [:octicons-arrow-right-24: Doctor Checks](onboarding-guide.md#preflight-diagnostics-raylings-doctor)
+    [**Explore Reference Guides →**](#comprehensive-18-chapter-reference-guides){ .md-button }
 
 </div>
 
 ---
 
-## 🔄 The Raylings Learning Loop
+## 📚 Comprehensive 18-Chapter Reference Guides
 
-```mermaid
-flowchart TD
-    A[Start: raylings watch] --> B[Load Current Exercise]
-    B --> C[Inspect Code & Read Hints]
-    C --> D[Edit in IDE & Save File]
-    D --> E{Tests & Assertions Pass?}
-    E -- No --> F[Render Diagnostics & Stack Trace]
-    F --> C
-    E -- Yes --> G[🎉 Mark Completed in State]
-    G --> H{More Exercises in Syllabus?}
-    H -- Yes --> I[Advance to Next Exercise]
-    I --> B
-    H -- No --> J[🏆 Mastered Python Ray!]
-```
+Explore in-depth architectural guides and launch linked practice exercises directly into the playground:
 
----
+<div class="grid cards" markdown>
 
-## 🏗️ System Architecture
+-   ### Ray Core & Distributed Memory
+    ---
+    - [**01. Remote Tasks & Futures**](guides/01-tasks.md) &bull; `@ray.remote`, ObjectRefs, async execution, batching
+    - [**02. Stateful Actors & Concurrency**](guides/02-actors.md) &bull; Remote classes, state tracking, concurrency groups
+    - [**03. Plasma Object Store**](guides/03-object-store.md) &bull; Shared memory, `ray.put()`, zero-copy Apache Arrow
+    - [**04. Resource Scheduling**](guides/04-resources-scheduling.md) &bull; Fractional CPUs/GPUs, custom tags, placement groups
+    - [**05. Fault Tolerance & Lineage**](guides/05-fault-tolerance.md) &bull; Task retries, actor restarts, lineage recovery
+    - [**06. Cluster Architecture & GCS**](guides/06-cluster-architecture.md) &bull; Head node, raylets, Global Control Store
+    - [**07. Design Patterns & Anti-Patterns**](guides/07-patterns-and-antipatterns.md) &bull; Tree aggregation, actor pipelines
 
-```
-                                  +-----------------------+
-                                  |     User Terminal     |
-                                  +-----------+-----------+
-                                              |
-                                              v
-                                  +-----------------------+
-                                  |   Raylings CLI (Typer)|
-                                  +-----------+-----------+
-                                              |
-                     +------------------------+------------------------+
-                     |                                                 |
-                     v                                                 v
-         +-----------------------+                         +-----------------------+
-         |  File Watcher Engine  |                         | Rich UI & TUI Engine  |
-         |      (watchfiles)     |                         |  (split-pane / top)   |
-         +-----------+-----------+                         +-----------------------+
-                     |
-                     v
-         +-----------------------+
-         |  Curriculum Manifest  |  (18 Chapters / 81 Exercises)
-         +-----------+-----------+
-                     |
-                     v
-         +-----------------------+
-         |   Exercise Runner     |
-         +-----------+-----------+
-                     |
-        +------------+------------+
-        |                         |
-        v                         v
-+----------------+       +-------------------+
-| Pure-Python    |       | Live Ray Cluster  |
-| In-Memory WASM |  OR   | & KubeRay Multi-  |
-| Ray Simulator  |       | Node Adapter      |
-+----------------+       +-------------------+
-```
+-   ### Distributed Data & Scalable ML
+    ---
+    - [**08. Streaming Ray Data**](guides/08-ray-data.md) &bull; Block partitions, `map_batches`, streaming pipelines
+    - [**09. Distributed ML from Scratch**](guides/09-distributed-ml.md) &bull; Parameter Servers, Ring All-Reduce, worker shards
+    - [**10. PyTorch Distributed (Ray Train)**](guides/10-ray-train.md) &bull; `TorchTrainer`, DDP, fault-tolerant checkpoints
+    - [**11. Hyperparameter Search (Ray Tune)**](guides/11-ray-tune.md) &bull; Search spaces, ASHA early stopping, trial tuners
+    - [**12. Production Serving (Ray Serve)**](guides/12-ray-serve.md) &bull; `@serve.deployment`, HTTP ingress, dynamic batching
+
+-   ### Observability & Cloud Orchestration
+    ---
+    - [**13. Observability, Tracing & Profiling**](guides/13-observability.md) &bull; Ray Dashboard, OpenTelemetry spans, metrics
+    - [**14. Kubernetes AI with KubeRay**](guides/14-kuberay.md) &bull; `RayCluster`, `RayJob`, `RayService`, GPU pod groups
+
+-   ### Generative AI, LLMs & High Performance
+    ---
+    - [**15. High-Throughput vLLM Serving**](guides/15-vllm-and-llms.md) &bull; PagedAttention KV cache, continuous batching
+    - [**16. Multi-Node LLM Training (FSDP)**](guides/16-fsdp-deepspeed.md) &bull; ZeRO-3 parameter sharding, mixed precision
+    - [**17. Multimodal Embeddings & Vector RAG**](guides/17-multimodal-vectors.md) &bull; Distributed chunking, vector indexing
+    - [**18. Quantitative Finance Risk Engines**](guides/18-quant-finance.md) &bull; Monte Carlo Black-Scholes, VaR simulation
+
+</div>
 
 ---
 
-## ⚡ Quick Navigation
+## 💡 How the Playground Works
 
-- [**Getting Started**](getting-started.md) — Prerequisites, installation (`uv` / `pip`), and your first 5 minutes.
-- [**Interactive Playground**](playground/index.html) — WebAssembly-powered Monaco editor learning in the browser.
-- [**Onboarding Guide**](onboarding-guide.md) — Guided tour, doctor diagnostics, and VS Code integration.
-- [**Curriculum Syllabus**](syllabus.md) — Detailed breakdown of all 18 chapters and 81 exercises.
-- [**Plugin Architecture**](plugins.md) — Extensible domain packs and custom curriculum authoring.
-- [**Cloud & KubeRay Guide**](cloud-kuberay.md) — Multi-node KinD testing, remote execution, and Helm deployment.
-- [**CLI Reference**](cli-reference.md) — Comprehensive reference manual for all commands and options.
-- [**Troubleshooting**](troubleshooting.md) — Solutions for port conflicts, memory spilling, and DDP deadlocks.
-- [**Contributing**](contributing.md) — How to author new exercises and contribute to Raylings.
+The Raylings web playground runs entirely on client-side WebAssembly technology:
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                          Web Browser Tab                               │
+│  ┌───────────────────────┐             ┌─────────────────────────────┐ │
+│  │     Monaco Editor     │ Python Code │  Web Worker (Pyodide Wasm)  │ │
+│  │  (VS Code in Browser) ├────────────►│  • Python 3.12 Runtime      │ │
+│  └───────────────────────┘             │  • Pure-Python Ray Engine   │ │
+│                                        │  • Progressive Hint Engine  │ │
+│  ┌───────────────────────┐             └──────────────┬──────────────┘ │
+│  │   Interactive xterm   │◄───────────────────────────┘                │
+│  │    Terminal Output    │         Instant Test & Execution Output     │
+│  └───────────────────────┘         (< 5ms in WebAssembly)              │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Instant Execution**: Python code compiles and evaluates inside a background Web Worker running Pyodide v0.26 WebAssembly.
+2. **Local Cluster Simulation**: The pure-Python Ray compatibility engine simulates `@ray.remote` tasks, stateful actors, Plasma shared memory, and cluster stats directly in your browser.
+3. **Zero Backend Required**: All state is stored locally via `localStorage`. Work completely offline on airplanes, trains, or behind corporate air-gaps.

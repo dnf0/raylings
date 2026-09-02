@@ -409,7 +409,5 @@ class WasmRayModule:
         }
 
 
-
 # Global drop-in singleton mimicking `import ray`
 ray = WasmRayModule()
-

@@ -79,8 +79,6 @@ def test_bundle_structure_and_exercise_details():
     assert len(ex["hints"]) >= 1
 
 
-
-
 def test_wasm_simulation_engine():
     """Verify the pure-Python Ray simulation engine executes tasks, actors, datasets, and telemetry correctly."""
     from raylings.wasm_compat import ray
@@ -126,8 +124,18 @@ def test_wasm_simulation_engine():
     # Test cluster stats contract
     stats = ray._get_cluster_stats()
     assert isinstance(stats, dict)
-    expected_keys = {"nodes", "cpus", "gpus", "objects_count", "objects_bytes", "actors_count", "tasks_count"}
-    assert expected_keys.issubset(set(stats.keys())), f"Missing keys in cluster stats: {expected_keys - set(stats.keys())}"
+    expected_keys = {
+        "nodes",
+        "cpus",
+        "gpus",
+        "objects_count",
+        "objects_bytes",
+        "actors_count",
+        "tasks_count",
+    }
+    assert expected_keys.issubset(set(stats.keys())), (
+        f"Missing keys in cluster stats: {expected_keys - set(stats.keys())}"
+    )
     assert stats["nodes"] == 1
     assert stats["cpus"] == 4
     assert stats["objects_count"] >= 1
@@ -141,16 +149,19 @@ def test_mkdocs_build_and_standalone_shell_artifact():
     """Verify that mkdocs build --strict generates site/playground/index.html with the standalone shell intact."""
     import subprocess
 
-    build_res = subprocess.run(["uv", "run", "mkdocs", "build", "--strict"], capture_output=True, text=True)
+    build_res = subprocess.run(
+        ["uv", "run", "mkdocs", "build", "--strict"], capture_output=True, text=True
+    )
     assert build_res.returncode == 0, f"mkdocs build failed: {build_res.stderr}"
 
     site_shell = Path("site/playground/index.html")
     assert site_shell.exists(), "site/playground/index.html must exist after mkdocs build"
     content = site_shell.read_text(encoding="utf-8")
-    assert "standalone-playground-root" in content, "Built site/playground/index.html must contain standalone shell"
+    assert "standalone-playground-root" in content, (
+        "Built site/playground/index.html must contain standalone shell"
+    )
     assert "playground.css" in content
     assert "playground.js" in content
-
 
 
 def test_bundle_drift_and_synchronization():
@@ -175,7 +186,12 @@ def test_javascript_syntax_validity():
     node_bin = shutil.which("node")
     if node_bin:
         res = subprocess.run(
-            [node_bin, "--check", "docs/assets/playground/playground.js", "docs/assets/playground/playground-worker.js"],
+            [
+                node_bin,
+                "--check",
+                "docs/assets/playground/playground.js",
+                "docs/assets/playground/playground-worker.js",
+            ],
             capture_output=True,
             text=True,
         )
@@ -224,3 +240,29 @@ def test_standardized_playground_architecture():
     assert "raylings.wasm_compat" in worker_content
 
 
+def test_all_18_chapter_guides_and_links():
+    """Verify all 18 architectural chapter guides exist, follow schema, and have valid exercise deep links."""
+    guides_dir = Path("docs/guides")
+    assert guides_dir.is_dir(), "docs/guides directory must exist"
+
+    guide_files = sorted(guides_dir.glob("*.md"))
+    assert len(guide_files) == 18, f"Expected 18 chapter guides, got {len(guide_files)}"
+
+    for idx, guide_file in enumerate(guide_files, start=1):
+        content = guide_file.read_text(encoding="utf-8")
+        assert (
+            f"[**Launch Playground in Wasm →**](../playground/index.html?chapter={idx})" in content
+        ), f"Guide {guide_file.name} must link to playground chapter {idx}"
+        assert "## 1. Architectural Overview & Control Plane Mechanics" in content, (
+            f"Guide {guide_file.name} missing Section 1"
+        )
+        assert "## 2. Annotated" in content, f"Guide {guide_file.name} missing Section 2"
+        assert "## 3. Production Best Practices & Hardening Guidelines" in content, (
+            f"Guide {guide_file.name} missing Section 3"
+        )
+        assert "## 4. Troubleshooting & Diagnostic Workflows" in content, (
+            f"Guide {guide_file.name} missing Section 4"
+        )
+        assert "## 5. Hands-on Practice Exercises" in content, (
+            f"Guide {guide_file.name} missing Section 5"
+        )

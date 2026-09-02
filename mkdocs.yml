@@ -1,5 +1,5 @@
 site_name: Raylings
-site_description: An interactive, hands-on CLI learning environment for Python Ray.
+site_description: An interactive, client-side WebAssembly learning platform and comprehensive reference manual for Python Ray.
 site_url: https://dnf0.github.io/raylings/
 site_author: Raylings Contributors
 repo_name: dnf0/raylings
@@ -57,15 +57,30 @@ markdown_extensions:
 nav:
   - Overview: index.md
   - Interactive Playground: playground/index.html
-  - Getting Started: getting-started.md
-  - Onboarding Guide: onboarding-guide.md
-  - Curriculum Syllabus: syllabus.md
-  - Curriculum Plugins: plugins.md
-  - CLI Reference: cli-reference.md
-  - Troubleshooting: troubleshooting.md
-  - Cloud & KubeRay: cloud-kuberay.md
+  - Syllabus & Curriculum: syllabus.md
+  - Ray Core & Architecture:
+      - 01. Remote Tasks & Futures: guides/01-tasks.md
+      - 02. Stateful Actors & Concurrency: guides/02-actors.md
+      - 03. Plasma Object Store: guides/03-object-store.md
+      - 04. Scheduling & Resources: guides/04-resources-scheduling.md
+      - 05. Lineage & Fault Tolerance: guides/05-fault-tolerance.md
+      - 06. Cluster Architecture & GCS: guides/06-cluster-architecture.md
+      - 07. Patterns & Anti-Patterns: guides/07-patterns-and-antipatterns.md
+  - Distributed Data & Machine Learning:
+      - 08. Streaming Ray Data: guides/08-ray-data.md
+      - 09. Distributed ML from Scratch: guides/09-distributed-ml.md
+      - 10. Distributed PyTorch (Ray Train): guides/10-ray-train.md
+      - 11. Hyperparameter Search (Ray Tune): guides/11-ray-tune.md
+      - 12. Model Serving (Ray Serve): guides/12-ray-serve.md
+  - Observability & Cloud Orchestration:
+      - 13. Observability, Tracing & Profiling: guides/13-observability.md
+      - 14. Kubernetes AI with KubeRay: guides/14-kuberay.md
+  - Generative AI, LLMs & High Performance:
+      - 15. High-Throughput vLLM Serving: guides/15-vllm-and-llms.md
+      - 16. Multi-Node LLM Training (FSDP): guides/16-fsdp-deepspeed.md
+      - 17. Multimodal Embeddings & Vector RAG: guides/17-multimodal-vectors.md
+      - 18. Quantitative Finance Risk Engines: guides/18-quant-finance.md
   - Contributing: contributing.md
-  - Roadmap & Backlog: ROADMAP.md
 
 exclude_docs: |
   superpowers/**
@@ -75,6 +90,10 @@ not_in_nav: |
   superpowers/**
   playground/**
   ONBOARDING.md
-
-
-
+  getting-started.md
+  onboarding-guide.md
+  cli-reference.md
+  plugins.md
+  cloud-kuberay.md
+  troubleshooting.md
+  ROADMAP.md
