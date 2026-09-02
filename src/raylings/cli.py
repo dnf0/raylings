@@ -4,7 +4,7 @@ import os
 import platform
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import typer
 from rich.table import Table
@@ -1018,7 +1018,8 @@ def tui_command(
         )
     except SystemExit as exc:
         if exc.code != 0:
-            raise typer.Exit(exc.code)
+            code = exc.code if isinstance(exc.code, int) else 1
+            raise typer.Exit(code)
     except Exception as e:
         console.print(f"[bold red]Error running TUI:[/bold red] {e}")
         raise typer.Exit(1)
@@ -1127,7 +1128,7 @@ def plugins_validate_command(
                     and issubclass(val, RaylingsPlugin)
                     and val is not RaylingsPlugin
                 ):
-                    plugin = val()
+                    plugin = cast(Any, val)()
                     break
             if not plugin:
                 console.print(

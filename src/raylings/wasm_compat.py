@@ -15,7 +15,7 @@ import pickle
 import time
 from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass, field
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, cast
 
 T = TypeVar("T")
 R = TypeVar("R")
@@ -128,7 +128,7 @@ class WasmRemoteFunction(Generic[R]):
         self._func = func
         self._store = store
         self._options = options or {}
-        functools.update_wrapper(self, func)
+        functools.update_wrapper(cast(Any, self), func)
 
     def remote(self, *args: Any, **kwargs: Any) -> WasmObjectRef[R]:
         """Invoke the remote function and return a future-like ObjectRef."""
@@ -161,7 +161,7 @@ class WasmRemoteClass:
         self._cls = cls
         self._store = store
         self._options = options or {}
-        functools.update_wrapper(self, cls)
+        functools.update_wrapper(cast(Any, self), cls)
 
     def remote(self, *args: Any, **kwargs: Any) -> WasmActorHandle:
         """Instantiate the actor class and return an actor handle."""

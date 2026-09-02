@@ -21,9 +21,10 @@ Welcome to the **Raylings Interactive Playground**! You can solve, execute, and 
 ## 🚀 Key Features
 
 - **Zero Local Setup**: Run Python Ray tasks, actors, object store calls, and data streaming pipelines inside WebAssembly with 0 local dependencies.
-- **Monaco Code Editor**: VS Code-powered browser code editing with autocomplete, syntax highlighting, and keyboard shortcuts (`Ctrl+Enter` or `Cmd+Enter` to run).
+- **Monaco Code Editor**: VS Code-powered browser code editing with autocomplete, syntax highlighting, debounced auto-saving, and keyboard shortcuts (`Ctrl+Enter` or `Cmd+Enter` to run, `Alt+Left`/`Alt+Right` to navigate, `F11` for fullscreen).
 - **Simulated Cluster State**: Monitor virtual worker nodes, virtual CPU allocations, Plasma object store usage gauges, and active actor pools in real time.
-- **Step-by-Step Curriculum**: Interactive sidebar with all 78 exercises across 17 chapters, live progress checkmarks, hints, and reference solutions.
+- **Full Curriculum Syllabus**: Interactive syllabus sidebar with all 81 exercises across 18 chapters, progress metrics, searchable topic filter, hints, and reference solutions.
+- **Client-Side State Persistence**: Debounced auto-save to `localStorage`, completion tracking, backup JSON export/import, and granular reset options.
 - **Offline Capable**: Works entirely client-side once assets and Pyodide runtime are cached.
 
 ---
@@ -33,9 +34,10 @@ Welcome to the **Raylings Interactive Playground**! You can solve, execute, and 
 You can also run the playground locally using the Raylings CLI or open the standalone HTML file in your browser:
 
 ```bash
-# Export the complete exercise catalog bundle
-python -c "from raylings.playground_assets import export_playground_bundle; export_playground_bundle('docs/assets/playground_catalog.json')"
+# Export the complete 81-exercise catalog bundle
+uv run python -c "from raylings.playground_assets import export_playground_bundle; export_playground_bundle('docs/assets/playground_catalog.json')"
 
 # Preview with MkDocs local server
 uv run mkdocs serve
 ```
+

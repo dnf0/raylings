@@ -99,8 +99,8 @@ class TUIState:
         if self.current_exercise_idx < len(exercises) - 1:
             self.current_exercise_idx += 1
             self.show_hint = False
-            self.hint_level = 0
-            self.last_run_result = self.results_by_name.get(self.current_exercise.name)
+            if self.current_exercise:
+                self.last_run_result = self.results_by_name.get(self.current_exercise.name)
         return self.current_exercise
 
     def prev_exercise(self) -> Exercise | None:
@@ -112,7 +112,8 @@ class TUIState:
             self.current_exercise_idx -= 1
             self.show_hint = False
             self.hint_level = 0
-            self.last_run_result = self.results_by_name.get(self.current_exercise.name)
+            if self.current_exercise:
+                self.last_run_result = self.results_by_name.get(self.current_exercise.name)
         return self.current_exercise
 
     def select_exercise_by_name(self, name: str) -> bool:
